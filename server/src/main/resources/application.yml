@@ -1,0 +1,10 @@
+spring:
+  datasource:
+    url: jdbc:sqlite:data.db
+    driver-class-name: org.sqlite.JDBC
+  jpa:
+    database-platform: org.hibernate.community.dialect.SQLiteDialect
+    generate-ddl: true
+    show-sql: true
+    hibernate:
+      ddl-auto: create
