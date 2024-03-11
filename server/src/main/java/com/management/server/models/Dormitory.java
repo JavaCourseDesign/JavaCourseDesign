@@ -7,7 +7,7 @@ import lombok.Data;
 
 @Entity
 @Data
-@Table(name="dormitory")
+@Table(name="dormitory",uniqueConstraints = {})
 public class Dormitory {
     @Id
     @Column(name="id")

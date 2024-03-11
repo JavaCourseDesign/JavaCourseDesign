@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 @Entity
 @Data
-@Table(name="student")
+@Table(name="student",uniqueConstraints = {})
 public class Student{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
