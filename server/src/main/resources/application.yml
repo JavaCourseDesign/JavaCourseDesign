@@ -1,9 +1,0 @@
-spring:
-  jpa:
-    show-sql: true
-    hibernate:
-      ddl-auto: update
-    database-platform: org.sqlite.hibernate.dialect.SQLiteDialect
-  datasource:
-    driver-class-name: org.sqlite.JDBC
-    url: jdbc:sqlite:../JavaCourseDesign/data.db

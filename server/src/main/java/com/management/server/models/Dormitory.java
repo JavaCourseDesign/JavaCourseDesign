@@ -2,19 +2,19 @@ package com.management.server.models;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import org.springframework.stereotype.Component;
+
 
 
 @Entity
 @Data
-@Table(name="student")
-public class Student{
+@Table(name="dormitory")
+public class Dormitory {
     @Id
+    @Column(name="id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer studentId;
-    @Column(name="score")
-    Integer score;
+    int id;
     @Column(name="name")
     String name;
+    @Column(name = "num")
+    String num;
 }
