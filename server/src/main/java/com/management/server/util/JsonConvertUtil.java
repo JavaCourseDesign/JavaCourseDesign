@@ -1,6 +1,6 @@
 package com.management.server.util;
 
-import org.fatmansoft.teach.payload.response.DataResponse;
+import com.management.server.payload.response.DataResponse;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
