@@ -14,11 +14,6 @@ import java.util.List;
 @Repository
 public interface DormitoryRepository extends JpaRepository<Dormitory,Integer> {
     @Query("select d from Dormitory d")
-   List<Dormitory> findAll();
-
-    @Modifying
-    @Transactional
-    @Query("update Dormitory set name=?1 where id=?2")
-    void updateDormNameById(String name,Integer id);
+    List<Dormitory> findAll();
 
 }

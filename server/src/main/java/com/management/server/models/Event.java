@@ -18,12 +18,20 @@ public class Event {
 
     private String name;
 
-    private String date;//2024-05-15
+    private String beginTime;//2024-03-12 08:31
 
-    private String beginTime;//08:31
+    private String endTime;//2024-03-12 08:31
 
-    private String endTime;//14:05
+    private String introduction;
+
+    private String location;
+
+    /*@ManyToMany(mappedBy = "events")
+    private List<Person> persons;*/
 
     @ManyToMany(mappedBy = "events")
-    private List<Person> persons;
+    private List<Student> students;
+
+    @ManyToMany(mappedBy = "events")
+    private List<Teacher> teachers;
 }

@@ -25,7 +25,9 @@ public class Student extends Person{
     @Size(max = 50)
     private String className;
 
-
+    @ManyToMany
+    @JoinTable(name = "event", joinColumns = @JoinColumn(name = "personId"), inverseJoinColumns = @JoinColumn(name = "eventId"))
+    private List<Event> events;
 
     public String getNumName(){
         return super.getNum()+"-" + super.getName();

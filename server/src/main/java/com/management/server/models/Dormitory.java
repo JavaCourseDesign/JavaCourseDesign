@@ -3,6 +3,7 @@ package com.management.server.models;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.List;
 
 
 @Entity
@@ -10,11 +11,11 @@ import lombok.Data;
 @Table(name="dormitory",uniqueConstraints = {})
 public class Dormitory {
     @Id
-    @Column(name="id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    int id;
-    @Column(name="name")
-    String name;
-    @Column(name = "num")
-    String num;
+    private int dormitoryId;
+
+    @OneToMany(mappedBy = "dormitory")
+    private List<Person> persons;
+
+    private int number;
 }

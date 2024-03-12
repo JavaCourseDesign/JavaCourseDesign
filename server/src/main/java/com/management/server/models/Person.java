@@ -7,6 +7,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
+import java.security.DomainLoadStoreParameter;
 import java.util.List;
 
 
@@ -20,7 +21,7 @@ import java.util.List;
 @Table(name="person",uniqueConstraints = {})
 //@MappedSuperclass
 @Inheritance(strategy = InheritanceType.JOINED)
-public class Person {
+public abstract class Person {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer personId;
@@ -58,9 +59,13 @@ public class Person {
     @Size(max = 1000)
     private String introduce;
 
-    @ManyToMany
+    @ManyToOne
+    @JoinColumn(name = "dormitoryId")
+    private Dormitory dormitory;
+
+    /*@ManyToMany
     @JoinTable(name = "event", joinColumns = @JoinColumn(name = "personId"), inverseJoinColumns = @JoinColumn(name = "eventId"))
-    private List<Event> events;
+    private List<Event> events;*/
 
     public Person() {
     }

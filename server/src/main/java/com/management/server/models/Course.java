@@ -6,5 +6,7 @@ import lombok.Data;
 @Entity
 @Data
 public class Course extends Event{
-
+    private String courseCode;
+    private String reference;
+    private Integer capacity;//课容量
 }
