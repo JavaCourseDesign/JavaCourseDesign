@@ -1,4 +1,4 @@
-package com.management.server.repository;
+package com.management.server.repositories;
 
 
 import com.management.server.models.Dormitory;
