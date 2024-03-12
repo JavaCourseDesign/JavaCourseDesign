@@ -13,8 +13,9 @@ import lombok.Data;
         uniqueConstraints = {
                 @UniqueConstraint(columnNames = "num"),   //人员表中的编号 唯一
         })*/
-@Data
+
 //@Inheritance(strategy = InheritanceType.JOINED)
+@Data
 @MappedSuperclass
 
 public class Person {
