@@ -7,6 +7,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 
 @Entity
 @Data
@@ -22,6 +24,8 @@ public class Student extends Person{
 
     @Size(max = 50)
     private String className;
+
+
 
     public String getNumName(){
         return super.getNum()+"-" + super.getName();

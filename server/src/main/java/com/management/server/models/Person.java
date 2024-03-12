@@ -7,6 +7,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
+import java.util.List;
+
 
 /*@Entity
 @Table(	name = "person",
@@ -15,6 +17,7 @@ import lombok.Data;
         })*/
 @Data
 @Entity
+@Table(name="person",uniqueConstraints = {})
 //@MappedSuperclass
 @Inheritance(strategy = InheritanceType.JOINED)
 public class Person {
@@ -55,6 +58,9 @@ public class Person {
     @Size(max = 1000)
     private String introduce;
 
+    @ManyToMany
+    @JoinTable(name = "event", joinColumns = @JoinColumn(name = "personId"), inverseJoinColumns = @JoinColumn(name = "eventId"))
+    private List<Event> events;
 
     public Person() {
     }

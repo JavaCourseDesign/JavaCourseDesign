@@ -3,8 +3,11 @@ package com.management.server.models;
 import jakarta.persistence.*;
 import lombok.Data;
 
-//should be the super class of course,activities,etc
+import java.util.List;
 
+//should be the super class of course,activities,etc
+@Entity
+@Table(name="event",uniqueConstraints = {})
 @Data
 //@MappedSuperclass
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -20,4 +23,7 @@ public class Event {
     private String beginTime;//08:31
 
     private String endTime;//14:05
+
+    @ManyToMany(mappedBy = "events")
+    private List<Person> persons;
 }
