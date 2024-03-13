@@ -12,7 +12,7 @@ import java.util.List;
 public class Dormitory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int dormitoryId;
+    private Integer dormitoryId;
 
     @OneToMany(mappedBy = "dormitory")
     private List<Person> persons;
