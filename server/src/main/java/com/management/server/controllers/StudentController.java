@@ -1,6 +1,5 @@
 package com.management.server.controllers;
 
-import com.management.server.models.Person;
 import com.management.server.models.Student;
 /*import com.management.server.repository.PersonRepository;*/
 import com.management.server.repositories.StudentRepository;
@@ -18,7 +17,6 @@ public class StudentController {
     @GetMapping("/demoStudent")
     public String demoStudent(){
         Student s=new Student();
-        s.setName("tst");
         s.setMajor("software");
         studentRepository.save(s);
         return "HelloStudent";

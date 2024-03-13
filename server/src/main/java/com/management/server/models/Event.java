@@ -33,21 +33,13 @@ public class Event {
     /*@ManyToMany(mappedBy = "events")
     private List<Person> persons=new ArrayList<>();*/
 
-    @ManyToMany(mappedBy = "events")
-    private List<Student> students=new ArrayList<>();//why new ArrayList<>()?
+    @ManyToMany
+    @JoinTable(name = "student_event")
 
-    @ManyToMany(mappedBy = "events")
-    private List<Teacher> teachers=new ArrayList<>();
+    private List<Student> students;//why new ArrayList<>()?
+
 
     /*public void addPerson(Person person){
         persons.add(person);
     }*/
-
-    public void addStudent(Student student){
-        students.add(student);
-    }
-
-    public void addTeacher(Teacher teacher){
-        teachers.add(teacher);
-    }
 }
