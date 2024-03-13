@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -27,7 +28,11 @@ public class Student extends Person{
 
     @ManyToMany
     @JoinTable(name = "event", joinColumns = @JoinColumn(name = "personId"), inverseJoinColumns = @JoinColumn(name = "eventId"))
-    private List<Event> events;
+    private List<Event> events=new ArrayList<>();
+
+    /*public void addEvent(Event event){
+        events.add(event);
+    }*/
 
     public String getNumName(){
         return super.getNum()+"-" + super.getName();

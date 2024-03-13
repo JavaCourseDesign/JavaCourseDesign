@@ -21,7 +21,7 @@ import java.util.List;
 @Table(name="person",uniqueConstraints = {})
 //@MappedSuperclass
 @Inheritance(strategy = InheritanceType.JOINED)
-public abstract class Person {
+public /*abstract */class Person {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer personId;

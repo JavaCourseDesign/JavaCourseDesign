@@ -22,4 +22,6 @@ public interface StudentRepository extends JpaRepository<Student,Integer> {
     Optional<Student> findByPersonNum(String num);
     @Query(value = "from Student where ?1='' or Person.num like %?1% or Person.name like %?1% ")
     List<Student> findStudentListByNumName(String numName);*/
+    /*@Query("select p from Person p where p.personId = ?1")
+    Student findByPersonId(Integer personId);*/
 }

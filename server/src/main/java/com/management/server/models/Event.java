@@ -2,7 +2,9 @@ package com.management.server.models;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.ArrayList;
 import java.util.List;
 
 //should be the super class of course,activities,etc
@@ -26,12 +28,26 @@ public class Event {
 
     private String location;
 
+    private Integer personId;//to be deleted why????
+
     /*@ManyToMany(mappedBy = "events")
-    private List<Person> persons;*/
+    private List<Person> persons=new ArrayList<>();*/
 
     @ManyToMany(mappedBy = "events")
-    private List<Student> students;
+    private List<Student> students=new ArrayList<>();//why new ArrayList<>()?
 
     @ManyToMany(mappedBy = "events")
-    private List<Teacher> teachers;
+    private List<Teacher> teachers=new ArrayList<>();
+
+    /*public void addPerson(Person person){
+        persons.add(person);
+    }*/
+
+    public void addStudent(Student student){
+        students.add(student);
+    }
+
+    public void addTeacher(Teacher teacher){
+        teachers.add(teacher);
+    }
 }

@@ -1,7 +1,9 @@
 package com.management.server.repositories;
 
+import com.management.server.models.Person;
 import com.management.server.models.Teacher;
 import jakarta.transaction.Transactional;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
@@ -10,7 +12,7 @@ import java.util.Optional;
 
 @Repository
 @Transactional
-public interface TeacherRepository {
+public interface TeacherRepository extends JpaRepository<Teacher,Integer> {
     /*@Query(value = "select max(personId) from Teacher  ")
     Integer getMaxId();
     Optional<Teacher> findByPersonPersonId(Integer personId);
