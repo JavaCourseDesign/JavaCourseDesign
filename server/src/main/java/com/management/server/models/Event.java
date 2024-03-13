@@ -28,26 +28,24 @@ public class Event {
 
     private String location;
 
-    private Integer personId;//to be deleted why????
+    //private Integer personId;//to be deleted why????
 
     /*@ManyToMany(mappedBy = "events")
     private List<Person> persons=new ArrayList<>();*/
 
     @ManyToMany(mappedBy = "events")
-    private List<Student> students=new ArrayList<>();//why new ArrayList<>()?
+    private List<Student> students;
 
     @ManyToMany(mappedBy = "events")
-    private List<Teacher> teachers=new ArrayList<>();
+    private List<Teacher> teachers;
 
-    /*public void addPerson(Person person){
-        persons.add(person);
-    }*/
 
-    public void addStudent(Student student){
+
+  /*  public void addStudent(Student student){
         students.add(student);
     }
 
     public void addTeacher(Teacher teacher){
         teachers.add(teacher);
-    }
+    }*/
 }

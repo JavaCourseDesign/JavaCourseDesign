@@ -1,6 +1,7 @@
 package com.management.server.repositories;
 
 import com.management.server.models.Person;
+import com.management.server.models.Student;
 import com.management.server.models.Teacher;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -20,4 +21,6 @@ public interface TeacherRepository extends JpaRepository<Teacher,Integer> {
     List<Teacher> findByPersonName(String name);
     @Query(value = "from Teacher where ?1='' or Person.num like %?1% or Person.name like %?1% ")
     List<Teacher> findTeacherListByNumName(String numName);*/
+    @Query("select p from Person p where p.personId = ?1")
+    Teacher findByPersonId(Integer personId);
 }

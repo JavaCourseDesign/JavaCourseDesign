@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @RestController
 //@RequestMapping("/course")
 public class CourseController {
@@ -28,11 +31,17 @@ public class CourseController {
         c.setCourseCode("100a");
         c.setName("java");
         c.setCredit(3);
-        c.addStudent(studentRepository.findById(1).get());
-        c.addTeacher(teacherRepository.findById(2).get());
+        List<Student> studentList=new ArrayList<>();
+        studentList.add(studentRepository.findByStudentId(1));
+        studentList.add(studentRepository.findByStudentId(2));
+        List<Teacher> teacherList=new ArrayList<>();
+        teacherList.add(teacherRepository.findByPersonId(3));
+        teacherList.add(teacherRepository.findByPersonId(4));
+        c.setStudents(studentList);
+        c.setTeachers(teacherList);
         //c.addStudent(studentRepository.findByPersonId(1));
         courseRepository.save(c);
-        return "HelloCourse"+c.getTeachers().get(0).getName()+" ";
+        return "HelloCourse";
     }
 
 }
