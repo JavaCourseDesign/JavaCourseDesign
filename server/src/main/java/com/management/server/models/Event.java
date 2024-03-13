@@ -33,10 +33,12 @@ public class Event {
     /*@ManyToMany(mappedBy = "events")
     private List<Person> persons=new ArrayList<>();*/
 
-    @ManyToMany(mappedBy = "events")
+    @ManyToMany
+    @JoinTable(name = "student_event")
     private List<Student> students;
 
-    @ManyToMany(mappedBy = "events")
+    @ManyToMany
+    @JoinTable(name = "teacher_event")
     private List<Teacher> teachers;
 
 

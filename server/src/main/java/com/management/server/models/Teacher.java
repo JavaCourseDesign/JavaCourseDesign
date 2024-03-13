@@ -20,7 +20,6 @@ public class Teacher extends Person{
     @Size(max = 50)
     private String title;
 
-    @ManyToMany
-    //@JoinTable(name = "event", joinColumns = @JoinColumn(name = "personId"), inverseJoinColumns = @JoinColumn(name = "eventId"))
-    private List<Event> events=new ArrayList<>();
+    @ManyToMany(mappedBy = "teachers")
+    private List<Event> events;
 }

@@ -15,10 +15,10 @@ import java.util.List;
 @Data
 @Table(name="student",uniqueConstraints = {})
 
-public class Student /*extends Person*/{
-    @Id
+public class Student extends Person{
+    /*@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer studentId;
+    private Integer studentId;*/
 
     @Size(max = 20)
     private String major;
@@ -26,13 +26,7 @@ public class Student /*extends Person*/{
     @Size(max = 50)
     private String className;
 
-    @ManyToMany
-    //@JoinTable(name = "event", joinColumns = @JoinColumn(name = "personId"), inverseJoinColumns = @JoinColumn(name = "eventId"))
-    @JoinTable(
-            name = "student_event",
-            joinColumns = @JoinColumn(name = "student_id"),
-            inverseJoinColumns = @JoinColumn(name = "event_id")
-    )
+    @ManyToMany(mappedBy = "students")
     private List<Event> events;
 
     /*public void addEvent(Event event){
