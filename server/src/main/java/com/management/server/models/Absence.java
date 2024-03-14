@@ -14,11 +14,11 @@ public class Absence {
 
     private String reason;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name="person_id")
     private Person person;
 
-    @OneToOne
-    @JoinColumn(name="related_event_id")
-    private Event relatedEvent;
+    @ManyToOne
+    @JoinColumn(name="related_lesson_id")
+    private Lesson lesson;
 }

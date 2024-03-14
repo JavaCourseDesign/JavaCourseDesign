@@ -60,10 +60,13 @@ public abstract class Person {
     private String introduce;
 
     @OneToMany(mappedBy = "person")
+    private List<Absence> absences;
+
+    @OneToMany(mappedBy = "person")
     private List<Honor> honors;
 
     @ManyToOne
-    @JoinColumn(name = "dormitoryId")
+    @JoinColumn(name = "dormitory_id")
     private Dormitory dormitory;
 
     /*@ManyToMany

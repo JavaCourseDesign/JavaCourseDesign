@@ -2,14 +2,11 @@ package com.management.server.models;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.ArrayList;
 import java.util.List;
 
 //should be the super class of course,activities,etc
 @Entity
-@Table(name="event",uniqueConstraints = {})
+@Table(name="event")
 @Data
 //@MappedSuperclass
 @Inheritance(strategy = InheritanceType.JOINED)

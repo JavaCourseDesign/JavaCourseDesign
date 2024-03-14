@@ -18,6 +18,7 @@ public class StudentController {
     @GetMapping("/demoStudent")
     public String demoStudent(){
         Student s=new Student();
+
         s.setMajor("software");
         studentRepository.save(s);
         return "HelloStudent";

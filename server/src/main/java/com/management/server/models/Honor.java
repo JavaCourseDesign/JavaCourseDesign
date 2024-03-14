@@ -4,9 +4,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 @Entity
-@Table(	name = "honor",
-        uniqueConstraints = {
-        })
+@Table(	name = "honor")
 @Data
 public class Honor {
     @Id

@@ -1,10 +1,9 @@
 package com.management.server.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Data;
+
+import java.util.List;
 
 @Entity
 @Data
@@ -13,4 +12,7 @@ public class Lesson extends Event{
     @ManyToOne
     @JoinColumn(name="course_id")
     private Course course;
+
+    @OneToMany(mappedBy = "lesson")
+    private List<Absence> absences;
 }
