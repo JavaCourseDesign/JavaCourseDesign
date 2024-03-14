@@ -22,4 +22,10 @@ public class StudentController {
         studentRepository.save(s);
         return "HelloStudent";
     }
+
+    @GetMapping("/checkEvents")
+    public String checkEvents(){
+        Student s=studentRepository.findById(1).get();
+        return s.getEvents().toString();
+    }
 }

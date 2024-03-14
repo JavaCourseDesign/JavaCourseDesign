@@ -59,6 +59,9 @@ public abstract class Person {
     @Size(max = 1000)
     private String introduce;
 
+    @OneToMany(mappedBy = "person")
+    private List<Honor> honors;
+
     @ManyToOne
     @JoinColumn(name = "dormitoryId")
     private Dormitory dormitory;

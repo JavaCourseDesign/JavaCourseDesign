@@ -14,11 +14,11 @@ public class Honor {
     private Integer honorId;
 
     @ManyToOne
-    @JoinColumn(name = "student_id")
-    private Student student;
+    @JoinColumn(name = "person_id")
+    private Person person;
 
     private String time;
-    private String honor;
+    private String honorName;
     @Size(max=1000)
     private String message;
     @Size(max=1000)

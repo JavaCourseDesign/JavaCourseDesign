@@ -26,21 +26,8 @@ public class CourseController {
     TeacherRepository teacherRepository;
     @GetMapping("/demoCourse")
     public String demoCourse(){
-        Course c=new Course();
-        c.setEventId(1);
-        c.setCourseCode("100a");
-        c.setName("java");
-        c.setCredit(3);
-        List<Student> studentList=new ArrayList<>();
-        studentList.add(studentRepository.findById(1).get());
-        studentList.add(studentRepository.findById(2).get());
-        List<Teacher> teacherList=new ArrayList<>();
-        teacherList.add(teacherRepository.findById(3).get());
-        teacherList.add(teacherRepository.findById(4).get());
-        c.setStudents(studentList);
-        c.setTeachers(teacherList);
-        //c.addStudent(studentRepository.findByPersonId(1));
-        courseRepository.save(c);
+
+
         return "HelloCourse";
     }
 
