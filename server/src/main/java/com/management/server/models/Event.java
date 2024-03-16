@@ -10,7 +10,7 @@ import java.util.List;
 @Data
 //@MappedSuperclass
 @Inheritance(strategy = InheritanceType.JOINED)
-public class Event {
+public abstract class Event {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer eventId;
