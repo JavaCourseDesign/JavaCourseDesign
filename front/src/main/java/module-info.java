@@ -9,7 +9,12 @@ module com.management.front {
     requires org.kordamp.ikonli.javafx;
     requires org.kordamp.bootstrapfx.core;
     requires eu.hansolo.tilesfx;
+    requires java.sql;
+    requires java.net.http;
+    requires com.google.gson;
 
     opens com.management.front to javafx.fxml;
     exports com.management.front;
+    exports com.management.front.request to com.google.gson;
+    opens com.management.front.request to com.google.gson;
 }

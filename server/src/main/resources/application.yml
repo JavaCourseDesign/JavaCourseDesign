@@ -1,3 +1,4 @@
+
 spring:
   datasource:
     url: jdbc:sqlite:data.db
@@ -8,3 +9,5 @@ spring:
     show-sql: true
     hibernate:
       ddl-auto: create
+server:
+  port: 9090
