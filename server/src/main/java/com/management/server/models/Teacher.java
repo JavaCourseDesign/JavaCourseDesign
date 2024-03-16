@@ -22,4 +22,7 @@ public class Teacher extends Person{
 
     @ManyToMany(mappedBy = "teachers")
     private List<Event> events;
+
+    @ManyToMany(mappedBy = "teachers")
+    private List<Course> courses;
 }
