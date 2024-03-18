@@ -5,29 +5,36 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e82a43fb-52cb-4cdd-a010-327e48d43756" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/front/src/main/java/com/management/front/request/DataRequest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/front/src/main/java/com/management/front/request/DataResponse.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/front/src/main/java/com/management/front/request/HttpRequestUtil.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/front/src/main/java/com/management/front/request/JwtResponse.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/front/src/main/java/com/management/front/request/LoginRequest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/front/src/main/java/com/management/front/request/MessageResponse.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/front/src/main/java/com/management/front/request/MyTreeNode.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/front/src/main/java/com/management/front/request/OptionItem.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/front/src/main/java/com/management/front/request/OptionItemList.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/front/src/main/java/com/management/front/request/SQLiteJDBC.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/front/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/src/main/java/com/management/front/HelloController.java" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/main/java/com/management/front/HelloController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/src/main/resources/com/management/front/hello-view.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/main/resources/com/management/front/hello-view.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/management/server/controllers/StudentController.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/com/management/server/controllers/StudentController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/front/src/main/java/com/management/front/DemoClient.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/src/main/java/com/management/server/controllers/DemoController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data.db" beforeDir="false" afterPath="$PROJECT_DIR$/data.db" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/management/server/controllers/CourseController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/management/server/controllers/StudentController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/management/server/controllers/TeacherController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/management/server/repositories/CourseRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/management/server/repositories/DormitoryRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/management/server/repositories/PersonRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/management/server/repositories/StudentRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/management/server/repositories/TeacherRepository.java" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;customColor&quot;: &quot;&quot;,
@@ -38,27 +45,33 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
-    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
-    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
-    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;last_opened_file_path&quot;: &quot;D:/JAVACourseDesign/JavaCourseDesign/front/src/main/java/com/management/front&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.DemoClient.executor": "Run",
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "Spring Boot.DemoController.executor": "Run",
+    "Spring Boot.ServerApplication.executor": "Run",
+    "WebServerToolWindowFactoryState": "false",
+    "git-widget-placeholder": "communacationtest",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "D:/JAVACourseDesign/JavaCourseDesign/front/src/main/java/com/management/front",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.0",
+    "settings.editor.selected.configurable": "reference.settings.project.maven.repository.indices",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="D:\JAVACourseDesign\JavaCourseDesign\front\src\main\java\com\management\front" />
@@ -67,13 +80,39 @@
       <recent name="com.management.front.request" />
     </key>
   </component>
-  <component name="RunManager" selected="Spring Boot.ServerApplication">
+  <component name="RunManager" selected="Application.DemoClient">
+    <configuration name="DemoClient" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.management.front.DemoClient" />
+      <module name="front" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.management.front.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="HelloApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.management.front.HelloApplication" />
       <module name="front" />
       <extension name="coverage">
         <pattern>
           <option name="PATTERN" value="com.management.front.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="DemoController" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" temporary="true" nameIsGenerated="true">
+      <module name="server" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.management.server.controllers.DemoController" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.management.server.controllers.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -90,9 +129,18 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.DemoClient" />
+        <item itemvalue="Spring Boot.DemoController" />
         <item itemvalue="Application.HelloApplication" />
       </list>
     </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="jdk-21.0.2-openjdk-21.0.2-4caba194b151-4f524021" />
+      </set>
+    </attachedChunks>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -105,6 +153,7 @@
       <workItem from="1710593832753" duration="2394000" />
       <workItem from="1710749274236" duration="11000" />
       <workItem from="1710750582240" duration="426000" />
+      <workItem from="1710753083899" duration="1362000" />
     </task>
     <servers />
   </component>
