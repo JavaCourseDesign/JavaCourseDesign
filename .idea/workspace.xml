@@ -5,14 +5,30 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e82a43fb-52cb-4cdd-a010-327e48d43756" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/server/src/main/java/com/management/server/util/CommonMethod.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/copilot/chatSessions/xd.lck" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/copilot/chatSessions/xd.lck" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/management/server/util/Test.java" beforeDir="false" />
+      <change afterPath="$PROJECT_DIR$/front/src/main/java/com/management/front/DemoClient.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/src/main/java/com/management/server/controllers/DemoController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data.db" beforeDir="false" afterPath="$PROJECT_DIR$/data.db" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/management/server/controllers/CourseController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/management/server/controllers/StudentController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/management/server/controllers/TeacherController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/management/server/repositories/CourseRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/management/server/repositories/DormitoryRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/management/server/repositories/PersonRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/management/server/repositories/StudentRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/management/server/repositories/TeacherRepository.java" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -25,25 +41,25 @@
   &quot;associatedIndex&quot;: 2
 }</component>
   <component name="ProjectId" id="2dls76glkPq7V7b0iIz1UrASbBN" />
-  <component name="ProjectLevelVcsManager">
-    <ConfirmationsSetting value="2" id="Add" />
-  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "Application.DemoClient.executor": "Run",
     "RequestMappingsPanelOrder0": "0",
     "RequestMappingsPanelOrder1": "1",
     "RequestMappingsPanelWidth0": "75",
     "RequestMappingsPanelWidth1": "75",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "Spring Boot.DemoController.executor": "Run",
+    "Spring Boot.ServerApplication.executor": "Run",
     "WebServerToolWindowFactoryState": "false",
-    "git-widget-placeholder": "main",
+    "git-widget-placeholder": "communacationtest",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "D:/23993/OneDrive/IDEA/JavaCourseDesign/server/src/main/java/com/management/server/util",
+    "last_opened_file_path": "D:/JAVACourseDesign/JavaCourseDesign/front/src/main/java/com/management/front",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -52,25 +68,51 @@
     "project.structure.last.edited": "Project",
     "project.structure.proportion": "0.0",
     "project.structure.side.proportion": "0.0",
+    "settings.editor.selected.configurable": "reference.settings.project.maven.repository.indices",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="D:\23993\OneDrive\IDEA\JavaCourseDesign\server\src\main\java\com\management\server\util" />
       <recent name="D:\JAVACourseDesign\JavaCourseDesign\front\src\main\java\com\management\front" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
       <recent name="com.management.front.request" />
     </key>
   </component>
-  <component name="RunManager" selected="Spring Boot.ServerApplication">
+  <component name="RunManager" selected="Application.DemoClient">
+    <configuration name="DemoClient" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.management.front.DemoClient" />
+      <module name="front" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.management.front.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="HelloApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.management.front.HelloApplication" />
       <module name="front" />
       <extension name="coverage">
         <pattern>
           <option name="PATTERN" value="com.management.front.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="DemoController" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" temporary="true" nameIsGenerated="true">
+      <module name="server" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.management.server.controllers.DemoController" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.management.server.controllers.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -87,6 +129,8 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.DemoClient" />
+        <item itemvalue="Spring Boot.DemoController" />
         <item itemvalue="Application.HelloApplication" />
       </list>
     </recent_temporary>
@@ -94,7 +138,6 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="jdk-20.0.2-azul-20.0.2-f644763e9732-d86f2a68" />
         <option value="jdk-21.0.2-openjdk-21.0.2-4caba194b151-4f524021" />
       </set>
     </attachedChunks>
@@ -110,16 +153,11 @@
       <workItem from="1710593832753" duration="2394000" />
       <workItem from="1710749274236" duration="11000" />
       <workItem from="1710750582240" duration="426000" />
-      <workItem from="1710752541875" duration="45000" />
-      <workItem from="1710752599126" duration="43000" />
-      <workItem from="1710752741281" duration="265000" />
+      <workItem from="1710753083899" duration="1753000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
-  </component>
-  <component name="VcsManagerConfiguration">
-    <option name="LAST_COMMIT_MESSAGE" value="" />
   </component>
 </project>
