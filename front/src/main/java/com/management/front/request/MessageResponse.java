@@ -1,5 +1,10 @@
 package com.management.front.request;
 
+/**
+ * MessageResponse  消息返回对象 系统框架返回的消息对象
+ * String message 返回的消息
+ */
+
 public class MessageResponse {
     private String message;
 
@@ -14,5 +19,4 @@ public class MessageResponse {
     public void setMessage(String message) {
         this.message = message;
     }
-
 }

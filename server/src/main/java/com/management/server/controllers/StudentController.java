@@ -22,7 +22,7 @@ public class StudentController {
     private PersonRepository personRepository;*/
     @Autowired
     private StudentRepository studentRepository;
-    @PostMapping ("/demoStudent")
+    @GetMapping ("/demoStudent")
     public String demoStudent(){
         Student s=new Student();
         s.setMajor("software");

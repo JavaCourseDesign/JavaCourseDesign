@@ -1,17 +1,22 @@
 package com.management.front.request;
 
+/**
+ * OptionItem 选项数据类
+ * Integer id  数据项id
+ * String value 数据项值
+ * String label 数据值标题
+ */
 public class OptionItem {
     private Integer id;
     private String value;
-    private String label;
-
+    private String title;
     public OptionItem(){
 
     }
-    public OptionItem(Integer id, String value, String label){
+    public OptionItem(Integer id, String value, String title){
         this.id = id;
         this.value = value;
-        this.label = label;
+        this.title = title;
     }
     public Integer getId() {
         return id;
@@ -29,16 +34,15 @@ public class OptionItem {
         this.value = value;
     }
 
-    public String getLabel() {
-        return label;
-    }
-
-    public void setLabel(String label) {
-        this.label = label;
-    }
-
     public String toString(){
-        return label;
+        return title;
     }
 
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
 }
