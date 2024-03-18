@@ -16,12 +16,12 @@ public class StudentController {
     @Autowired
     private StudentRepository studentRepository;
     @GetMapping("/demoStudent")
-    public String demoStudent(){
+    public Student demoStudent(){
         Student s=new Student();
 
         s.setMajor("software");
         studentRepository.save(s);
-        return "HelloStudent";
+        return s;
     }
 
     @GetMapping("/checkEvents")
