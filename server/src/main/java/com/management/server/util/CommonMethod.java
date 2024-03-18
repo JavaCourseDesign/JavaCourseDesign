@@ -1,12 +1,16 @@
 package com.management.server.util;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-
+import org.apache.poi.ss.usermodel.BorderStyle;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
+import org.apache.poi.ss.usermodel.VerticalAlignment;
+import org.apache.poi.xssf.usermodel.XSSFCellStyle;
+import org.apache.poi.xssf.usermodel.XSSFFont;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import com.management.server.payload.response.DataResponse;
-import com.management.server.service.UserDetailsImpl;
+import com.management.server.security.services.UserDetailsImpl;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
@@ -42,21 +46,16 @@ public class CommonMethod {
      * Integer getUserId() 获得用户的userId 该static 方法可以在任何的Controller和Service中使用，可以获得当前登录用户的用户ID，可以通过在Web请求服务中使用该方法获取当前请求客户的信息
      * @return
      */
-    public static String getUserId(){
+    public static Integer getUserId(){
         Object obj = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if(!(obj instanceof UserDetailsImpl userDetails))
+        if(!(obj instanceof UserDetailsImpl))
             return null;
-        return userDetails.getId();
-    }
-    public static String getUserType(){
-        Object obj = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if(!(obj instanceof UserDetailsImpl userDetails))
+        UserDetailsImpl userDetails =
+                (UserDetailsImpl) obj;
+        if(userDetails != null)
+            return userDetails.getId();
+        else
             return null;
-        Collection<? extends GrantedAuthority> authorities = userDetails.getAuthorities();
-        if (!authorities.isEmpty()) {
-            return authorities.iterator().next().getAuthority();
-        }
-        return null;
     }
     public static String getUsername(){
         Object obj = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -299,6 +298,24 @@ public class CommonMethod {
      * @param fontSize
      * @return
      */
+    public static XSSFCellStyle createCellStyle(XSSFWorkbook workbook, int fontSize) {
+        XSSFFont font = workbook.createFont();
+        //在对应的workbook中新建字体
+        font.setFontName("微软雅黑");
+        //字体微软雅黑
+        font.setFontHeightInPoints((short) fontSize);
+        //设置字体大小
+        XSSFCellStyle style = workbook.createCellStyle();
+        //新建Cell字体
+        style.setFont(font);
+        style.setAlignment(HorizontalAlignment.CENTER);
+        style.setVerticalAlignment(VerticalAlignment.CENTER);
+        style.setBorderBottom(BorderStyle.THIN);
+        style.setBorderTop(BorderStyle.THIN);
+        style.setBorderLeft(BorderStyle.THIN);
+        style.setBorderRight(BorderStyle.THIN);
+        return style;
+    }
 
     /**
      * String replaceNameValue(String html, Map<String,String>m) 将用户HTML模板中参数替换为Map里面的值，参数名对应Map中的Key
