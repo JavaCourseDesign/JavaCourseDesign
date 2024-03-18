@@ -21,7 +21,7 @@ public class DemoClient extends Application {
         primaryStage.setScene(new Scene(root, 300, 250));
         primaryStage.show();
     }
-
+    //port:9090
     private String getHelloWorldFromServer() {
         try {
             URL url = new URL("http://localhost:9090/helloworld");
