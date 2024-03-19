@@ -12,6 +12,8 @@ module com.management.front {
     requires java.sql;
     requires java.net.http;
     requires com.google.gson;
+    requires org.apache.httpcomponents.httpcore;
+    requires org.apache.httpcomponents.httpclient;
 
     opens com.management.front to javafx.fxml;
     exports com.management.front;

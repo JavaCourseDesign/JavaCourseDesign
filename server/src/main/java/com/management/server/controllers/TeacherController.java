@@ -29,11 +29,12 @@ public class TeacherController {
 
     @PostMapping("/getTeacherList")
     //@PreAuthorize("hasRole('ADMIN')")
-    public DataResponse getTeacherList(/*@Valid @RequestBody DataRequest dataRequest*/) {
+    //public DataResponse getTeacherList(@Valid @RequestBody DataRequest dataRequest) {
+    public DataResponse getTeacherList(@Valid @RequestBody DataResponse dataResponse) {
         //String numName= dataRequest.getString("numName");
         //List dataList = getTeacherMapList(numName);
         Teacher t=new Teacher();
-        t.setName("wzk");
+        t.setName("wzk"+dataResponse.getMsg()+"success2");
         return new DataResponse(200,t,"hello");  //按照测试框架规范会送Map的list
     }
 }
