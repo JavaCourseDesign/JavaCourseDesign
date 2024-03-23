@@ -30,13 +30,17 @@ public abstract class Event {
     /*@ManyToMany(mappedBy = "events")
     private List<Person> persons=new ArrayList<>();*/
 
-    @ManyToMany
+    /*@ManyToMany
     @JoinTable(name = "student_event")
     private List<Student> students;
 
     @ManyToMany
     @JoinTable(name = "teacher_event")
-    private List<Teacher> teachers;
+    private List<Teacher> teachers;*/
+
+    @ManyToMany
+    @JoinTable(name = "person_event")
+    private List<Person> persons;
 
 
 

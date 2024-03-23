@@ -69,6 +69,12 @@ public abstract class Person {
     @JoinColumn(name = "dormitory_id")
     private Dormitory dormitory;
 
+    @ManyToMany(mappedBy = "persons")
+    private List<Event> events;
+
+    @ManyToMany(mappedBy = "persons")
+    private List<Course> courses;
+
 
     /*@ManyToMany
     @JoinTable(name = "event", joinColumns = @JoinColumn(name = "personId"), inverseJoinColumns = @JoinColumn(name = "eventId"))

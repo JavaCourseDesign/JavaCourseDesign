@@ -20,9 +20,9 @@ public class Teacher extends Person{
     @Size(max = 50)
     private String title;
 
-    @ManyToMany(mappedBy = "teachers")
+    /*@ManyToMany(mappedBy = "teachers")
     private List<Event> events;
 
     @ManyToMany(mappedBy = "teachers")
-    private List<Course> courses;
+    private List<Course> courses;*/
 }
