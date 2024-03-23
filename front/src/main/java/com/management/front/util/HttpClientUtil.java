@@ -16,7 +16,7 @@ import org.apache.http.util.EntityUtils;
 import java.io.IOException;
 import java.lang.reflect.Type;
 
-public class HttpClientUtil {
+public class HttpClientUtil  {
     static public String mainUrl = "http://localhost:9090";
     //private DataResponse sendAndReceive(String numName) throws IOException {
     static public DataResponse sendAndReceive(String url, Object parameter) throws IOException {
