@@ -1,10 +1,14 @@
-.grid-pane {
-    -fx-background-color: #f0f0f0;
+.schedule-grid {
+    -fx-border-color: black;
+    -fx-border-width: 2;
+    -fx-padding: 10;
 }
 
-.vbox {
-    -fx-spacing: 5;
-    -fx-alignment: center;
+.day-box {
+    -fx-border-color: grey;
+    -fx-border-width: 1;
+    -fx-padding: 5;
+    -fx-spacing: 5; /* 为每个事件之间添加一些空间 */
 }
 
 .time-block {
@@ -14,3 +18,10 @@
     -fx-padding: 5;
     -fx-alignment: center-left;
 }
+
+.time-divider {
+    -fx-border-color: rgb(248, 5, 5);
+    -fx-border-width: 0 0 1 0; /* 只在底部有1像素的边框线 */
+    -fx-padding: 0;
+}
+

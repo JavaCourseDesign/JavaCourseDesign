@@ -14,6 +14,7 @@ module com.management.front {
     requires com.google.gson;
     requires org.apache.httpcomponents.httpcore;
     requires org.apache.httpcomponents.httpclient;
+    requires java.desktop;
 
     opens com.management.front to javafx.fxml;
     exports com.management.front;

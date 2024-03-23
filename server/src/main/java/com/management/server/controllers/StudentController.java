@@ -50,6 +50,16 @@ public class StudentController {
         return r;
     }
 
+    @PostMapping("/deleteStudent")
+    public boolean deleteStudent(@Valid @RequestBody DataRequest data){
+        return true;
+    }
+
+    @PostMapping("/getAllStudents")
+    public List<Student> getAllStudents(){
+        return studentRepository.findAll();
+    }
+
 
 
 }

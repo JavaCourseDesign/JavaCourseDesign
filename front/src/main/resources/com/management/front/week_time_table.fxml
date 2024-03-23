@@ -1,58 +1,71 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<?import javafx.geometry.Insets?>
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.management.front.controller.WeekTimeTableController"
-            prefHeight="400.0" prefWidth="700.0">
-    <BorderPane>
+<AnchorPane prefHeight="400.0" prefWidth="746.0" stylesheets="@week_time_table.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.management.front.controller.WeekTimeTableController">
+    <BorderPane prefHeight="329.0" prefWidth="768.0">
         <top>
-            <HBox spacing="10" alignment="CENTER">
-                <Label text="时间/星期" minWidth="80"/> <!-- 占位符 -->
-                <Label text="星期一" minWidth="100"/>
-                <Label text="星期二" minWidth="100"/>
-                <Label text="星期三" minWidth="100"/>
-                <Label text="星期四" minWidth="100"/>
-                <Label text="星期五" minWidth="100"/>
-                <Label text="星期六" minWidth="100"/>
-                <Label text="星期日" minWidth="100"/>
+            <HBox alignment="CENTER" prefHeight="15.0" prefWidth="700.0" spacing="10">
+                <Label minWidth="90.0" text="时间/星期" /> <!-- 占位符 -->
+                <Label minWidth="90.0" prefHeight="15.0" prefWidth="90.0" text="星期一" />
+                <Label minWidth="90.0" prefHeight="15.0" prefWidth="90.0" text="星期二" />
+                <Label minWidth="90.0" prefHeight="15.0" prefWidth="90.0" text="星期三" />
+                <Label minWidth="90.0" prefHeight="15.0" prefWidth="90.0" text="星期四" />
+                <Label minWidth="90.0" prefHeight="15.0" prefWidth="90.0" text="星期五" />
+                <Label minWidth="90.0" prefHeight="15.0" prefWidth="90.0" text="星期六" />
+                <Label minWidth="90.0" prefHeight="15.0" prefWidth="90.0" text="星期日" />
             </HBox>
         </top>
         <left>
-            <VBox spacing="5" alignment="TOP_RIGHT">
-                <Label text="00:00" minHeight="30"/> <!-- 以HOUR_HEIGHT为基准调整 -->
-                <Label text="01:00" minHeight="30"/>
-                <Label text="02:00" minHeight="30"/>
-                <Label text="03:00" minHeight="30"/>
-                <Label text="04:00" minHeight="30"/>
-                <Label text="05:00" minHeight="30"/>
-                <Label text="06:00" minHeight="30"/>
-                <Label text="07:00" minHeight="30"/>
-                <Label text="08:00" minHeight="30"/>
+            <VBox fx:id="time" alignment="TOP_RIGHT" prefHeight="300.0" prefWidth="75.0" spacing="5">
+                <Label maxHeight="30.0" minHeight="30" text="06:00" /><!-- 以HOUR_HEIGHT为基准调整 -->
+                <Label maxHeight="30.0" minHeight="30" text="07:00" />
+                <Label maxHeight="30.0" minHeight="30" text="08:00" />
+                <Label maxHeight="30.0" minHeight="30" text="09:00" />
+                <Label maxHeight="30.0" minHeight="30" text="10:00" />
+                <Label maxHeight="30.0" minHeight="30" text="11:00" />
+                <Label maxHeight="30.0" minHeight="30" text="12:00" />
+                <Label maxHeight="30.0" minHeight="30" text="13:00" />
+                <Label maxHeight="30.0" minHeight="30" text="14:00" />
+                <Label maxHeight="30.0" minHeight="30" text="15:00" />
+                <Label maxHeight="30.0" minHeight="30" text="16:00" />
+                <Label maxHeight="30.0" minHeight="30" text="17:00" />
+                <Label maxHeight="30.0" minHeight="30" text="18:00" />
+                <Label maxHeight="30.0" minHeight="30" text="19:00" />
+                <Label maxHeight="30.0" minHeight="30" text="20:00" />
+                <Label maxHeight="30.0" minHeight="30" text="21:00" />
+                <Label maxHeight="30.0" minHeight="30" text="22:00" />
                 <!-- 添加更多时间标签 -->
             </VBox>
         </left>
         <center>
-            <GridPane fx:id="scheduleGrid" hgap="70" vgap="10" >
+            <GridPane fx:id="scheduleGrid" hgap="20" vgap="10">
                 <padding>
-                    <Insets top="10" right="10" bottom="10" left="10"/>
+                    <Insets bottom="10" left="10" right="10" top="10" />
                 </padding>
                 <!-- 列定义，每个VBox代表一天 -->
-                <AnchorPane fx:id="day1" GridPane.columnIndex="0"/>
-                <AnchorPane fx:id="day2" GridPane.columnIndex="1"/>
-                <AnchorPane fx:id="day3" GridPane.columnIndex="2"/>
-                <AnchorPane fx:id="day4" GridPane.columnIndex="3"/>
-                <AnchorPane fx:id="day5" GridPane.columnIndex="4"/>
-                <AnchorPane fx:id="day6" GridPane.columnIndex="5"/>
-                <AnchorPane fx:id="day7" GridPane.columnIndex="6"/>
+                <AnchorPane fx:id="day1" prefWidth="80.0" styleClass="day-box" GridPane.columnIndex="0" />
+                <AnchorPane fx:id="day2" prefWidth="80.0" styleClass="day-box" GridPane.columnIndex="1" />
+                <AnchorPane fx:id="day3" prefWidth="80.0" styleClass="day-box" GridPane.columnIndex="2" />
+                <AnchorPane fx:id="day4" prefWidth="80.0" styleClass="day-box" GridPane.columnIndex="3" />
+                <AnchorPane fx:id="day5" prefWidth="80.0" styleClass="day-box" GridPane.columnIndex="4" />
+                <AnchorPane fx:id="day6" prefWidth="80.0" styleClass="day-box" GridPane.columnIndex="5" />
+                <AnchorPane fx:id="day7" prefWidth="80.0" styleClass="day-box" GridPane.columnIndex="6" />
+            <columnConstraints>
+               <ColumnConstraints />
+               <ColumnConstraints />
+               <ColumnConstraints />
+               <ColumnConstraints />
+               <ColumnConstraints />
+               <ColumnConstraints />
+               <ColumnConstraints />
+            </columnConstraints>
+            <rowConstraints>
+               <RowConstraints />
+            </rowConstraints>
             </GridPane>
         </center>
     </BorderPane>
 </AnchorPane>
-

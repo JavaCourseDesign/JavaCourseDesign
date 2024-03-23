@@ -62,6 +62,5 @@ public class HelloController {
         student.put("major",major.getText());
         Gson gson = new Gson();
         System.out.println(gson.toJson(student));
-        welcomeText.setText("successfullyAddedStudent"+sendAndReceive("/addStudent",student).getMsg());
     }
 }

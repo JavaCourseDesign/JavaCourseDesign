@@ -15,11 +15,12 @@ import org.apache.http.util.EntityUtils;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.util.Map;
 
 public class HttpClientUtil {
     static public String mainUrl = "http://localhost:9090";
     //private DataResponse sendAndReceive(String numName) throws IOException {
-    static public DataResponse sendAndReceive(String url, Object parameter) throws IOException {
+    static public Object sendAndReceive(String url, Object parameter) throws IOException {
         CloseableHttpClient httpclient = HttpClients.createDefault();
         Gson gson = new Gson();
         // 2. 创建HttpPost实例
@@ -38,8 +39,8 @@ public class HttpClientUtil {
         response.close();
         httpclient.close();
 
-
-        return gson.fromJson(html,DataResponse.class);
+        System.out.println(html);
+        return gson.fromJson(html, Object.class);
     }
 }
 /*public class HttpClientUtil {
