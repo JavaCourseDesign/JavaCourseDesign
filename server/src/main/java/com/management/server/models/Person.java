@@ -1,52 +1,49 @@
 package com.management.server.models;
 
-
-import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
 
 import java.security.DomainLoadStoreParameter;
 import java.util.List;
-import java.util.Set;
 
 
-@Entity
-@Table(name="person")
-
+/*@Entity
+@Table(	name = "person",
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = "num"),   //人员表中的编号 唯一
+        })*/
 @Data
-
-//@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "name")//在递归中第二次出现时用name属性替代本对象避免无限递归
-//@JsonIgnoreProperties(value = {"courses"})
-@EqualsAndHashCode(exclude = {"events","honors","courses"})//极为重要！跟json ignore搭配才能解决循环引用问题
-
+@Entity
+@Table(name="person",uniqueConstraints = {})
+//@MappedSuperclass
 @Inheritance(strategy = InheritanceType.JOINED)
 public abstract class Person {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String personId;
+    private Integer personId;
+
+    //@NotBlank    // 字段非空
+    @Size(max = 20)   //字段长度最长为20
+    private String num;
 
     @Size(max = 50)
     private String name;
 
-/*    @Size(max = 2)
-    private String type;*/
+    @Size(max = 2)
+    private String type;
 
     @Size(max = 50)
     private String dept;
 
     @Size(max = 20)
-    private String idCardNum;
-    @Size(max = 20)
+    private String card;
+    @Size(max = 2)
     private String gender;
 
     private String birthday;
-    
 
     @Size(max = 60)
     @Email
@@ -58,45 +55,31 @@ public abstract class Person {
     @Size(max = 20)
     private String address;
 
-    @Size(max=20)
-    private String homeTown;
+    @Size(max = 1000)
+    private String introduce;
 
-    private String social;
-    private String photo;
+    @OneToMany(mappedBy = "person")
+    private List<Absence> absences;
 
-    /*@OneToMany(mappedBy = "person")
-    private List<Absence> absences;*/
-
-    /*@OneToMany(mappedBy = "person")
-    private List<Honor> honors;*/
-
-    /*@ManyToOne
-    @JoinColumn(name = "dormitory_id")
-    private Dormitory dormitory;*/
-
-    @ManyToMany(mappedBy = "persons")
-    @JsonIgnore
-    private Set<Event> events;
-
-    @ManyToMany(mappedBy = "persons")
-    @JsonIgnore
+    @OneToMany(mappedBy = "person")
     private List<Honor> honors;
 
-    @ManyToMany(mappedBy = "persons")
-    @JsonIgnore
-    private List<Course> courses;
+    @ManyToOne
+    @JoinColumn(name = "dormitory_id")
+    private Dormitory dormitory;
 
+    /*@ManyToMany
+    @JoinTable(name = "event", joinColumns = @JoinColumn(name = "personId"), inverseJoinColumns = @JoinColumn(name = "eventId"))
+    private List<Event> events;*/
 
-    /*public String getGenderName() {
+    public Person() {
+    }
+
+    public String getGenderName() {
         return  ComDataUtil.getInstance().getDictionaryLabelByValue("XBM", gender);
-    }*/ //ComDataUtil相关，暂时（或永久）删除
+    }
 
-    public Set<Event> getEvents() { //lesson不再重复存储persons，提升课程管理性能
-        Set<Event> events = this.events;
-        for(Course course : this.courses) {
-            events.addAll(course.getLessons());
-        }
-        return events;
+    public void setGenderName(String genderName) {
     }
 
 }
