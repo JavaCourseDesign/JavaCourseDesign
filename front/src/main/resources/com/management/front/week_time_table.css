@@ -1,27 +1,13 @@
-.schedule-grid {
-    -fx-border-color: black;
-    -fx-border-width: 2;
-    -fx-padding: 10;
-}
 
-.day-box {
+/*.day-box {
     -fx-border-color: grey;
     -fx-border-width: 1;
     -fx-padding: 5;
-    -fx-spacing: 5; /* 为每个事件之间添加一些空间 */
-}
+    -fx-spacing: 5; !* 为每个事件之间添加一些空间 *!
+}*/
 
-.time-block {
-    -fx-background-color: #a3d3f5;
-    -fx-border-color: black;
-    -fx-border-width: 1;
-    -fx-padding: 5;
-    -fx-alignment: center-left;
-}
-
-.time-divider {
-    -fx-border-color: rgb(248, 5, 5);
-    -fx-border-width: 0 0 1 0; /* 只在底部有1像素的边框线 */
-    -fx-padding: 0;
+.grid-background {
+    -fx-background-image: url('images/grid_background.png');
+    -fx-background-repeat: repeat;
 }
 

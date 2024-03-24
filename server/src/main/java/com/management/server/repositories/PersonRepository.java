@@ -12,5 +12,5 @@ import java.util.Optional;
 @Transactional
 
 public interface PersonRepository extends JpaRepository<Person,Integer> {
-
+    Person findByPersonId(Integer personId);
 }

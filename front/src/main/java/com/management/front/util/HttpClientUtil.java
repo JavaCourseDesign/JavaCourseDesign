@@ -20,7 +20,7 @@ import java.util.Map;
 public class HttpClientUtil {
     static public String mainUrl = "http://localhost:9090";
     //private DataResponse sendAndReceive(String numName) throws IOException {
-    static public Object sendAndReceive(String url, Object parameter) throws IOException {
+    static public Object sendAndReceiveObject(String url, Object parameter) throws IOException {
         CloseableHttpClient httpclient = HttpClients.createDefault();
         Gson gson = new Gson();
         // 2. 创建HttpPost实例
@@ -42,7 +42,33 @@ public class HttpClientUtil {
         System.out.println(html);
         return gson.fromJson(html, Object.class);
     }
+
+    static public DataResponse sendAndReceiveDataResponse(String url, Object parameter) throws IOException {
+        CloseableHttpClient httpclient = HttpClients.createDefault();
+        Gson gson = new Gson();
+        // 2. 创建HttpPost实例
+        HttpPost httpPost = new HttpPost(mainUrl+url);
+        httpPost.setEntity(new StringEntity(gson.toJson(parameter), ContentType.APPLICATION_JSON));
+
+        // 3. 调用HttpClient实例来执行HttpPost实例
+        CloseableHttpResponse response = httpclient.execute(httpPost);
+        // 4. 读 response
+        int status = response.getStatusLine().getStatusCode();
+        if(status<200||status>=300) throw new ClientProtocolException("Unexpected response status: " + status);
+        HttpEntity entity = response.getEntity();
+        String html = EntityUtils.toString(entity);
+
+        // 5. 释放连接
+        response.close();
+        httpclient.close();
+
+        System.out.println(html);
+        return gson.fromJson(html, DataResponse.class);
+    }
 }
+
+
+
 /*public class HttpClientUtil {
     //private DataResponse sendAndReceive(String numName) throws IOException {
     static public DataResponse sendAndReceive(String url, Object parameter, Type type) throws IOException {
