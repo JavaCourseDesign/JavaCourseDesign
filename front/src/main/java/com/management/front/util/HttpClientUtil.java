@@ -31,7 +31,8 @@ public class HttpClientUtil {
         CloseableHttpResponse response = httpclient.execute(httpPost);
         // 4. 读 response
         int status = response.getStatusLine().getStatusCode();
-        if(status<200||status>=300) throw new ClientProtocolException("Unexpected response status: " + status);
+        //if(status<200||status>=300) throw new ClientProtocolException("Unexpected response status: " + status);
+        if(status<200||status>=300) return null;
         HttpEntity entity = response.getEntity();
         String html = EntityUtils.toString(entity);
 

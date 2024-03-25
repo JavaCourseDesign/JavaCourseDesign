@@ -30,12 +30,12 @@ public class HelloApplication extends Application {
         controller.addEvent(3, "测试会议", "办公室", 9.0, 11.0);
         controller.addEvent(4, "语文", "办公室", 9.0, 19.0);
         controller.addEvent(5, "会议3", "办公室", 10.0, 18.0);*/
-        controller.addEvent(1, "线性代数", "办公室", 8.0, 9.83);
-        controller.addEvent(1, "高等数学（2）", "办公室", 10.17, 12);
-        controller.addEvent(1, "体育（2）", "办公室", 14.0, 15.83);
-        controller.addEvent(1, "高级程序开发", "办公室", 16.17, 18.0);
-        controller.addEvent(1, "创业实务以北斗为例", "办公室", 19.0, 20.83);
-        controller.addEvent(2, "会议3", "办公室", 10.0, 18.0);
+        controller.addEvent(1, "线性代数", "办公室", 8.0, 9.5);
+        controller.addEvent(1, "高等数学（2）", "办公室", 10.1, 12);
+        controller.addEvent(1, "体育（2）", "办公室", 14.0, 15.5);
+        controller.addEvent(1, "高级程序开发", "办公室", 16.1, 18.0);
+        controller.addEvent(1, "创业实务以北斗为例", "办公室", 19.0, 20.5);
+        controller.addEvent(3, "会议3", "办公室", 10.0, 18.0);
 
         Scene scene = new Scene(root);
         stage.setScene(scene);

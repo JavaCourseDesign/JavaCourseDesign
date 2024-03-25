@@ -1,80 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.shape.*?>
 
-<AnchorPane prefHeight="540" prefWidth="600" stylesheets="@week_time_table.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.management.front.controller.WeekTimeTableController">
-   <VBox fx:id="background" prefHeight="540.0" prefWidth="100.0">
-       <Rectangle fill="#373737" height="30.0" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="600.0" />
-       <Rectangle fill="#373737" height="15.0" opacity="0.3" stroke="BLACK" strokeType="INSIDE" width="600.0" />
-       <Rectangle fill="#373737" height="30.0" opacity="0.3" stroke="BLACK" strokeType="INSIDE" width="600.0" />
-       <Rectangle fill="#373737" height="30.0" opacity="0.3" stroke="BLACK" strokeType="INSIDE" width="600.0" />
-       <Rectangle fill="#373737" height="30.0" opacity="0.3" stroke="BLACK" strokeType="INSIDE" width="600.0" />
-       <Rectangle fill="#373737" height="30.0" opacity="0.3" stroke="BLACK" strokeType="INSIDE" width="600.0" />
-       <Rectangle fill="#373737" height="30.0" opacity="0.3" stroke="BLACK" strokeType="INSIDE" width="600.0" />
-       <Rectangle fill="#373737" height="30.0" opacity="0.3" stroke="BLACK" strokeType="INSIDE" width="600.0" />
-       <Rectangle fill="#373737" height="30.0" opacity="0.3" stroke="BLACK" strokeType="INSIDE" width="600.0" />
-       <Rectangle fill="#373737" height="30.0" opacity="0.3" stroke="BLACK" strokeType="INSIDE" width="600.0" />
-       <Rectangle fill="#373737" height="30.0" opacity="0.3" stroke="BLACK" strokeType="INSIDE" width="600.0" />
-       <Rectangle fill="#373737" height="30.0" opacity="0.3" stroke="BLACK" strokeType="INSIDE" width="600.0" />
-       <Rectangle fill="#373737" height="30.0" opacity="0.3" stroke="BLACK" strokeType="INSIDE" width="600.0" />
-       <Rectangle fill="#373737" height="30.0" opacity="0.3" stroke="BLACK" strokeType="INSIDE" width="600.0" />
-       <Rectangle fill="#373737" height="30.0" opacity="0.3" stroke="BLACK" strokeType="INSIDE" width="600.0" />
-       <Rectangle fill="#373737" height="30.0" opacity="0.3" stroke="BLACK" strokeType="INSIDE" width="600.0" />
-       <Rectangle fill="#373737" height="30.0" opacity="0.3" stroke="BLACK" strokeType="INSIDE" width="600.0" />
-       <Rectangle fill="#373737" height="30.0" opacity="0.3" stroke="BLACK" strokeType="INSIDE" width="600.0" />
-       <Rectangle fill="#373737" height="15.0" opacity="0.3" stroke="BLACK" strokeType="INSIDE" width="600.0" />
-   </VBox>
-    <BorderPane fx:id="table" prefHeight="540" prefWidth="600">
-        <top>
-            <HBox prefHeight="30.0" prefWidth="600">
-                <Label style="-fx-text-fill: white" alignment="CENTER" prefHeight="30.0" prefWidth="75" text="时间/星期" /> <!-- 占位符 -->
-                <Label style="-fx-text-fill: white" alignment="CENTER" prefHeight="30.0" prefWidth="75" text="星期一" />
-                <Label style="-fx-text-fill: white" alignment="CENTER" prefHeight="30.0" prefWidth="75" text="星期二" />
-                <Label style="-fx-text-fill: white" alignment="CENTER" prefHeight="30.0" prefWidth="75" text="星期三" />
-                <Label style="-fx-text-fill: white" alignment="CENTER" prefHeight="30.0" prefWidth="75" text="星期四" />
-                <Label style="-fx-text-fill: white" alignment="CENTER" prefHeight="30.0" prefWidth="75" text="星期五" />
-                <Label style="-fx-text-fill: white" alignment="CENTER" prefHeight="30.0" prefWidth="75" text="星期六" />
-                <Label style="-fx-text-fill: white" alignment="CENTER" prefHeight="30.0" prefWidth="75" text="星期日" />
-            </HBox>
-        </top>
-        <left>
-            <VBox alignment="TOP_RIGHT" prefWidth="75" >
-                <Label style="-fx-text-fill: white" alignment="CENTER" prefHeight="30" prefWidth="75" text="06:00" /><!-- 以HOUR_HEIGHT为基准调整 -->
-                <Label style="-fx-text-fill: white" alignment="CENTER" prefHeight="30" prefWidth="75" text="07:00" />
-                <Label style="-fx-text-fill: white" alignment="CENTER" prefHeight="30" prefWidth="75" text="08:00" />
-                <Label style="-fx-text-fill: white" alignment="CENTER" prefHeight="30" prefWidth="75" text="09:00" />
-                <Label style="-fx-text-fill: white" alignment="CENTER" prefHeight="30" prefWidth="75" text="10:00" />
-                <Label style="-fx-text-fill: white" alignment="CENTER" prefHeight="30" prefWidth="75" text="11:00" />
-                <Label style="-fx-text-fill: white" alignment="CENTER" prefHeight="30" prefWidth="75" text="12:00" />
-                <Label style="-fx-text-fill: white" alignment="CENTER" prefHeight="30" prefWidth="75" text="13:00" />
-                <Label style="-fx-text-fill: white" alignment="CENTER" prefHeight="30" prefWidth="75" text="14:00" />
-                <Label style="-fx-text-fill: white" alignment="CENTER" prefHeight="30" prefWidth="75" text="15:00" />
-                <Label style="-fx-text-fill: white" alignment="CENTER" prefHeight="30" prefWidth="75" text="16:00" />
-                <Label style="-fx-text-fill: white" alignment="CENTER" prefHeight="30" prefWidth="75" text="17:00" />
-                <Label style="-fx-text-fill: white" alignment="CENTER" prefHeight="30" prefWidth="75" text="18:00" />
-                <Label style="-fx-text-fill: white" alignment="CENTER" prefHeight="30" prefWidth="75" text="19:00" />
-                <Label style="-fx-text-fill: white" alignment="CENTER" prefHeight="30" prefWidth="75" text="20:00" />
-                <Label style="-fx-text-fill: white" alignment="CENTER" prefHeight="30" prefWidth="75" text="21:00" />
-                <Label style="-fx-text-fill: white" alignment="CENTER" prefHeight="30" prefWidth="75" text="22:00" />
-                <!-- 添加更多时间标签 -->
-            </VBox>
-        </left>
-        <center>
-            <GridPane fx:id="scheduleGrid">
-                <padding>
-                    <Insets bottom="15" top="15" />
-                </padding>
-                <AnchorPane fx:id="day1" prefHeight="15" prefWidth="75.0" GridPane.columnIndex="0" />
-                <AnchorPane fx:id="day2" prefHeight="15" prefWidth="75.0" GridPane.columnIndex="1" />
-                <AnchorPane fx:id="day3" prefHeight="15" prefWidth="75.0" GridPane.columnIndex="2" />
-                <AnchorPane fx:id="day4" prefHeight="15" prefWidth="75.0" GridPane.columnIndex="3" />
-                <AnchorPane fx:id="day5" prefHeight="15" prefWidth="75.0" GridPane.columnIndex="4" />
-                <AnchorPane fx:id="day6" prefHeight="15" prefWidth="75.0" GridPane.columnIndex="5" />
-                <AnchorPane fx:id="day7" prefHeight="15" prefWidth="75.0" GridPane.columnIndex="6" />
-            </GridPane>
-        </center>
-    </BorderPane>
+<?import javafx.scene.Group?>
+<AnchorPane stylesheets="@week_time_table.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.management.front.controller.WeekTimeTableController">
+    <Group fx:id="table" />
 </AnchorPane>
