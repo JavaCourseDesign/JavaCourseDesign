@@ -1,8 +1,6 @@
 package com.management.front.controller;
 
 import javafx.fxml.FXML;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -11,12 +9,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 
-
-import java.util.ArrayList;
-
-public class WeekTimeTableController {
-    @FXML
-    private Group table;
+public class WeekTimeTable extends Group{
     private static final double HOUR_HEIGHT = 30; // 假设每小时60像素
     private static final double DAY_WIDTH = 75; // 每天的宽度
     private static final double LEFT_BAR_WIDTH = 50;
@@ -29,12 +22,10 @@ public class WeekTimeTableController {
     private static final String[] timeLine = {"06:00", "07:00", "08:00", "09:00", "10:00", "11:00", "12:00",
             "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00"};
 
-    // 其他代码保持不变
-    @FXML
-    private void initialize() {
+    public WeekTimeTable() {
         Rectangle background = new Rectangle((int) (LEFT_BAR_WIDTH + DAY_WIDTH * 7), (int) (TOP_BAR_HEIGHT + HOUR_HEIGHT * 17));
         background.setFill(Color.web("#181818"));
-        table.getChildren().add(background);
+        this.getChildren().add(background);
 
         drawTopBar();
         drawLeftBar();
@@ -48,14 +39,14 @@ public class WeekTimeTableController {
             topBarCell.setLayoutY(0);
             topBarCell.setOpacity(0.3);
 
-            table.getChildren().add(topBarCell);
+            this.getChildren().add(topBarCell);
 
             Text day = new Text(weekDays[i]);
             day.setFont(Font.font("Courier New", 12));
             day.setFill(Color.WHITE);
             day.setLayoutX(LEFT_BAR_WIDTH + i * DAY_WIDTH+ DAY_WIDTH/2-5);
             day.setLayoutY(TOP_BAR_HEIGHT/3);
-            table.getChildren().add(day);
+            this.getChildren().add(day);
         }
     }
     private void drawLeftBar() {
@@ -67,14 +58,14 @@ public class WeekTimeTableController {
             leftBarCell.setLayoutY(TOP_BAR_HEIGHT + i * HOUR_HEIGHT);
             leftBarCell.setOpacity(0.8);
 
-            table.getChildren().add(leftBarCell);
+            this.getChildren().add(leftBarCell);
 
             Text time = new Text(timeLine[i]);
             time.setFont(Font.font("Arial", 12));
             time.setFill(Color.WHITE);
             time.setLayoutX(LEFT_BAR_WIDTH/6);
             time.setLayoutY(TOP_BAR_HEIGHT + i * HOUR_HEIGHT + 5);
-            table.getChildren().add(time);
+            this.getChildren().add(time);
         }
     }
 
@@ -109,7 +100,7 @@ public class WeekTimeTableController {
         event.setOnMouseEntered(e -> event.setOpacity(0.8));
         event.setOnMouseExited(e -> event.setOpacity(0.4));
 
-        table.getChildren().add(event);
+        this.getChildren().add(event);
     }
 
     public static double transferTime(double t)
