@@ -9,15 +9,16 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.MapValueFactory;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
 
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
-import static com.management.front.util.HttpClientUtil.sendAndReceive;
-
+import static com.management.front.util.HttpClientUtil.sendAndReceiveDataResponse;
 public class StudentController {
     @FXML
     private TableView<Map> studentTableView;
@@ -44,12 +45,19 @@ public class StudentController {
 
     @FXML
     private TextField numField;
+    @FXML
+    private RadioButton man;
+    @FXML
+    private RadioButton woman;
+    @FXML
+    private HBox genderBox;
 
     @FXML
     private Button save;
     @FXML
     private Button delete;
     private ArrayList<Map> studentList;
+    private String gender;
     private ObservableList<Map> observableList= FXCollections.observableArrayList();
     private void setTableViewData() {
         observableList.clear();
@@ -62,7 +70,7 @@ public class StudentController {
     //名字必须为这个，一字不差，且与fxml文件建立联系，系统才会调用这个方法，不然必须自己手动在启动器调用
    public void initialize()throws IOException
    {
-       DataResponse r=sendAndReceive("/getStudent",null);
+       DataResponse r=sendAndReceiveDataResponse("/getStudent",null);
        studentList =(ArrayList<Map>) r.getData();
        numColumn.setCellValueFactory(new MapValueFactory<>("studentId"));
        nameColumn.setCellValueFactory(new MapValueFactory<>("name"));
@@ -71,13 +79,26 @@ public class StudentController {
        setTableViewData();
    }
     @FXML
+    String onSelectGenderButton(ActionEvent event) {
+        if(event.getSource()==man)
+        {
+            gender="男";
+        }
+        else
+        {
+            gender="女";
+        }
+        return gender;
+    }
+
+    @FXML
     void onSaveStudentButton(ActionEvent event) throws IOException{
         Map<String,String> m=new HashMap<>();
         m.put("num",numField.getText());
         m.put("name",nameField.getText());
-        m.put("gender",genderField.getText());
+        m.put("gender",gender);
         m.put("major",majorField.getText());
-        DataResponse r=sendAndReceive("/addStudent",m);
+        DataResponse r=sendAndReceiveDataResponse("/addStudent",m);
 
         if(r.getCode()==0)
         {
@@ -103,16 +124,25 @@ public class StudentController {
             alert.setContentText("未选择，无法删除");
             alert.showAndWait();
         }
-        DataResponse r=sendAndReceive("/deleteStudent",form);
-        System.out.println(r.getCode());
-        if(r.getCode()==1)
+        else
         {
-            Alert alert=new Alert(Alert.AlertType.INFORMATION);
-            alert.setContentText("删除成功");
-            alert.showAndWait();
+            Alert alert=new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("警告");
+            alert.setContentText("确定要删除吗？");
+            Optional<ButtonType> result=alert.showAndWait();
+            if(result.get()==ButtonType.OK)
+            {
+                DataResponse r=sendAndReceiveDataResponse("/deleteStudent",form);
+                if(r.getCode()==1)
+                {
+                    Alert alert1=new Alert(Alert.AlertType.INFORMATION);
+                    alert1.setContentText("删除成功");
+                    alert1.showAndWait();
+                }
+            }
         }
         initialize();
     }
-
 }
+
 

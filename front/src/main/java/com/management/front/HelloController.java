@@ -35,7 +35,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.management.front.util.HttpClientUtil.sendAndReceive;
 
 public class HelloController {
     @FXML
@@ -53,15 +52,4 @@ public class HelloController {
     @FXML
     private TextField major;
 
-    @FXML
-    protected void addStudent() throws IOException{
-        Map<String, String> student=new HashMap<>();
-        student.put("name",name.getText());
-        student.put("gender",gender.getText());
-        student.put("studentId",studentId.getText());
-        student.put("major",major.getText());
-        Gson gson = new Gson();
-        System.out.println(gson.toJson(student));
-        welcomeText.setText("successfullyAddedStudent"+sendAndReceive("/addStudent",student).getMsg());
-    }
 }
