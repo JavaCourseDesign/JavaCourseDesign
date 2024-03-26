@@ -40,7 +40,7 @@ public class HttpClientUtil {
         response.close();
         httpclient.close();
 
-        System.out.println(html);
+        //System.out.println(html);
         return gson.fromJson(html, Object.class);
     }
 
@@ -63,7 +63,7 @@ public class HttpClientUtil {
         response.close();
         httpclient.close();
 
-        System.out.println(html);
+        //System.out.println(html);
         return gson.fromJson(html, DataResponse.class);
     }
 }

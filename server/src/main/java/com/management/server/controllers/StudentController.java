@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -55,8 +57,44 @@ public class StudentController {
         return true;
     }
 
+
+    /*@PostMapping("/getAllStudents")
+    public DataResponse getAllStudents()
+    {
+        Student s=new Student();
+        s.setName("zhangsan");
+        s.setGender("male");
+        s.setMajor("software");
+        s.setStudentId("2018001");
+        studentRepository.save(s);
+
+
+        ArrayList<Map> studentMapList=new ArrayList<>();
+        List<Student> list=studentRepository.findAll();
+        for(int i=0;i<list.size();i++)
+        {
+            Map m=new HashMap();
+            m.put("studentId",list.get(i).getStudentId());
+            m.put("name",list.get(i).getName());
+            m.put("gender",list.get(i).getGender());
+            m.put("major",list.get(i).getMajor());
+            studentMapList.add(m);
+        }
+        DataResponse r=new DataResponse(200,studentMapList,null);
+        return r;
+    }*/
     @PostMapping("/getAllStudents")
-    public List<Student> getAllStudents(){
+    public List<Student> getAllStudents()
+    {
+        Student s=new Student();
+        s.setName("zhangsan");
+        s.setGender("male");
+        s.setMajor("software");
+        s.setStudentId("2018001");
+        studentRepository.save(s);
+
+
+
         return studentRepository.findAll();
     }
 
