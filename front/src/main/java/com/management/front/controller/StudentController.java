@@ -100,7 +100,7 @@ public class StudentController {
         m.put("name",nameField.getText());
         m.put("gender",gender);
         m.put("major",majorField.getText());
-        DataResponse r=sendAndReceiveDataResponse("/addStudent",m);
+        DataResponse r=request("/addStudent",m);
 
         if(r.getCode()==0)
         {
