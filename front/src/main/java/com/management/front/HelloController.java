@@ -1,7 +1,6 @@
 package com.management.front;
 
 import com.google.gson.Gson;
-import com.management.front.model.Greeting;
 import com.management.front.request.DataResponse;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;

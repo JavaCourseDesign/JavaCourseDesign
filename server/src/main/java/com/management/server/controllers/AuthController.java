@@ -5,6 +5,7 @@ import com.management.server.models.User;
 import com.management.server.payload.response.DataResponse;
 import com.management.server.payload.response.JwtResponse;
 import com.management.server.repositories.UserRepository;
+import com.management.server.util.JwtUtil;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerProperties;
@@ -29,20 +30,18 @@ public class AuthController {
     private PasswordEncoder passwordEncoder;
     @Autowired
     UserRepository userRepository;
+
     /*@Autowired
     AuthenticationManager authenticationManager;*/
-    @PostMapping("/user/login")
+    @PostMapping("/login")
     public String login( @RequestBody Map<String,String> req){
       /*  UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(req.get("username"), req.get("password"));
         authenticationManager.authenticate(authenticationToken);*/
-        if(passwordEncoder.matches(req.get("password"),userRepository.findByUserName(req.get("username")).getPassword()))
+        System.out.println("check");
+        if(passwordEncoder.matches(req.get("password"),userRepository.findByUsername(req.get("username")).getPassword()))
         {
-            String token = cn.hutool.jwt.JWT.create()
-//                .setExpiresAt(new Date(System.currentTimeMillis() + (1000 * 30)))
-                    .setPayload("username", req.get("username"))
-                    .setKey("secret".getBytes(StandardCharsets.UTF_8))
-                    .sign();
+            String token = JwtUtil.generateToken(req.get("username"));
             return token;
         }
         return null;
@@ -53,7 +52,7 @@ public class AuthController {
     public DataResponse registerUser(@RequestBody Map<String,String> map) {
         String encodedPassword =passwordEncoder.encode(map.get("password"));
         User user=new User();
-        user.setUserName(map.get("username"));
+        user.setUsername(map.get("username"));
         user.setPassword(encodedPassword);
         userRepository.save(user);
         return new DataResponse(1,null,"注册成功");

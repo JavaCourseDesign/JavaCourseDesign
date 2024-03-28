@@ -1,6 +1,6 @@
 package com.management.front;
 
-import com.management.front.controller.WeekTimeTableController;
+
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;

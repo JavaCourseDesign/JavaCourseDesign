@@ -16,6 +16,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -47,14 +48,10 @@ public class LoginController {
     }
 
     @FXML
-    public void onLoginButton(MouseEvent event) throws IOException {
+    public void onLoginButton(MouseEvent event) throws IOException, URISyntaxException, InterruptedException {
         String username = usernameField.getText();
         String password = passwordField.getText();
-        Map<String,String> map = new HashMap<>();
-        map.put("username",username);
-        map.put("password",password);
-        String string=login(map);
-        if(string.equals("登录成功"))
+        if(login(username,password))
         {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setContentText("登录成功");

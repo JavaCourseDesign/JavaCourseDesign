@@ -57,7 +57,7 @@ public class StudentController {
     @PostMapping("/getStudent")
     public DataResponse getStudent()
     {
-        System.out.println("check");
+        System.out.println("checkStudent");
         ArrayList<Map> studentMapList=new ArrayList<>();
         List<Student> list=studentRepository.findAll();
         for(int i=0;i<list.size();i++)

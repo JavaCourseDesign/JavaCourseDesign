@@ -33,7 +33,7 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable()) // 禁用CSRF
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/login").permitAll() // 允许/login路径的匿名访问
+                        .requestMatchers("/login","/register").permitAll() // 允许/login路径的匿名访问
                         .anyRequest().authenticated()) // 其他所有请求都需要认证
                 .httpBasic(withDefaults()) // 使用默认的HTTP基本认证
                 .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class) // 添加JWT请求过滤器

@@ -1,3 +1,4 @@
+/*
 package com.management.server.models;
 
 import jakarta.persistence.*;
@@ -43,4 +44,24 @@ public class User {
         this.userName = username;
         this.password = password;
     }
+}
+*/
+package com.management.server.models;
+
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+import lombok.Data;
+
+
+@Entity
+@Data
+public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Integer id;
+    private String username;//////在老师的案例中是userName
+    private String password;
+
+
 }
