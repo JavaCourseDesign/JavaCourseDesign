@@ -25,18 +25,24 @@ public abstract class Event {
 
     private String location;
 
+    private boolean checked;//用于判定是否已经通知到学生，如果未通知，应在通知栏显示
+
     //private Integer personId;//to be deleted why????
 
     /*@ManyToMany(mappedBy = "events")
     private List<Person> persons=new ArrayList<>();*/
 
-    @ManyToMany
+    /*@ManyToMany
     @JoinTable(name = "student_event")
     private List<Student> students;
 
     @ManyToMany
     @JoinTable(name = "teacher_event")
-    private List<Teacher> teachers;
+    private List<Teacher> teachers;*/
+
+    @ManyToMany
+    @JoinTable(name = "person_event")
+    private List<Person> persons;
 
 
 

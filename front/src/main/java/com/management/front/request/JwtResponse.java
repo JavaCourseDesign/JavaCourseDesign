@@ -1,44 +1,18 @@
 package com.management.front.request;
 
-/**
- * JwtResponse JWT数据返回对象 包含客户登录的信息
- * String token token字符串
- * String type JWT 类型
- * Integer id 用户的ID user_id
- * String username 用户的登录名
- * String role 用户角色 ROLE_ADMIN, ROLE_STUDENT, ROLE_TEACHER
- */
-
 public class JwtResponse {
-    private String token;
-    private String type = "Bearer";
+    private String tokenType;
     private Integer id;
     private String username;
-    private String perName;
-    private String role;
-
-    public JwtResponse(String accessToken, Integer id, String username, String perName,String role) {
-        this.token = accessToken;
-        this.id = id;
-        this.username = username;
-        this.perName = perName;
-        this.role = role;
-    }
-
-    public String getAccessToken() {
-        return token;
-    }
-
-    public void setAccessToken(String accessToken) {
-        this.token = accessToken;
-    }
+    private String accessToken;
+    private String roles;
 
     public String getTokenType() {
-        return type;
+        return tokenType;
     }
 
     public void setTokenType(String tokenType) {
-        this.type = tokenType;
+        this.tokenType = tokenType;
     }
 
     public Integer getId() {
@@ -49,7 +23,6 @@ public class JwtResponse {
         this.id = id;
     }
 
-
     public String getUsername() {
         return username;
     }
@@ -58,15 +31,21 @@ public class JwtResponse {
         this.username = username;
     }
 
+
+    public String getAccessToken() {
+        return accessToken;
+    }
+
+    public void setAccessToken(String accessToken) {
+        this.accessToken = accessToken;
+    }
+
     public String getRoles() {
-        return role;
+        return roles;
     }
 
-    public String getPerName() {
-        return perName;
+    public void setRoles(String roles) {
+        this.roles = roles;
     }
 
-    public void setPerName(String perName) {
-        this.perName = perName;
-    }
 }

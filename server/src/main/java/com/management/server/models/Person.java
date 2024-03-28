@@ -1,6 +1,6 @@
 package com.management.server.models;
 
-import com.management.server.util.ComDataUtil;
+
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -41,7 +41,7 @@ public abstract class Person {
 
     @Size(max = 20)
     private String card;
-    @Size(max = 2)
+    @Size(max = 20)
     private String gender;
 
     private String birthday;
@@ -69,6 +69,13 @@ public abstract class Person {
     @JoinColumn(name = "dormitory_id")
     private Dormitory dormitory;
 
+    @ManyToMany(mappedBy = "persons")
+    private List<Event> events;
+
+    @ManyToMany(mappedBy = "persons")
+    private List<Course> courses;
+
+
     /*@ManyToMany
     @JoinTable(name = "event", joinColumns = @JoinColumn(name = "personId"), inverseJoinColumns = @JoinColumn(name = "eventId"))
     private List<Event> events;*/
@@ -76,9 +83,9 @@ public abstract class Person {
     public Person() {
     }
 
-    public String getGenderName() {
+    /*public String getGenderName() {
         return  ComDataUtil.getInstance().getDictionaryLabelByValue("XBM", gender);
-    }
+    }*/ //ComDataUtil相关，暂时（或永久）删除
 
     public void setGenderName(String genderName) {
     }

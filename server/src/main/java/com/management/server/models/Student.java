@@ -30,11 +30,11 @@ public class Student extends Person{
     @Size(max = 50)
     private String className;
 
-    @ManyToMany(mappedBy = "students")
+    /*@ManyToMany(mappedBy = "students")
     private List<Event> events;
 
     @ManyToMany(mappedBy = "students")
-    private List<Course> courses;
+    private List<Course> courses;*/
 
     /*public void addEvent(Event event){
         events.add(event);

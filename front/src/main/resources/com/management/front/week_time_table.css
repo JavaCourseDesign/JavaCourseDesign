@@ -1,16 +1,13 @@
-.grid-pane {
-    -fx-background-color: #f0f0f0;
-}
 
-.vbox {
-    -fx-spacing: 5;
-    -fx-alignment: center;
-}
-
-.time-block {
-    -fx-background-color: #a3d3f5;
-    -fx-border-color: black;
+/*.day-box {
+    -fx-border-color: grey;
     -fx-border-width: 1;
     -fx-padding: 5;
-    -fx-alignment: center-left;
+    -fx-spacing: 5; !* 为每个事件之间添加一些空间 *!
+}*/
+
+.grid-background {
+    -fx-background-image: url('images/grid_background.png');
+    -fx-background-repeat: repeat;
 }
+
