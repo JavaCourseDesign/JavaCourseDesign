@@ -53,7 +53,7 @@ public class HttpClientUtil {
         try {
             HttpResponse<String> response = client.send(httpRequest, HttpResponse.BodyHandlers.ofString());
             if (response.statusCode() == 200) {
-                DataResponse dataResponse = new DataResponse(0,response.body(),null);
+                DataResponse dataResponse = gson.fromJson(response.body(), DataResponse.class);
                 return dataResponse;
             }
         } catch (IOException e) {

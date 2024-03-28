@@ -84,7 +84,7 @@ public class StudentController {
         return r;
     }*/
     @PostMapping("/getAllStudents")
-    public List<Student> getAllStudents()
+    public DataResponse getAllStudents()
     {
         Student s=new Student();
         s.setName("zhangsan");
@@ -92,10 +92,7 @@ public class StudentController {
         s.setMajor("software");
         s.setStudentId("2018001");
         studentRepository.save(s);
-
-
-
-        return studentRepository.findAll();
+        return new DataResponse(0,studentRepository.findAll(),null);
     }
 
 
