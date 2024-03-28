@@ -1,9 +1,10 @@
 package com.management.server.config;
 
-import com.management.server.config.JwtRequestFilter;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -31,14 +32,13 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable()) // 禁用CSRF
+                .csrf(AbstractHttpConfigurer::disable) // 禁用CSRF
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/login").permitAll() // 允许/login路径的匿名访问
                         .anyRequest().authenticated()) // 其他所有请求都需要认证
-                .httpBasic(withDefaults()) // 使用默认的HTTP基本认证
-                .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class) // 添加JWT请求过滤器
-                // 应用新的会话管理策略，声明服务为无状态
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+                        .httpBasic(withDefaults()) // 使用默认的HTTP基本认证
+                        .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class) // 添加JWT请求过滤器
+                        .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));// 应用新的会话管理策略，声明服务为无状态
 
         return http.build();
     }
