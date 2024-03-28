@@ -3,12 +3,28 @@ package com.management.server.models;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import lombok.Data;
+
 
 @Entity
+@Data
+public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Integer id;
+    private String username;
+    private String password;
+
+    // Getters and Setters
+}
+
+
+/*@Entity
 @Table(	name = "user",
         uniqueConstraints = {
                 @UniqueConstraint(columnNames = "user_name"),
         })
+@Data
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,4 +57,4 @@ public class User {
         this.userName = username;
         this.password = password;
     }
-}
+}*/
