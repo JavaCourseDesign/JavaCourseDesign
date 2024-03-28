@@ -12,10 +12,10 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
-    private String username;
+    private String username;//////在老师的案例中是userName
     private String password;
+    
 
-    // Getters and Setters
 }
 
 

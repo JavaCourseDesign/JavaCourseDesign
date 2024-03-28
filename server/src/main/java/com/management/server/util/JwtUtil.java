@@ -12,23 +12,22 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class JwtUtil {
-    private String secret = "your_secret_key_your_secret_key"; // 密钥至少需要256位
-    private Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
-
-    public String extractUsername(String token) {
+    static private String secret = "your_secret_key_your_secret_key"; // 密钥至少需要256位
+    static private Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+    static public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
     }
 
-    public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
+    public static <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = extractAllClaims(token);
         return claimsResolver.apply(claims);
     }
 
-    private Claims extractAllClaims(String token) {
+    private static Claims extractAllClaims(String token) {
         return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
     }
 
-    public String generateToken(String username) {
+    public static String generateToken(String username) {
         return Jwts.builder()
                 .setSubject(username)
                 .setIssuedAt(new Date(System.currentTimeMillis()))

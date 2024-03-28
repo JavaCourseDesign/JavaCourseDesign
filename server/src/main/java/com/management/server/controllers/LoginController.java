@@ -18,14 +18,11 @@ public class LoginController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @Autowired
-    private JwtUtil jwtUtil;
-
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody User user) {
         User foundUser = userRepository.findByUsername(user.getUsername());
         if (foundUser != null && passwordEncoder.matches(user.getPassword(), foundUser.getPassword())) {
-            String token = jwtUtil.generateToken(user.getUsername());
+            String token = JwtUtil.generateToken(user.getUsername());
             return ResponseEntity.ok().body(token); // 发送Token给前端
         } else {
             System.out.println("Login failed, expect" + foundUser.getPassword() + " got " + user.getPassword());
