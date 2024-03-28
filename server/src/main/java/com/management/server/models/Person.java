@@ -1,6 +1,6 @@
 package com.management.server.models;
 
-import com.management.server.util.ComDataUtil;
+
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -83,9 +83,9 @@ public abstract class Person {
     public Person() {
     }
 
-    public String getGenderName() {
+    /*public String getGenderName() {
         return  ComDataUtil.getInstance().getDictionaryLabelByValue("XBM", gender);
-    }
+    }*/ //ComDataUtil相关，暂时（或永久）删除
 
     public void setGenderName(String genderName) {
     }

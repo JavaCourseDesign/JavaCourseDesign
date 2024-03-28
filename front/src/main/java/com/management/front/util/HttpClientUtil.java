@@ -1,8 +1,8 @@
 package com.management.front.util;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 import com.management.front.request.DataResponse;
+import com.management.front.request.JwtResponse;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -14,15 +14,60 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 
 import java.io.IOException;
-import java.lang.reflect.Type;
-import java.util.Map;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 
 public class HttpClientUtil {
     static public String mainUrl = "http://localhost:9090";
-    //private DataResponse sendAndReceive(String numName) throws IOException {
+    static Gson gson = new Gson();
+    static private JwtResponse jwt=new JwtResponse();//在老师的示例项目中被存储在appstore
+    static public void login(String username, String password) throws IOException, URISyntaxException, InterruptedException {
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(new URI(mainUrl+"/login"))
+                .POST(HttpRequest.BodyPublishers.ofString("{\"username\":\"" + username + "\", \"password\":\"" + password + "\"}"))
+                .header("Content-Type", "application/json")
+                .build();
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+        if (response.statusCode() == 200) {
+            System.out.println("Login successful");
+            System.out.println("Token:"+response.body());
+            jwt.setAccessToken(response.body());
+        } else {
+            System.out.println("Login failed");
+        }
+    }
+
+    public static DataResponse request(String url,Object request){
+        HttpRequest httpRequest = HttpRequest.newBuilder()
+                .uri(URI.create(mainUrl + url))
+                .POST(HttpRequest.BodyPublishers.ofString(gson.toJson(request)))
+                .headers("Content-Type", "application/json")
+                .headers("Authorization", "Bearer " + jwt.getAccessToken())
+                .build();
+        HttpClient client = HttpClient.newHttpClient();
+        try {
+            HttpResponse<String> response = client.send(httpRequest, HttpResponse.BodyHandlers.ofString());
+            if (response.statusCode() == 200) {
+                DataResponse dataResponse = new DataResponse(0,response.body(),null);
+                return dataResponse;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
     static public Object sendAndReceiveObject(String url, Object parameter) throws IOException {
         CloseableHttpClient httpclient = HttpClients.createDefault();
-        Gson gson = new Gson();
+
         // 2. 创建HttpPost实例
         HttpPost httpPost = new HttpPost(mainUrl+url);
         httpPost.setEntity(new StringEntity(gson.toJson(parameter), ContentType.APPLICATION_JSON));
@@ -46,7 +91,6 @@ public class HttpClientUtil {
 
     static public DataResponse sendAndReceiveDataResponse(String url, Object parameter) throws IOException {
         CloseableHttpClient httpclient = HttpClients.createDefault();
-        Gson gson = new Gson();
         // 2. 创建HttpPost实例
         HttpPost httpPost = new HttpPost(mainUrl+url);
         httpPost.setEntity(new StringEntity(gson.toJson(parameter), ContentType.APPLICATION_JSON));

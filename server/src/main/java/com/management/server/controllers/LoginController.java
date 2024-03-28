@@ -1,6 +1,7 @@
 package com.management.server.controllers;
 import com.management.server.models.User;
 import com.management.server.repositories.UserRepository;
+import com.management.server.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -17,22 +18,26 @@ public class LoginController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private JwtUtil jwtUtil;
+
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody User user) {
-        User newuser = new User();
-        newuser.setUsername("admin");
-        newuser.setPassword("admin");
-        registerUser(newuser);
         User foundUser = userRepository.findByUsername(user.getUsername());
-
-        System.out.println("Encoded password in DB: " + foundUser.getPassword());
-
         if (foundUser != null && passwordEncoder.matches(user.getPassword(), foundUser.getPassword())) {
-            return ResponseEntity.ok().body("Login successful");
+            String token = jwtUtil.generateToken(user.getUsername());
+            return ResponseEntity.ok().body(token); // 发送Token给前端
         } else {
-            return ResponseEntity.badRequest().body("Login failed");
+            System.out.println("Login failed, expect" + foundUser.getPassword() + " got " + user.getPassword());
+            return ResponseEntity.badRequest().body("Login failed, expect" + foundUser.getPassword() + " got " + user.getPassword());
         }
     }
+
+        /*User newuser = new User();
+        newuser.setUsername("admin");
+        newuser.setPassword("admin");
+        registerUser(newuser);*/
+
 
 
 
@@ -44,8 +49,6 @@ public class LoginController {
         user.setPassword(encodedPassword);
         userRepository.save(user);
         System.out.println("Encoded password on register: " + encodedPassword);
-
-
     }
 
 }

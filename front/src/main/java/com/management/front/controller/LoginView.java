@@ -6,10 +6,12 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
-import java.net.URI;
+
+import java.io.IOException;
+import java.net.URISyntaxException;
+
+import static com.management.front.util.HttpClientUtil.login;
+import static com.management.front.util.HttpClientUtil.request;
 
 public class LoginView extends Application {
 
@@ -41,22 +43,14 @@ public class LoginView extends Application {
             String password = passwordField.getText();
             // 实现与后端的通信
             try {
-                HttpClient client = HttpClient.newHttpClient();
-                HttpRequest request = HttpRequest.newBuilder()
-                        .uri(new URI("http://localhost:9090/login"))
-                        .POST(HttpRequest.BodyPublishers.ofString("{\"username\":\"" + username + "\", \"password\":\"" + password + "\"}"))
-                        .header("Content-Type", "application/json")
-                        .build();
-                HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-
-                if (response.statusCode() == 200) {
-                    System.out.println("Login successful");
-                } else {
-                    System.out.println("Login failed");
-                }
-            } catch (Exception ex) {
-                ex.printStackTrace();
+                login(username, password);
+            } catch (IOException | URISyntaxException | InterruptedException ex) {
+                throw new RuntimeException(ex);
             }
+
+            //测试通讯
+            System.out.println(request("/getAllStudents", null).getData());
+
         });
         gridPane.add(loginButton, 1, 3);
 
