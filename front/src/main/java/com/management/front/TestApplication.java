@@ -95,10 +95,18 @@ public class TestApplication extends Application {
         Application.launch(args);
     }
 
-    @Override
+   /* @Override
     public void start(Stage stage)  throws IOException{
         stage.setTitle("TreeTableViewTest");
         FXMLLoader fxmlLoader=new FXMLLoader(TestApplication.class.getResource("adminFxml/menu.fxml"));
+        Parent root = fxmlLoader.load();
+        Scene scene = new Scene(root, 800, 400);
+        stage.setScene(scene);//舞台设置场景
+        stage.show();//舞台展现
+    }*/
+    @Override
+    public void start(Stage stage)  throws IOException{
+        FXMLLoader fxmlLoader=new FXMLLoader(TestApplication.class.getResource("adminFxml/login.fxml"));
         Parent root = fxmlLoader.load();
         Scene scene = new Scene(root, 800, 400);
         stage.setScene(scene);//舞台设置场景

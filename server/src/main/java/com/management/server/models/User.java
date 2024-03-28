@@ -3,8 +3,10 @@ package com.management.server.models;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import lombok.Data;
 
 @Entity
+@Data
 @Table(	name = "user",
         uniqueConstraints = {
                 @UniqueConstraint(columnNames = "user_name"),

@@ -14,14 +14,21 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.lang.reflect.Type;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.util.Map;
 
-public class HttpClientUtil  {
+public class HttpClientUtil {
     static public String mainUrl = "http://localhost:9090";
+    static Gson gson = new Gson();
+    private static HttpClient client = HttpClient.newHttpClient();
     //private DataResponse sendAndReceive(String numName) throws IOException {
     static public Object sendAndReceiveObject(String url, Object parameter) throws IOException {
         CloseableHttpClient httpclient = HttpClients.createDefault();
-        Gson gson = new Gson();
         // 2. 创建HttpPost实例
         HttpPost httpPost = new HttpPost(mainUrl+url);
         httpPost.setEntity(new StringEntity(gson.toJson(parameter), ContentType.APPLICATION_JSON));
@@ -30,7 +37,8 @@ public class HttpClientUtil  {
         CloseableHttpResponse response = httpclient.execute(httpPost);
         // 4. 读 response
         int status = response.getStatusLine().getStatusCode();
-        if(status<200||status>=300) throw new ClientProtocolException("Unexpected response status: " + status);
+        //if(status<200||status>=300) throw new ClientProtocolException("Unexpected response status: " + status);
+        if(status<200||status>=300) return null;
         HttpEntity entity = response.getEntity();
         String html = EntityUtils.toString(entity);
 
@@ -38,16 +46,15 @@ public class HttpClientUtil  {
         response.close();
         httpclient.close();
 
-
-        return gson.fromJson(html,Object.class);
+        //System.out.println(html);
+        return gson.fromJson(html, Object.class);
     }
+
     static public DataResponse sendAndReceiveDataResponse(String url, Object parameter) throws IOException {
         CloseableHttpClient httpclient = HttpClients.createDefault();
-        Gson gson = new Gson();
         // 2. 创建HttpPost实例
         HttpPost httpPost = new HttpPost(mainUrl+url);
         httpPost.setEntity(new StringEntity(gson.toJson(parameter), ContentType.APPLICATION_JSON));
-
         // 3. 调用HttpClient实例来执行HttpPost实例
         CloseableHttpResponse response = httpclient.execute(httpPost);
         // 4. 读 response
@@ -60,64 +67,90 @@ public class HttpClientUtil  {
         response.close();
         httpclient.close();
 
+        //System.out.println(html);
+        return gson.fromJson(html, DataResponse.class);
+    }
+    public static String login(Object request){
 
-        return gson.fromJson(html,DataResponse.class);
+            HttpRequest httpRequest = HttpRequest.newBuilder()
+                    .uri(URI.create(mainUrl + "/user/login"))
+                    .POST(HttpRequest.BodyPublishers.ofString(gson.toJson(request)))
+                    .headers("Content-Type", "application/json")
+                    .build();
+            try {
+                HttpResponse<String> response = client.send(httpRequest, HttpResponse.BodyHandlers.ofString());
+                System.out.println(response.body()+"checkpoint");
+                if (response.statusCode() == 200) {
+                    JwtResponse jwt = new JwtResponse(response.body());
+                    AppStore.setJwt(jwt);
+                    return "登录成功";
+                } else if (response.statusCode() == 401) {
+                    return "用户名或密码不存在！";
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            return "登录失败";
+    }
+
+    public static DataResponse request(String url,Object request){
+        HttpRequest httpRequest = HttpRequest.newBuilder()
+                .uri(URI.create(mainUrl + url))
+                .POST(HttpRequest.BodyPublishers.ofString(gson.toJson(request)))
+                .headers("Content-Type", "application/json")
+                .headers("Authorization", "Bearer " + AppStore.getJwt().getAccessToken())
+                .build();
+        System.out.println(AppStore.getJwt().getAccessToken());
+        HttpClient client = HttpClient.newHttpClient();
+        try {
+            HttpResponse<String> response = client.send(httpRequest, HttpResponse.BodyHandlers.ofString());
+            if (response.statusCode() == 200) {
+                                System.out.println(response.body());
+                DataResponse dataResponse = new DataResponse(1,response.body(),null);
+                return dataResponse;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }return null;
+    }
+
+}
+class  AppStore {
+    private static JwtResponse jwt;
+
+    private AppStore(){
+    }
+
+    public static JwtResponse getJwt() {
+        return jwt;
+    }
+
+    public static void setJwt(JwtResponse jwt) {
+        AppStore.jwt = jwt;
     }
 }
 
+class JwtResponse {
+
+    private String accessToken;
 
 
-/*public class HttpClientUtil {
-    //private DataResponse sendAndReceive(String numName) throws IOException {
-    static public DataResponse sendAndReceive(String url, Object parameter, Type type) throws IOException {
-        CloseableHttpClient httpclient = HttpClients.createDefault();
-
-        // 2. 创建HttpPost实例
-        HttpPost httpPost = new HttpPost(url);
-        httpPost.setEntity(new StringEntity("this is Post"+parameter));
-
-        // 3. 调用HttpClient实例来执行HttpPost实例
-        CloseableHttpResponse response = httpclient.execute(httpPost);
-        // 4. 读 response
-        int status = response.getStatusLine().getStatusCode();
-        if(status<200||status>=300) throw new ClientProtocolException("Unexpected response status: " + status);
-        HttpEntity entity = response.getEntity();
-        System.out.println(response);
-        System.out.println("===================");
-        String html = EntityUtils.toString(entity);
-        System.out.println("html:"+html);
-
-        // 5. 释放连接
-        response.close();
-        httpclient.close();
-
-        Gson gson = new Gson();
-        return gson.fromJson(html,type);
+    public JwtResponse(String accessToken) {
+        this.accessToken = accessToken;
     }
-}*/
 
-/*private DataResponse sendAndReceive(String numName) throws IOException{
-        CloseableHttpClient httpclient = HttpClients.createDefault();
+    public String getAccessToken() {
+        return accessToken;
+    }
 
-        // 2. 创建HttpPost实例
-        HttpPost httpPost = new HttpPost("http://localhost:9090/getTeacherList");
-        httpPost.setEntity(new StringEntity("this is Post"+numName));
+    public void setAccessToken(String accessToken) {
+        this.accessToken = accessToken;
+    }
 
-        // 3. 调用HttpClient实例来执行HttpPost实例
-        CloseableHttpResponse response = httpclient.execute(httpPost);
-        // 4. 读 response
-        int status = response.getStatusLine().getStatusCode();
-        if(status<200||status>=300) throw new ClientProtocolException("Unexpected response status: " + status);
-        HttpEntity entity = response.getEntity();
-        System.out.println(response);
-        System.out.println("===================");
-        String html = EntityUtils.toString(entity);
-        System.out.println("html:"+html);
 
-        // 5. 释放连接
-        response.close();
-        httpclient.close();
 
-        Gson gson = new Gson();
-        return gson.fromJson(html,DataResponse.class);
-    }*/
+}

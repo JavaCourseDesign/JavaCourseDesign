@@ -17,7 +17,7 @@ public class MenuController {
     @FXML
     BorderPane rootPane;
 
-    @FXML
+
     public void initialize()
    {
        //Creating tree items

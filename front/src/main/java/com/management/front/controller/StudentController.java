@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+import static com.management.front.util.HttpClientUtil.request;
 import static com.management.front.util.HttpClientUtil.sendAndReceiveDataResponse;
 public class StudentController {
     @FXML
@@ -70,7 +71,8 @@ public class StudentController {
     //名字必须为这个，一字不差，且与fxml文件建立联系，系统才会调用这个方法，不然必须自己手动在启动器调用
    public void initialize()throws IOException
    {
-       DataResponse r=sendAndReceiveDataResponse("/getStudent",null);
+      // DataResponse r=sendAndReceiveDataResponse("/getStudent",null);
+       DataResponse r=request("/getStudent",null);
        studentList =(ArrayList<Map>) r.getData();
        numColumn.setCellValueFactory(new MapValueFactory<>("studentId"));
        nameColumn.setCellValueFactory(new MapValueFactory<>("name"));
