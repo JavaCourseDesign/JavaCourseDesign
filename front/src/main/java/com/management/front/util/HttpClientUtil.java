@@ -45,15 +45,16 @@ public class HttpClientUtil {
     }
 
     public static DataResponse request(String url,Object request){
+        HttpClient client = HttpClient.newHttpClient();
         HttpRequest httpRequest = HttpRequest.newBuilder()
                 .uri(URI.create(mainUrl + url))
                 .POST(HttpRequest.BodyPublishers.ofString(gson.toJson(request)))
                 .headers("Content-Type", "application/json")
                 .headers("Authorization", "Bearer " + jwt.getAccessToken())
                 .build();
-        HttpClient client = HttpClient.newHttpClient();
         try {
             HttpResponse<String> response = client.send(httpRequest, HttpResponse.BodyHandlers.ofString());
+            //System.out.println("check"+response.body());
             if (response.statusCode() == 200) {
                 DataResponse dataResponse = gson.fromJson(response.body(), DataResponse.class);
                 return dataResponse;

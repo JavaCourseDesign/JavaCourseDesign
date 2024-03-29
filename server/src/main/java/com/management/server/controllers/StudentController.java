@@ -8,6 +8,7 @@ import com.management.server.payload.response.DataResponse;
 import com.management.server.repositories.StudentRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -42,22 +43,11 @@ public class StudentController {
         return s.getEvents().toString();
     }
 
-    /*@PostMapping("/addStudent")
-    public DataResponse addStudent(@Valid @RequestBody Map<String,String> data){
-        Student student=new Student();
-        student.setName(data.get("name"));
-        student.setGender(data.get("gender"));
-        student.setMajor(data.get("studentId"));
-        student.setClassName(data.get("major"));
-        studentRepository.save(student);
-        DataResponse r=new DataResponse();
-        r.setMsg("添加成功"+student.getName()+data.get("name"));
-        return r;
-    }*/
     @PostMapping("/getStudent")
+    @PreAuthorize("hasRole('STUDENT')")
     public DataResponse getStudent()
     {
-        System.out.println("checkStudent");
+        //System.out.println("checkStudent");
         ArrayList<Map> studentMapList=new ArrayList<>();
         List<Student> list=studentRepository.findAll();
         for(int i=0;i<list.size();i++)

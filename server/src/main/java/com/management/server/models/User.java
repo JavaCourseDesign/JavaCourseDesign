@@ -1,4 +1,4 @@
-/*
+
 package com.management.server.models;
 
 import jakarta.persistence.*;
@@ -17,7 +17,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer userId;
 
-    @ManyToOne()
+    @ManyToOne
     @JoinColumn(name = "user_type_id")
     private UserType userType;
 
@@ -27,7 +27,7 @@ public class User {
 
     @NotBlank
     @Size(max = 20)
-    private String userName;
+    private String username;
 
 
     @NotBlank
@@ -41,11 +41,15 @@ public class User {
     }
 
     public User(String username, String password) {
-        this.userName = username;
+        this.username = username;
         this.password = password;
     }
 }
-*/
+
+
+
+
+/*
 package com.management.server.models;
 
 import jakarta.persistence.*;
@@ -63,5 +67,6 @@ public class User {
     private String username;//////在老师的案例中是userName
     private String password;
 
-
 }
+*/
+

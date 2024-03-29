@@ -70,7 +70,7 @@ public class LoginController {
         Map<String,String> map = new HashMap<>();
         map.put("username",usernameField.getText());
         map.put("password",passwordField.getText());
-        DataResponse response=sendAndReceiveDataResponse("/register",map);
+        DataResponse response=sendAndReceiveDataResponse("/register/teacher",map);
         if(response.getCode()==1)
         {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
