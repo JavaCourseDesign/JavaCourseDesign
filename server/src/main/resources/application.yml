@@ -9,5 +9,9 @@ spring:
     show-sql: true
     hibernate:
       ddl-auto: create
+bezkoder:
+  app:
+    jwtSecret: bezKoderaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+    jwtExpirationMs: 86400000
 server:
   port: 9090

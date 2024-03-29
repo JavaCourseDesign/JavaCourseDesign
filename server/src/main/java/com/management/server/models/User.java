@@ -6,7 +6,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 
-@Entity
+/*@Entity
 @Data
 public class User {
     @Id
@@ -16,10 +16,10 @@ public class User {
     private String password;
     
 
-}
+}*/
 
 
-/*@Entity
+@Entity
 @Table(	name = "user",
         uniqueConstraints = {
                 @UniqueConstraint(columnNames = "user_name"),
@@ -40,7 +40,7 @@ public class User {
 
     @NotBlank
     @Size(max = 20)
-    private String userName;
+    private String username;
 
 
     @NotBlank
@@ -54,7 +54,7 @@ public class User {
     }
 
     public User(String username, String password) {
-        this.userName = username;
+        this.username = username;
         this.password = password;
     }
-}*/
+}

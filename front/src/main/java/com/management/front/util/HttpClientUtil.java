@@ -24,8 +24,10 @@ public class HttpClientUtil {
     static public String mainUrl = "http://localhost:9090";
     static Gson gson = new Gson();
     static private JwtResponse jwt=new JwtResponse();//在老师的示例项目中被存储在appstore
+
+    private static HttpClient client = HttpClient.newHttpClient();
     static public boolean login(String username, String password) throws IOException, URISyntaxException, InterruptedException {
-        HttpClient client = HttpClient.newHttpClient();
+        /*HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(new URI(mainUrl+"/login"))
                 .POST(HttpRequest.BodyPublishers.ofString("{\"username\":\"" + username + "\", \"password\":\"" + password + "\"}"))
@@ -39,9 +41,29 @@ public class HttpClientUtil {
             jwt.setAccessToken(response.body());
             return true;
         } else {
-            System.out.println("Login failed");
+            System.out.println("Login failed, statusCode="+response.statusCode());
             return false;
+        }*/
+        HttpRequest httpRequest = HttpRequest.newBuilder()
+                .uri(URI.create(mainUrl + "/login"))
+                .POST(HttpRequest.BodyPublishers.ofString("{\"username\":\"" + username + "\", \"password\":\"" + password + "\"}"))
+                .headers("Content-Type", "application/json")
+                .build();
+        try {
+            HttpResponse<String> response = client.send(httpRequest, HttpResponse.BodyHandlers.ofString());
+            System.out.println(response.body());
+            if (response.statusCode() == 200) {
+                jwt = gson.fromJson(response.body(), JwtResponse.class);
+                return true;
+            } else if (response.statusCode() == 401) {
+                return false;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
+        return false;
     }
 
     public static DataResponse request(String url,Object request){

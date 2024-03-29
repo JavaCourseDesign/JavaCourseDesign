@@ -2,6 +2,7 @@ package com.management.server.models;
 
 
 import jakarta.persistence.*;
+import lombok.Data;
 
 /**
  * UserType用户类型表实体类 三种类型 管理员，学生和教师 对应 枚举类型EUserType
@@ -10,6 +11,7 @@ import jakarta.persistence.*;
  */
 @Entity
 @Table(name = "user_type")
+@Data
 public class UserType {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
