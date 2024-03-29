@@ -1,6 +1,7 @@
 package com.management.front;
 
 import com.management.front.controller.HomePage;
+import com.management.front.controller.LoginView;
 import com.management.front.controller.Menu;
 import com.management.front.controller.WeekTimeTable;
 import javafx.application.Application;
@@ -18,8 +19,8 @@ import static com.management.front.util.HttpClientUtil.sendAndReceiveObject;
 
 public class HelloApplication extends Application {
     @Override
-    public void start(Stage stage) throws IOException {
-        Scene scene = new Scene(new Menu(), 800, 600);
+    public void start(Stage stage) throws Exception {
+        Scene scene = new Scene(new LoginView(), 800, 600);
         stage.setScene(scene);
         stage.show();
     }

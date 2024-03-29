@@ -20,6 +20,10 @@ public class LoginController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody User user) {
+        /*User newuser = new User();
+        newuser.setUsername("admin1");
+        newuser.setPassword("admin1");
+        registerUser(newuser);*/
         User foundUser = userRepository.findByUsername(user.getUsername());
         if (foundUser != null && passwordEncoder.matches(user.getPassword(), foundUser.getPassword())) {
             String token = JwtUtil.generateToken(user.getUsername());
@@ -31,8 +35,8 @@ public class LoginController {
     }
 
         /*User newuser = new User();
-        newuser.setUsername("admin");
-        newuser.setPassword("admin");
+        newuser.setUsername("admin1");
+        newuser.setPassword("admin1");
         registerUser(newuser);*/
 
 

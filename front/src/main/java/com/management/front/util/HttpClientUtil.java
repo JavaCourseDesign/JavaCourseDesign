@@ -24,7 +24,7 @@ public class HttpClientUtil {
     static public String mainUrl = "http://localhost:9090";
     static Gson gson = new Gson();
     static private JwtResponse jwt=new JwtResponse();//在老师的示例项目中被存储在appstore
-    static public void login(String username, String password) throws IOException, URISyntaxException, InterruptedException {
+    static public boolean login(String username, String password) throws IOException, URISyntaxException, InterruptedException {
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(new URI(mainUrl+"/login"))
@@ -37,8 +37,10 @@ public class HttpClientUtil {
             System.out.println("Login successful");
             System.out.println("Token:"+response.body());
             jwt.setAccessToken(response.body());
+            return true;
         } else {
             System.out.println("Login failed");
+            return false;
         }
     }
 

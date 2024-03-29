@@ -13,29 +13,26 @@ import java.net.URISyntaxException;
 import static com.management.front.util.HttpClientUtil.login;
 import static com.management.front.util.HttpClientUtil.request;
 
-public class LoginView extends Application {
+public class LoginView extends GridPane{
 
-    @Override
-    public void start(Stage primaryStage) throws Exception {
-        primaryStage.setTitle("Login");
-
-        GridPane gridPane = new GridPane();
-        gridPane.setAlignment(Pos.CENTER);
-        gridPane.setPadding(new Insets(40, 40, 40, 40));
-        gridPane.setHgap(10);
-        gridPane.setVgap(10);
+    boolean loginStatue = false;
+    public LoginView() throws Exception {
+        this.setAlignment(Pos.CENTER);
+        this.setPadding(new Insets(40, 40, 40, 40));
+        this.setHgap(10);
+        this.setVgap(10);
 
         Label userNameLabel = new Label("Username:");
-        gridPane.add(userNameLabel, 0, 1);
+        this.add(userNameLabel, 0, 1);
 
         TextField userNameTextField = new TextField();
-        gridPane.add(userNameTextField, 1, 1);
+        this.add(userNameTextField, 1, 1);
 
         Label passwordLabel = new Label("Password:");
-        gridPane.add(passwordLabel, 0, 2);
+        this.add(passwordLabel, 0, 2);
 
         PasswordField passwordField = new PasswordField();
-        gridPane.add(passwordField, 1, 2);
+        this.add(passwordField, 1, 2);
 
         Button loginButton = new Button("Login");
         loginButton.setOnAction(e -> {
@@ -43,23 +40,29 @@ public class LoginView extends Application {
             String password = passwordField.getText();
             // 实现与后端的通信
             try {
-                login(username, password);
+                loginStatue = login(username, password);
+                if (loginStatue) {
+                    System.out.println("Login successful");
+                    // 登录成功后跳转到主页面
+                    Menu menu = new Menu();
+                    Scene scene = new Scene(menu, 800, 600);
+                    Stage stage = (Stage) loginButton.getScene().getWindow();
+                    stage.setScene(scene);
+                    stage.show();
+                } else {
+                    System.out.println("Login failed");
+                }
             } catch (IOException | URISyntaxException | InterruptedException ex) {
                 throw new RuntimeException(ex);
             }
 
             //测试通讯
-            System.out.println(request("/getAllStudents", null).getData());
+            //System.out.println(request("/getAllStudents", null).getData());
 
         });
-        gridPane.add(loginButton, 1, 3);
-
-        Scene scene = new Scene(gridPane, 800, 500);
-        primaryStage.setScene(scene);
-        primaryStage.show();
+        this.add(loginButton, 1, 3);
     }
-
-    public static void main(String[] args) {
-        launch(args);
+    public boolean getLoginStatue() {
+        return loginStatue;
     }
 }

@@ -1,5 +1,6 @@
 package com.management.front.controller;
 
+import com.management.front.request.DataResponse;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
@@ -11,6 +12,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.management.front.util.HttpClientUtil.request;
 import static com.management.front.util.HttpClientUtil.sendAndReceiveObject;
 
 public class StudentManagementPage extends SplitPane {
@@ -62,10 +64,8 @@ public class StudentManagementPage extends SplitPane {
     }
 
     private void displayStudents() throws IOException {
-        Object o = sendAndReceiveObject("/getAllStudents", null);
-
         observableList.clear();
-        observableList.addAll(FXCollections.observableArrayList((ArrayList<Map>) o));
+        observableList.addAll(FXCollections.observableArrayList((ArrayList) request("/getAllStudents", null).getData()));
         studentTable.setItems(observableList);
     }
 
