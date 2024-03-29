@@ -132,3 +132,22 @@ private List<Event> events;
     </BorderPane>
 </AnchorPane>
 ```
+
+# 关于jwt权限控制
+1.userDetailsService实现loadUserByUsername方法
+2.配置jwtFilter
+3.在securityconfig中配置写@EnableMethodSecurity(prePostEnabled = true)
+最重要的是userdetailsimpl
+```
+public static UserDetailsImpl build(User user) {
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        authorities.add(new SimpleGrantedAuthority(user.getUserType().getName().name()));
+
+        return new UserDetailsImpl(
+        user.getUserId(),
+        user.getUsername(),
+        user.getPassword(),
+        authorities);
+        }
+        其中实现了如何得到用户权限，这样才能使用preauthorize注解
+```

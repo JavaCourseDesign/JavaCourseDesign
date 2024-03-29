@@ -26,4 +26,6 @@ module com.management.front {
     opens com.management.front.request to com.google.gson;
     exports com.management.front.controller;
     opens com.management.front.controller to javafx.fxml;
+    exports com.management.front.util;
+    opens com.management.front.util to com.google.gson;
 }

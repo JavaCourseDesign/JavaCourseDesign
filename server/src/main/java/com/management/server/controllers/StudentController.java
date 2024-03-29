@@ -8,6 +8,7 @@ import com.management.server.payload.response.DataResponse;
 import com.management.server.repositories.StudentRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,6 +18,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 
 @RestController
 
@@ -25,10 +27,12 @@ public class StudentController {
     private PersonRepository personRepository;*/
     @Autowired
     private StudentRepository studentRepository;
-    @GetMapping ("/demoStudent")
     public String demoStudent(){
         Student s=new Student();
+        s.setName("wzk");
         s.setMajor("software");
+        s.setGender("男");
+        s.setStudentId("2023");
         studentRepository.save(s);
         return "HelloStudent";
     }
@@ -39,36 +43,11 @@ public class StudentController {
         return s.getEvents().toString();
     }
 
-    @PostMapping("/addStudent")
-    public DataResponse addStudent(@Valid @RequestBody Map<String,String> data){
-        Student student=new Student();
-        student.setName(data.get("name"));
-        student.setGender(data.get("gender"));
-        student.setMajor(data.get("studentId"));
-        student.setClassName(data.get("major"));
-        studentRepository.save(student);
-        DataResponse r=new DataResponse();
-        r.setMsg("添加成功"+student.getName()+data.get("name"));
-        return r;
-    }
-
-    @PostMapping("/deleteStudent")
-    public boolean deleteStudent(@Valid @RequestBody DataRequest data){
-        return true;
-    }
-
-
-    /*@PostMapping("/getAllStudents")
-    public DataResponse getAllStudents()
+    @PostMapping("/getStudent")
+    @PreAuthorize("hasRole('STUDENT')")
+    public DataResponse getStudent()
     {
-        Student s=new Student();
-        s.setName("zhangsan");
-        s.setGender("male");
-        s.setMajor("software");
-        s.setStudentId("2018001");
-        studentRepository.save(s);
-
-
+        //System.out.println("checkStudent");
         ArrayList<Map> studentMapList=new ArrayList<>();
         List<Student> list=studentRepository.findAll();
         for(int i=0;i<list.size();i++)
@@ -82,19 +61,30 @@ public class StudentController {
         }
         DataResponse r=new DataResponse(200,studentMapList,null);
         return r;
-    }*/
-    @PostMapping("/getAllStudents")
-    public DataResponse getAllStudents()
-    {
-        Student s=new Student();
-        s.setName("zhangsan");
-        s.setGender("male");
-        s.setMajor("software");
-        s.setStudentId("2018001");
-        studentRepository.save(s);
-        return new DataResponse(0,studentRepository.findAll(),null);
     }
-
-
-
+    @PostMapping("/addStudent")
+    public DataResponse addStudent(@RequestBody Map<String,String> m)
+    {
+        String studentId=m.get("num");
+        if(studentRepository.existsByStudentId(studentId))
+        {
+            return new DataResponse(0,null,"学号已存在，无法添加");
+        }
+        else
+        {
+            Student s=new Student();
+            s.setStudentId(m.get("num"));
+            s.setMajor(m.get("major"));
+            s.setName(m.get("name"));
+            s.setGender(m.get("gender"));
+            studentRepository.save(s);
+            return new DataResponse(1,null,"添加成功");
+        }
+    }
+    @PostMapping("/deleteStudent")
+    public DataResponse deleteStudent(@RequestBody Map<String,String> m)
+    {
+        studentRepository.deleteAllByStudentId(m.get("studentId"));
+       return new DataResponse(1,null," ");
+    }
 }

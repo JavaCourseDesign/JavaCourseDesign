@@ -10,6 +10,7 @@ import lombok.Data;
  * EUserType nam 角色名称 ROLE_ADMIN, ROLE_STUDENT,ROLE_TEACHER
  */
 @Entity
+@Data
 @Table(name = "user_type")
 @Data
 public class UserType {
