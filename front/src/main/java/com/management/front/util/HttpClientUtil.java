@@ -24,14 +24,24 @@ public class HttpClientUtil {
     static public String mainUrl = "http://localhost:9090";
     static Gson gson = new Gson();
     static private JwtResponse jwt=new JwtResponse();//在老师的示例项目中被存储在appstore
-    static public boolean login(String username, String password) throws IOException, URISyntaxException, InterruptedException {
+    static public boolean login(String username, String password){
         HttpClient client = HttpClient.newHttpClient();
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(new URI(mainUrl+"/login"))
-                .POST(HttpRequest.BodyPublishers.ofString("{\"username\":\"" + username + "\", \"password\":\"" + password + "\"}"))
-                .header("Content-Type", "application/json")
-                .build();
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        HttpRequest request = null;
+        try {
+            request = HttpRequest.newBuilder()
+                    .uri(new URI(mainUrl+"/login"))
+                    .POST(HttpRequest.BodyPublishers.ofString("{\"username\":\"" + username + "\", \"password\":\"" + password + "\"}"))
+                    .header("Content-Type", "application/json")
+                    .build();
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
+        HttpResponse<String> response = null;
+        try {
+            response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        } catch (IOException | InterruptedException e) {
+            throw new RuntimeException(e);
+        }
 
         if (response.statusCode() == 200) {
             System.out.println("Login successful");
@@ -92,23 +102,45 @@ public class HttpClientUtil {
         return gson.fromJson(html, Object.class);
     }
 
-    static public DataResponse sendAndReceiveDataResponse(String url, Object parameter) throws IOException {
+    static public DataResponse sendAndReceiveDataResponse(String url, Object parameter) {
         CloseableHttpClient httpclient = HttpClients.createDefault();
         // 2. 创建HttpPost实例
         HttpPost httpPost = new HttpPost(mainUrl+url);
         httpPost.setEntity(new StringEntity(gson.toJson(parameter), ContentType.APPLICATION_JSON));
 
         // 3. 调用HttpClient实例来执行HttpPost实例
-        CloseableHttpResponse response = httpclient.execute(httpPost);
+        CloseableHttpResponse response = null;
+        try {
+            response = httpclient.execute(httpPost);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         // 4. 读 response
         int status = response.getStatusLine().getStatusCode();
-        if(status<200||status>=300) throw new ClientProtocolException("Unexpected response status: " + status);
+        if(status<200||status>=300) try {
+            throw new ClientProtocolException("Unexpected response status: " + status);
+        } catch (ClientProtocolException e) {
+            throw new RuntimeException(e);
+        }
         HttpEntity entity = response.getEntity();
-        String html = EntityUtils.toString(entity);
+        String html = null;
+        try {
+            html = EntityUtils.toString(entity);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
         // 5. 释放连接
-        response.close();
-        httpclient.close();
+        try {
+            response.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        try {
+            httpclient.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
         //System.out.println(html);
         return gson.fromJson(html, DataResponse.class);

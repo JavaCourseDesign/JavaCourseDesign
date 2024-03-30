@@ -13,10 +13,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import static com.management.front.util.HttpClientUtil.*;
+import static com.management.front.util.HttpClientUtil.request;
 
-public class StudentManagementPage extends SplitPane {
-    private TableView<Map> studentTable = new TableView<>();
+public class TeacherManagementPage extends SplitPane {
+    private TableView<Map> teacherTable = new TableView<>();
     private VBox controlPanel = new VBox();
     private ObservableList<Map> observableList = FXCollections.observableArrayList();
 
@@ -25,17 +25,17 @@ public class StudentManagementPage extends SplitPane {
     private Button updateButton = new Button("Update");
     private Button refreshButton = new Button("Refresh");
 
-    private TextField numField = new TextField("studentId");
+    private TextField numField = new TextField("teacherId");
     private TextField nameField = new TextField("name");
     private TextField genderField = new TextField("gender");
-    private TextField majorField = new TextField("major");
+    private TextField majorField = new TextField("title");
 
-    public StudentManagementPage() {
+    public TeacherManagementPage() {
         this.setWidth(1000);
         initializeTable();
         initializeControlPanel();
         try {
-            displayStudents();
+            displayTeachers();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -44,37 +44,37 @@ public class StudentManagementPage extends SplitPane {
     private void initializeTable() {
 
         //建立列
-        TableColumn<Map, String> studentId = new TableColumn<>("studentID");
-        TableColumn<Map, String> studentName = new TableColumn<>("Name");
-        TableColumn<Map, String> studentGender = new TableColumn<>("Gender");
-        TableColumn<Map, String> studentMajor = new TableColumn<>("Major");
+        TableColumn<Map, String> teacherId = new TableColumn<>("teacherID");
+        TableColumn<Map, String> teacherName = new TableColumn<>("Name");
+        TableColumn<Map, String> teacherGender = new TableColumn<>("Gender");
+        TableColumn<Map, String> teacherMajor = new TableColumn<>("Title");
 
         //把map填入单元格
-        studentId.setCellValueFactory(new MapValueFactory<>("studentId"));
-        studentName.setCellValueFactory(new MapValueFactory<>("name"));
-        studentGender.setCellValueFactory(new MapValueFactory<>("gender"));
-        studentMajor.setCellValueFactory(new MapValueFactory<>("major"));
+        teacherId.setCellValueFactory(new MapValueFactory<>("teacherId"));
+        teacherName.setCellValueFactory(new MapValueFactory<>("name"));
+        teacherGender.setCellValueFactory(new MapValueFactory<>("gender"));
+        teacherMajor.setCellValueFactory(new MapValueFactory<>("title"));
 
-        studentTable.getColumns().addAll(studentId, studentName, studentGender, studentMajor);
-        this.getItems().add(studentTable);
+        teacherTable.getColumns().addAll(teacherId, teacherName, teacherGender, teacherMajor);
+        this.getItems().add(teacherTable);
     }
 
     private void initializeControlPanel() {
         controlPanel.setMinWidth(200);
         controlPanel.setSpacing(10);
 
-        addButton.setOnAction(event -> addStudent());
-        deleteButton.setOnAction(event -> deleteStudent());
-        updateButton.setOnAction(event -> updateStudent());
-        refreshButton.setOnAction(event -> refreshStudents());
+        addButton.setOnAction(event -> addTeacher());
+        deleteButton.setOnAction(event -> deleteTeacher());
+        updateButton.setOnAction(event -> updateTeacher());
+        refreshButton.setOnAction(event -> refreshTeachers());
 
-        studentTable.selectionModelProperty().get().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+        teacherTable.selectionModelProperty().get().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if(newValue!=null)
             {
-                numField.setText((String) newValue.get("studentId"));
+                numField.setText((String) newValue.get("teacherId"));
                 nameField.setText((String) newValue.get("name"));
                 genderField.setText((String) newValue.get("gender"));
-                majorField.setText((String) newValue.get("major"));
+                majorField.setText((String) newValue.get("title"));
             }
         });
 
@@ -82,25 +82,25 @@ public class StudentManagementPage extends SplitPane {
         this.getItems().add(controlPanel);
     }
 
-    private void displayStudents() throws IOException {
+    private void displayTeachers() throws IOException {
         observableList.clear();
-        observableList.addAll(FXCollections.observableArrayList((ArrayList) request("/getAllStudents", null).getData()));
-        studentTable.setItems(observableList);
+        observableList.addAll(FXCollections.observableArrayList((ArrayList) request("/getAllTeachers", null).getData()));
+        teacherTable.setItems(observableList);
     }
 
-    private void addStudent() {
-        // 实现添加学生的逻辑
+    private void addTeacher() {
+        // 实现添加教师的逻辑
         Map<String,String> m=new HashMap<>();
-        m.put("studentId",numField.getText());//必须跟后端属性命名一致
+        m.put("teacherId",numField.getText());//必须跟后端属性命名一致
         m.put("name",nameField.getText());
         m.put("gender",genderField.getText());
-        m.put("major",majorField.getText());
+        m.put("title",majorField.getText());
 
         System.out.println(m);
 
-        DataResponse r=request("/addStudent",m);
+        DataResponse r=request("/addTeacher",m);
 
-        refreshStudents();
+        refreshTeachers();
 
         if(r.getCode()==-1)
         {
@@ -117,9 +117,9 @@ public class StudentManagementPage extends SplitPane {
         }
     }
 
-    private void deleteStudent() {
-        // 实现删除选中的学生逻辑
-        Map form = studentTable.getSelectionModel().getSelectedItem();
+    private void deleteTeacher() {
+        // 实现删除选中的教师逻辑
+        Map form = teacherTable.getSelectionModel().getSelectedItem();
         if(form==null)
         {
             Alert alert=new Alert(Alert.AlertType.INFORMATION);
@@ -134,11 +134,11 @@ public class StudentManagementPage extends SplitPane {
             Optional<ButtonType> result=alert.showAndWait();
             if(result.get()==ButtonType.OK)
             {
-                DataResponse r=request("/deleteStudent",form);
+                DataResponse r=request("/deleteTeacher",form);
                 System.out.println(form);
                 System.out.println(r);
 
-                refreshStudents();
+                refreshTeachers();
 
                 if(r.getCode()==0)
                 {
@@ -150,9 +150,9 @@ public class StudentManagementPage extends SplitPane {
         }
     }
 
-    private void updateStudent() {
-        // 实现更新学生信息的逻辑
-        Map form = studentTable.getSelectionModel().getSelectedItem();
+    private void updateTeacher() {
+        // 实现更新教师信息的逻辑
+        Map form = teacherTable.getSelectionModel().getSelectedItem();
         if(form==null)
         {
             Alert alert=new Alert(Alert.AlertType.INFORMATION);
@@ -162,10 +162,10 @@ public class StudentManagementPage extends SplitPane {
         else
         {
 
-            form.put("studentId",numField.getText());
+            form.put("teacherId",numField.getText());
             form.put("name",nameField.getText());
             form.put("gender",genderField.getText());
-            form.put("major",majorField.getText());
+            form.put("title",majorField.getText());
 
             Alert alert=new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("警告");
@@ -173,11 +173,11 @@ public class StudentManagementPage extends SplitPane {
             Optional<ButtonType> result=alert.showAndWait();
             if(result.get()==ButtonType.OK)
             {
-                DataResponse r=request("/updateStudent",form);
+                DataResponse r=request("/updateTeacher",form);
                 System.out.println(form);
                 System.out.println(r);
 
-                refreshStudents();
+                refreshTeachers();
 
                 if(r.getCode()==0)
                 {
@@ -189,9 +189,9 @@ public class StudentManagementPage extends SplitPane {
         }
     }
 
-    private void refreshStudents() {
+    private void refreshTeachers() {
         try {
-            displayStudents();
+            displayTeachers();
         } catch (IOException e) {
             e.printStackTrace();
         }

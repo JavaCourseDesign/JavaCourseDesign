@@ -102,7 +102,7 @@ public class StudentController {
         m.put("major",majorField.getText());
         DataResponse r=request("/addStudent",m);
 
-        if(r.getCode()==0)
+        if(r.getCode()==-1)
         {
             Alert alert=new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("警告");

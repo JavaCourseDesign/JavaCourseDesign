@@ -20,8 +20,6 @@ module com.management.front {
     exports com.management.front;
 
     //following are manually added
-    exports com.management.front.model to com.google.gson;
-    opens com.management.front.model to com.google.gson;
     exports com.management.front.request to com.google.gson;
     opens com.management.front.request to com.google.gson;
     exports com.management.front.controller;
