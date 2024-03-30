@@ -3,9 +3,10 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox alignment="CENTER" spacing="10" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/17.0.2-ea" fx:controller="com.management.front.controller.LoginController">
+<VBox alignment="CENTER" spacing="10" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.management.front.controller.LoginController">
+   <TextField fx:id="idField" promptText="ID" />
     <TextField fx:id="usernameField" promptText="Username" />
     <PasswordField fx:id="passwordField" promptText="Password" />
-    <Button fx:id="loginButton"  text="Login" onMouseClicked="#onLoginButton" />
-    <Button fx:id="registerButton" text="Register" onMouseClicked="#onRegisterButton" />
+    <Button fx:id="loginButton" onMouseClicked="#onLoginButton" text="Login" />
+    <Button fx:id="registerButton" onMouseClicked="#onRegisterButton" text="Register" />
 </VBox>

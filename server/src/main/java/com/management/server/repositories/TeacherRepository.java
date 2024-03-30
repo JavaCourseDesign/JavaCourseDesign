@@ -23,4 +23,7 @@ public interface TeacherRepository extends JpaRepository<Teacher,Integer> {
     List<Teacher> findTeacherListByNumName(String numName);*/
     /*@Query("select p from Person p where p.personId = ?1")
     Teacher findByPersonId(Integer personId);*/
+
+    Teacher findByTeacherId(String teacherId);
+
 }

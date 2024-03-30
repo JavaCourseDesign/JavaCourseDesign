@@ -24,8 +24,9 @@ import static com.management.front.util.HttpClientUtil.*;
 
 public class LoginController {
     @FXML
+    private TextField idField;
+    @FXML
     private TextField usernameField;
-
     @FXML
     private PasswordField passwordField;
     @FXML
@@ -33,10 +34,10 @@ public class LoginController {
     @FXML
     Button registerButton;
     @FXML
-    public void initialize() {
+    public void initialize() throws IOException {
         usernameField.setText("aaa");
         passwordField.setText("123456");
-
+        sendAndReceiveDataResponse("/test/addTestData",null);
     }
     private void goNext() throws IOException {
         Stage stage=new Stage();
@@ -68,19 +69,20 @@ public class LoginController {
     @FXML
     public void onRegisterButton(MouseEvent event) throws IOException {
         Map<String,String> map = new HashMap<>();
+        map.put("id",idField.getText());
         map.put("username",usernameField.getText());
         map.put("password",passwordField.getText());
-        DataResponse response=sendAndReceiveDataResponse("/register/teacher",map);
-        if(response.getCode()==1)
+        DataResponse response=sendAndReceiveDataResponse("/register",map);
+        if(response.getCode()==0)
         {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setContentText("注册成功");
+            alert.setContentText(response.getMsg());
             alert.showAndWait();
         }
         else
         {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setContentText("注册失败");
+            alert.setContentText(response.getMsg());
             alert.showAndWait();
         }
 

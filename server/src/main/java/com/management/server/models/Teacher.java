@@ -14,6 +14,8 @@ public class Teacher extends Person{
     /*@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer teacherId;*/
+    private String teacherId;
+
     @Size(max = 20)
     private String degree;
 

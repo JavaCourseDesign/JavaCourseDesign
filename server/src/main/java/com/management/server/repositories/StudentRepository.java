@@ -22,6 +22,7 @@ public interface StudentRepository extends JpaRepository<Student,Integer> {
     List<Student> findStudentListByNumName(String numName);*/
     /*@Query("select s from Student s where s.studentId = ?1")
     Student findByStudentId(Integer personId);*/
+    Student findByStudentId(String studentId);
 
     List<Student> findAll();
     boolean existsByStudentId(String studentId);
