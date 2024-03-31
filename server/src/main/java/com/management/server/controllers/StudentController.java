@@ -46,6 +46,7 @@ public class StudentController {
     public DataResponse updateStudent(@RequestBody Map m) {
         studentRepository.deleteAllByPersonId(Integer.parseInt((""+ m.get("personId")).split("\\.")[0]));
         addStudent(m);
+        System.out.println("\n"+m+"\n");
         return new DataResponse(0, null, " ");
     }
 }
