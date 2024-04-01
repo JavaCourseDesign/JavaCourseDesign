@@ -43,16 +43,17 @@ public class CourseController {
             m.put("capacity", course.getCapacity());
             m.put("credit", course.getCredit());
             // 获取这个课程的所有教师的名字
-            List<String> teacherNames = new ArrayList<>();
+            ArrayList<String> teacherNames = new ArrayList<>();
             List<Person> persons = personRepository.findPersonsByCourseId(course.getCourseId());
             for (Person person : persons) {
                 if (person instanceof Teacher) {
                     teacherNames.add(person.getName());
                 }
             }
-            m.put("teacherName", teacherNames.get(0));
+            m.put("teacherNames", teacherNames);
             courseMapList.add(m);
         }
+        System.out.println(courseMapList);
         DataResponse r = new DataResponse(0, courseMapList, null);
         return r;
     }

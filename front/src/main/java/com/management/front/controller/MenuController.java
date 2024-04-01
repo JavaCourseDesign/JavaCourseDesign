@@ -67,7 +67,10 @@ public class MenuController {
                rootPane.setCenter(ro);
                ro.setLayoutX(100);
                ro.setLayoutY(200);
-
+           }
+           else if(selectedItem==childNode3)
+           {
+               rootPane.setCenter(new TeacherManagementPage());
            }
        });
    }

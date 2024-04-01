@@ -57,7 +57,7 @@ public class CourseController{
         creditColumn.setCellValueFactory(new MapValueFactory<>("credit"));
         capacityColumn.setCellValueFactory(new MapValueFactory<>("capacity"));
         referenceColumn.setCellValueFactory(new MapValueFactory<>("reference"));
-        teacherNameColumn.setCellValueFactory(new MapValueFactory<>("teacherName"));
+        teacherNameColumn.setCellValueFactory(new MapValueFactory<>("teacherNames"));
         setTableViewData();
     }
 

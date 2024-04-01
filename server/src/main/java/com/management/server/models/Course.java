@@ -32,9 +32,11 @@ public class Course{
     @JoinTable(name = "teacher_course")
     private List<Teacher> teachers;*/
 
+
     @ManyToMany
     @JoinTable(name = "person_course")
     private List<Person> persons;
+
 
     //lesson should be subClass of event, lesson to course should be many to one
     //course should not be subClass of event

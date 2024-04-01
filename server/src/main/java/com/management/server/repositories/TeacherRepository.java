@@ -16,6 +16,11 @@ import java.util.Optional;
 @Repository
 @Transactional
 public interface TeacherRepository extends JpaRepository<Teacher,Integer> {
+    boolean existsByTeacherId(String teacherId);
+
+    Integer deleteAllByTeacherId(String teacherId);
+
+     Integer deleteAllByPersonId(Integer personId);
     /*@Query(value = "select max(personId) from Teacher  ")
     Integer getMaxId();
     Optional<Teacher> findByPersonPersonId(Integer personId);
