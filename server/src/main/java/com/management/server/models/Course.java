@@ -1,5 +1,7 @@
 package com.management.server.models;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -8,10 +10,15 @@ import java.util.List;
 @Entity
 @Data
 @Table(name="course")
+
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "name")//在递归中第二次出现时用name属性替代本对象避免无限递归
+
 public class Course{
     @Id
     @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
-    private String courseId;
+    private String courseId;//待修改
+
+    private String name;
 
     private String reference;
 

@@ -7,6 +7,10 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.Map;
+
+import static com.management.front.util.HttpClientUtil.request;
 
 public class Menu extends SplitPane {
     TreeView<String> menu = new TreeView<>();
@@ -21,10 +25,14 @@ public class Menu extends SplitPane {
         menu.setShowRoot(false);
 
         root.getChildren().addAll(item1, item2, item3, item4);
+        //item4.getChildren().addAll(new TreeItem<>("班级信息"), new TreeItem<>("班级成绩"));
         menu.setRoot(root);
 
         this.getItems().add(menu);
         this.getItems().add(new Pane());
+
+        //System.out.println(((List<Map>) request("/getAllStudents", null).getData()).get(0));
+        System.out.println((request("/getAllCourses", null).getData()));
 
         menu.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             switch (newValue.getValue()) {
@@ -34,7 +42,7 @@ public class Menu extends SplitPane {
                     break;
                 case "课程管理": this.getItems().set(1,new HomePage());
                     break;
-                case "班级管理":
+                case "班级管理": this.getItems().set(1,new StudentPersonalInfoPage(((List<Map>) request("/getAllStudents", null).getData()).get(0)));
                     break;
             }
         });

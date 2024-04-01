@@ -1,6 +1,8 @@
 package com.management.server.models;
 
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -18,8 +20,10 @@ import java.util.List;
         })*/
 @Data
 @Entity
-@Table(name="person",uniqueConstraints = {})
-//@MappedSuperclass
+@Table(name="person")
+
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "name")//在递归中第二次出现时用name属性替代本对象避免无限递归
+
 @Inheritance(strategy = InheritanceType.JOINED)
 public abstract class Person {
     @Id

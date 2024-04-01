@@ -1,6 +1,8 @@
 package com.management.server.models;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
@@ -15,6 +17,7 @@ import java.util.List;
 @Entity
 @Data
 @Table(name="student",uniqueConstraints = {@UniqueConstraint(columnNames = {"student_id"})})
+
 
 public class Student extends Person{
     /*@Id

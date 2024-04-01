@@ -25,10 +25,10 @@ public class StudentManagementPage extends SplitPane {
     private Button updateButton = new Button("Update");
     //private Button refreshButton = new Button("Refresh");
 
-    private TextField numField = new TextField("studentId");
-    private TextField nameField = new TextField("name");
-    private TextField genderField = new TextField("gender");
-    private TextField majorField = new TextField("major");
+    private TextField numField = new TextField();
+    private TextField nameField = new TextField();
+    private TextField genderField = new TextField();
+    private TextField majorField = new TextField();
 
     private Map newMapFromFields(Map m) {
         m.put("studentId", numField.getText());

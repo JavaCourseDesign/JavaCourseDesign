@@ -24,10 +24,10 @@ public class TeacherManagementPage extends SplitPane {
     private Button deleteButton = new Button("Delete");
     private Button updateButton = new Button("Update");
 
-    private TextField numField = new TextField("teacherId");
-    private TextField nameField = new TextField("name");
-    private TextField genderField = new TextField("gender");
-    private TextField majorField = new TextField("title");
+    private TextField numField = new TextField();
+    private TextField nameField = new TextField();
+    private TextField genderField = new TextField();
+    private TextField majorField = new TextField();
 
     private Map newMapFromFields(Map m) {
         m.put("teacherId", numField.getText());
@@ -63,6 +63,8 @@ public class TeacherManagementPage extends SplitPane {
     private void initializeControlPanel() {
         controlPanel.setMinWidth(200);
         controlPanel.setSpacing(10);
+
+
 
         controlPanel.getChildren().addAll(numField, nameField, genderField, majorField, addButton, deleteButton, updateButton);
 
