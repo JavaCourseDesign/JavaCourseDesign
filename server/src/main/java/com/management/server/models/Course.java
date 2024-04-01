@@ -21,6 +21,8 @@ public class Course{
 
     @OneToMany(mappedBy = "course")
     private List<Lesson> lessons;
+   // private String beginWeek;
+   // private String endWeek;
 
     /*@ManyToMany
     @JoinTable(name = "student_course")
@@ -36,5 +38,4 @@ public class Course{
 
     //lesson should be subClass of event, lesson to course should be many to one
     //course should not be subClass of event
-
 }

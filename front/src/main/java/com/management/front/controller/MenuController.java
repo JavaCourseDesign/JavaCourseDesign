@@ -21,9 +21,9 @@ public class MenuController {
     public void initialize()
    {
        //Creating tree items
-       TreeItem<String> childNode1 = new TreeItem<>("选项节点1");//创建树形结构选项组件
-       TreeItem<String> childNode2 = new TreeItem<>("选项节点2");//创建树形结构选项组件
-       TreeItem<String> childNode3 = new TreeItem<>("选项节点3");//创建树形结构选项组件
+       TreeItem<String> childNode1 = new TreeItem<>("学生管理");//创建树形结构选项组件
+       TreeItem<String> childNode2 = new TreeItem<>("课程管理");//创建树形结构选项组件
+       TreeItem<String> childNode3 = new TreeItem<>("教师管理");//创建树形结构选项组件
        //Creating the root element
        final TreeItem<String> root = new TreeItem<>("根节点");
        root.setExpanded(true);//默认设置根节点可展开
@@ -57,6 +57,17 @@ public class MenuController {
                ro.setLayoutY(200);
                // 将从student.fxml加载的界面添加到BorderPane的中间
            } else if (selectedItem == childNode2) {
+               FXMLLoader fxmlLoader=new FXMLLoader(TestApplication.class.getResource("adminFxml/course_panel.fxml"));
+               Parent ro = null;
+               try {
+                   ro = fxmlLoader.load();
+               } catch (IOException e) {
+                   throw new RuntimeException(e);
+               }
+               rootPane.setCenter(ro);
+               ro.setLayoutX(100);
+               ro.setLayoutY(200);
+
            }
        });
    }

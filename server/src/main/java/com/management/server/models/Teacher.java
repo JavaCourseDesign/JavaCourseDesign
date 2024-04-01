@@ -16,6 +16,8 @@ public class Teacher extends Person{
     private Integer teacherId;*/
     @Size(max = 20)
     private String degree;
+    @Size(max=50)
+    private String TeacherId;
 
     @Size(max = 50)
     private String title;

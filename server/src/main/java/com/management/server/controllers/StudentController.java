@@ -44,7 +44,7 @@ public class StudentController {
     }
 
     @PostMapping("/getStudent")
-    @PreAuthorize("hasRole('STUDENT')")
+    @PreAuthorize("hasRole('ADMIN')")
     public DataResponse getStudent()
     {
         //System.out.println("checkStudent");

@@ -1,11 +1,13 @@
 package com.management.server.repositories;
 
+import com.management.server.models.Course;
 import com.management.server.models.Person;
 import com.management.server.models.Student;
 import com.management.server.models.Teacher;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -23,4 +25,10 @@ public interface TeacherRepository extends JpaRepository<Teacher,Integer> {
     List<Teacher> findTeacherListByNumName(String numName);*/
     /*@Query("select p from Person p where p.personId = ?1")
     Teacher findByPersonId(Integer personId);*/
+    //AND c.courseId = :courseId
+
+
+
+
+
 }

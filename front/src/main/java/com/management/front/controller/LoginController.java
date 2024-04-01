@@ -34,7 +34,7 @@ public class LoginController {
     Button registerButton;
     @FXML
     public void initialize() {
-        usernameField.setText("aaa");
+        usernameField.setText("why");
         passwordField.setText("123456");
 
     }
@@ -83,7 +83,6 @@ public class LoginController {
             alert.setContentText("注册失败");
             alert.showAndWait();
         }
-
     }
 
 
