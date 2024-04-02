@@ -50,6 +50,13 @@ public class StudentController {
         //System.out.println("checkStudent");
         ArrayList<Map> studentMapList=new ArrayList<>();
         List<Student> list=studentRepository.findAll();
+        studentMapList=getStudentMapList(list);
+        DataResponse r=new DataResponse(0,studentMapList,null);
+        return r;
+    }
+    public ArrayList<Map> getStudentMapList(List<Student> list)
+    {
+        ArrayList<Map> studentMapList=new ArrayList<>();
         for(int i=0;i<list.size();i++)
         {
             Map m=new HashMap();
@@ -59,7 +66,16 @@ public class StudentController {
             m.put("major",list.get(i).getMajor());
             studentMapList.add(m);
         }
-        DataResponse r=new DataResponse(200,studentMapList,null);
+        return studentMapList;
+    }
+    @PostMapping("/queryStudent")
+    @PreAuthorize("hasRole('ADMIN')")
+    public DataResponse queryStudent(@RequestBody Map<String,String> map) {
+        String numName=map.get("numName");
+        List<Student> list=studentRepository.findStudentsByStudentIdOrName(numName);
+        ArrayList<Map> studentMapList=getStudentMapList(list);
+        studentMapList=getStudentMapList(list);
+        DataResponse r=new DataResponse(0,studentMapList,null);
         return r;
     }
     @PostMapping("/addStudent")

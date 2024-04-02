@@ -7,6 +7,8 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
@@ -15,7 +17,7 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.management.front.controller.StudentController">
    <children>
-      <TableView fx:id="studentTableView" layoutY="14.0" prefHeight="400.0" prefWidth="300.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="300.0" AnchorPane.topAnchor="0.0">
+      <TableView fx:id="studentTableView" prefHeight="400.0" prefWidth="300.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="300.0" AnchorPane.topAnchor="0.0">
         <columns>
           <TableColumn fx:id="numColumn" prefWidth="75.0" text="学号" />
           <TableColumn fx:id="nameColumn" prefWidth="75.0" text="姓名" />
@@ -58,5 +60,12 @@
       </GridPane>
       <Button fx:id="save" layoutX="423.0" layoutY="253.0" mnemonicParsing="false" onAction="#onSaveStudentButton" text="添加" />
       <Button fx:id="delete" layoutX="487.0" layoutY="253.0" mnemonicParsing="false" onMouseClicked="#onDeleteStudentButton" text="删除" />
+      <TextField fx:id="queryField" layoutX="363.0" layoutY="190.0" prefHeight="40.0" prefWidth="162.0" />
+      <ImageView fitHeight="40.0" fitWidth="40.0" layoutX="323.0" layoutY="190.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/search.png" />
+         </image>
+      </ImageView>
+      <Button fx:id="queryButton" layoutX="323.0" layoutY="190.0" mnemonicParsing="false" onMouseClicked="#onQueryButton" opacity="0.0" prefHeight="53.0" prefWidth="55.0" text="Button" />
    </children>
 </AnchorPane>

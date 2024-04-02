@@ -4,6 +4,7 @@ import com.management.server.models.Student;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -26,4 +27,6 @@ public interface StudentRepository extends JpaRepository<Student,Integer> {
     List<Student> findAll();
     boolean existsByStudentId(String studentId);
     Integer deleteAllByStudentId(String studentId);
+    @Query("SELECT s FROM Student s WHERE s.studentId LIKE %?1% OR s.name LIKE %?1%")
+    List<Student> findStudentsByStudentIdOrName(String numName );
 }

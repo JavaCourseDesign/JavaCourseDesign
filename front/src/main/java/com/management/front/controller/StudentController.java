@@ -5,9 +5,12 @@ import com.management.front.util.HttpClientUtil;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.MapValueFactory;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 
@@ -57,6 +60,10 @@ public class StudentController {
     private Button save;
     @FXML
     private Button delete;
+    @FXML
+    private Button queryButton;
+    @FXML
+    private TextField queryField;
     private ArrayList<Map> studentList;
     private String gender;
     private ObservableList<Map> observableList= FXCollections.observableArrayList();
@@ -78,6 +85,39 @@ public class StudentController {
        nameColumn.setCellValueFactory(new MapValueFactory<>("name"));
        genderColumn.setCellValueFactory(new MapValueFactory<>("gender"));
        majorColumn.setCellValueFactory(new MapValueFactory<>("major"));
+       setTableViewData();
+       queryField.setOnKeyPressed(new EventHandler<KeyEvent>() {
+           @Override
+           public void handle(KeyEvent event) {
+               if (event.getCode() == KeyCode.ENTER) {
+                   onQueryButton();
+               }
+           }
+       });
+       queryButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
+           @Override
+           public void handle(MouseEvent event) {
+               onQueryButton();
+           }
+       });
+   }
+   @FXML
+   public void onQueryButton()
+   {
+       String s=queryField.getText();
+       Map<String,String> m=new HashMap();
+       m.put("numName",s);
+       DataResponse res=request("/queryStudent",m);
+       if(res != null && res.getCode()== 0) {
+           studentList = (ArrayList<Map>)res.getData();
+       }
+       numColumn.setCellValueFactory(new MapValueFactory("studentId"));
+       nameColumn.setCellValueFactory(new MapValueFactory<>("name"));
+       majorColumn.setCellValueFactory(new MapValueFactory<>("major"));
+       genderColumn.setCellValueFactory(new MapValueFactory<>("gender"));
+      // TableView.TableViewSelectionModel<Map> tsm = studentTableView.getSelectionModel();
+      // ObservableList<Integer> list = tsm.getSelectedIndices();
+      // list.addListener(this::onTableRowSelect);
        setTableViewData();
    }
     @FXML
