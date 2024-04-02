@@ -25,9 +25,9 @@ public class StudentController {
     }
 
     @PostMapping("/addStudent")
-    public DataResponse addStudent(@RequestBody Map<String,String> m)
+    public DataResponse addStudent(@RequestBody Map m)
     {
-        String studentId = m.get("studentId");
+        String studentId = (String) m.get("studentId");
         if(studentRepository.existsByStudentId(studentId)) {
             return new DataResponse(-1,null,"学号已存在，无法添加");
         }
@@ -39,7 +39,7 @@ public class StudentController {
     public DataResponse deleteStudent(@RequestBody Map m)
     {
         studentRepository.deleteAllByStudentId(""+m.get("studentId"));
-        return new DataResponse(0,null," ");
+        return new DataResponse(0,null,"删除成功");
     }
 
     @PostMapping("/updateStudent")
@@ -47,6 +47,6 @@ public class StudentController {
         studentRepository.deleteAllByPersonId(Integer.parseInt((""+ m.get("personId")).split("\\.")[0]));
         addStudent(m);
         System.out.println("\n"+m+"\n");
-        return new DataResponse(0, null, " ");
+        return new DataResponse(0, null, "更新成功");
     }
 }

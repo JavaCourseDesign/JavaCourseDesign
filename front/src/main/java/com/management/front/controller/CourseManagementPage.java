@@ -1,5 +1,6 @@
 package com.management.front.controller;
 
+import com.management.front.customComponents.SearchableListView;
 import com.management.front.request.DataResponse;
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -23,6 +24,7 @@ public class CourseManagementPage extends SplitPane {
     private Button addButton = new Button("Add");
     private Button deleteButton = new Button("Delete");
     private Button updateButton = new Button("Update");
+    private SearchableListView teacherListView;
 
     private TextField courseIdField = new TextField();
     private TextField nameField = new TextField();
@@ -87,8 +89,6 @@ public class CourseManagementPage extends SplitPane {
         controlPanel.setMinWidth(200);
         controlPanel.setSpacing(10);
 
-        controlPanel.getChildren().addAll(courseIdField, nameField, referenceField, capacityField, addButton, deleteButton, updateButton);
-
         addButton.setOnAction(event -> addCourse());
         deleteButton.setOnAction(event -> deleteCourse());
         updateButton.setOnAction(event -> updateCourse());
@@ -96,12 +96,23 @@ public class CourseManagementPage extends SplitPane {
         courseTable.selectionModelProperty().get().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if(newValue!=null)
             {
-                courseIdField.setText((String) newValue.get("courseId"));
-                nameField.setText((String) newValue.get("name"));
-                referenceField.setText((String) newValue.get("reference"));
-                capacityField.setText((String) newValue.get("capacity"));
+                courseIdField.setText(newValue.get("courseId") != null ? newValue.get("courseId").toString() : "");
+                nameField.setText(newValue.get("name") != null ? newValue.get("name").toString() : "");
+                referenceField.setText(newValue.get("reference") != null ? newValue.get("reference").toString() : "");
+                capacityField.setText(newValue.get("capacity") != null ? newValue.get("capacity").toString() : "");
             }
         });
+
+        teacherListView=new SearchableListView(FXCollections.observableArrayList((ArrayList) request("/getAllTeachers", null).getData()));
+        teacherListView.setOnItemClick(teacher ->{
+            Map m = courseTable.getSelectionModel().getSelectedItem();
+            m.put("newPersonId",teacher.get("personId"));
+            System.out.println(m);
+            request("/updateCourse",m);
+            displayCourses();
+        });
+
+        controlPanel.getChildren().addAll(courseIdField, nameField, referenceField, capacityField, addButton, deleteButton, updateButton, teacherListView);
 
         this.getItems().add(controlPanel);
     }

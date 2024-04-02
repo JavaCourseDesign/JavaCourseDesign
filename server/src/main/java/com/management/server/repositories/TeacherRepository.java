@@ -29,4 +29,6 @@ public interface TeacherRepository extends JpaRepository<Teacher,Integer> {
     boolean existsByTeacherId(String teacherId);
     Integer deleteAllByTeacherId(String teacherId);
     Integer deleteAllByPersonId(Integer personId);
+
+    Teacher findByPersonId(Integer personId);
 }

@@ -24,7 +24,7 @@ import java.util.List;
 public class Course{
     @Id
     @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
-    private Integer courseId;//待修改
+    private String courseId;//待修改
 
     private String name;
 
@@ -45,8 +45,11 @@ public class Course{
     @JoinTable(name = "teacher_course")
     private List<Teacher> teachers;*/
 
+    //在老师的示例中有preCourse（前序课程）！！！待实现  关系为@manytoone
+
     @ManyToMany
     @JoinTable(name = "person_course")
+    @JsonIgnoreProperties(value = {"courses"})
     private List<Person> persons;
 
     //lesson should be subClass of event, lesson to course should be many to one
