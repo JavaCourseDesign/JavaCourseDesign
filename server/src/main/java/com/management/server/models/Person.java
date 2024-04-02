@@ -2,27 +2,29 @@ package com.management.server.models;
 
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.security.DomainLoadStoreParameter;
 import java.util.List;
 
 
-/*@Entity
-@Table(	name = "person",
-        uniqueConstraints = {
-                @UniqueConstraint(columnNames = "num"),   //人员表中的编号 唯一
-        })*/
-@Data
 @Entity
 @Table(name="person")
 
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "name")//在递归中第二次出现时用name属性替代本对象避免无限递归
+//@Data
+@Getter
+@Setter
+
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "name", scope = ServicioDTO.class)//在递归中第二次出现时用name属性替代本对象避免无限递归
+//@JsonIgnoreProperties(value = {"courses"})
 
 @Inheritance(strategy = InheritanceType.JOINED)
 public abstract class Person {

@@ -46,17 +46,17 @@ public class CourseManagementPage extends SplitPane {
 
     private void initializeTable() {
 
-        TableColumn<Map, String> courseId = new TableColumn<>("课程号");
-        TableColumn<Map, String> courseName = new TableColumn<>("课程名");
-        TableColumn<Map, String> courseReference = new TableColumn<>("参考资料");
-        TableColumn<Map, String> courseCapacity = new TableColumn<>("课容量");
+        TableColumn<Map, String> courseIdColumn = new TableColumn<>("课程号");
+        TableColumn<Map, String> courseNameColumn = new TableColumn<>("课程名");
+        TableColumn<Map, String> courseReferenceColumn = new TableColumn<>("参考资料");
+        TableColumn<Map, String> courseCapacityColumn = new TableColumn<>("课容量");
         TableColumn<Map, String> teacherColumn = new TableColumn<>("教师");
         TableColumn<Map, String> studentColumn = new TableColumn<>("学生数");
 
-        courseId.setCellValueFactory(new MapValueFactory<>("courseId"));
-        courseName.setCellValueFactory(new MapValueFactory<>("name"));
-        courseReference.setCellValueFactory(new MapValueFactory<>("reference"));
-        courseCapacity.setCellValueFactory(new MapValueFactory<>("capacity"));
+        courseIdColumn.setCellValueFactory(new MapValueFactory<>("courseId"));
+        courseNameColumn.setCellValueFactory(new MapValueFactory<>("name"));
+        courseReferenceColumn.setCellValueFactory(new MapValueFactory<>("reference"));
+        courseCapacityColumn.setCellValueFactory(new MapValueFactory<>("capacity"));
 
         teacherColumn.setCellValueFactory(new MapValueFactory<>("persons"));
         teacherColumn.setCellValueFactory(data -> {
@@ -79,7 +79,7 @@ public class CourseManagementPage extends SplitPane {
             return new SimpleStringProperty(studentCount + "");
         });
 
-        courseTable.getColumns().addAll(courseId, courseName, courseReference, courseCapacity, teacherColumn ,studentColumn);
+        courseTable.getColumns().addAll(courseIdColumn, courseNameColumn, courseReferenceColumn, courseCapacityColumn, teacherColumn ,studentColumn);
         this.getItems().add(courseTable);
     }
 
@@ -110,6 +110,9 @@ public class CourseManagementPage extends SplitPane {
         observableList.clear();
         observableList.addAll(FXCollections.observableArrayList((ArrayList) request("/getAllCourses", null).getData()));
         courseTable.setItems(observableList);
+
+        System.out.println(observableList);
+
     }
 
     private void addCourse() {

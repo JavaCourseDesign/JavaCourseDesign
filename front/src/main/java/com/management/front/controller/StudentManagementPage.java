@@ -25,13 +25,13 @@ public class StudentManagementPage extends SplitPane {
     private Button updateButton = new Button("Update");
     //private Button refreshButton = new Button("Refresh");
 
-    private TextField numField = new TextField();
+    private TextField studentIdField = new TextField();
     private TextField nameField = new TextField();
     private TextField genderField = new TextField();
     private TextField majorField = new TextField();
 
     private Map newMapFromFields(Map m) {
-        m.put("studentId", numField.getText());
+        m.put("studentId", studentIdField.getText());
         m.put("name", nameField.getText());
         m.put("gender", genderField.getText());
         m.put("major", majorField.getText());
@@ -48,18 +48,18 @@ public class StudentManagementPage extends SplitPane {
     private void initializeTable() {
 
         //建立列
-        TableColumn<Map, String> studentId = new TableColumn<>("学号");
-        TableColumn<Map, String> studentName = new TableColumn<>("姓名");
-        TableColumn<Map, String> studentGender = new TableColumn<>("性别");
-        TableColumn<Map, String> studentMajor = new TableColumn<>("专业");
+        TableColumn<Map, String> studentIdColumn = new TableColumn<>("学号");
+        TableColumn<Map, String> studentNameColumn = new TableColumn<>("姓名");
+        TableColumn<Map, String> studentGenderColumn = new TableColumn<>("性别");
+        TableColumn<Map, String> studentMajorColumn = new TableColumn<>("专业");
 
         //把map填入单元格
-        studentId.setCellValueFactory(new MapValueFactory<>("studentId"));//与后端属性一致
-        studentName.setCellValueFactory(new MapValueFactory<>("name"));
-        studentGender.setCellValueFactory(new MapValueFactory<>("gender"));
-        studentMajor.setCellValueFactory(new MapValueFactory<>("major"));
+        studentIdColumn.setCellValueFactory(new MapValueFactory<>("studentId"));//与后端属性一致
+        studentNameColumn.setCellValueFactory(new MapValueFactory<>("name"));
+        studentGenderColumn.setCellValueFactory(new MapValueFactory<>("gender"));
+        studentMajorColumn.setCellValueFactory(new MapValueFactory<>("major"));
 
-        studentTable.getColumns().addAll(studentId, studentName, studentGender, studentMajor);
+        studentTable.getColumns().addAll(studentIdColumn, studentNameColumn, studentGenderColumn, studentMajorColumn);
         this.getItems().add(studentTable);
     }
 
@@ -67,7 +67,7 @@ public class StudentManagementPage extends SplitPane {
         controlPanel.setMinWidth(200);
         controlPanel.setSpacing(10);
 
-        controlPanel.getChildren().addAll(numField, nameField, genderField, majorField, addButton, deleteButton, updateButton);
+        controlPanel.getChildren().addAll(studentIdField, nameField, genderField, majorField, addButton, deleteButton, updateButton);
 
         addButton.setOnAction(event -> addStudent());
         deleteButton.setOnAction(event -> deleteStudent());
@@ -77,7 +77,7 @@ public class StudentManagementPage extends SplitPane {
         studentTable.selectionModelProperty().get().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if(newValue!=null)
             {
-                numField.setText((String) newValue.get("studentId"));
+                studentIdField.setText((String) newValue.get("studentId"));
                 nameField.setText((String) newValue.get("name"));
                 genderField.setText((String) newValue.get("gender"));
                 majorField.setText((String) newValue.get("major"));
@@ -91,6 +91,8 @@ public class StudentManagementPage extends SplitPane {
         observableList.clear();
         observableList.addAll(FXCollections.observableArrayList((ArrayList) request("/getAllStudents", null).getData()));
         studentTable.setItems(observableList);
+
+        System.out.println(observableList);
     }
 
     private void addStudent() {
@@ -175,3 +177,10 @@ public class StudentManagementPage extends SplitPane {
         }
     }
 }
+
+//[
+//        {personId=1.0, num=null, name=tst, type=null, dept=null, card=null, gender=男, birthday=null, email=null, phone=null, address=null, introduce=null, absences=[], honors=[], dormitory=null, events=[], courses=[{name=软件工程, courseId=1, reference=null, capacity=null, credit=null, lessons=[], persons=[{personId=1.0, num=null, name=tst, type=null, dept=null, card=null, gender=男, birthday=null, email=null, phone=null, address=null, introduce=null, absences=[], honors=[], dormitory=null, events=[], courses=[软件工程], studentId=2019210000, major=软件工程, className=软工1班}, {personId=2.0, num=null, name=wzk, type=null, dept=null, card=null, gender=男, birthday=null, email=null, phone=null, address=null, introduce=null, absences=[], honors=[], dormitory=null, events=[], courses=[软件工程], studentId=2019210001, major=软件工程, className=软工2班}, {personId=3.0, num=null, name=why, type=null, dept=null, card=null, gender=null, birthday=null, email=null, phone=null, address=null, introduce=null, absences=[], honors=[], dormitory=null, events=[], courses=[软件工程], teacherId=100000, degree=null, title=null}]}], studentId=2019210000, major=软件工程, className=软工1班},
+//        {personId=2.0, num=null, name=wzk, type=null, dept=null, card=null, gender=男, birthday=null, email=null, phone=null, address=null, introduce=null, absences=[], honors=[], dormitory=null, events=[], courses=[软件工程], studentId=2019210001, major=软件工程, className=软工2班}
+//
+//        ]
+
