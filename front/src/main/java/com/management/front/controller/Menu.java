@@ -42,7 +42,7 @@ public class Menu extends SplitPane {
                     break;
                 case "课程管理": this.getItems().set(1,new HomePage());
                     break;
-                case "班级管理": this.getItems().set(1,new StudentPersonalInfoPage(((List<Map>) request("/getAllStudents", null).getData()).get(0)));
+                case "班级管理": this.getItems().set(1,new CourseManagementPage());
                     break;
             }
         });
