@@ -151,3 +151,11 @@ public static UserDetailsImpl build(User user) {
         }
         其中实现了如何得到用户权限，这样才能使用preauthorize注解
 ```
+
+
+# 关于双向关系的序列化
+在双向关系中，如果两个实体类都有对方的引用，那么在序列化时会出现无限递归的问题，导致栈溢出。
+解决方法：
+#### 1.在一方的@jsonignoreproperties 对整个类添加，忽略该类的某属性
+#### 2.在双方的@jsonignoreproperties 对单个属性添加，忽略属性的属性，适合构建二级嵌套
+#### 3.@JsonIdentityInfo 在本对象第二次实例化时用某个属性代替，会导致层级不清晰，前端难以处理

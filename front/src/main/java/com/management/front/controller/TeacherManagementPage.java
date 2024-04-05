@@ -24,16 +24,16 @@ public class TeacherManagementPage extends SplitPane {
     private Button deleteButton = new Button("Delete");
     private Button updateButton = new Button("Update");
 
-    private TextField numField = new TextField("teacherId");
-    private TextField nameField = new TextField("name");
-    private TextField genderField = new TextField("gender");
-    private TextField majorField = new TextField("title");
+    private TextField teacherIdField = new TextField();
+    private TextField nameField = new TextField();
+    private TextField genderField = new TextField();
+    private TextField titleField = new TextField();
 
     private Map newMapFromFields(Map m) {
-        m.put("teacherId", numField.getText());
+        m.put("teacherId", teacherIdField.getText());
         m.put("name", nameField.getText());
         m.put("gender", genderField.getText());
-        m.put("title", majorField.getText());
+        m.put("title", titleField.getText());
         return m;
     }
 
@@ -46,17 +46,17 @@ public class TeacherManagementPage extends SplitPane {
 
     private void initializeTable() {
 
-        TableColumn<Map, String> teacherId = new TableColumn<>("教师号");
-        TableColumn<Map, String> teacherName = new TableColumn<>("姓名");
-        TableColumn<Map, String> teacherGender = new TableColumn<>("性别");
-        TableColumn<Map, String> teacherMajor = new TableColumn<>("职称");
+        TableColumn<Map, String> teacherIdColumn = new TableColumn<>("教师号");
+        TableColumn<Map, String> teacherNameColumn = new TableColumn<>("姓名");
+        TableColumn<Map, String> teacherGenderColumn = new TableColumn<>("性别");
+        TableColumn<Map, String> teacherTitleColumn = new TableColumn<>("职称");
 
-        teacherId.setCellValueFactory(new MapValueFactory<>("teacherId"));
-        teacherName.setCellValueFactory(new MapValueFactory<>("name"));
-        teacherGender.setCellValueFactory(new MapValueFactory<>("gender"));
-        teacherMajor.setCellValueFactory(new MapValueFactory<>("title"));
+        teacherIdColumn.setCellValueFactory(new MapValueFactory<>("teacherId"));
+        teacherNameColumn.setCellValueFactory(new MapValueFactory<>("name"));
+        teacherGenderColumn.setCellValueFactory(new MapValueFactory<>("gender"));
+        teacherTitleColumn.setCellValueFactory(new MapValueFactory<>("title"));
 
-        teacherTable.getColumns().addAll(teacherId, teacherName, teacherGender, teacherMajor);
+        teacherTable.getColumns().addAll(teacherIdColumn, teacherNameColumn, teacherGenderColumn, teacherTitleColumn);
         this.getItems().add(teacherTable);
     }
 
@@ -64,7 +64,7 @@ public class TeacherManagementPage extends SplitPane {
         controlPanel.setMinWidth(200);
         controlPanel.setSpacing(10);
 
-        controlPanel.getChildren().addAll(numField, nameField, genderField, majorField, addButton, deleteButton, updateButton);
+        controlPanel.getChildren().addAll(teacherIdField, nameField, genderField, titleField, addButton, deleteButton, updateButton);
 
         addButton.setOnAction(event -> addTeacher());
         deleteButton.setOnAction(event -> deleteTeacher());
@@ -73,10 +73,10 @@ public class TeacherManagementPage extends SplitPane {
         teacherTable.selectionModelProperty().get().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if(newValue!=null)
             {
-                numField.setText((String) newValue.get("teacherId"));
+                teacherIdField.setText((String) newValue.get("teacherId"));
                 nameField.setText((String) newValue.get("name"));
                 genderField.setText((String) newValue.get("gender"));
-                majorField.setText((String) newValue.get("title"));
+                titleField.setText((String) newValue.get("title"));
             }
         });
 
@@ -87,6 +87,9 @@ public class TeacherManagementPage extends SplitPane {
         observableList.clear();
         observableList.addAll(FXCollections.observableArrayList((ArrayList) request("/getAllTeachers", null).getData()));
         teacherTable.setItems(observableList);
+
+        System.out.println(observableList);
+
     }
 
     private void addTeacher() {

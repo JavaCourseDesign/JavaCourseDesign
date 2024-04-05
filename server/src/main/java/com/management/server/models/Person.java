@@ -1,25 +1,31 @@
 package com.management.server.models;
 
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.security.DomainLoadStoreParameter;
 import java.util.List;
 
 
-/*@Entity
-@Table(	name = "person",
-        uniqueConstraints = {
-                @UniqueConstraint(columnNames = "num"),   //人员表中的编号 唯一
-        })*/
-@Data
 @Entity
-@Table(name="person",uniqueConstraints = {})
-//@MappedSuperclass
+@Table(name="person")
+
+//@Data
+@Getter
+@Setter
+
+//@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "name")//在递归中第二次出现时用name属性替代本对象避免无限递归
+//@JsonIgnoreProperties(value = {"courses"})
+
 @Inheritance(strategy = InheritanceType.JOINED)
 public abstract class Person {
     @Id
@@ -73,21 +79,12 @@ public abstract class Person {
     private List<Event> events;
 
     @ManyToMany(mappedBy = "persons")
+    @JsonIgnoreProperties(value = {"persons"})//在单个属性中添加@JsonIgnoreProperties注解，可以忽略 该属性中 某个属性 的序列化和反序列化
     private List<Course> courses;
 
-
-    /*@ManyToMany
-    @JoinTable(name = "event", joinColumns = @JoinColumn(name = "personId"), inverseJoinColumns = @JoinColumn(name = "eventId"))
-    private List<Event> events;*/
-
-    public Person() {
-    }
 
     /*public String getGenderName() {
         return  ComDataUtil.getInstance().getDictionaryLabelByValue("XBM", gender);
     }*/ //ComDataUtil相关，暂时（或永久）删除
-
-    public void setGenderName(String genderName) {
-    }
 
 }

@@ -1,30 +1,15 @@
 package com.management.server.controllers;
 
-import cn.hutool.jwt.JWT;
-import com.management.server.models.EUserType;
-import com.management.server.models.User;
-import com.management.server.models.UserType;
+import com.management.server.models.*;
 import com.management.server.payload.response.DataResponse;
-import com.management.server.payload.response.JwtResponse;
-import com.management.server.repositories.UserRepository;
-import com.management.server.repositories.UserTypeRepository;
+import com.management.server.repositories.*;
 import com.management.server.util.JwtUtil;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerProperties;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.nio.charset.StandardCharsets;
-import java.util.Date;
 import java.util.Map;
-
-import static org.springframework.security.config.Elements.JWT;
 
 
 @RestController
@@ -32,9 +17,13 @@ public class AuthController {
     @Autowired
     private PasswordEncoder passwordEncoder;
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
     @Autowired
     UserTypeRepository userTypeRepository;
+    @Autowired
+    private TeacherRepository teacherRepository;
+    @Autowired
+    private StudentRepository studentRepository;
 
     /*@Autowired
     AuthenticationManager authenticationManager;
@@ -49,60 +38,47 @@ public class AuthController {
         System.out.println("check");
         if(passwordEncoder.matches(req.get("password"),userRepository.findByUsername(req.get("username")).getPassword()))
         {
-            String token = JwtUtil.generateToken(req.get("username"));
-            return token;
+            return JwtUtil.generateToken(req.get("username"));
         }
         return null;
     }
 
-
-   /* @PostMapping("/register")
+    @PostMapping("/register")
     public DataResponse registerUser(@RequestBody Map<String,String> map) {
-        String encodedPassword =passwordEncoder.encode(map.get("password"));
-        User user=new User();
-        user.setUsername(map.get("username"));
-        user.setPassword(encodedPassword);
-        userRepository.save(user);
-        return new DataResponse(1,null,"注册成功");
-    }*/
-    /*@PostMapping("/register/admin")
-    public DataResponse registerUser(@RequestBody Map<String,String> map) {
-        String encodedPassword =passwordEncoder.encode(map.get("password"));
-        User user=new User();
-        user.setUsername(map.get("username"));
-        user.setPassword(encodedPassword);
-        UserType userType=new UserType();
-        userType.setName(EUserType.ROLE_ADMIN);
-        userTypeRepository.save(userType);
-        user.setUserType(userType);
-        userRepository.save(user);
-        return new DataResponse(1,null,"注册成功");
-    }*/
-  /* @PostMapping("/register/student")
-   public DataResponse registerUser(@RequestBody Map<String,String> map) {
-       String encodedPassword =passwordEncoder.encode(map.get("password"));
-       User user=new User();
-       user.setUsername(map.get("username"));
-       user.setPassword(encodedPassword);
-       UserType userType=new UserType();
-       userType.setName(EUserType.ROLE_STUDENT);
-       userTypeRepository.save(userType);
-       user.setUserType(userType);
-       userRepository.save(user);
-       return new DataResponse(1,null,"注册成功");
-   }*/
-   @PostMapping("/register/teacher")
-   public DataResponse registerUser(@RequestBody Map<String,String> map) {
-       String encodedPassword =passwordEncoder.encode(map.get("password"));
-       User user=new User();
-       user.setUsername(map.get("username"));
-       user.setPassword(encodedPassword);
-       UserType userType=new UserType();
-       userType.setName(EUserType.ROLE_TEACHER);
-       userTypeRepository.save(userType);
-       user.setUserType(userType);
-       userRepository.save(user);
-       return new DataResponse(1,null,"注册成功");
-   }
+        String id = map.get("id");
+        String username = map.get("username");
+        String password = passwordEncoder.encode(map.get("password"));
 
+        Student foundStudent = studentRepository.findByStudentId(id);
+        if (isUserValid(foundStudent, username)) {
+            return registerUser(foundStudent, username, password, EUserType.ROLE_STUDENT);
+        }
+
+        Teacher foundTeacher = teacherRepository.findByTeacherId(id);
+        if (isUserValid(foundTeacher, username)) {
+            return registerUser(foundTeacher, username, password, EUserType.ROLE_TEACHER);
+        }
+
+        return new DataResponse(-1,null,"注册失败");
+    }
+
+    private boolean isUserValid(Person person, String username) {
+        return person != null && person.getName().equals(username) && userRepository.findByUsername(person.getName()) == null;
+    }
+
+    private DataResponse registerUser(Person person, String username, String password, EUserType userType) {
+        User user = new User();
+        user.setUsername(username);
+        user.setPassword(password);
+
+        UserType type = new UserType();
+        type.setName(userType);
+        userTypeRepository.save(type);
+
+        user.setUserType(type);
+        userRepository.save(user);
+        user.setPerson(person);
+
+        return new DataResponse(0, null, userType == EUserType.ROLE_STUDENT ? "学生注册成功" : "教师注册成功");
+    }
 }

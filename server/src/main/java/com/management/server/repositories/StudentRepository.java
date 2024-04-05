@@ -4,7 +4,6 @@ import com.management.server.models.Student;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -14,6 +13,15 @@ import java.util.Optional;
 @Repository
 @Transactional
 public interface StudentRepository extends JpaRepository<Student,Integer> {
+
+    Student findByStudentId(String studentId);
+    Student findByPersonId(Integer personId);
+    List<Student> findAll();
+    boolean existsByStudentId(String studentId);
+    Integer deleteAllByStudentId(String studentId);
+    Integer deleteAllByPersonId(Integer personId);
+
+
     /*Optional<Student> findByPersonPersonId(Integer personId);
     Optional<Student> findByPersonNum(String num);
     List<Student> findByPersonName(String name);*/
@@ -23,10 +31,4 @@ public interface StudentRepository extends JpaRepository<Student,Integer> {
     List<Student> findStudentListByNumName(String numName);*/
     /*@Query("select s from Student s where s.studentId = ?1")
     Student findByStudentId(Integer personId);*/
-
-    List<Student> findAll();
-    boolean existsByStudentId(String studentId);
-    Integer deleteAllByStudentId(String studentId);
-    @Query("SELECT s FROM Student s WHERE s.studentId LIKE %?1% OR s.name LIKE %?1%")
-    List<Student> findStudentsByStudentIdOrName(String numName );
 }

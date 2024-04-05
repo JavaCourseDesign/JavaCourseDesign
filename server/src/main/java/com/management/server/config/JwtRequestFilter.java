@@ -1,7 +1,5 @@
 package com.management.server.config;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 import com.management.server.service.UserDetailsServiceImpl;
 import com.management.server.util.JwtUtil;
 import jakarta.servlet.FilterChain;
@@ -60,7 +58,5 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         }
         chain.doFilter(request, response);
     }
-
-
 }
 

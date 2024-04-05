@@ -1,13 +1,11 @@
 package com.management.server.repositories;
 
-import com.management.server.models.Course;
 import com.management.server.models.Person;
 import com.management.server.models.Student;
 import com.management.server.models.Teacher;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -16,11 +14,6 @@ import java.util.Optional;
 @Repository
 @Transactional
 public interface TeacherRepository extends JpaRepository<Teacher,Integer> {
-    boolean existsByTeacherId(String teacherId);
-
-    Integer deleteAllByTeacherId(String teacherId);
-
-     Integer deleteAllByPersonId(Integer personId);
     /*@Query(value = "select max(personId) from Teacher  ")
     Integer getMaxId();
     Optional<Teacher> findByPersonPersonId(Integer personId);
@@ -30,10 +23,12 @@ public interface TeacherRepository extends JpaRepository<Teacher,Integer> {
     List<Teacher> findTeacherListByNumName(String numName);*/
     /*@Query("select p from Person p where p.personId = ?1")
     Teacher findByPersonId(Integer personId);*/
-    //AND c.courseId = :courseId
 
+    Teacher findByTeacherId(String teacherId);
+    List<Teacher> findAll();
+    boolean existsByTeacherId(String teacherId);
+    Integer deleteAllByTeacherId(String teacherId);
+    Integer deleteAllByPersonId(Integer personId);
 
-
-
-
+    Teacher findByPersonId(Integer personId);
 }

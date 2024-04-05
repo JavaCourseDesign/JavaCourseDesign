@@ -1,0 +1,210 @@
+package com.management.front.controller;
+
+import com.management.front.customComponents.SearchableListView;
+import com.management.front.request.DataResponse;
+import javafx.beans.property.SimpleLongProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.MapValueFactory;
+import javafx.scene.layout.VBox;
+
+import java.io.IOException;
+import java.util.*;
+import java.util.stream.Collectors;
+
+import static com.management.front.util.HttpClientUtil.*;
+
+public class CourseManagementPage extends SplitPane {
+    private TableView<Map> courseTable = new TableView<>();
+    private VBox controlPanel = new VBox();
+    private ObservableList<Map> observableList = FXCollections.observableArrayList();
+
+    private Button addButton = new Button("Add");
+    private Button deleteButton = new Button("Delete");
+    private Button updateButton = new Button("Update");
+    private SearchableListView teacherListView;
+
+    private TextField courseIdField = new TextField();
+    private TextField nameField = new TextField();
+    private TextField referenceField = new TextField();
+    private TextField capacityField = new TextField();
+
+    private Map newMapFromFields(Map m) {
+        m.put("courseId", courseIdField.getText());
+        m.put("name", nameField.getText());
+        m.put("reference", referenceField.getText());
+        m.put("capacity", capacityField.getText());
+        return m;
+    }
+
+    public CourseManagementPage() {
+        this.setWidth(1000);
+        initializeTable();
+        initializeControlPanel();
+        displayCourses();
+    }
+
+    private void initializeTable() {
+
+        TableColumn<Map, String> courseIdColumn = new TableColumn<>("课程号");
+        TableColumn<Map, String> courseNameColumn = new TableColumn<>("课程名");
+        TableColumn<Map, String> courseReferenceColumn = new TableColumn<>("参考资料");
+        TableColumn<Map, String> courseCapacityColumn = new TableColumn<>("课容量");
+        TableColumn<Map, String> teacherColumn = new TableColumn<>("教师");
+        TableColumn<Map, String> studentColumn = new TableColumn<>("学生数");
+
+        courseIdColumn.setCellValueFactory(new MapValueFactory<>("courseId"));
+        courseNameColumn.setCellValueFactory(new MapValueFactory<>("name"));
+        courseReferenceColumn.setCellValueFactory(new MapValueFactory<>("reference"));
+        courseCapacityColumn.setCellValueFactory(new MapValueFactory<>("capacity"));
+
+        teacherColumn.setCellValueFactory(new MapValueFactory<>("persons"));
+        teacherColumn.setCellValueFactory(data -> {
+            List<Map<String, Object>> persons = (List<Map<String, Object>>) data.getValue().get("persons");
+            String personNames = persons.stream()
+                    .filter(person -> person.containsKey("teacherId"))
+                    .map(person -> (String) person.get("name"))
+                    .collect(Collectors.joining(", "));
+            return new SimpleStringProperty(personNames);
+        });
+
+        studentColumn.setCellValueFactory(new MapValueFactory<>("persons"));
+        studentColumn.setCellValueFactory(data -> {
+            List<Map<String, Object>> persons = (List<Map<String, Object>>) data.getValue().get("persons");
+            long studentCount = persons.stream()
+                    // 过滤出有studentId属性的Map对象
+                    .filter(person -> person.containsKey("studentId"))
+                    // 统计符合条件的项的数量
+                    .count();
+            return new SimpleStringProperty(studentCount + "");
+        });
+
+        courseTable.getColumns().addAll(courseIdColumn, courseNameColumn, courseReferenceColumn, courseCapacityColumn, teacherColumn ,studentColumn);
+        this.getItems().add(courseTable);
+    }
+
+    private void initializeControlPanel() {
+        controlPanel.setMinWidth(200);
+        controlPanel.setSpacing(10);
+
+        addButton.setOnAction(event -> addCourse());
+        deleteButton.setOnAction(event -> deleteCourse());
+        updateButton.setOnAction(event -> updateCourse());
+
+        courseTable.selectionModelProperty().get().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if(newValue!=null)
+            {
+                courseIdField.setText(newValue.get("courseId") != null ? newValue.get("courseId").toString() : "");
+                nameField.setText(newValue.get("name") != null ? newValue.get("name").toString() : "");
+                referenceField.setText(newValue.get("reference") != null ? newValue.get("reference").toString() : "");
+                capacityField.setText(newValue.get("capacity") != null ? newValue.get("capacity").toString() : "");
+            }
+        });
+
+        teacherListView=new SearchableListView(FXCollections.observableArrayList((ArrayList) request("/getAllTeachers", null).getData()));
+        teacherListView.setOnItemClick(teacher ->{
+            Map m = courseTable.getSelectionModel().getSelectedItem();
+            m.put("newPersonId",teacher.get("personId"));
+            System.out.println(m);
+            request("/updateCourse",m);
+            displayCourses();
+        });
+
+        controlPanel.getChildren().addAll(courseIdField, nameField, referenceField, capacityField, addButton, deleteButton, updateButton, teacherListView);
+
+        this.getItems().add(controlPanel);
+    }
+
+    private void displayCourses(){
+        observableList.clear();
+        observableList.addAll(FXCollections.observableArrayList((ArrayList) request("/getAllCourses", null).getData()));
+        courseTable.setItems(observableList);
+
+        System.out.println(observableList);
+
+    }
+
+    private void addCourse() {
+        Map m=newMapFromFields(new HashMap<>());
+
+        System.out.println(m);
+
+        DataResponse r=request("/addCourse",m);
+
+        displayCourses();
+
+        if(r.getCode()==-1)
+        {
+            Alert alert=new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("警告");
+            alert.setContentText(r.getMsg());
+            alert.showAndWait();
+        }
+        else
+        {
+            Alert alert=new Alert(Alert.AlertType.INFORMATION);
+            alert.setContentText(r.getMsg());
+            alert.showAndWait();
+        }
+    }
+
+    private void deleteCourse() {
+        Map m = courseTable.getSelectionModel().getSelectedItem();
+        if(m==null)
+        {
+            Alert alert=new Alert(Alert.AlertType.INFORMATION);
+            alert.setContentText("未选择，无法删除");
+            alert.showAndWait();
+        }
+        else
+        {
+            Alert alert=new Alert(Alert.AlertType.CONFIRMATION, "确定要删除吗？");
+            alert.setTitle("警告");
+            Optional<ButtonType> result=alert.showAndWait();
+            if(result.get()==ButtonType.OK)
+            {
+                DataResponse r=request("/deleteCourse",m);
+                System.out.println(m);
+                System.out.println(r);
+
+                displayCourses();
+
+                if(r.getCode()==0)
+                {
+                    Alert alert1=new Alert(Alert.AlertType.INFORMATION);
+                    alert1.setContentText("删除成功");
+                    alert1.showAndWait();
+                }
+            }
+        }
+    }
+
+    private void updateCourse() {
+        Map selected = courseTable.getSelectionModel().getSelectedItem();
+        if(selected==null)
+        {
+            Alert alert=new Alert(Alert.AlertType.INFORMATION);
+            alert.setContentText("未选择，无法更新");
+            alert.showAndWait();
+            return;
+        }
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "确定要更新吗？");
+        alert.setTitle("警告");
+        Optional<ButtonType> result=alert.showAndWait();
+        if(result.get()==ButtonType.OK)
+        {
+            DataResponse r=request("/updateCourse",newMapFromFields(selected));
+
+            displayCourses();
+
+            if(r.getCode()==0)
+            {
+                Alert alert1=new Alert(Alert.AlertType.INFORMATION);
+                alert1.setContentText("更新成功");
+                alert1.showAndWait();
+            }
+        }
+    }
+}
