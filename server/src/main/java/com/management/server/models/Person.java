@@ -83,18 +83,8 @@ public abstract class Person {
     private List<Course> courses;
 
 
-    /*@ManyToMany
-    @JoinTable(name = "event", joinColumns = @JoinColumn(name = "personId"), inverseJoinColumns = @JoinColumn(name = "eventId"))
-    private List<Event> events;*/
-
-    public Person() {
-    }
-
     /*public String getGenderName() {
         return  ComDataUtil.getInstance().getDictionaryLabelByValue("XBM", gender);
     }*/ //ComDataUtil相关，暂时（或永久）删除
-
-    public void setGenderName(String genderName) {
-    }
 
 }
