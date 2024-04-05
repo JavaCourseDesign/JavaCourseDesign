@@ -11,3 +11,5 @@ spring:
       ddl-auto: update
 server:
   port: 9090
+attach:
+  folder: server/src/main/resources/Photo/

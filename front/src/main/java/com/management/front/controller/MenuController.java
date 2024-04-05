@@ -24,11 +24,12 @@ public class MenuController {
        TreeItem<String> childNode1 = new TreeItem<>("学生管理");//创建树形结构选项组件
        TreeItem<String> childNode2 = new TreeItem<>("课程管理");//创建树形结构选项组件
        TreeItem<String> childNode3 = new TreeItem<>("教师管理");//创建树形结构选项组件
+       TreeItem<String> childNode4 = new TreeItem<>("图片测试");//创建树形结构选项组件
        //Creating the root element
        final TreeItem<String> root = new TreeItem<>("根节点");
        root.setExpanded(true);//默认设置根节点可展开
        //Adding tree items to the root
-       root.getChildren().setAll(childNode1, childNode2, childNode3);//根节点添加3个叶子节点
+       root.getChildren().setAll(childNode1, childNode2, childNode3,childNode4);//根节点添加3个叶子节点
        //Creating a column
        TreeTableColumn<String,String> column = new TreeTableColumn<>("列名");//创建一个表格列
        column.setPrefWidth(150);//列宽设置
@@ -71,6 +72,19 @@ public class MenuController {
            else if(selectedItem==childNode3)
            {
                rootPane.setCenter(new TeacherManagementPage());
+           }
+           else if(selectedItem==childNode4) {
+               FXMLLoader fxmlLoader = new FXMLLoader(TestApplication.class.getResource("adminFxml/photoDemo.fxml"));
+               Parent ro = null;
+               try {
+                   ro = fxmlLoader.load();
+               } catch (IOException e) {
+                   throw new RuntimeException(e);
+               }
+               rootPane.setCenter(ro);
+               ro.setLayoutX(100);
+               ro.setLayoutY(200);
+
            }
        });
    }
