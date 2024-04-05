@@ -33,7 +33,7 @@ public class TestController {//专门用于添加测试数据
         s1.setName("tst");
         s1.setGender("男");
         s1.setMajor("软件工程");
-        s1.setClassName("软工1班");
+        //s1.setClassName("软工1班");
         studentRepository.save(s1);
 
         Student s2=new Student();
@@ -41,7 +41,7 @@ public class TestController {//专门用于添加测试数据
         s2.setName("wzk");
         s2.setGender("男");
         s2.setMajor("软件工程");
-        s2.setClassName("软工2班");
+        //s2.setClassName("软工2班");
         studentRepository.save(s2);
 
         Teacher t1=new Teacher();

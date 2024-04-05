@@ -23,7 +23,7 @@ import java.util.List;
 
 public class Course{
     @Id
-    @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String courseId;//待修改
 
     private String name;

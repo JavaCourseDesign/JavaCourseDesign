@@ -17,5 +17,5 @@ public class Dormitory {
     @OneToMany(mappedBy = "dormitory")
     private List<Person> persons;
 
-    private int number;
+    private Integer number;
 }
