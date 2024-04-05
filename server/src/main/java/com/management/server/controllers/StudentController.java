@@ -24,12 +24,6 @@ public class StudentController {
         return new DataResponse(200,studentRepository.findAll(),null);
     }
 
-    @PostMapping("/getStudent")
-    public DataResponse getStudent(@RequestBody Map m)
-    {
-        return new DataResponse(200,studentRepository.findAllByStudentId(""+m.get("studentId")),null);
-    }
-
     @PostMapping("/addStudent")
     public DataResponse addStudent(@RequestBody Map m)
     {
