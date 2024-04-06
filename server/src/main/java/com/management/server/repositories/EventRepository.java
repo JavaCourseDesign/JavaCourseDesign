@@ -11,5 +11,5 @@ import java.util.Optional;
 
 @Repository
 @Transactional
-public interface EventRepository extends JpaRepository<Event,Integer> {
+public interface EventRepository extends JpaRepository<Event,String> {
 }

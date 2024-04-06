@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface DormitoryRepository extends JpaRepository<Dormitory,Integer> {
+public interface DormitoryRepository extends JpaRepository<Dormitory,String> {
     @Query("select d from Dormitory d")
     List<Dormitory> findAll();
 

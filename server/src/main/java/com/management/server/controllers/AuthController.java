@@ -76,8 +76,8 @@ public class AuthController {
         userTypeRepository.save(type);
 
         user.setUserType(type);
-        userRepository.save(user);
         user.setPerson(person);
+        userRepository.save(user);
 
         return new DataResponse(0, null, userType == EUserType.ROLE_STUDENT ? "学生注册成功" : "教师注册成功");
     }

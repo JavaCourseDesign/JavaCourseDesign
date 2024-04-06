@@ -13,7 +13,9 @@ import java.util.Optional;
 @Repository
 @Transactional
 
-public interface PersonRepository extends JpaRepository<Person,Integer> {
-    Person findByPersonId(Integer personId);
+public interface PersonRepository extends JpaRepository<Person,String> {
+    Person findByPersonId(String personId);
     Person findByName(String username);
+
+    boolean existsByPersonId(String personId);
 }

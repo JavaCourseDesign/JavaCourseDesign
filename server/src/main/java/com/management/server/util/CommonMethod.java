@@ -41,16 +41,11 @@ public class CommonMethod {
      * Integer getUserId() 获得用户的userId 该static 方法可以在任何的Controller和Service中使用，可以获得当前登录用户的用户ID，可以通过在Web请求服务中使用该方法获取当前请求客户的信息
      * @return
      */
-    public static Integer getUserId(){
+    public static String getUserId(){
         Object obj = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if(!(obj instanceof UserDetailsImpl))
+        if(!(obj instanceof UserDetailsImpl userDetails))
             return null;
-        UserDetailsImpl userDetails =
-                (UserDetailsImpl) obj;
-        if(userDetails != null)
-            return userDetails.getId();
-        else
-            return null;
+        return userDetails.getId();
     }
     /*public static String getUsername(){
         Object obj = SecurityContextHolder.getContext().getAuthentication().getPrincipal();

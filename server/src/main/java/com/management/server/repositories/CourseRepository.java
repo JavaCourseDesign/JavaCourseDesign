@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 @Transactional
-public interface CourseRepository extends JpaRepository<Course,Integer> {
+public interface CourseRepository extends JpaRepository<Course,String> {
     boolean existsByCourseId(String courseId);
     void deleteAllByCourseId(String courseId);
 }

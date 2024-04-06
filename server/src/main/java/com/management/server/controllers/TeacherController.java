@@ -2,6 +2,7 @@ package com.management.server.controllers;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
+import com.management.server.models.Student;
 import com.management.server.models.Teacher;
 import com.management.server.payload.response.DataResponse;
 import com.management.server.repositories.TeacherRepository;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 public class TeacherController {
@@ -47,8 +49,17 @@ public class TeacherController {
 
     @PostMapping("/updateTeacher")
     public DataResponse updateTeacher(@RequestBody Map m) {
-        teacherRepository.deleteAllByPersonId(Integer.parseInt((""+ m.get("personId")).split("\\.")[0]));
-        addTeacher(m);
-        return new DataResponse(0, null, " ");
+        String personId = (String) m.get("personId");
+        Optional<Teacher> optionalTeacher = Optional.ofNullable(teacherRepository.findByPersonId(personId));
+        if(optionalTeacher.isPresent()) {
+            Teacher teacher = optionalTeacher.get();
+            BeanUtil.fillBeanWithMap(m, teacher, true, CopyOptions.create());
+            teacherRepository.save(teacher);
+            return new DataResponse(0, null, "更新成功");
+        } else {
+            return new DataResponse(-1, null, "工号不存在，无法更新");
+        }
     }
+
+
 }

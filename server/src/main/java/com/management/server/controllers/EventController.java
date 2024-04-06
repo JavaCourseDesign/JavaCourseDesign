@@ -30,15 +30,7 @@ public class EventController {
     @Autowired
     private TeacherRepository teacherRepository;
 
-    @PostMapping("/addDailyActivity")
-    public Object addDailyActivity(){
-        return null;
-    }
 
-    @PostMapping("/getAllEvents")
-    public List<Event> getAllDailyActivity(@Valid @RequestBody Map<String,Integer> data){//只需要知道此人的personId故map的value可以为Integer型
-        return personRepository.findByPersonId(data.get("personId")).getEvents();
-    }
 }
 
 //getAllEvents测试代码

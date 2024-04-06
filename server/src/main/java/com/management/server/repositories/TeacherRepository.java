@@ -13,7 +13,7 @@ import java.util.Optional;
 
 @Repository
 @Transactional
-public interface TeacherRepository extends JpaRepository<Teacher,Integer> {
+public interface TeacherRepository extends JpaRepository<Teacher,String> {
     /*@Query(value = "select max(personId) from Teacher  ")
     Integer getMaxId();
     Optional<Teacher> findByPersonPersonId(Integer personId);
@@ -28,7 +28,7 @@ public interface TeacherRepository extends JpaRepository<Teacher,Integer> {
     List<Teacher> findAll();
     boolean existsByTeacherId(String teacherId);
     Integer deleteAllByTeacherId(String teacherId);
-    Integer deleteAllByPersonId(Integer personId);
+    Integer deleteAllByPersonId(String personId);
 
-    Teacher findByPersonId(Integer personId);
+    Teacher findByPersonId(String personId);
 }
