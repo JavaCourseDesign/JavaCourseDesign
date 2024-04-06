@@ -20,8 +20,6 @@ public class Teacher extends Person{
 
     @Size(max = 20)
     private String degree;
-    @Size(max=50)
-    private String teacherId;
 
     @Size(max = 50)
     private String title;

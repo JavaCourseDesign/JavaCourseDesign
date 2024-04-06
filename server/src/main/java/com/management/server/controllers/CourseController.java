@@ -49,12 +49,12 @@ public class CourseController {
         return new DataResponse(0,null,"删除成功");
     }
 
-    @PostMapping("/updateCourse")
+   /* @PostMapping("/updateCourse")
     public DataResponse updateCourse(@RequestBody Map m) {
         courseRepository.deleteAllByCourseId((""+ m.get("courseId")).split("\\.")[0]);
         if(m.containsKey("newPersonId")) m.put("persons", teacherRepository.findByPersonId(Integer.parseInt((""+ m.get("newPersonId")).split("\\.")[0])));
         addCourse(m);
         System.out.println("\n"+m+"\n");
         return new DataResponse(0, null, "更新成功");
-    }
+    }*/
 }

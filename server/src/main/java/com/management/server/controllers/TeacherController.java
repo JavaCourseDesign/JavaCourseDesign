@@ -45,10 +45,10 @@ public class TeacherController {
         return new DataResponse(0,null," ");
     }
 
-    @PostMapping("/updateTeacher")
+   /* @PostMapping("/updateTeacher")
     public DataResponse updateTeacher(@RequestBody Map m) {
         teacherRepository.deleteAllByPersonId(Integer.parseInt((""+ m.get("personId")).split("\\.")[0]));
         addTeacher(m);
         return new DataResponse(0, null, " ");
-    }
+    }*/
 }

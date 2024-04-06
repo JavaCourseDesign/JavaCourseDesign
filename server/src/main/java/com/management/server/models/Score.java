@@ -8,7 +8,7 @@ import lombok.Data;
 public class Score {
     @Id
     @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
-    private int scoreId;
+    private String scoreId;
 
     @ManyToOne
     @JoinColumn(name = "student_id")

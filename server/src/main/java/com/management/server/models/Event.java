@@ -13,7 +13,7 @@ import java.util.List;
 public abstract class Event {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer eventId;
+    private String eventId;
 
     private String name;
 

@@ -12,14 +12,14 @@ import java.util.Optional;
 
 @Repository
 @Transactional
-public interface StudentRepository extends JpaRepository<Student,Integer> {
+public interface StudentRepository extends JpaRepository<Student,String> {
 
     Student findByStudentId(String studentId);
-    Student findByPersonId(Integer personId);
+    Student findByPersonId(String personId);
     List<Student> findAll();
     boolean existsByStudentId(String studentId);
     Integer deleteAllByStudentId(String studentId);
-    Integer deleteAllByPersonId(Integer personId);
+    Integer deleteAllByPersonId(String personId);
 
 
     /*Optional<Student> findByPersonPersonId(Integer personId);

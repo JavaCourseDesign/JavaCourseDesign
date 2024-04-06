@@ -15,7 +15,7 @@ import java.util.Objects;
 public class UserDetailsImpl implements UserDetails {
     private static final long serialVersionUID = 1L;
 
-    private Integer id;
+    private String id;
 
     private String username;
 
@@ -24,7 +24,7 @@ public class UserDetailsImpl implements UserDetails {
 
     private Collection<? extends GrantedAuthority> authorities;
 
-    public UserDetailsImpl(Integer id, String username, String password,
+    public UserDetailsImpl(String id, String username, String password,
                            Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
         this.username = username;
@@ -48,7 +48,7 @@ public class UserDetailsImpl implements UserDetails {
         return authorities;
     }
 
-    public Integer getId() {
+    public String getId() {
         return id;
     }
 

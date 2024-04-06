@@ -42,23 +42,20 @@ public class AuthController {
         }
         return null;
     }
-
     @PostMapping("/register")
     public DataResponse registerUser(@RequestBody Map<String,String> map) {
         String id = map.get("id");
         String username = map.get("username");
         String password = passwordEncoder.encode(map.get("password"));
-
         Student foundStudent = studentRepository.findByStudentId(id);
         if (isUserValid(foundStudent, username)) {
-            return registerUser(foundStudent, username, password, EUserType.ROLE_STUDENT);
+            return registerUser(foundStudent,username, password, EUserType.ROLE_STUDENT);
         }
 
         Teacher foundTeacher = teacherRepository.findByTeacherId(id);
         if (isUserValid(foundTeacher, username)) {
             return registerUser(foundTeacher, username, password, EUserType.ROLE_TEACHER);
         }
-
         return new DataResponse(-1,null,"注册失败");
     }
 
@@ -76,9 +73,16 @@ public class AuthController {
         userTypeRepository.save(type);
 
         user.setUserType(type);
-        userRepository.save(user);
         user.setPerson(person);
-
+        userRepository.save(user);
         return new DataResponse(0, null, userType == EUserType.ROLE_STUDENT ? "学生注册成功" : "教师注册成功");
+    }
+    @PostMapping("/findPersonIdByUsername")
+    public DataResponse findPersonIdByUsername(@RequestBody Map<String,String> map) {
+        User user = userRepository.findByUsername(map.get("username"));
+        if (user == null) {
+            return new DataResponse(-1, null, null);
+        }
+        return new DataResponse(0, user.getPerson().getPersonId(), null);
     }
 }

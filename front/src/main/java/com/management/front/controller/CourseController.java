@@ -1,5 +1,5 @@
 package com.management.front.controller;
-import com.management.front.TestApplication;
+import com.management.front.HelloApplication;
 import com.management.front.request.DataResponse;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -64,7 +64,7 @@ public class CourseController{
     @FXML
     void onAddCourseButton(ActionEvent event)throws IOException {
         Stage stage=new Stage();
-        FXMLLoader fxmlLoader=new FXMLLoader(TestApplication.class.getResource("adminFxml/addCourse.fxml"));
+        FXMLLoader fxmlLoader=new FXMLLoader(HelloApplication.class.getResource("adminFxml/addCourse.fxml"));
         Parent root = fxmlLoader.load();
         Scene scene = new Scene(root, 800, 400);
         stage.setScene(scene);//舞台设置场景

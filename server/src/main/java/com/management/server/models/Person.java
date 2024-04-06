@@ -30,7 +30,7 @@ import java.util.List;
 public abstract class Person {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer personId;
+    private String personId;
 
     //@NotBlank    // 字段非空
     @Size(max = 20)   //字段长度最长为20
@@ -46,7 +46,7 @@ public abstract class Person {
     private String dept;
 
     @Size(max = 20)
-    private String card;
+    private String idCardNum;
     @Size(max = 20)
     private String gender;
 

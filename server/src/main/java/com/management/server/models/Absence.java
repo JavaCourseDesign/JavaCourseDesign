@@ -10,7 +10,7 @@ import java.util.List;
 public class Absence {
     @Id
     @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
-    private Integer absenceId;
+    private String absenceId;
 
     private String reason;
 

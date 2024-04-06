@@ -21,13 +21,14 @@ public class StudentController {
     @PostMapping("/getAllStudents")
     public DataResponse getAllStudents()
     {
-        return new DataResponse(200,studentRepository.findAll(),null);
+        return new DataResponse(0,studentRepository.findAll(),null);
     }
 
-    @PostMapping("/getStudent")
-    public DataResponse getStudent(@RequestBody Map m)
+    @PostMapping("/getStudentByPersonId")
+    public DataResponse getStudent(@RequestBody Map<String,String> map)
     {
-        return new DataResponse(200,studentRepository.findAllByStudentId(""+m.get("studentId")),null);
+        Student student = studentRepository.findByPersonId(map.get("personId"));
+        return new DataResponse(0,student,null);
     }
 
     @PostMapping("/addStudent")
@@ -48,11 +49,11 @@ public class StudentController {
         return new DataResponse(0,null,"删除成功");
     }
 
-    @PostMapping("/updateStudent")
+   /* @PostMapping("/updateStudent")
     public DataResponse updateStudent(@RequestBody Map m) {
         studentRepository.deleteAllByPersonId(Integer.parseInt((""+ m.get("personId")).split("\\.")[0]));
         addStudent(m);
         System.out.println("\n"+m+"\n");
         return new DataResponse(0, null, "更新成功");
-    }
+    }*/
 }

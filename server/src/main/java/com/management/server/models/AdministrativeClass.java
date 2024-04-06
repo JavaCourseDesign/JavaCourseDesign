@@ -11,7 +11,7 @@ import java.util.List;
 public class AdministrativeClass {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer administrativeClassId;
+    private String administrativeClassId;
 
     /*@OneToOne
     private Teacher headTeacher;*/ //暂时不考虑班主任
