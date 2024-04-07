@@ -40,6 +40,4 @@ public class Student extends Person{
         events.add(event);
     }*/
 
-
-
 }

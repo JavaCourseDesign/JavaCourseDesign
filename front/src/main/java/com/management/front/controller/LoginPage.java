@@ -13,10 +13,10 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.management.front.util.HttpClientUtil.login;
-import static com.management.front.util.HttpClientUtil.sendAndReceiveDataResponse;
+import static com.management.front.util.HttpClientUtil.*;
 
 public class LoginPage extends VBox {
+    public static String personId;
     private TextField idField=new TextField();
     private TextField usernameField=new TextField();
     private PasswordField passwordField=new PasswordField();
@@ -37,12 +37,15 @@ public class LoginPage extends VBox {
             String password = passwordField.getText();
             if(login(username,password))
             {
+                Map<String,String> map = new HashMap<>();
+                map.put("username",username);
+                DataResponse r=request("/findPersonIdByUsername",map);
+                personId=(String)r.getData();
                 Menu menu = new Menu();
                 Scene scene = new Scene(menu, 800, 600);
                 Stage stage = (Stage) loginButton.getScene().getWindow();
                 stage.setScene(scene);
                 stage.show();
-
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setContentText("登录成功");
                 alert.showAndWait();

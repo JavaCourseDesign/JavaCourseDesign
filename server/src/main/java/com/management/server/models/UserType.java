@@ -16,7 +16,7 @@ import lombok.Data;
 public class UserType {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private String id;
 
     @Enumerated(EnumType.STRING)
     @Column(length = 20)

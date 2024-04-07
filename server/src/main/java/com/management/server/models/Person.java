@@ -46,7 +46,7 @@ public abstract class Person {
     private String dept;
 
     @Size(max = 20)
-    private String card;
+    private String idCardNum;
     @Size(max = 20)
     private String gender;
 

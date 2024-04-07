@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.management.front.controller.CourseController">
+   <children>
+      <TableView fx:id="courseTable" prefHeight="400.0" prefWidth="379.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="221.0" AnchorPane.topAnchor="0.0">
+        <columns>
+          <TableColumn fx:id="courseIdColumn" prefWidth="75.0" text="课序号" />
+          <TableColumn fx:id="referenceColumn" prefWidth="75.0" text="教材" />
+            <TableColumn fx:id="capacityColumn" prefWidth="75.0" text="课容量" />
+            <TableColumn fx:id="creditColumn" prefWidth="75.0" text="学分" />
+            <TableColumn fx:id="teacherNameColumn" prefWidth="75.0" text="任课教师" />
+        </columns>
+      </TableView>
+      <Button fx:id="addCourseButton" layoutX="411.0" layoutY="67.0" mnemonicParsing="false" onAction="#onAddCourseButton" prefHeight="95.0" prefWidth="126.0" text="增加" />
+      <Button fx:id="deleteCourseButton" layoutX="411.0" layoutY="216.0" mnemonicParsing="false" onAction="#onDeleteCourseButton" prefHeight="95.0" prefWidth="138.0" text="删除" />
+   </children>
+</AnchorPane>

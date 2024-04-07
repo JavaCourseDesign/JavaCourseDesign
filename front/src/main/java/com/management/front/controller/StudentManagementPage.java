@@ -91,7 +91,6 @@ public class StudentManagementPage extends SplitPane {
         observableList.clear();
         observableList.addAll(FXCollections.observableArrayList((ArrayList) request("/getAllStudents", null).getData()));
         studentTable.setItems(observableList);
-
         System.out.println(observableList);
     }
 
