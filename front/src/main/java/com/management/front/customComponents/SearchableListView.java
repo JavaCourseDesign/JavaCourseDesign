@@ -5,12 +5,16 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.scene.Scene;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
@@ -20,8 +24,10 @@ public class SearchableListView extends VBox {
     private ObservableList<Map<String, Object>> items;
     private FilteredList<Map<String, Object>> filteredItems;
     private Consumer<Map<String, Object>> onItemClick; // Updated to use Map
+    private List<String> keys;
 
-    public SearchableListView(ObservableList<Map<String, Object>> items) {
+    public SearchableListView(ObservableList<Map<String, Object>> items, List<String> keys) {
+        this.keys = keys;
         this.items = items;
         initializeComponents();
     }
@@ -45,7 +51,7 @@ public class SearchableListView extends VBox {
                 if (newValue == null || newValue.isEmpty()) {
                     return true;
                 }
-                String itemValue = ""+item.get("studentId")+item.get("teacherId")+item.get("name"); // Assuming you want to filter based on "name" key
+                String itemValue = itemToString(item); // Assuming you want to filter based on "name" key
                 return itemValue.toLowerCase().contains(newValue.toLowerCase());
             });
         });
@@ -57,7 +63,7 @@ public class SearchableListView extends VBox {
                 if (empty || item == null) {
                     setText(null);
                 } else {
-                    setText(""+item.get("studentId")+item.get("teacherId")+item.get("name")); // Display the "name" attribute
+                    setText(itemToString(item)); // Display the "name" attribute
                 }
             }
         });
@@ -66,6 +72,7 @@ public class SearchableListView extends VBox {
             Map<String, Object> selectedItem = listView.getSelectionModel().getSelectedItem();
             if (selectedItem != null && onItemClick != null) {
                 onItemClick.accept(selectedItem);
+                searchField.clear();
             }
         });
 
@@ -74,6 +81,14 @@ public class SearchableListView extends VBox {
 
     public void setOnItemClick(Consumer<Map<String, Object>> action) {
         this.onItemClick = action;
+    }
+
+    public String itemToString(Map<String, Object> item) {
+        StringBuilder sb = new StringBuilder();
+        for (String key : keys) {
+            sb.append(item.get(key));
+        }
+        return String.valueOf(sb);
     }
 }
 
