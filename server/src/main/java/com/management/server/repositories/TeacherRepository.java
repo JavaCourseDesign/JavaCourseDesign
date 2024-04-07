@@ -13,7 +13,7 @@ import java.util.Optional;
 
 @Repository
 @Transactional
-public interface TeacherRepository extends JpaRepository<Teacher,Integer> {
+public interface TeacherRepository extends JpaRepository<Teacher,String> {
     /*@Query(value = "select max(personId) from Teacher  ")
     Integer getMaxId();
     Optional<Teacher> findByPersonPersonId(Integer personId);

@@ -16,4 +16,6 @@ import java.util.Optional;
 public interface PersonRepository extends JpaRepository<Person,String> {
     Person findByPersonId(String personId);
     Person findByName(String username);
+
+    boolean existsByPersonId(String personId);
 }

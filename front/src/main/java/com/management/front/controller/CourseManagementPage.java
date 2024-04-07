@@ -105,10 +105,10 @@ public class CourseManagementPage extends SplitPane {
 
         teacherListView=new SearchableListView(FXCollections.observableArrayList((ArrayList) request("/getAllTeachers", null).getData()));
         teacherListView.setOnItemClick(teacher ->{
-            Map m = courseTable.getSelectionModel().getSelectedItem();
-            m.put("newPersonId",teacher.get("personId"));
-            System.out.println(m);
-            request("/updateCourse",m);
+            Map m = new HashMap<>();
+            m.put("courseId", courseTable.getSelectionModel().getSelectedItem().get("courseId"));
+            m.put("personId", teacher.get("personId"));
+            request("/updateCourse/person", m);
             displayCourses();
         });
 

@@ -27,6 +27,8 @@ public class CourseController {
     StudentRepository studentRepository;
     @Autowired
     TeacherRepository teacherRepository;
+    @Autowired
+    PersonRepository personRepository;
     @PostMapping("/getAllCourses")
     public DataResponse getAllCourses(){
         return new DataResponse(0,courseRepository.findAll(),null);
@@ -49,12 +51,37 @@ public class CourseController {
         return new DataResponse(0,null,"删除成功");
     }
 
-   /* @PostMapping("/updateCourse")
-    public DataResponse updateCourse(@RequestBody Map m) {
-        courseRepository.deleteAllByCourseId((""+ m.get("courseId")).split("\\.")[0]);
-        if(m.containsKey("newPersonId")) m.put("persons", teacherRepository.findByPersonId(Integer.parseInt((""+ m.get("newPersonId")).split("\\.")[0])));
-        addCourse(m);
-        System.out.println("\n"+m+"\n");
-        return new DataResponse(0, null, "更新成功");
-    }*/
+    @PostMapping("/updateCourse")
+    public DataResponse updateCourse(@RequestBody Map m){
+        String courseId = (String) m.get("courseId");
+        if(!courseRepository.existsByCourseId(courseId)) {
+            return new DataResponse(-1,null,"课程不存在，无法更新");
+        }
+        Course course = courseRepository.findById(courseId).get();
+        BeanUtil.fillBeanWithMap(m, course, true, CopyOptions.create());//要求map键值与对象一致
+        courseRepository.save(course);
+        return new DataResponse(0,null,"更新成功");
+    }
+
+    @PostMapping("/updateCourse/person")
+    public DataResponse updateCoursePerson(@RequestBody Map m){
+        String courseId = (String) m.get("courseId");
+        String personId = (String) m.get("personId");
+        if(!courseRepository.existsByCourseId(courseId)) {
+            return new DataResponse(-1,null,"课程不存在，无法更新");
+        }
+        if(!personRepository.existsByPersonId(personId)) {
+            return new DataResponse(-1,null,"人员不存在，无法更新");
+        }
+        Course course = courseRepository.findById(courseId).get();
+        Person person = personRepository.findById(personId).get();
+        if(course.getPersons().contains(person))
+        {
+            return new DataResponse(-1,null,"已经添加过了");
+        }
+        course.getPersons().add(person);
+        courseRepository.save(course);
+        return new DataResponse(0,null,"更新成功");
+        //还需要添加根据班级添加学生的功能
+    }
 }

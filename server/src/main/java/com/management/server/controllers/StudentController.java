@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 
@@ -21,14 +22,7 @@ public class StudentController {
     @PostMapping("/getAllStudents")
     public DataResponse getAllStudents()
     {
-        return new DataResponse(0,studentRepository.findAll(),null);
-    }
-
-    @PostMapping("/getStudentByPersonId")
-    public DataResponse getStudent(@RequestBody Map<String,String> map)
-    {
-        Student student = studentRepository.findByPersonId(map.get("personId"));
-        return new DataResponse(0,student,null);
+        return new DataResponse(200,studentRepository.findAll(),null);
     }
 
     @PostMapping("/addStudent")
@@ -49,11 +43,18 @@ public class StudentController {
         return new DataResponse(0,null,"删除成功");
     }
 
-   /* @PostMapping("/updateStudent")
+    @PostMapping("/updateStudent")
     public DataResponse updateStudent(@RequestBody Map m) {
-        studentRepository.deleteAllByPersonId(Integer.parseInt((""+ m.get("personId")).split("\\.")[0]));
-        addStudent(m);
-        System.out.println("\n"+m+"\n");
-        return new DataResponse(0, null, "更新成功");
-    }*/
+        String personId = (String) m.get("personId");
+        Optional<Student> optionalStudent = Optional.ofNullable(studentRepository.findByPersonId(personId));
+        if(optionalStudent.isPresent()) {
+            Student student = optionalStudent.get();
+            BeanUtil.fillBeanWithMap(m, student, true, CopyOptions.create());
+            studentRepository.save(student);
+            return new DataResponse(0, null, "更新成功");
+        } else {
+            return new DataResponse(-1, null, "学号不存在，无法更新");
+        }
+    }
+
 }

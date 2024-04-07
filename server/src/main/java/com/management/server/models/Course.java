@@ -47,6 +47,10 @@ public class Course{
 
     //在老师的示例中有preCourse（前序课程）！！！待实现  关系为@manytoone
 
+    @ManyToOne
+    @JoinColumn(name="pre_course_id")
+    private Course preCourse;
+
     @ManyToMany
     @JoinTable(name = "person_course")
     @JsonIgnoreProperties(value = {"courses"})

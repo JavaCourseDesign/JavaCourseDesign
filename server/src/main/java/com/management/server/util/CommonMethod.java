@@ -43,14 +43,9 @@ public class CommonMethod {
      */
     public static String getUserId(){
         Object obj = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if(!(obj instanceof UserDetailsImpl))
+        if(!(obj instanceof UserDetailsImpl userDetails))
             return null;
-        UserDetailsImpl userDetails =
-                (UserDetailsImpl) obj;
-        if(userDetails != null)
-            return userDetails.getId();
-        else
-            return null;
+        return userDetails.getId();
     }
     /*public static String getUsername(){
         Object obj = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
