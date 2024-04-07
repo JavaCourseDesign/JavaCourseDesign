@@ -45,7 +45,7 @@ public class SearchableListView extends VBox {
                 if (newValue == null || newValue.isEmpty()) {
                     return true;
                 }
-                String itemValue = (String) item.get("name"); // Assuming you want to filter based on "name" key
+                String itemValue = ""+item.get("studentId")+item.get("teacherId")+item.get("name"); // Assuming you want to filter based on "name" key
                 return itemValue.toLowerCase().contains(newValue.toLowerCase());
             });
         });
@@ -57,7 +57,7 @@ public class SearchableListView extends VBox {
                 if (empty || item == null) {
                     setText(null);
                 } else {
-                    setText((String) item.get("name")); // Display the "name" attribute
+                    setText(""+item.get("studentId")+item.get("teacherId")+item.get("name")); // Display the "name" attribute
                 }
             }
         });

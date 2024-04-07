@@ -77,7 +77,9 @@ public class CourseController {
         Person person = personRepository.findById(personId).get();
         if(course.getPersons().contains(person))
         {
-            return new DataResponse(-1,null,"已经添加过了");
+            course.getPersons().remove(person);
+            courseRepository.save(course);
+            return new DataResponse(0,null,"已经添加过了,故移除");
         }
         course.getPersons().add(person);
         courseRepository.save(course);

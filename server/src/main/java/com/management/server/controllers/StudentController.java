@@ -19,6 +19,13 @@ public class StudentController {
     @Autowired
     private StudentRepository studentRepository;
 
+    @PostMapping("/getStudentByPersonId")
+    public DataResponse getStudent(@RequestBody Map<String,String> map)
+    {
+        Student student = studentRepository.findByPersonId(map.get("personId"));
+        return new DataResponse(0,student,null);
+    }
+
     @PostMapping("/getAllStudents")
     public DataResponse getAllStudents()
     {
