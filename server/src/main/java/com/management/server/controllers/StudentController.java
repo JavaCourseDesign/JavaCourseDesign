@@ -24,7 +24,12 @@ public class StudentController {
     {
         return new DataResponse(200,studentRepository.findAll(),null);
     }
-
+    @PostMapping("/getStudentByPersonId")
+    public DataResponse getStudent(@RequestBody Map<String,String> map)
+    {
+        Student student = studentRepository.findByPersonId(map.get("personId"));
+        return new DataResponse(0,student,null);
+    }
     @PostMapping("/addStudent")
     public DataResponse addStudent(@RequestBody Map m)
     {
@@ -42,7 +47,6 @@ public class StudentController {
         studentRepository.deleteAllByStudentId(""+m.get("studentId"));
         return new DataResponse(0,null,"删除成功");
     }
-
     @PostMapping("/updateStudent")
     public DataResponse updateStudent(@RequestBody Map m) {
         String personId = (String) m.get("personId");

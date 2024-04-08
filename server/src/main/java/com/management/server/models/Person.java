@@ -32,9 +32,6 @@ public abstract class Person {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String personId;
 
-    //@NotBlank    // 字段非空
-    @Size(max = 20)   //字段长度最长为20
-    private String num;
 
     @Size(max = 50)
     private String name;
@@ -81,10 +78,7 @@ public abstract class Person {
     @ManyToMany(mappedBy = "persons")
     @JsonIgnoreProperties(value = {"persons"})//在单个属性中添加@JsonIgnoreProperties注解，可以忽略 该属性中 某个属性 的序列化和反序列化
     private List<Course> courses;
-
-
     /*public String getGenderName() {
         return  ComDataUtil.getInstance().getDictionaryLabelByValue("XBM", gender);
     }*/ //ComDataUtil相关，暂时（或永久）删除
-
 }
