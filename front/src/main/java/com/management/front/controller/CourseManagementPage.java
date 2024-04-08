@@ -25,7 +25,7 @@ public class CourseManagementPage extends SplitPane {
     private Button addButton = new Button("Add");
     private Button deleteButton = new Button("Delete");
     private Button updateButton = new Button("Update");
-    private SearchableListView teacherListView;
+    private SearchableListView teacherListView=new SearchableListView(FXCollections.observableArrayList((ArrayList) request("/getAllTeachers", null).getData()), List.of("teacherId", "name"));
 
     private TextField courseIdField = new TextField();
     private TextField nameField = new TextField();
@@ -38,6 +38,7 @@ public class CourseManagementPage extends SplitPane {
         m.put("name", nameField.getText());
         m.put("reference", referenceField.getText());
         m.put("capacity", capacityField.getText());
+        m.put("personIds", teacherListView.getSelectedItems());
         return m;
     }
 
@@ -102,19 +103,11 @@ public class CourseManagementPage extends SplitPane {
                 nameField.setText(newValue.get("name") != null ? newValue.get("name").toString() : "");
                 referenceField.setText(newValue.get("reference") != null ? newValue.get("reference").toString() : "");
                 capacityField.setText(newValue.get("capacity") != null ? newValue.get("capacity").toString() : "");
+                teacherListView.setSelectedItems((List<Map>) newValue.get("persons"));
             }
         });
 
-        teacherListView=new SearchableListView(FXCollections.observableArrayList((ArrayList) request("/getAllTeachers", null).getData()), List.of("teacherId", "name"));
-        teacherListView.setOnItemClick(teacher ->{
-            Map m = new HashMap<>();
-            m.put("courseId", courseTable.getSelectionModel().getSelectedItem().get("courseId"));
-            m.put("personId", teacher.get("personId"));
-            request("/updateCourse/person", m);
-            displayCourses();
-        });
-
-        controlPanel.getChildren().addAll(courseIdField, nameField, referenceField, capacityField, addButton, deleteButton, updateButton, teacherListView, selectionGrid);
+        controlPanel.getChildren().addAll(courseIdField, nameField, referenceField, capacityField, teacherListView, addButton, deleteButton, updateButton, selectionGrid);
 
         this.getItems().add(controlPanel);
     }
