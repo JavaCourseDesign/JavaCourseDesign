@@ -30,9 +30,13 @@ public class Course{
 
     private String reference;
 
-    private Integer capacity;//课容量
+    private Double capacity;//课容量
 
-    private Integer credit;//学分
+    private Double credit;//学分
+
+    private Double beginWeek;//开始周次
+
+    private Double endWeek;//结束周次
 
     @OneToMany(mappedBy = "course")
     private List<Lesson> lessons;

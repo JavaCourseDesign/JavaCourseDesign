@@ -56,6 +56,9 @@ public class StudentController {
         Optional<Student> optionalStudent = Optional.ofNullable(studentRepository.findByPersonId(personId));
         if(optionalStudent.isPresent()) {
             Student student = optionalStudent.get();
+
+            System.out.println(m);
+
             BeanUtil.fillBeanWithMap(m, student, true, CopyOptions.create());
             studentRepository.save(student);
             return new DataResponse(0, null, "更新成功");

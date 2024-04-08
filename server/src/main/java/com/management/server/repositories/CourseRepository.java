@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 @Transactional
 public interface CourseRepository extends JpaRepository<Course,String> {
+    Course findByCourseId(String courseId);
     boolean existsByCourseId(String courseId);
     void deleteAllByCourseId(String courseId);
 }
