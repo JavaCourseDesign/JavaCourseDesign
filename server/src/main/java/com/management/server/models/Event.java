@@ -17,9 +17,7 @@ public abstract class Event {
 
     private String name;
 
-    private String beginTime;//2024-03-12 08:31
-
-    private String endTime;//2024-03-12 08:31
+    private String time;//12,5,8.30,1.50     第十二周 周五 8:30 一小时五十分钟  lesson的此属性第一个数值应为-1，开始周与结束周属性在course 中
 
     private String introduction;
 

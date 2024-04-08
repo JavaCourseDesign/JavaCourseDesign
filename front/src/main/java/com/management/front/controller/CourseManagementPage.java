@@ -8,6 +8,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.MapValueFactory;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 
 import java.io.IOException;
@@ -30,6 +31,7 @@ public class CourseManagementPage extends SplitPane {
     private TextField nameField = new TextField();
     private TextField referenceField = new TextField();
     private TextField capacityField = new TextField();
+    private SelectionGrid selectionGrid = new SelectionGrid();
 
     private Map newMapFromFields(Map m) {
         m.put("courseId", courseIdField.getText());
@@ -103,7 +105,7 @@ public class CourseManagementPage extends SplitPane {
             }
         });
 
-        teacherListView=new SearchableListView(FXCollections.observableArrayList((ArrayList) request("/getAllTeachers", null).getData()));
+        teacherListView=new SearchableListView(FXCollections.observableArrayList((ArrayList) request("/getAllTeachers", null).getData()), List.of("teacherId", "name"));
         teacherListView.setOnItemClick(teacher ->{
             Map m = new HashMap<>();
             m.put("courseId", courseTable.getSelectionModel().getSelectedItem().get("courseId"));
@@ -112,7 +114,7 @@ public class CourseManagementPage extends SplitPane {
             displayCourses();
         });
 
-        controlPanel.getChildren().addAll(courseIdField, nameField, referenceField, capacityField, addButton, deleteButton, updateButton, teacherListView);
+        controlPanel.getChildren().addAll(courseIdField, nameField, referenceField, capacityField, addButton, deleteButton, updateButton, teacherListView, selectionGrid);
 
         this.getItems().add(controlPanel);
     }
@@ -206,5 +208,73 @@ public class CourseManagementPage extends SplitPane {
                 alert1.showAndWait();
             }
         }
+    }
+}
+
+class SelectionGrid extends GridPane {
+    private final int rows = 5;
+    private final int cols = 7;
+    private CheckBox[][] checkBoxes = new CheckBox[rows][cols];
+
+    public SelectionGrid() {
+        super();
+        initGrid();
+    }
+
+    private void initGrid() {
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                CheckBox checkBox = new CheckBox();
+                checkBoxes[i][j] = checkBox;
+                this.add(checkBox, j, i); // 添加到GridPane
+            }
+        }
+    }
+
+    public List<String> getSelectedCoordinates() {
+        List<String> selected = new ArrayList<>();
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                if (checkBoxes[i][j].isSelected()) {
+                    selected.add("-1,"+(j+1)+","+transferCoordinateToTime(i)+",1.50"); // 储存坐标 i节数 j天数
+                }
+            }
+        }
+        return selected;
+    }
+
+    public void setSelectedCoordinates(List<String> selected) {//-1,6,8.00,1.50  //需要写一个方法把Course的Lessons（Events）属性中的时间段转换成坐标，反之亦然
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                checkBoxes[i][j].setSelected(false);
+            }
+        }
+        for (String s : selected) {
+            int i = transferTimeToCoordinate(s.split(",")[2]);
+            int j = Integer.parseInt(s.split(",")[1])-1;
+            checkBoxes[i][j].setSelected(true);
+        }
+    }
+
+    private int transferTimeToCoordinate(String time) {
+        return switch (time) {
+            case "8.00" -> 0;
+            case "10.10" -> 1;
+            case "14.00" -> 2;
+            case "14.10" -> 3;
+            case "19.00" -> 4;
+            default -> 0;
+        };
+    }
+
+    private String transferCoordinateToTime(int i) {
+        return switch (i) {
+            case 0 -> "8.00";
+            case 1 -> "10.10";
+            case 2 -> "14.00";
+            case 3 -> "14.10";
+            case 4 -> "19.00";
+            default -> "8.00";
+        };
     }
 }

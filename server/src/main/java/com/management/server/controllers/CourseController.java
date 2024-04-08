@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 //@RequestMapping("/course")
@@ -57,7 +58,12 @@ public class CourseController {
         if(!courseRepository.existsByCourseId(courseId)) {
             return new DataResponse(-1,null,"课程不存在，无法更新");
         }
-        Course course = courseRepository.findById(courseId).get();
+        Course course = courseRepository.findByCourseId(courseId);
+
+        //需要把多对多关系属性忽略掉，student与teacher中亦然，因为这些属性经过传输以及不再具有完整的循环嵌套特征，需要通过主键重新建立联系
+        m.remove("persons");
+        System.out.println(m);
+
         BeanUtil.fillBeanWithMap(m, course, true, CopyOptions.create());//要求map键值与对象一致
         courseRepository.save(course);
         return new DataResponse(0,null,"更新成功");
@@ -77,7 +83,9 @@ public class CourseController {
         Person person = personRepository.findById(personId).get();
         if(course.getPersons().contains(person))
         {
-            return new DataResponse(-1,null,"已经添加过了");
+            course.getPersons().remove(person);
+            courseRepository.save(course);
+            return new DataResponse(0,null,"已经添加过了,故移除");
         }
         course.getPersons().add(person);
         courseRepository.save(course);

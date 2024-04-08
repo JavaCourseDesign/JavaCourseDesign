@@ -4,6 +4,7 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
 import com.management.server.models.Student;
 import com.management.server.payload.response.DataResponse;
+import com.management.server.repositories.CourseRepository;
 import com.management.server.repositories.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,18 +19,24 @@ import java.util.Optional;
 public class StudentController {
     @Autowired
     private StudentRepository studentRepository;
+    @Autowired
+    private CourseRepository courseRepository;
+
+    @PostMapping("/getStudentByPersonId")
+    public DataResponse getStudent(@RequestBody Map<String,String> map)
+    {
+        //Map student = (Map) studentRepository.findByPersonId(map.get("personId"));
+        Map student = BeanUtil.beanToMap(studentRepository.findByPersonId(map.get("personId"))) ;
+        student.put("courses",courseRepository.findCoursesByPersonId(map.get("personId")));
+        return new DataResponse(0,student,null);
+    }
 
     @PostMapping("/getAllStudents")
     public DataResponse getAllStudents()
     {
         return new DataResponse(200,studentRepository.findAll(),null);
     }
-    @PostMapping("/getStudentByPersonId")
-    public DataResponse getStudent(@RequestBody Map<String,String> map)
-    {
-        Student student = studentRepository.findByPersonId(map.get("personId"));
-        return new DataResponse(0,student,null);
-    }
+
     @PostMapping("/addStudent")
     public DataResponse addStudent(@RequestBody Map m)
     {
@@ -47,12 +54,16 @@ public class StudentController {
         studentRepository.deleteAllByStudentId(""+m.get("studentId"));
         return new DataResponse(0,null,"删除成功");
     }
+
     @PostMapping("/updateStudent")
     public DataResponse updateStudent(@RequestBody Map m) {
         String personId = (String) m.get("personId");
         Optional<Student> optionalStudent = Optional.ofNullable(studentRepository.findByPersonId(personId));
         if(optionalStudent.isPresent()) {
             Student student = optionalStudent.get();
+
+            System.out.println(m);
+
             BeanUtil.fillBeanWithMap(m, student, true, CopyOptions.create());
             studentRepository.save(student);
             return new DataResponse(0, null, "更新成功");

@@ -1,5 +1,6 @@
 package com.management.front.controller;
 
+import com.management.front.customComponents.SearchableTableView;
 import com.management.front.request.DataResponse;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -8,15 +9,12 @@ import javafx.scene.control.cell.MapValueFactory;
 import javafx.scene.layout.VBox;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 import static com.management.front.util.HttpClientUtil.*;
 
 public class StudentManagementPage extends SplitPane {
-    private TableView<Map> studentTable = new TableView<>();
+    private SearchableTableView studentTable;
     private VBox controlPanel = new VBox();
     private ObservableList<Map> observableList = FXCollections.observableArrayList();
 
@@ -46,20 +44,29 @@ public class StudentManagementPage extends SplitPane {
     }
 
     private void initializeTable() {
-
-        //建立列
+        // Create columns
         TableColumn<Map, String> studentIdColumn = new TableColumn<>("学号");
         TableColumn<Map, String> studentNameColumn = new TableColumn<>("姓名");
         TableColumn<Map, String> studentGenderColumn = new TableColumn<>("性别");
         TableColumn<Map, String> studentMajorColumn = new TableColumn<>("专业");
 
-        //把map填入单元格
-        studentIdColumn.setCellValueFactory(new MapValueFactory<>("studentId"));//与后端属性一致
+        // Set cell value factories
+        studentIdColumn.setCellValueFactory(new MapValueFactory<>("studentId"));
         studentNameColumn.setCellValueFactory(new MapValueFactory<>("name"));
         studentGenderColumn.setCellValueFactory(new MapValueFactory<>("gender"));
         studentMajorColumn.setCellValueFactory(new MapValueFactory<>("major"));
 
-        studentTable.getColumns().addAll(studentIdColumn, studentNameColumn, studentGenderColumn, studentMajorColumn);
+        // Create a list of columns
+        List<TableColumn<Map, ?>> columns = new ArrayList<>();
+        columns.add(studentIdColumn);
+        columns.add(studentNameColumn);
+        columns.add(studentGenderColumn);
+        columns.add(studentMajorColumn);
+
+
+        // Initialize the SearchableTableViewForMap
+        studentTable = new SearchableTableView(observableList, List.of("studentId","name"), columns);
+
         this.getItems().add(studentTable);
     }
 
@@ -72,25 +79,23 @@ public class StudentManagementPage extends SplitPane {
         addButton.setOnAction(event -> addStudent());
         deleteButton.setOnAction(event -> deleteStudent());
         updateButton.setOnAction(event -> updateStudent());
-        //refreshButton.setOnAction(event -> displayStudents());
 
-        studentTable.selectionModelProperty().get().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            if(newValue!=null)
+        studentTable.setOnItemClick(student -> {
+            if(student!=null)
             {
-                studentIdField.setText((String) newValue.get("studentId"));
-                nameField.setText((String) newValue.get("name"));
-                genderField.setText((String) newValue.get("gender"));
-                majorField.setText((String) newValue.get("major"));
+                studentIdField.setText((String) student.get("studentId"));
+                nameField.setText((String) student.get("name"));
+                genderField.setText((String) student.get("gender"));
+                majorField.setText((String) student.get("major"));
             }
         });
-
         this.getItems().add(controlPanel);
     }
 
     private void displayStudents(){
         observableList.clear();
         observableList.addAll(FXCollections.observableArrayList((ArrayList) request("/getAllStudents", null).getData()));
-        studentTable.setItems(observableList);
+        studentTable.setData(observableList);
         System.out.println(observableList);
     }
 
@@ -119,7 +124,7 @@ public class StudentManagementPage extends SplitPane {
     }
 
     private void deleteStudent() {
-        Map m = studentTable.getSelectionModel().getSelectedItem();
+        Map m = studentTable.getSelectedItem();
         if(m==null)
         {
             Alert alert=new Alert(Alert.AlertType.INFORMATION);
@@ -150,7 +155,7 @@ public class StudentManagementPage extends SplitPane {
     }
 
     private void updateStudent() {
-        Map selected = studentTable.getSelectionModel().getSelectedItem();
+        Map selected = studentTable.getSelectedItem();
         if(selected==null)
         {
             Alert alert=new Alert(Alert.AlertType.INFORMATION);
@@ -176,10 +181,3 @@ public class StudentManagementPage extends SplitPane {
         }
     }
 }
-
-//[
-//        {personId=1.0, num=null, name=tst, type=null, dept=null, card=null, gender=男, birthday=null, email=null, phone=null, address=null, introduce=null, absences=[], honors=[], dormitory=null, events=[], courses=[{name=软件工程, courseId=1, reference=null, capacity=null, credit=null, lessons=[], persons=[{personId=1.0, num=null, name=tst, type=null, dept=null, card=null, gender=男, birthday=null, email=null, phone=null, address=null, introduce=null, absences=[], honors=[], dormitory=null, events=[], courses=[软件工程], studentId=2019210000, major=软件工程, className=软工1班}, {personId=2.0, num=null, name=wzk, type=null, dept=null, card=null, gender=男, birthday=null, email=null, phone=null, address=null, introduce=null, absences=[], honors=[], dormitory=null, events=[], courses=[软件工程], studentId=2019210001, major=软件工程, className=软工2班}, {personId=3.0, num=null, name=why, type=null, dept=null, card=null, gender=null, birthday=null, email=null, phone=null, address=null, introduce=null, absences=[], honors=[], dormitory=null, events=[], courses=[软件工程], teacherId=100000, degree=null, title=null}]}], studentId=2019210000, major=软件工程, className=软工1班},
-//        {personId=2.0, num=null, name=wzk, type=null, dept=null, card=null, gender=男, birthday=null, email=null, phone=null, address=null, introduce=null, absences=[], honors=[], dormitory=null, events=[], courses=[软件工程], studentId=2019210001, major=软件工程, className=软工2班}
-//
-//        ]
-

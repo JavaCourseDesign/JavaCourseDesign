@@ -60,8 +60,8 @@ public class TestController {//专门用于添加测试数据
 
         Course c1=new Course();
         c1.setName("软件工程");
-        c1.setCapacity(100);
-        c1.setCredit(3);
+        c1.setCapacity(100.0);
+        c1.setCredit(3.0);
         List<Person> persons=new ArrayList<>();
         persons.add(s1);
         persons.add(s2);
@@ -76,8 +76,8 @@ public class TestController {//专门用于添加测试数据
 
         Course c2=new Course();
         c2.setName("计算机网络");
-        c2.setCapacity(100);
-        c2.setCredit(3);
+        c2.setCapacity(100.0);
+        c2.setCredit(3.0);
         List<Person> persons2=new ArrayList<>();
         persons2.add(s1);
         persons2.add(s2);
@@ -90,6 +90,9 @@ public class TestController {//专门用于添加测试数据
         teacherRepository.save(t2);
         courseRepository.save(c2);
 
+        System.out.println(courseRepository.findCoursesByPersonId("1"));
+
         return new DataResponse(0,null,"测试数据添加成功");
     }
 }
+

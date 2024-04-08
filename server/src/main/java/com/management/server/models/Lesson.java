@@ -9,6 +9,9 @@ import java.util.List;
 @Data
 @Table(name="lesson")
 public class Lesson extends Event{
+
+    private String beginTime;
+
     @ManyToOne
     @JoinColumn(name="course_id")
     private Course course;

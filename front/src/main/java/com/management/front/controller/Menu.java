@@ -1,5 +1,6 @@
 package com.management.front.controller;
 
+import com.management.front.customComponents.EditableMapTable;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
@@ -20,28 +21,27 @@ public class Menu extends SplitPane {
     TreeItem<String> item3 = new TreeItem<>("课程管理");
     TreeItem<String> item4 = new TreeItem<>("班级管理");
     TreeItem<String> item5 = new TreeItem<>("学生个人信息");
+    TreeItem<String> item6 = new TreeItem<>("测试");
     public Menu(){
         root.setExpanded(true);
         menu.setShowRoot(false);
 
-        root.getChildren().addAll(item1, item2, item3, item4,item5);
+        root.getChildren().addAll(item1, item2, item3, item4,item5, item6);
         menu.setRoot(root);
 
         this.getItems().add(menu);
         this.getItems().add(new Pane());
 
+        System.out.println((Map)((List) request("/getAllStudents",null).getData()).get(0));
+
         menu.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             switch (newValue.getValue()) {
-                case "学生管理": this.getItems().set(1,new StudentManagementPage());
-                    break;
-                case "教师管理": this.getItems().set(1,new TeacherManagementPage());
-                    break;
-                case "课程管理": this.getItems().set(1,new HomePage());
-                    break;
-                case "班级管理": this.getItems().set(1,new CourseManagementPage());
-                    break;
-                    case "学生个人信息":this.getItems().set(1,new StudentPersonalInfoPage());
-                        break;
+                case "学生管理": this.getItems().set(1,new StudentManagementPage());break;
+                case "教师管理": this.getItems().set(1,new TeacherManagementPage());break;
+                case "课程管理": this.getItems().set(1,new HomePage());break;
+                case "班级管理": this.getItems().set(1,new CourseManagementPage());break;
+                case "学生个人信息":this.getItems().set(1,new StudentPersonalInfoPage());break;
+                case "测试" : this.getItems().set(1,new EditableMapTable((Map)((List) request("/getAllStudents",null).getData()).get(0),Map.of("studentId","学号","name","姓名")));break;
             }
         });
     }
