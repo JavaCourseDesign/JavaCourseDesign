@@ -26,9 +26,9 @@ public class Student extends Person{
     /*@Size(max = 50)
     private String className;*/
 
-    @ManyToOne
+    /*@ManyToOne
     @JoinColumn(name = "administrative_class_id")
-    private AdministrativeClass administrativeClass;
+    private AdministrativeClass administrativeClass;*/
 
     /*@ManyToMany(mappedBy = "students")
     private List<Event> events;

@@ -26,7 +26,8 @@ public class StudentPersonalInfoPage extends TabPane {
         Map m=new HashMap();
         m.put("personId",LoginPage.personId);
         Map student =(Map)request("/getStudentByPersonId",m).getData();
-       this.getTabs().add(new BasicInfoTab(student));
+        System.out.println(student);
+        this.getTabs().add(new BasicInfoTab(student));
     }
 }
 class BasicInfoTab extends Tab {

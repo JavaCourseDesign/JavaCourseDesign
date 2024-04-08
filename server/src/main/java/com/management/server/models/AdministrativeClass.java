@@ -16,7 +16,7 @@ public class AdministrativeClass {
     /*@OneToOne
     private Teacher headTeacher;*/ //暂时不考虑班主任
 
-    @OneToMany(mappedBy = "administrativeClass")
+    @OneToMany
     private List<Student> students;
 
 }

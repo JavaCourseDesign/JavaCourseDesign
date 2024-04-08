@@ -17,9 +17,7 @@ import java.util.List;
 @Entity
 @Table(name="person")
 
-//@Data
-@Getter
-@Setter
+@Data
 
 //@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "name")//在递归中第二次出现时用name属性替代本对象避免无限递归
 //@JsonIgnoreProperties(value = {"courses"})
@@ -63,22 +61,22 @@ public abstract class Person {
     @Size(max = 1000)
     private String introduce;
 
-    @OneToMany(mappedBy = "person")
-    private List<Absence> absences;
+    /*@OneToMany(mappedBy = "person")
+    private List<Absence> absences;*/
 
-    @OneToMany(mappedBy = "person")
-    private List<Honor> honors;
+    /*@OneToMany(mappedBy = "person")
+    private List<Honor> honors;*/
 
-    @ManyToOne
+    /*@ManyToOne
     @JoinColumn(name = "dormitory_id")
-    private Dormitory dormitory;
+    private Dormitory dormitory;*/
 
-    @ManyToMany(mappedBy = "persons")
-    private List<Event> events;
+    /*@ManyToMany(mappedBy = "persons")
+    private List<Event> events;*/
 
-    @ManyToMany(mappedBy = "persons")
+    /*@ManyToMany(mappedBy = "persons")
     @JsonIgnoreProperties(value = {"persons"})//在单个属性中添加@JsonIgnoreProperties注解，可以忽略 该属性中 某个属性 的序列化和反序列化
-    private List<Course> courses;
+    private List<Course> courses;*/ //双向关系是不必要的，可以在course仓库查询实现相同效果
 
 
     /*public String getGenderName() {

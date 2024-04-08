@@ -12,10 +12,7 @@ import java.util.List;
 
 @Entity
 
-//@Data
-@Getter
-@Setter
-
+@Data
 @Table(name="course")
 
 //@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "name")//在递归中第二次出现时用name属性替代本对象避免无限递归
@@ -57,7 +54,7 @@ public class Course{
 
     @ManyToMany
     @JoinTable(name = "person_course")
-    @JsonIgnoreProperties(value = {"courses"})
+    //@JsonIgnoreProperties(value = {"courses"})
     private List<Person> persons;
 
     //lesson should be subClass of event, lesson to course should be many to one

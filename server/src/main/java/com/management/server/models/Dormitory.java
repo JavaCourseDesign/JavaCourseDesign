@@ -14,8 +14,8 @@ public class Dormitory {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String dormitoryId;
 
-    @OneToMany(mappedBy = "dormitory")
+    @OneToMany
     private List<Person> persons;
 
-    private Integer number;
+    private Double number;
 }

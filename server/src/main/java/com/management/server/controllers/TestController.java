@@ -90,6 +90,9 @@ public class TestController {//专门用于添加测试数据
         teacherRepository.save(t2);
         courseRepository.save(c2);
 
+        System.out.println(courseRepository.findCoursesByPersonId("1"));
+
         return new DataResponse(0,null,"测试数据添加成功");
     }
 }
+

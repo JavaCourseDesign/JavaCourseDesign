@@ -60,7 +60,7 @@ public class CourseController {
         }
         Course course = courseRepository.findByCourseId(courseId);
 
-        //需要把多对多关系属性忽略掉，student与teacher中亦然，因为这些属性经过传输以及不再具有完整的循环嵌套特征，需要通过逐渐重新建立联系
+        //需要把多对多关系属性忽略掉，student与teacher中亦然，因为这些属性经过传输以及不再具有完整的循环嵌套特征，需要通过主键重新建立联系
         m.remove("persons");
         System.out.println(m);
 
