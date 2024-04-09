@@ -4,6 +4,7 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
 import com.management.server.models.Student;
 import com.management.server.payload.response.DataResponse;
+import com.management.server.repositories.AdministrativeClassRepository;
 import com.management.server.repositories.CourseRepository;
 import com.management.server.repositories.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,13 +22,17 @@ public class StudentController {
     private StudentRepository studentRepository;
     @Autowired
     private CourseRepository courseRepository;
+    @Autowired
+    private AdministrativeClassRepository administrativeClassRepository;
 
     @PostMapping("/getStudentByPersonId")
     public DataResponse getStudent(@RequestBody Map<String,String> map)
     {
         //Map student = (Map) studentRepository.findByPersonId(map.get("personId"));
-        Map student = BeanUtil.beanToMap(studentRepository.findByPersonId(map.get("personId"))) ;
+        Student  s=studentRepository.findByPersonId(map.get("personId"));
+        Map student = BeanUtil.beanToMap(s) ;
         student.put("courses",courseRepository.findCoursesByPersonId(map.get("personId")));
+        student.put("className",administrativeClassRepository.findAdministrativeClassByStudent(s));
         return new DataResponse(0,student,null);
     }
 

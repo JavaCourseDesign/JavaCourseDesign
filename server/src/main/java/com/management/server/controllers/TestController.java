@@ -48,12 +48,19 @@ public class TestController {//专门用于添加测试数据
         userRepository.save(user);
 
         ArrayList<Student> students=new ArrayList<>();
-        for(int i=0;i<1000;i++){
+        for(int i=0;i<100;i++){
             Student student=new Student();
             student.setStudentId("201921"+String.format("%03d",i));
             student.setName(generateRandomChineseName());
             student.setGender("男");
             student.setMajor("软件工程");
+            student.setDept("软件学院");
+            student.setSocial("群众");
+            student.setHighSchool("南京市第一中学");
+            student.setFamilyMember("父亲");
+            student.setFamilyMemberPhone("1234567890");
+            student.setAddress("山东大学宿舍");
+            student.setHomeTown("江苏南京");
             students.add(student);
             studentRepository.save(student);
         }

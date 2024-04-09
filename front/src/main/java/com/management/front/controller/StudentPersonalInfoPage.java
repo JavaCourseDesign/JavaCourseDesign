@@ -161,32 +161,28 @@ class BasicInfoTab extends Tab {
         //request("/updateStudent", student);
     }
     public void refresh() {
-        Separator separator1 = new Separator();
-        separator1.setStyle("-fx-background-color: #000000; -fx-padding: 5;");
-        Separator separator2 = new Separator();
-        separator2.setStyle("-fx-background-color: #000000; -fx-padding: 5;");
-        Separator separator3 = new Separator();
-        separator3.setStyle("-fx-background-color: #000000; -fx-padding: 5;");
         Label label1 = new Label("毕业高中信息");
-        label1.setStyle("-fx-font: 20 arial; -fx-fill: blue;");
+        label1.setStyle("-fx-font: 20 arial; -fx-text-fill: blue;");
         Label label2=new Label("家庭信息");
-        label2.setStyle("-fx-font: 20 arial; -fx-fill: blue;");
+        label2.setStyle("-fx-font: 20 arial; -fx-text-fill: blue;");
         Label label3=new Label("校内联系方式");
-        label3.setStyle("-fx-font: 20 arial; -fx-fill: blue;");
+        label3.setStyle("-fx-font: 20 arial; -fx-text-fill: blue;");
         TextField studentIdField = new TextField(student.get("studentId").toString());
         TextField nameField = new TextField(student.get("name").toString());
         TextField genderField = new TextField(student.get("gender").toString());
         TextField majorField = new TextField(student.get("major").toString());
         Text deptText= new Text(student.get("dept").toString());
+        Text classNameText=new Text(student.get("className").toString());
         Text socilaText=new Text(student.get("social").toString());
-        Text cardText=new Text(student.get("idCardNum").toString());
-        Text birthdayText=new Text(student.get("birthday").toString());
+        Text cardText=new Text(student.get("idCardNum")+"");
+        Text birthdayText=new Text(student.get("birthday")+"");
         TextField highSchoolField = new TextField(student.get("highSchool").toString());
         TextField familyMemberField = new TextField(student.get("familyMember").toString());
         TextField familyMemberPhoneField = new TextField(student.get("familyMemberPhone").toString());
-        TextField homeTownField = new TextField(student.get("homeTown").toString());
-        TextField phoneField = new TextField(student.get("phone").toString());
-        TextField emailField = new TextField(student.get("email").toString());
+        TextField addressField = new TextField(student.get("address")+"");
+        TextField homeTownField = new TextField(student.get("homeTown")+"");
+        TextField phoneField = new TextField(student.get("phone")+"");
+        TextField emailField = new TextField(student.get("email")+"");
 
         gridPane.addColumn(0,
                 new Label("学号:"),
@@ -194,20 +190,21 @@ class BasicInfoTab extends Tab {
                 new Label("性别:"),
                 new Label("专业:"),
                 new Label("学院:"),
+                new Label("班级:"),
                 new Label("政治面貌:"),
                 new Label("身份证号:"),
                 new Label("出生日期:"),
                 label1,
-                separator1,
+                new Separator(),
                 new Label("毕业高中:"),
                 label2,
-                separator2,
+                new Separator(),
                 new Label("家庭联系人:"),
                 new Label("家庭联系电话:"),
                 new Label("家庭住址:"),
                 new Label("家庭籍贯:"),
                 label3,
-                separator3,
+                new Separator(),
                 new Label("电话:"),
                 new Label("email:")
         );
@@ -217,21 +214,24 @@ class BasicInfoTab extends Tab {
                 genderField,
                 majorField,
                 deptText,
+                classNameText,
                 socilaText,
                 cardText,
                 birthdayText,
                 new Text(),
-                new Text(),
+                new Separator(),
                 highSchoolField,
                 new Text(),
-                new Text(),
+                new Separator(),
                 familyMemberField,
                 familyMemberPhoneField,
+                addressField,
                 homeTownField,
                 new Text(),
-                new Text(),
+                new Separator(),
                 phoneField,
                 emailField);
+                ;
     }
 
 
