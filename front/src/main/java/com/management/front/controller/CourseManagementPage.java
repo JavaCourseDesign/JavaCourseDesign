@@ -27,7 +27,7 @@ public class CourseManagementPage extends SplitPane {
     private Button deleteButton = new Button("Delete");
     private Button updateButton = new Button("Update");
     private SearchableListView teacherListView=new SearchableListView(FXCollections.observableArrayList((ArrayList) request("/getAllTeachers", null).getData()), List.of("teacherId", "name"));
-
+    //包含全局所有教师信息的ListView，用于选择教师
     private TextField courseIdField = new TextField();
     private TextField nameField = new TextField();
     private TextField referenceField = new TextField();
@@ -119,7 +119,7 @@ public class CourseManagementPage extends SplitPane {
             }
         });
 
-        controlPanel.getChildren().addAll(courseIdField, nameField, referenceField, capacityField, teacherListView, addButton, deleteButton, updateButton, selectionGrid);
+        controlPanel.getChildren().addAll(courseIdField, nameField, referenceField, capacityField, teacherListView, selectionGrid, addButton, deleteButton, updateButton);
 
         this.getItems().add(controlPanel);
     }
