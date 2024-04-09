@@ -22,7 +22,14 @@ public class Student extends Person{
 
     @Size(max = 20)
     private String major;
-
+    @Size(max = 50)
+    private String familyMember;
+    @Size(max = 20)
+    private String familyMemberPhone;
+    @Size(max=20)
+    private String homeTown;
+    @Size(max=20)
+    private String highSchool;
 
     /*@Size(max = 50)
     private String className;*/

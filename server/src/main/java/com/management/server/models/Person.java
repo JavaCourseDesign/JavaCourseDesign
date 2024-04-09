@@ -28,10 +28,6 @@ public abstract class Person {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String personId;
 
-    //@NotBlank    // 字段非空
-    @Size(max = 20)   //字段长度最长为20
-    private String num;
-
     @Size(max = 50)
     private String name;
 
@@ -60,6 +56,7 @@ public abstract class Person {
 
     @Size(max = 1000)
     private String introduce;
+    private String social;
 
     /*@OneToMany(mappedBy = "person")
     private List<Absence> absences;*/

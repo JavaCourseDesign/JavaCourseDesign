@@ -33,6 +33,17 @@ public class TestController {//专门用于添加测试数据
         s1.setName("tst");
         s1.setGender("男");
         s1.setMajor("软件工程");
+        s1.setFamilyMember("王志凯");
+        s1.setFamilyMemberPhone("18879635506");
+        s1.setHighSchool("潍坊文华国际学校");
+        s1.setHomeTown("山东潍坊");
+        s1.setDept("软件学院");
+        s1.setAddress("山东大学软件学院");
+        s1.setIdCardNum("370785200001010000");
+        s1.setBirthday("2000-01-01");
+        s1.setEmail("1234567890@qq.com");
+        s1.setPhone("12345678901");
+        s1.setSocial("共青团员");
         //s1.setClassName("软工1班");
         studentRepository.save(s1);
 
