@@ -80,7 +80,7 @@ public class AuthController {
     @PostMapping("/findPersonIdByUsername")
     public DataResponse findPersonIdByUsername(@RequestBody Map<String,String> map) {
         User user = userRepository.findByUsername(map.get("username"));
-        if (user == null) {
+        if (user == null||user.getPerson()==null) {
             return new DataResponse(-1, null, null);
         }
         return new DataResponse(0, user.getPerson().getPersonId(), null);

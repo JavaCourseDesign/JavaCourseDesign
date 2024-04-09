@@ -2,19 +2,20 @@ package com.management.front.controller;
 
 import com.management.front.customComponents.SearchableTableView;
 import com.management.front.request.DataResponse;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.MapValueFactory;
 import javafx.scene.layout.VBox;
 
-import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collectors;
 
-import static com.management.front.util.HttpClientUtil.*;
+import static com.management.front.util.HttpClientUtil.request;
 
-public class TeacherManagementPage extends SplitPane {
-    private SearchableTableView teacherTable;
+public class AdministrativeClassManagementPage extends SplitPane {
+    private SearchableTableView administrativeClassTable;
     private VBox controlPanel = new VBox();
     private ObservableList<Map> observableList = FXCollections.observableArrayList();
 
@@ -22,84 +23,85 @@ public class TeacherManagementPage extends SplitPane {
     private Button deleteButton = new Button("Delete");
     private Button updateButton = new Button("Update");
 
-    private TextField teacherIdField = new TextField();
+    private TextField administrativeClassIdField = new TextField();
     private TextField nameField = new TextField();
-    private TextField genderField = new TextField();
-    private TextField titleField = new TextField();
 
     private Map newMapFromFields(Map m) {
-        m.put("teacherId", teacherIdField.getText());
+        m.put("administrativeClassId", administrativeClassIdField.getText());
         m.put("name", nameField.getText());
-        m.put("gender", genderField.getText());
-        m.put("title", titleField.getText());
         return m;
     }
 
-    public TeacherManagementPage() {
+    public AdministrativeClassManagementPage() {
         this.setWidth(1000);
         initializeTable();
         initializeControlPanel();
-        displayTeachers();
+        displayAdministrativeClasses();
     }
 
     private void initializeTable() {
+        TableColumn<Map, String> administrativeClassIdColumn = new TableColumn<>("班级号");
+        TableColumn<Map, String> administrativeClassStudentsColumn = new TableColumn<>("学生");
 
-        TableColumn<Map, String> teacherIdColumn = new TableColumn<>("教师号");
-        TableColumn<Map, String> teacherNameColumn = new TableColumn<>("姓名");
-        TableColumn<Map, String> teacherGenderColumn = new TableColumn<>("性别");
-        TableColumn<Map, String> teacherTitleColumn = new TableColumn<>("职称");
+        administrativeClassIdColumn.setCellValueFactory(new MapValueFactory<>("administrativeClassId"));
 
-        teacherIdColumn.setCellValueFactory(new MapValueFactory<>("teacherId"));
-        teacherNameColumn.setCellValueFactory(new MapValueFactory<>("name"));
-        teacherGenderColumn.setCellValueFactory(new MapValueFactory<>("gender"));
-        teacherTitleColumn.setCellValueFactory(new MapValueFactory<>("title"));
+        administrativeClassStudentsColumn.setCellValueFactory(new MapValueFactory<>("persons"));
+        administrativeClassStudentsColumn.setCellValueFactory(data -> {
+            List<Map<String, Object>> persons = (List<Map<String, Object>>) data.getValue().get("students");
+            if(persons==null)
+            {
+                return new SimpleStringProperty("");
+            }
+            String personNames = persons.stream()
+                    .filter(person -> person.containsKey("studentId"))
+                    .map(person -> (String) person.get("name"))
+                    .collect(Collectors.joining(", "));
+            return new SimpleStringProperty(personNames);
+        });
 
         List<TableColumn<Map, ?>> columns = new ArrayList<>();
-        columns.addAll(List.of(teacherIdColumn, teacherNameColumn, teacherGenderColumn, teacherTitleColumn));
+        columns.addAll(List.of(administrativeClassIdColumn, administrativeClassStudentsColumn)) ;
 
-        teacherTable = new SearchableTableView(observableList, List.of("teacherId","name"), columns);
-        this.getItems().add(teacherTable);
+        administrativeClassTable = new SearchableTableView(observableList, List.of("administrativeClassId","name"), columns);
+
+        this.getItems().add(administrativeClassTable);
     }
 
     private void initializeControlPanel() {
         controlPanel.setMinWidth(200);
         controlPanel.setSpacing(10);
 
-        controlPanel.getChildren().addAll(teacherIdField, nameField, genderField, titleField, addButton, deleteButton, updateButton);
+        controlPanel.getChildren().addAll(administrativeClassIdField, nameField, addButton, deleteButton, updateButton);
 
-        addButton.setOnAction(event -> addTeacher());
-        deleteButton.setOnAction(event -> deleteTeacher());
-        updateButton.setOnAction(event -> updateTeacher());
+        addButton.setOnAction(event -> addAdministrativeClass());
+        deleteButton.setOnAction(event -> deleteAdministrativeClass());
+        updateButton.setOnAction(event -> updateAdministrativeClass());
 
-        teacherTable.setOnItemClick(teacher -> {
-            if(teacher!=null)
+        administrativeClassTable.setOnItemClick(administrativeClass -> {
+            if(administrativeClass!=null)
             {
-                teacherIdField.setText((String) teacher.get("teacherId"));
-                nameField.setText((String) teacher.get("name"));
-                genderField.setText((String) teacher.get("gender"));
-                titleField.setText((String) teacher.get("title"));
+                administrativeClassIdField.setText((String) administrativeClass.get("administrativeClassId"));
+                nameField.setText((String) administrativeClass.get("name"));
             }
         });
         this.getItems().add(controlPanel);
     }
 
-    private void displayTeachers(){
+    private void displayAdministrativeClasses(){
         observableList.clear();
-        observableList.addAll(FXCollections.observableArrayList((ArrayList) request("/getAllTeachers", null).getData()));
-        teacherTable.setData(observableList);
-
+        observableList.addAll(FXCollections.observableArrayList((ArrayList) request("/getAllAdministrativeClasses", null).getData()));
+        administrativeClassTable.setData(observableList);
         System.out.println(observableList);
-
     }
 
-    private void addTeacher() {
+    private void addAdministrativeClass() {
         Map m=newMapFromFields(new HashMap<>());
 
         System.out.println(m);
 
-        DataResponse r=request("/addTeacher",m);
+        DataResponse r=request("/addAdministrativeClass",m);
 
-        displayTeachers();
+        displayAdministrativeClasses();
 
         if(r.getCode()==-1)
         {
@@ -116,8 +118,8 @@ public class TeacherManagementPage extends SplitPane {
         }
     }
 
-    private void deleteTeacher() {
-        Map m = teacherTable.getSelectedItem();
+    private void deleteAdministrativeClass() {
+        Map m = administrativeClassTable.getSelectedItem();
         if(m==null)
         {
             Alert alert=new Alert(Alert.AlertType.INFORMATION);
@@ -131,11 +133,11 @@ public class TeacherManagementPage extends SplitPane {
             Optional<ButtonType> result=alert.showAndWait();
             if(result.get()==ButtonType.OK)
             {
-                DataResponse r=request("/deleteTeacher",m);
+                DataResponse r=request("/deleteAdministrativeClass",m);
                 System.out.println(m);
                 System.out.println(r);
 
-                displayTeachers();
+                displayAdministrativeClasses();
 
                 if(r.getCode()==0)
                 {
@@ -147,8 +149,8 @@ public class TeacherManagementPage extends SplitPane {
         }
     }
 
-    private void updateTeacher() {
-        Map selected = teacherTable.getSelectedItem();
+    private void updateAdministrativeClass() {
+        Map selected = administrativeClassTable.getSelectedItem();
         if(selected==null)
         {
             Alert alert=new Alert(Alert.AlertType.INFORMATION);
@@ -161,9 +163,9 @@ public class TeacherManagementPage extends SplitPane {
         Optional<ButtonType> result=alert.showAndWait();
         if(result.get()==ButtonType.OK)
         {
-            DataResponse r=request("/updateTeacher",newMapFromFields(selected));
+            DataResponse r=request("/updateAdministrativeClass",newMapFromFields(selected));
 
-            displayTeachers();
+            displayAdministrativeClasses();
 
             if(r.getCode()==0)
             {
