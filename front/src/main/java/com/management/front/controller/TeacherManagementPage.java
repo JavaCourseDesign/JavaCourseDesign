@@ -1,5 +1,6 @@
 package com.management.front.controller;
 
+import com.management.front.customComponents.SearchableTableView;
 import com.management.front.request.DataResponse;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -8,15 +9,12 @@ import javafx.scene.control.cell.MapValueFactory;
 import javafx.scene.layout.VBox;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 import static com.management.front.util.HttpClientUtil.*;
 
 public class TeacherManagementPage extends SplitPane {
-    private TableView<Map> teacherTable = new TableView<>();
+    private SearchableTableView teacherTable;
     private VBox controlPanel = new VBox();
     private ObservableList<Map> observableList = FXCollections.observableArrayList();
 
@@ -56,7 +54,10 @@ public class TeacherManagementPage extends SplitPane {
         teacherGenderColumn.setCellValueFactory(new MapValueFactory<>("gender"));
         teacherTitleColumn.setCellValueFactory(new MapValueFactory<>("title"));
 
-        teacherTable.getColumns().addAll(teacherIdColumn, teacherNameColumn, teacherGenderColumn, teacherTitleColumn);
+        List<TableColumn<Map, ?>> columns = new ArrayList<>();
+        columns.addAll(List.of(teacherIdColumn, teacherNameColumn, teacherGenderColumn, teacherTitleColumn));
+
+        teacherTable = new SearchableTableView(observableList, List.of("teacherId","name"), columns);
         this.getItems().add(teacherTable);
     }
 
@@ -70,23 +71,22 @@ public class TeacherManagementPage extends SplitPane {
         deleteButton.setOnAction(event -> deleteTeacher());
         updateButton.setOnAction(event -> updateTeacher());
 
-        teacherTable.selectionModelProperty().get().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            if(newValue!=null)
+        teacherTable.setOnItemClick(teacher -> {
+            if(teacher!=null)
             {
-                teacherIdField.setText((String) newValue.get("teacherId"));
-                nameField.setText((String) newValue.get("name"));
-                genderField.setText((String) newValue.get("gender"));
-                titleField.setText((String) newValue.get("title"));
+                teacherIdField.setText((String) teacher.get("teacherId"));
+                nameField.setText((String) teacher.get("name"));
+                genderField.setText((String) teacher.get("gender"));
+                titleField.setText((String) teacher.get("title"));
             }
         });
-
         this.getItems().add(controlPanel);
     }
 
     private void displayTeachers(){
         observableList.clear();
         observableList.addAll(FXCollections.observableArrayList((ArrayList) request("/getAllTeachers", null).getData()));
-        teacherTable.setItems(observableList);
+        teacherTable.setData(observableList);
 
         System.out.println(observableList);
 
@@ -117,7 +117,7 @@ public class TeacherManagementPage extends SplitPane {
     }
 
     private void deleteTeacher() {
-        Map m = teacherTable.getSelectionModel().getSelectedItem();
+        Map m = teacherTable.getSelectedItem();
         if(m==null)
         {
             Alert alert=new Alert(Alert.AlertType.INFORMATION);
@@ -148,7 +148,7 @@ public class TeacherManagementPage extends SplitPane {
     }
 
     private void updateTeacher() {
-        Map selected = teacherTable.getSelectionModel().getSelectedItem();
+        Map selected = teacherTable.getSelectedItem();
         if(selected==null)
         {
             Alert alert=new Alert(Alert.AlertType.INFORMATION);

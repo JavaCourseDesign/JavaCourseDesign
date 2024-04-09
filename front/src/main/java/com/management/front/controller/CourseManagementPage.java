@@ -1,6 +1,7 @@
 package com.management.front.controller;
 
 import com.management.front.customComponents.SearchableListView;
+import com.management.front.customComponents.SearchableTableView;
 import com.management.front.request.DataResponse;
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -18,7 +19,7 @@ import java.util.stream.Collectors;
 import static com.management.front.util.HttpClientUtil.*;
 
 public class CourseManagementPage extends SplitPane {
-    private TableView<Map> courseTable = new TableView<>();
+    private SearchableTableView courseTable;
     private VBox controlPanel = new VBox();
     private ObservableList<Map> observableList = FXCollections.observableArrayList();
 
@@ -63,7 +64,7 @@ public class CourseManagementPage extends SplitPane {
         courseReferenceColumn.setCellValueFactory(new MapValueFactory<>("reference"));
         courseCapacityColumn.setCellValueFactory(new MapValueFactory<>("capacity"));
 
-        teacherColumn.setCellValueFactory(new MapValueFactory<>("persons"));
+        teacherColumn.setCellValueFactory(new MapValueFactory<>("teacher"));
         teacherColumn.setCellValueFactory(data -> {
             List<Map<String, Object>> persons = (List<Map<String, Object>>) data.getValue().get("persons");
             String personNames = persons.stream()
@@ -73,7 +74,7 @@ public class CourseManagementPage extends SplitPane {
             return new SimpleStringProperty(personNames);
         });
 
-        studentColumn.setCellValueFactory(new MapValueFactory<>("persons"));
+        studentColumn.setCellValueFactory(new MapValueFactory<>("student"));
         studentColumn.setCellValueFactory(data -> {
             List<Map<String, Object>> persons = (List<Map<String, Object>>) data.getValue().get("persons");
             long studentCount = persons.stream()
@@ -84,7 +85,10 @@ public class CourseManagementPage extends SplitPane {
             return new SimpleStringProperty(studentCount + "");
         });
 
-        courseTable.getColumns().addAll(courseIdColumn, courseNameColumn, courseReferenceColumn, courseCapacityColumn, teacherColumn ,studentColumn);
+        List<TableColumn<Map,?>> columns = new ArrayList<>();
+        columns.addAll(List.of(courseIdColumn, courseNameColumn, courseReferenceColumn, courseCapacityColumn, teacherColumn, studentColumn));
+        courseTable=new SearchableTableView(observableList, List.of("courseId","name","teacher"), columns);
+
         this.getItems().add(courseTable);
     }
 
@@ -96,14 +100,15 @@ public class CourseManagementPage extends SplitPane {
         deleteButton.setOnAction(event -> deleteCourse());
         updateButton.setOnAction(event -> updateCourse());
 
-        courseTable.selectionModelProperty().get().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            if(newValue!=null)
+        courseTable.setOnItemClick(course -> {
+            if(course!=null)
             {
-                courseIdField.setText(newValue.get("courseId") != null ? newValue.get("courseId").toString() : "");
-                nameField.setText(newValue.get("name") != null ? newValue.get("name").toString() : "");
-                referenceField.setText(newValue.get("reference") != null ? newValue.get("reference").toString() : "");
-                capacityField.setText(newValue.get("capacity") != null ? newValue.get("capacity").toString() : "");
-                teacherListView.setSelectedItems((List<Map>) newValue.get("persons"));
+                courseIdField.setText((String) course.get("courseId"));
+                nameField.setText((String) course.get("name"));
+                referenceField.setText((String) course.get("reference"));
+                capacityField.setText(""+course.get("capacity"));
+                teacherListView.setSelectedItems((List<Map>) course.get("persons"));
+                //selectionGrid.setSelectedCoordinates((List<String>) course.get("lessons"));
             }
         });
 
@@ -115,7 +120,7 @@ public class CourseManagementPage extends SplitPane {
     private void displayCourses(){
         observableList.clear();
         observableList.addAll(FXCollections.observableArrayList((ArrayList) request("/getAllCourses", null).getData()));
-        courseTable.setItems(observableList);
+        courseTable.setData(observableList);
 
         System.out.println(observableList);
 
@@ -146,7 +151,7 @@ public class CourseManagementPage extends SplitPane {
     }
 
     private void deleteCourse() {
-        Map m = courseTable.getSelectionModel().getSelectedItem();
+        Map m = courseTable.getSelectedItem();
         if(m==null)
         {
             Alert alert=new Alert(Alert.AlertType.INFORMATION);
@@ -177,7 +182,7 @@ public class CourseManagementPage extends SplitPane {
     }
 
     private void updateCourse() {
-        Map selected = courseTable.getSelectionModel().getSelectedItem();
+        Map selected = courseTable.getSelectedItem();
         if(selected==null)
         {
             Alert alert=new Alert(Alert.AlertType.INFORMATION);
