@@ -10,11 +10,11 @@ import java.util.List;
 @Table(name="lesson")
 public class Lesson extends Event{
 
-    private String beginTime;
+    //private String beginTime;
 
-    @ManyToOne
+    /*@ManyToOne
     @JoinColumn(name="course_id")
-    private Course course;
+    private Course course;*/
 
     @OneToMany(mappedBy = "lesson")
     private List<Absence> absences;
