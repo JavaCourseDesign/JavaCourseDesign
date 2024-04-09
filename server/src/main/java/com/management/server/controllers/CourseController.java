@@ -51,6 +51,7 @@ public class CourseController {
         List<Lesson> lessons = new ArrayList<>();
         for (int i = 0; i < times.size(); i++) {
             Lesson lesson = new Lesson();
+            lesson.setName(course.getName());
             lesson.setTime(times.get(i));
             lessons.add(lesson);
             lessonRepository.save(lesson);
@@ -97,6 +98,7 @@ public class CourseController {
         List<Lesson> lessons = new ArrayList<>();
         for (int i = 0; i < times.size(); i++) {
             Lesson lesson = new Lesson();
+            lesson.setName(course.getName());
             lesson.setTime(times.get(i));
             lessons.add(lesson);
             lessonRepository.save(lesson);

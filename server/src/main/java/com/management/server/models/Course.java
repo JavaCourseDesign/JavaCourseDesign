@@ -35,6 +35,9 @@ public class Course{
 
     private Double endWeek;//结束周次
 
+    private String place;//上课地点 姑且认为在同一个地方上课吧。。。
+
+
     @OneToMany
     private List<Lesson> lessons;
 

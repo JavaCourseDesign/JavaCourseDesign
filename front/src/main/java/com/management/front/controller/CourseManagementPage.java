@@ -7,9 +7,11 @@ import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.Event;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.MapValueFactory;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
 import java.io.IOException;
@@ -33,6 +35,7 @@ public class CourseManagementPage extends SplitPane {
     private TextField referenceField = new TextField();
     private TextField capacityField = new TextField();
     private SelectionGrid selectionGrid = new SelectionGrid();
+    private WeekTimeTable weekTimeTable = new WeekTimeTable();//临时测试用
 
     private Map newMapFromFields(Map m) {
         m.put("courseId", courseIdField.getText());
@@ -52,7 +55,6 @@ public class CourseManagementPage extends SplitPane {
     }
 
     private void initializeTable() {
-
         TableColumn<Map, String> courseIdColumn = new TableColumn<>("课程号");
         TableColumn<Map, String> courseNameColumn = new TableColumn<>("课程名");
         TableColumn<Map, String> courseReferenceColumn = new TableColumn<>("参考资料");
@@ -109,17 +111,28 @@ public class CourseManagementPage extends SplitPane {
                 referenceField.setText((String) course.get("reference"));
                 capacityField.setText(""+course.get("capacity"));
                 teacherListView.setSelectedItems((List<Map>) course.get("persons"));
-                //selectionGrid.setSelectedCoordinates((List<String>) course.get("lessons"));
-                System.out.println("lessons:"+course.get("lessons"));
+
                 List<String> lessonTimes = new ArrayList<>();
                 for (Map lesson : (List<Map>) course.get("lessons")) {
                     lessonTimes.add((String) lesson.get("time"));
                 }
                 selectionGrid.setSelectedCoordinates(lessonTimes);
+
+                weekTimeTable.clear();
+                System.out.println(course.get("lessons"));
+                for (Map lesson : (List<Map>) course.get("lessons")) {
+                    weekTimeTable.addEvent(""+lesson.get("name"),""+lesson.get("location"),""+lesson.get("time"));
+                }
+
+                System.out.println(course);
+
             }
         });
 
-        controlPanel.getChildren().addAll(courseIdField, nameField, referenceField, capacityField, teacherListView, selectionGrid, addButton, deleteButton, updateButton);
+        Pane p=new Pane();
+        p.getChildren().add(weekTimeTable);
+
+        controlPanel.getChildren().addAll(courseIdField, nameField, referenceField, capacityField, teacherListView, selectionGrid, addButton, deleteButton, updateButton, p);
 
         this.getItems().add(controlPanel);
     }
@@ -220,6 +233,7 @@ class SelectionGrid extends GridPane {
     private final int rows = 5;
     private final int cols = 7;
     private CheckBox[][] checkBoxes = new CheckBox[rows][cols];
+    private LessonBox[][] lessonBoxes = new LessonBox[rows][cols];
 
     public SelectionGrid() {
         super();
@@ -229,9 +243,9 @@ class SelectionGrid extends GridPane {
     private void initGrid() {
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
-                CheckBox checkBox = new CheckBox();
-                checkBoxes[i][j] = checkBox;
-                this.add(checkBox, j, i); // 添加到GridPane
+                LessonBox lessonBox = new LessonBox();
+                lessonBoxes[i][j] = lessonBox;
+                this.add(lessonBox, j, i); // 添加到GridPane
             }
         }
     }
@@ -240,7 +254,7 @@ class SelectionGrid extends GridPane {
         List<String> selected = new ArrayList<>();
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
-                if (checkBoxes[i][j].isSelected()) {
+                if (lessonBoxes[i][j].checkBox.isSelected()) {
                     selected.add("-1,"+(j+1)+","+transferCoordinateToTime(i)+",1.50"); // 储存坐标 i节数 j天数
                 }
             }
@@ -251,13 +265,13 @@ class SelectionGrid extends GridPane {
     public void setSelectedCoordinates(List<String> selected) {//-1,6,8.00,1.50  //需要写一个方法把Course的Lessons（Events）属性中的时间段转换成坐标，反之亦然
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
-                checkBoxes[i][j].setSelected(false);
+                lessonBoxes[i][j].checkBox.setSelected(false);
             }
         }
         for (String s : selected) {
             int i = transferTimeToCoordinate(s.split(",")[2]);
             int j = Integer.parseInt(s.split(",")[1])-1;
-            checkBoxes[i][j].setSelected(true);
+            lessonBoxes[i][j].checkBox.setSelected(true);
         }
     }
 
@@ -266,7 +280,7 @@ class SelectionGrid extends GridPane {
             case "8.00" -> 0;
             case "10.10" -> 1;
             case "14.00" -> 2;
-            case "14.10" -> 3;
+            case "16.10" -> 3;
             case "19.00" -> 4;
             default -> 0;
         };
@@ -277,9 +291,41 @@ class SelectionGrid extends GridPane {
             case 0 -> "8.00";
             case 1 -> "10.10";
             case 2 -> "14.00";
-            case 3 -> "14.10";
+            case 3 -> "16.10";
             case 4 -> "19.00";
             default -> "8.00";
         };
+    }
+}
+
+class LessonBox extends MenuButton {//需要确定是在前端构造好完整的lesson还是传字符串然后到后端去构造
+    CheckBox checkBox = new CheckBox();
+    TextField locationField = new TextField();
+    CheckBox singleWeek = new CheckBox();
+    CheckBox doubleWeek = new CheckBox();
+    Spinner<Integer> startWeek = new Spinner<>(1, 20, 1);
+    Spinner<Integer> endWeek = new Spinner<>(1, 20, 1);
+    LessonBox(){
+        this.setGraphic(checkBox);
+
+        MenuItem item1 = new MenuItem("地点");
+        item1.setGraphic(locationField);
+        this.getItems().add(item1);
+
+        MenuItem item2 = new MenuItem("单周");
+        item2.setGraphic(singleWeek);
+        this.getItems().add(item2);
+
+        MenuItem item3 = new MenuItem("双周");
+        item3.setGraphic(doubleWeek);
+        this.getItems().add(item3);
+
+        MenuItem item4 = new MenuItem("开始周");
+        item4.setGraphic(startWeek);
+        this.getItems().add(item4);
+
+        MenuItem item5 = new MenuItem("结束周");
+        item5.setGraphic(endWeek);
+        this.getItems().add(item5);
     }
 }

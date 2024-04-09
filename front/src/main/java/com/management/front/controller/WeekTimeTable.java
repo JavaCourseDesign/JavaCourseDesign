@@ -8,13 +8,15 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
+import javafx.scene.transform.Scale;
 
-public class WeekTimeTable extends Group{
+public class WeekTimeTable extends Pane{
     private static final double HOUR_HEIGHT = 30; // 假设每小时60像素
     private static final double DAY_WIDTH = 75; // 每天的宽度
     private static final double LEFT_BAR_WIDTH = 50;
     private static final double TOP_BAR_HEIGHT = 50;
     private static final int BEGIN_TIME = 6;
+    private static final double NORMAL_OPACITY = 0.4;
 
     private static final String originalStyle = "-fx-background-color: #181818; -fx-border-color: black; -fx-border-width: 1; -fx-padding: 5;";
 
@@ -23,6 +25,28 @@ public class WeekTimeTable extends Group{
             "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00"};
 
     public WeekTimeTable() {
+        Scale scale = new Scale();
+        this.getTransforms().add(scale);
+
+        // 一旦此Group被添加到父节点，就监听父节点尺寸变化以调整缩放
+        this.parentProperty().addListener((obs, oldParent, newParent) -> {
+            if (newParent instanceof Pane) {
+                Pane parent = (Pane) newParent;
+
+                // 监听宽度变化并相应地调整缩放系数
+                parent.widthProperty().addListener((observable, oldValue, newValue) -> {
+                    double scaleFactor = newValue.doubleValue() / this.getTotalWidth();
+                    scale.setX(scaleFactor);
+                });
+
+                // 监听高度变化并相应地调整缩放系数
+                parent.heightProperty().addListener((observable, oldValue, newValue) -> {
+                    double scaleFactor = newValue.doubleValue() / this.getTotalHeight();
+                    scale.setY(scaleFactor);
+                });
+            }
+        });
+
         Rectangle background = new Rectangle((int) (LEFT_BAR_WIDTH + DAY_WIDTH * 7), (int) (TOP_BAR_HEIGHT + HOUR_HEIGHT * 17));
         background.setFill(Color.web("#181818"));
         this.getChildren().add(background);
@@ -69,20 +93,11 @@ public class WeekTimeTable extends Group{
         }
     }
 
-    public void addEvent(int day, String eventName, String eventLocation, double startTime, double endTime) {
-        startTime = transferTime(startTime);
-        endTime = transferTime(endTime);
+    public void addEvent(String eventName, String eventLocation, String time) {
 
-        Pane event = new Pane();
+        Pane event = transferTimeToEvent(time);
         event.setStyle("-fx-background-color: "+stringToHexColor(eventName)+"; -fx-border-color: black; -fx-border-width: 0; -fx-padding: 0; -fx-background-radius: 5");
 
-        double startY = (startTime-BEGIN_TIME) * HOUR_HEIGHT; // 计算开始时间对应的Y坐标
-        double height = (endTime - startTime) * HOUR_HEIGHT; // 计算事件持续时间对应的高度
-
-        event.setLayoutX(LEFT_BAR_WIDTH + (day-1) * DAY_WIDTH);
-        event.setLayoutY(TOP_BAR_HEIGHT+startY);
-        event.setPrefHeight(height);
-        event.setPrefWidth(DAY_WIDTH);
 
         Text name = new Text(eventName);
         name.setTextAlignment(TextAlignment.CENTER);
@@ -97,15 +112,43 @@ public class WeekTimeTable extends Group{
         VBox eventInfo = new VBox(name, location);
         event.getChildren().add(eventInfo);
 
-        event.setOnMouseEntered(e -> event.setOpacity(0.8));
-        event.setOnMouseExited(e -> event.setOpacity(0.4));
-
         this.getChildren().add(event);
+    }
+
+    public void clear()
+    {
+        this.getChildren().clear();
+        Rectangle background = new Rectangle((int) (LEFT_BAR_WIDTH + DAY_WIDTH * 7), (int) (TOP_BAR_HEIGHT + HOUR_HEIGHT * 17));
+        background.setFill(Color.web("#181818"));
+        this.getChildren().add(background);
+        drawTopBar();
+        drawLeftBar();
+    }
+
+    public double getTotalWidth()
+    {
+        return LEFT_BAR_WIDTH + DAY_WIDTH * 7;
+    }
+    public double getTotalHeight()
+    {
+        return TOP_BAR_HEIGHT + HOUR_HEIGHT * 17;
     }
 
     public static double transferTime(double t)
     {
         return (int)t + ((t - (int)t) *10/6);
+    }
+    public static Pane transferTimeToEvent(String Time)//-1,6,8.00,1.50
+    {
+        Pane event = new Pane();
+        event.setLayoutX(LEFT_BAR_WIDTH+(Integer.parseInt(Time.split(",")[1])-1)*DAY_WIDTH);
+        event.setLayoutY(TOP_BAR_HEIGHT+(transferTime(Double.parseDouble(Time.split(",")[2]))-BEGIN_TIME)*HOUR_HEIGHT);
+        event.setPrefHeight(transferTime(Double.parseDouble(Time.split(",")[3]))*HOUR_HEIGHT);
+        event.setPrefWidth(DAY_WIDTH);
+        event.setOpacity(NORMAL_OPACITY);
+        event.setOnMouseEntered(e -> event.setOpacity(0.8));
+        event.setOnMouseExited(e -> event.setOpacity(0.4));
+        return event;
     }
 
     public static String stringToHexColor(String input) {
