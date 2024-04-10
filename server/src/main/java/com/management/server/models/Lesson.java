@@ -18,4 +18,6 @@ public class Lesson extends Event{
 
     @OneToMany(mappedBy = "lesson")
     private List<Absence> absences;
+
+    //homework?
 }

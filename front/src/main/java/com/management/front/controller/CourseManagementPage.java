@@ -1,5 +1,6 @@
 package com.management.front.controller;
 
+import cn.hutool.core.bean.BeanUtil;
 import com.management.front.customComponents.SearchableListView;
 import com.management.front.customComponents.SearchableTableView;
 import com.management.front.request.DataResponse;
@@ -13,6 +14,8 @@ import javafx.scene.control.cell.MapValueFactory;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import org.controlsfx.property.BeanPropertyUtils;
+import cn.hutool.json.JSONObject;
 
 import java.io.IOException;
 import java.util.*;
@@ -43,7 +46,7 @@ public class CourseManagementPage extends SplitPane {
         m.put("reference", referenceField.getText());
         m.put("capacity", capacityField.getText());
         m.put("personIds", teacherListView.getSelectedItems());
-        m.put("lessonTimes", selectionGrid.getSelectedCoordinates());
+        m.put("lessons", selectionGrid.getSelectedLesson());
         return m;
     }
 
@@ -112,11 +115,14 @@ public class CourseManagementPage extends SplitPane {
                 capacityField.setText(""+course.get("capacity"));
                 teacherListView.setSelectedItems((List<Map>) course.get("persons"));
 
-                List<String> lessonTimes = new ArrayList<>();
+                /*List<String> lessonTimes = new ArrayList<>();
                 for (Map lesson : (List<Map>) course.get("lessons")) {
                     lessonTimes.add((String) lesson.get("time"));
                 }
-                selectionGrid.setSelectedCoordinates(lessonTimes);
+                selectionGrid.setSelectedCoordinates(lessonTimes);*/
+
+                selectionGrid.setSelectedLessons((List<Map>) course.get("lessons"));
+                selectionGrid.course=course;
 
                 weekTimeTable.clear();
                 System.out.println(course.get("lessons"));
@@ -230,9 +236,9 @@ public class CourseManagementPage extends SplitPane {
 }
 
 class SelectionGrid extends GridPane {
+    Map course = new HashMap();
     private final int rows = 5;
     private final int cols = 7;
-    private CheckBox[][] checkBoxes = new CheckBox[rows][cols];
     private LessonBox[][] lessonBoxes = new LessonBox[rows][cols];
 
     public SelectionGrid() {
@@ -250,28 +256,84 @@ class SelectionGrid extends GridPane {
         }
     }
 
-    public List<String> getSelectedCoordinates() {
-        List<String> selected = new ArrayList<>();
+    public List<Map> getSelectedLesson(){
+        List<Map> selected = new ArrayList<>();
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
                 if (lessonBoxes[i][j].checkBox.isSelected()) {
-                    selected.add("-1,"+(j+1)+","+transferCoordinateToTime(i)+",1.50"); // 储存坐标 i节数 j天数
+                    Map<String, Object> lesson = new HashMap<>();
+                    lesson.put("name",course.get("name"));//course还没写初始化
+                    lesson.put("location",lessonBoxes[i][j].locationField.getText());
+
+                    //time的格式： 7,8.00,1.50
+                    boolean[] eventWeek=new boolean[20];
+                    if (lessonBoxes[i][j].singleWeek.isSelected())
+                    {
+                        for (int k = lessonBoxes[i][j].startWeek.getValue(); k <= lessonBoxes[i][j].endWeek.getValue(); k+=2) {
+                            eventWeek[k-1]=true;
+                        }
+                    }
+                    if (lessonBoxes[i][j].doubleWeek.isSelected())
+                    {
+                        for (int k = lessonBoxes[i][j].startWeek.getValue()+1; k <= lessonBoxes[i][j].endWeek.getValue(); k+=2) {
+                            eventWeek[k-1]=true;
+                        }
+                    }//单双周逻辑有待完善（用户填入的开始和结束周不一定从哪开始）
+                    lesson.put("eventWeek",eventWeek);
+                    lesson.put("time", (j+1)+","+transferCoordinateToTime(i)+",1.50");
+
+                    selected.add(lesson);
                 }
             }
         }
         return selected;
     }
 
-    public void setSelectedCoordinates(List<String> selected) {//-1,6,8.00,1.50  //需要写一个方法把Course的Lessons（Events）属性中的时间段转换成坐标，反之亦然
+    public void setSelectedLessons(List<Map> lessons) {//-1,6,8.00,1.50  //需要写一个方法把Course的Lessons（Events）属性中的时间段转换成坐标，反之亦然
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
                 lessonBoxes[i][j].checkBox.setSelected(false);
+                lessonBoxes[i][j].locationField.setText("");
+                lessonBoxes[i][j].singleWeek.setSelected(false);
+                lessonBoxes[i][j].doubleWeek.setSelected(false);
+                lessonBoxes[i][j].startWeek.getValueFactory().setValue(1);
+                lessonBoxes[i][j].endWeek.getValueFactory().setValue(20);
             }
         }
-        for (String s : selected) {
-            int i = transferTimeToCoordinate(s.split(",")[2]);
-            int j = Integer.parseInt(s.split(",")[1])-1;
+        for (Map s : lessons) {
+            int i = transferTimeToCoordinate((s.get("time")+"").split(",")[1]);
+            int j = Integer.parseInt((s.get("time")+"").split(",")[0])-1;
             lessonBoxes[i][j].checkBox.setSelected(true);
+            lessonBoxes[i][j].locationField.setText((String) s.get("location"));
+
+            System.out.println("eventWeek:"+s.get("eventWeek"));
+            List<Boolean> eventWeekList = (List<Boolean>) s.get("eventWeek");
+            boolean[] eventWeek = new boolean[eventWeekList.size()];
+            for (int k = 0; k < eventWeekList.size(); k++) {
+                eventWeek[k] = eventWeekList.get(k);
+            }
+            int start = -1, end = -1;
+            boolean isSingleWeek = false, isDoubleWeek = false;
+
+            for (int k = 0; k < eventWeek.length; k++) {
+                if (eventWeek[k]) {
+                    if (start == -1) {
+                        start = k + 1; // 保存开始周数
+                    }
+                    end = k + 1; // 更新结束周数
+
+                    if ((k + 1) % 2 == 0) {
+                        isDoubleWeek = true; // 如果在偶数周有课，则是双周
+                    } else {
+                        isSingleWeek = true; // 如果在奇数周有课，则是单周
+                    }
+                }
+            }
+
+            lessonBoxes[i][j].singleWeek.setSelected(isSingleWeek);
+            lessonBoxes[i][j].doubleWeek.setSelected(isDoubleWeek);
+            lessonBoxes[i][j].startWeek.getValueFactory().setValue(start);
+            lessonBoxes[i][j].endWeek.getValueFactory().setValue(end);
         }
     }
 
@@ -298,7 +360,7 @@ class SelectionGrid extends GridPane {
     }
 }
 
-class LessonBox extends MenuButton {//需要确定是在前端构造好完整的lesson还是传字符串然后到后端去构造
+class LessonBox extends MenuButton {//选中课程时需要相应构造课程信息
     CheckBox checkBox = new CheckBox();
     TextField locationField = new TextField();
     CheckBox singleWeek = new CheckBox();

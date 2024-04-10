@@ -47,14 +47,13 @@ public class CourseController {
         }
         course.setPersons(persons);
 
-        List<String> times = (List<String>) m.get("lessonTimes");
+        List<Map> mapLessons = (List<Map>) m.get("lessons");
         List<Lesson> lessons = new ArrayList<>();
-        for (int i = 0; i < times.size(); i++) {
+        for (Map mapLesson : mapLessons) {
             Lesson lesson = new Lesson();
-            lesson.setName(course.getName());
-            lesson.setTime(times.get(i));
-            lessons.add(lesson);
+            lesson = BeanUtil.mapToBean(mapLesson, lesson.getClass(), true, CopyOptions.create());
             lessonRepository.save(lesson);
+            lessons.add(lesson);
         }
         course.setLessons(lessons);
 
@@ -88,20 +87,29 @@ public class CourseController {
 
         BeanUtil.fillBeanWithMap(m, course, true, CopyOptions.create());//要求map键值与对象一致
 
+        //lessonRepository.deleteLessonsByCourseId(courseId);//应该删除掉弃用的lesson
+
+        List<Lesson> lessonsToDelete = course.getLessons();
+        System.out.println("lessonsToDelete:"+lessonsToDelete);
+        course.getLessons().clear();//好像很重要，意义待研究  更新course是否要删除所有相关的lesson对象然后重新构建？还是更改现有lesson的属性？后者似乎实现很复杂
+        lessonRepository.deleteAll(lessonsToDelete);//顺序！！先存下来，然后清空course的lessons，再删除
+
+
         List<Person> persons = new ArrayList<>();
         for (int i = 0; i < ((ArrayList)m.get("personIds")).size(); i++) {
             persons.add(personRepository.findByPersonId((((Map)((ArrayList)m.get("personIds")).get(i)).get("personId")).toString()));
         }
+        System.out.println("persons:"+persons);
         course.setPersons(persons);
 
-        List<String> times = (List<String>) m.get("lessonTimes");
+        List<Map> mapLessons = (List<Map>) m.get("lessons");
         List<Lesson> lessons = new ArrayList<>();
-        for (int i = 0; i < times.size(); i++) {
+        for (Map mapLesson : mapLessons) {
             Lesson lesson = new Lesson();
-            lesson.setName(course.getName());
-            lesson.setTime(times.get(i));
-            lessons.add(lesson);
+            lesson = BeanUtil.mapToBean(mapLesson, lesson.getClass(), true, CopyOptions.create());
+            System.out.println("lesson:"+lesson);
             lessonRepository.save(lesson);
+            lessons.add(lesson);
         }
         course.setLessons(lessons);
 
@@ -110,29 +118,4 @@ public class CourseController {
         System.out.println(course);
         return new DataResponse(0,null,"更新成功");
     }
-
-    /*@PostMapping("/updateCourse/person")//已被上面的updateCourse方法替代
-    @PreAuthorize("hasRole('ADMIN')")//学生申请选课不应该直接使用本方法，应待管理员抽签后调用
-    public DataResponse updateCoursePerson(@RequestBody Map m){
-        String courseId = (String) m.get("courseId");
-        String personId = (String) m.get("personId");
-        if(!courseRepository.existsByCourseId(courseId)) {
-            return new DataResponse(-1,null,"课程不存在，无法更新");
-        }
-        if(!personRepository.existsByPersonId(personId)) {
-            return new DataResponse(-1,null,"人员不存在，无法更新");
-        }
-        Course course = courseRepository.findById(courseId).get();
-        Person person = personRepository.findById(personId).get();
-        if(course.getPersons().contains(person))
-        {
-            course.getPersons().remove(person);
-            courseRepository.save(course);
-            return new DataResponse(0,null,"已经添加过了,故移除");
-        }
-        course.getPersons().add(person);
-        courseRepository.save(course);
-        return new DataResponse(0,null,"更新成功");
-        //还需要添加根据班级添加学生的功能
-    }*/
 }

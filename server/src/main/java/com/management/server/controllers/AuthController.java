@@ -35,7 +35,6 @@ public class AuthController {
         authenticationManager.authenticate(authenticationToken);
 
         */
-        System.out.println("check");
         if(passwordEncoder.matches(req.get("password"),userRepository.findByUsername(req.get("username")).getPassword()))
         {
             return JwtUtil.generateToken(req.get("username"));

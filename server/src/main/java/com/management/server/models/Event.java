@@ -17,7 +17,7 @@ public abstract class Event {
 
     private String name;
 
-    private String time;//12,5,8.30,1.50     第十二周 周五 8:30 一小时五十分钟  lesson的此属性第一个数值应为-1，开始周与结束周属性在course 中
+    private String time;//5,8.30,1.50     周五 8:30 一小时五十分钟  lesson的此属性第一个数值应为-1，开始周与结束周属性在course 中
 
     private String introduction;
 
@@ -25,6 +25,11 @@ public abstract class Event {
 
     private boolean checked;//用于判定是否已经通知到学生，如果未通知，应在通知栏显示
 
+    private boolean[] eventWeek;
+
+    @ManyToMany
+    @JoinTable(name = "person_event")
+    private List<Person> persons;
     //private Integer personId;//to be deleted why????
 
     /*@ManyToMany(mappedBy = "events")
@@ -38,13 +43,7 @@ public abstract class Event {
     @JoinTable(name = "teacher_event")
     private List<Teacher> teachers;*/
 
-    @ManyToMany
-    @JoinTable(name = "person_event")
-    private List<Person> persons;
-
-
-
-  /*  public void addStudent(Student student){
+    /*  public void addStudent(Student student){
         students.add(student);
     }
 
