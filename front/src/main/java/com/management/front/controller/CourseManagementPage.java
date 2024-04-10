@@ -40,7 +40,6 @@ public class CourseManagementPage extends SplitPane {
         m.put("reference", referenceField.getText());
         m.put("capacity", capacityField.getText());
         m.put("personIds", teacherListView.getSelectedItems());
-        m.put("lessonTimes", selectionGrid.getSelectedCoordinates());
         return m;
     }
 
@@ -88,7 +87,7 @@ public class CourseManagementPage extends SplitPane {
 
         List<TableColumn<Map,?>> columns = new ArrayList<>();
         columns.addAll(List.of(courseIdColumn, courseNameColumn, courseReferenceColumn, courseCapacityColumn, teacherColumn, studentColumn));
-        courseTable=new SearchableTableView(observableList, List.of("courseId","name","persons"), columns);
+        courseTable=new SearchableTableView(observableList, List.of("courseId","name","teacher"), columns);
 
         this.getItems().add(courseTable);
     }
@@ -110,12 +109,6 @@ public class CourseManagementPage extends SplitPane {
                 capacityField.setText(""+course.get("capacity"));
                 teacherListView.setSelectedItems((List<Map>) course.get("persons"));
                 //selectionGrid.setSelectedCoordinates((List<String>) course.get("lessons"));
-                System.out.println("lessons:"+course.get("lessons"));
-                List<String> lessonTimes = new ArrayList<>();
-                for (Map lesson : (List<Map>) course.get("lessons")) {
-                    lessonTimes.add((String) lesson.get("time"));
-                }
-                selectionGrid.setSelectedCoordinates(lessonTimes);
             }
         });
 

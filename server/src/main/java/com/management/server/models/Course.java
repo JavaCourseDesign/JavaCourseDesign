@@ -35,7 +35,7 @@ public class Course{
 
     private Double endWeek;//结束周次
 
-    @OneToMany
+    @OneToMany(mappedBy = "course")
     private List<Lesson> lessons;
 
     /*@ManyToMany

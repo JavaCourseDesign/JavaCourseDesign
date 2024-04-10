@@ -83,7 +83,7 @@ public class TestController {//专门用于添加测试数据
             course.setCapacity(1.0*r.nextInt(100));
             course.setCredit(1.0*r.nextInt(6));
             List<Person> persons=new ArrayList<>();
-            for (int j = 0; j < r.nextInt(30)+15; j++) {
+            for (int j = 0; j < r.nextInt(30); j++) {
                 persons.add(students.get(r.nextInt(students.size())));
             }
             for (int j = 0; j < r.nextInt(3)+1; j++) {

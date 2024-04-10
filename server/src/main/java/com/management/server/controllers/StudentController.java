@@ -32,7 +32,7 @@ public class StudentController {
         Student  s=studentRepository.findByPersonId(map.get("personId"));
         Map student = BeanUtil.beanToMap(s) ;
         student.put("courses",courseRepository.findCoursesByPersonId(map.get("personId")));
-        student.put("className",administrativeClassRepository.findAdministrativeClassByStudent(s));
+        student.put("className",administrativeClassRepository.findAdministrativeClassByStudent(s)+"班");
         return new DataResponse(0,student,null);
     }
 

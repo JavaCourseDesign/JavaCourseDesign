@@ -3,6 +3,8 @@ package com.management.front.controller;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.management.front.request.DataResponse;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.input.Dragboard;
@@ -12,6 +14,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.image.ImageView;
 import javafx.scene.text.Text;
+import javafx.scene.web.HTMLEditor;
 import javafx.stage.FileChooser;
 
 
@@ -30,6 +33,7 @@ public class StudentPersonalInfoPage extends TabPane {
         Map student = (Map) request("/getStudentByPersonId", m).getData();
         System.out.println(student);
         this.getTabs().add(new BasicInfoTab(student));
+        this.getTabs().add(new InnovationTab(student));
     }
 }
 
@@ -167,18 +171,18 @@ class BasicInfoTab extends Tab {
         label2.setStyle("-fx-font: 20 arial; -fx-text-fill: blue;");
         Label label3=new Label("校内联系方式");
         label3.setStyle("-fx-font: 20 arial; -fx-text-fill: blue;");
-        TextField studentIdField = new TextField(student.get("studentId").toString());
-        TextField nameField = new TextField(student.get("name").toString());
-        TextField genderField = new TextField(student.get("gender").toString());
-        TextField majorField = new TextField(student.get("major").toString());
-        Text deptText= new Text(student.get("dept").toString());
-        Text classNameText=new Text(student.get("className").toString());
-        Text socilaText=new Text(student.get("social").toString());
+        Text studentIdText = new Text(student.get("studentId")+"");
+        Text nameText= new Text(student.get("name")+"");
+        Text genderText = new Text(student.get("gender")+"");
+        Text majorText = new Text(student.get("major")+"");
+        Text deptText= new Text(student.get("dept")+"");
+        Text classNameText=new Text(student.get("className")+"");
+        Text socilaText=new Text(student.get("social")+"");
         Text cardText=new Text(student.get("idCardNum")+"");
         Text birthdayText=new Text(student.get("birthday")+"");
-        TextField highSchoolField = new TextField(student.get("highSchool").toString());
-        TextField familyMemberField = new TextField(student.get("familyMember").toString());
-        TextField familyMemberPhoneField = new TextField(student.get("familyMemberPhone").toString());
+        TextField highSchoolField = new TextField(student.get("highSchool")+"");
+        TextField familyMemberField = new TextField(student.get("familyMember")+"");
+        TextField familyMemberPhoneField = new TextField(student.get("familyMemberPhone")+"");
         TextField addressField = new TextField(student.get("address")+"");
         TextField homeTownField = new TextField(student.get("homeTown")+"");
         TextField phoneField = new TextField(student.get("phone")+"");
@@ -209,10 +213,10 @@ class BasicInfoTab extends Tab {
                 new Label("email:")
         );
         gridPane.addColumn(1,
-                studentIdField,
-                nameField,
-                genderField,
-                majorField,
+                studentIdText,
+                nameText,
+                genderText,
+                majorText,
                 deptText,
                 classNameText,
                 socilaText,
@@ -231,8 +235,20 @@ class BasicInfoTab extends Tab {
                 new Separator(),
                 phoneField,
                 emailField);
-                ;
     }
-
-
 }
+class InnovationTab extends Tab {
+    SplitPane splitPane = new SplitPane();
+    private VBox controlPanel = new VBox();
+    private ObservableList<Map> observableList = FXCollections.observableArrayList();
+
+    private Button addButton = new Button("Add");
+    private Button deleteButton = new Button("Delete");
+    private Button updateButton = new Button("Update");
+
+    public InnovationTab(Map student) {
+        this.setText("创新实践信息管理");
+
+    }
+}
+

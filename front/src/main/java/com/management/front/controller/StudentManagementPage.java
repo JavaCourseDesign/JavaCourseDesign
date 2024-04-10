@@ -56,16 +56,16 @@ public class StudentManagementPage extends SplitPane {
         studentGenderColumn.setCellValueFactory(new MapValueFactory<>("gender"));
         studentMajorColumn.setCellValueFactory(new MapValueFactory<>("major"));
 
+
         // Create a list of columns
         List<TableColumn<Map, ?>> columns = new ArrayList<>();
         columns.add(studentIdColumn);
         columns.add(studentNameColumn);
         columns.add(studentGenderColumn);
         columns.add(studentMajorColumn);
-
-
         // Initialize the SearchableTableViewForMap
         studentTable = new SearchableTableView(observableList, List.of("studentId","name"), columns);
+
 
         this.getItems().add(studentTable);
     }

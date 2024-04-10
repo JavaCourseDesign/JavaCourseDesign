@@ -2,11 +2,16 @@ package com.management.server.controllers;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
-import com.management.server.models.*;
+import com.management.server.models.Course;
+import com.management.server.models.Person;
+import com.management.server.models.Student;
+import com.management.server.models.Teacher;
 import com.management.server.payload.response.DataResponse;
-import com.management.server.repositories.*;
+import com.management.server.repositories.CourseRepository;
+import com.management.server.repositories.PersonRepository;
+import com.management.server.repositories.StudentRepository;
+import com.management.server.repositories.TeacherRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -20,8 +25,6 @@ public class CourseController {
     @Autowired
     CourseRepository courseRepository;
     @Autowired
-    LessonRepository lessonRepository;
-    @Autowired
     StudentRepository studentRepository;
     @Autowired
     TeacherRepository teacherRepository;
@@ -33,47 +36,28 @@ public class CourseController {
     }
 
     @PostMapping("/addCourse")
-    @PreAuthorize("hasRole('ADMIN')")
     public DataResponse addCourse(@RequestBody Map m){
         String courseId = (String) m.get("courseId");
         if(courseRepository.existsByCourseId(courseId)) {
             return new DataResponse(-1,null,"课程已存在，无法添加");
         }
         Course course = BeanUtil.mapToBean(m, Course.class, true, CopyOptions.create());//要求map键值与对象一致
-
         List<Person> persons = new ArrayList<>();
         for (int i = 0; i < ((ArrayList)m.get("personIds")).size(); i++) {
             persons.add(personRepository.findByPersonId((((Map)((ArrayList)m.get("personIds")).get(i)).get("personId")).toString()));
         }
         course.setPersons(persons);
-
-        List<String> times = (List<String>) m.get("lessonTimes");
-        List<Lesson> lessons = new ArrayList<>();
-        for (int i = 0; i < times.size(); i++) {
-            Lesson lesson = new Lesson();
-            lesson.setTime(times.get(i));
-            lessons.add(lesson);
-            lessonRepository.save(lesson);
-        }
-        course.setLessons(lessons);
-
         courseRepository.save(course);
-
-        System.out.println(course);
-        System.out.println(course.getLessons().get(0).getTime());
-
         return new DataResponse(0,null,"添加成功");
     }
 
     @PostMapping("/deleteCourse")
-    @PreAuthorize("hasRole('ADMIN')")
     public DataResponse deleteCourse(@RequestBody Map m){
         courseRepository.deleteAllByCourseId(""+m.get("courseId"));
         return new DataResponse(0,null,"删除成功");
     }
 
     @PostMapping("/updateCourse")
-    @PreAuthorize("hasRole('ADMIN')")
     public DataResponse updateCourse(@RequestBody Map m){
         String courseId = (String) m.get("courseId");
         if(!courseRepository.existsByCourseId(courseId)) {
@@ -93,24 +77,12 @@ public class CourseController {
         }
         course.setPersons(persons);
 
-        List<String> times = (List<String>) m.get("lessonTimes");
-        List<Lesson> lessons = new ArrayList<>();
-        for (int i = 0; i < times.size(); i++) {
-            Lesson lesson = new Lesson();
-            lesson.setTime(times.get(i));
-            lessons.add(lesson);
-            lessonRepository.save(lesson);
-        }
-        course.setLessons(lessons);
 
         courseRepository.save(course);
-
-        System.out.println(course);
         return new DataResponse(0,null,"更新成功");
     }
 
-    /*@PostMapping("/updateCourse/person")//已被上面的updateCourse方法替代
-    @PreAuthorize("hasRole('ADMIN')")//学生申请选课不应该直接使用本方法，应待管理员抽签后调用
+    @PostMapping("/updateCourse/person")
     public DataResponse updateCoursePerson(@RequestBody Map m){
         String courseId = (String) m.get("courseId");
         String personId = (String) m.get("personId");
@@ -132,5 +104,5 @@ public class CourseController {
         courseRepository.save(course);
         return new DataResponse(0,null,"更新成功");
         //还需要添加根据班级添加学生的功能
-    }*/
+    }
 }
