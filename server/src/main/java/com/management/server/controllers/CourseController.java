@@ -83,21 +83,18 @@ public class CourseController {
 
         //需要把多对多关系属性忽略掉，student与teacher中亦然，因为这些属性经过传输以及不再具有完整的循环嵌套特征，需要通过主键重新建立联系
         m.remove("persons");
-        //System.out.println(m);
+
+        lessonRepository.deleteAll(course.getLessons());
 
         BeanUtil.fillBeanWithMap(m, course, true, CopyOptions.create());//要求map键值与对象一致
 
-        //lessonRepository.deleteLessonsByCourseId(courseId);//应该删除掉弃用的lesson
-
-        List<Lesson> lessonsToDelete = course.getLessons();
-        System.out.println("lessonsToDelete:"+lessonsToDelete);
         course.getLessons().clear();//好像很重要，意义待研究  更新course是否要删除所有相关的lesson对象然后重新构建？还是更改现有lesson的属性？后者似乎实现很复杂
-        lessonRepository.deleteAll(lessonsToDelete);//顺序！！先存下来，然后清空course的lessons，再删除
 
 
-        List<Person> persons = new ArrayList<>();
+        List<Person> persons = course.getPersons();
         for (int i = 0; i < ((ArrayList)m.get("personIds")).size(); i++) {
-            persons.add(personRepository.findByPersonId((((Map)((ArrayList)m.get("personIds")).get(i)).get("personId")).toString()));
+            if(!persons.contains(personRepository.findByPersonId((((Map)((ArrayList)m.get("personIds")).get(i)).get("personId")).toString())))
+                persons.add(personRepository.findByPersonId((((Map)((ArrayList)m.get("personIds")).get(i)).get("personId")).toString()));
         }
         System.out.println("persons:"+persons);
         course.setPersons(persons);
@@ -107,8 +104,8 @@ public class CourseController {
         for (Map mapLesson : mapLessons) {
             Lesson lesson = new Lesson();
             lesson = BeanUtil.mapToBean(mapLesson, lesson.getClass(), true, CopyOptions.create());
-            System.out.println("lesson:"+lesson);
             lessonRepository.save(lesson);
+            System.out.println("lesson:"+lesson+" eventId:"+lesson.getEventId());
             lessons.add(lesson);
         }
         course.setLessons(lessons);

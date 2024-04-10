@@ -77,6 +77,7 @@ public class SearchableListView extends VBox {
         });
 
         listView.setMaxHeight(100);
+        listView.setMinHeight(70);
 
         this.getChildren().addAll(selectedLabel, searchField, listView);
     }
