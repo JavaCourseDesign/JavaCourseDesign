@@ -50,10 +50,16 @@ public class SearchableTableView extends VBox {
             });
         });
 
-        tableView.setOnMouseClicked(event -> {
+        /*tableView.setOnMouseClicked(event -> {
             Map<String, Object> selectedItem = tableView.getSelectionModel().getSelectedItem();
             if (selectedItem != null && onItemClick != null) {
                 onItemClick.accept(selectedItem);
+            }
+        });*/
+
+        tableView.selectionModelProperty().get().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            if (newSelection != null) {
+                onItemClick.accept(newSelection);
             }
         });
 
@@ -80,7 +86,15 @@ public class SearchableTableView extends VBox {
         return tableView.getSelectionModel().getSelectedItem();
     }
 
+    public void setSelectedItem(int index) {
+        tableView.getSelectionModel().select(index);
+    }
+
+    public int getSelectedIndex() {
+        return tableView.getSelectionModel().getSelectedIndex();
+    }
+
     public void setOnItemClick(Consumer<Map<String, Object>> action) {
         this.onItemClick = action;
-    }
+    }//这个逻辑需要再研究一下 还有奇怪的命名
 }

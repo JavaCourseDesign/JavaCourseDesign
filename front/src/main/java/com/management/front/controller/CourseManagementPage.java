@@ -89,7 +89,7 @@ public class CourseManagementPage extends SplitPane {
                     .filter(person -> person.containsKey("studentId"))
                     // 统计符合条件的项的数量
                     .count();
-            return new SimpleStringProperty(studentCount + "");
+            return new SimpleStringProperty(studentCount!=0?studentCount + "":"");
         });
 
         List<TableColumn<Map,?>> columns = new ArrayList<>();
@@ -113,7 +113,7 @@ public class CourseManagementPage extends SplitPane {
                 courseIdField.setText((String) course.get("courseId"));
                 nameField.setText((String) course.get("name"));
                 referenceField.setText((String) course.get("reference"));
-                capacityField.setText(""+course.get("capacity"));
+                capacityField.setText(course.get("capacity")==null?"": "" +course.get("capacity"));
                 teacherListView.setSelectedItems((List<Map>) course.get("persons"));
 
                 /*List<String> lessonTimes = new ArrayList<>();
@@ -146,6 +146,9 @@ public class CourseManagementPage extends SplitPane {
 
     private void displayCourses(){
         observableList.clear();
+
+        observableList.add(Map.of("persons",List.of(),"lessons",List.of())); // 添加一个空行用于添加
+
         observableList.addAll(FXCollections.observableArrayList((ArrayList) request("/getAllCourses", null).getData()));
         courseTable.setData(observableList);
 
@@ -210,6 +213,7 @@ public class CourseManagementPage extends SplitPane {
 
     private void updateCourse() {
         Map selected = courseTable.getSelectedItem();
+        int index = courseTable.getSelectedIndex();
         if(selected==null)
         {
             Alert alert=new Alert(Alert.AlertType.INFORMATION);
@@ -233,6 +237,7 @@ public class CourseManagementPage extends SplitPane {
                 alert1.showAndWait();
             }
         }
+        courseTable.setSelectedItem(index); // 重新选中更新前的行 可能需要加一个空行用于添加
     }
 }
 
