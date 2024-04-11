@@ -58,7 +58,7 @@ public class SearchableTableView extends VBox {
         });*/
 
         tableView.selectionModelProperty().get().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-            if (newSelection != null) {
+            if (newSelection != null&&onItemClick != null) {
                 onItemClick.accept(newSelection);
             }
         });
@@ -95,6 +95,8 @@ public class SearchableTableView extends VBox {
     }
 
     public void setOnItemClick(Consumer<Map<String, Object>> action) {
-        this.onItemClick = action;
+        if(action != null) {
+            this.onItemClick = action;
+        }
     }//这个逻辑需要再研究一下 还有奇怪的命名
 }
