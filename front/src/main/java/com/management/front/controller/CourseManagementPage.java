@@ -52,6 +52,7 @@ public class CourseManagementPage extends SplitPane {
 
     public CourseManagementPage() {
         this.setWidth(1000);
+        this.setDividerPosition(0, 0.7);
         initializeTable();
         initializeControlPanel();
         displayCourses();

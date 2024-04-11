@@ -24,8 +24,11 @@ public class Menu extends SplitPane {
     TreeItem<String> item6 = new TreeItem<>("课程表");
     TreeItem<String> item7 = new TreeItem<>("创新实践管理");
     public Menu(){
+
         root.setExpanded(true);
         menu.setShowRoot(false);
+        menu.setPrefWidth(70);
+        this.setDividerPositions(0.1);
 
         root.getChildren().addAll(item1, item2, item3, item4,item5, item6);
         menu.setRoot(root);

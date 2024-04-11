@@ -42,7 +42,7 @@ public class LoginPage extends VBox {
                 DataResponse r=request("/findPersonIdByUsername",map);
                 personId=(String)r.getData();
                 Menu menu = new Menu();
-                Scene scene = new Scene(menu, 800, 600);
+                Scene scene = new Scene(menu, 1400, 800);
                 Stage stage = (Stage) loginButton.getScene().getWindow();
                 stage.setScene(scene);
                 stage.show();
