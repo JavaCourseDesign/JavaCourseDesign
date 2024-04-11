@@ -2,15 +2,18 @@ package com.management.front.controller;
 
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfWriter;
+import com.management.front.customComponents.SearchableTableView;
 import com.management.front.request.DataResponse;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.MapValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.image.ImageView;
 import javafx.scene.text.Text;
@@ -20,8 +23,10 @@ import javafx.stage.FileChooser;
 
 import java.io.*;
 import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static com.management.front.util.HttpClientUtil.request;
@@ -238,17 +243,46 @@ class BasicInfoTab extends Tab {
     }
 }
 class InnovationTab extends Tab {
-    SplitPane splitPane = new SplitPane();
+    private SearchableTableView innovationTable;
+    private SplitPane anchorPane=new SplitPane();
     private VBox controlPanel = new VBox();
     private ObservableList<Map> observableList = FXCollections.observableArrayList();
 
-    private Button addButton = new Button("Add");
-    private Button deleteButton = new Button("Delete");
-    private Button updateButton = new Button("Update");
-
+    Map m = new HashMap();
     public InnovationTab(Map student) {
+        m=student;
         this.setText("创新实践信息管理");
+        this.setContent(anchorPane);
+        initializeTable();
+        displayInnovations();
+    }
+    private void displayInnovations() {
+        observableList.clear();
+        observableList.addAll(FXCollections.observableArrayList((ArrayList) request("/getInnovationsByStudent", m).getData()));
+        innovationTable.setData(observableList);
+    }
+    private void initializeTable()
+    {
+        TableColumn<Map, String> nameColumn = new TableColumn<>("项目名称");
+        TableColumn<Map, String> typeColumn = new TableColumn<>("项目类型");
+        TableColumn<Map, String> timeColumn = new TableColumn<>("时间");
+        TableColumn<Map, String> locationColumn = new TableColumn<>("地点");
+        TableColumn<Map, String> performanceColumn = new TableColumn<>("评价");
+        nameColumn.setCellValueFactory(new MapValueFactory<>("name"));
+        typeColumn.setCellValueFactory(new MapValueFactory<>("type"));
+        timeColumn.setCellValueFactory(new MapValueFactory<>("time"));
+        locationColumn.setCellValueFactory(new MapValueFactory<>("location"));
+        performanceColumn.setCellValueFactory(new MapValueFactory<>("performance"));
 
+
+        List<TableColumn<Map, ?>> columns = new ArrayList<>();
+        columns.add(nameColumn);
+        columns.add(typeColumn);
+        columns.add(timeColumn);
+        columns.add(locationColumn);
+        columns.add(performanceColumn);
+        innovationTable = new SearchableTableView(observableList, List.of("name","type"), columns);
+        anchorPane.getItems().add(innovationTable);
     }
 }
 

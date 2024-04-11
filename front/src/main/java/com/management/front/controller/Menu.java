@@ -30,7 +30,7 @@ public class Menu extends SplitPane {
         menu.setPrefWidth(70);
         this.setDividerPositions(0.1);
 
-        root.getChildren().addAll(item1, item2, item3, item4,item5, item6);
+        root.getChildren().addAll(item1, item2, item3, item4,item5, item6,item7);
         menu.setRoot(root);
 
         this.getItems().add(menu);
