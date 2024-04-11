@@ -48,7 +48,7 @@ public class CourseManagementPage extends SplitPane {
         m.put("capacity", capacityField.getText());
         m.put("teachers", teacherListView.getSelectedItems());
         m.put("students", studentListView.getSelectedItems());
-        selectionGrid.course=m;
+        selectionGrid.course=m;//把一部分course的信息给予lesson，注意顺序！
         System.out.println("selectionGrid.course:"+selectionGrid.course);
         m.put("lessons", selectionGrid.getSelectedLesson());
         return m;
