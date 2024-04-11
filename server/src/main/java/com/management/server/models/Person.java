@@ -56,6 +56,7 @@ public abstract class Person {
 
     @Size(max = 1000)
     private String introduce;
+    private String social;
 
     /*@OneToMany(mappedBy = "person")
     private List<Absence> absences;*/

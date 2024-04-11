@@ -24,6 +24,10 @@ public class PhotoController {
         String str = "";
         try {
             File file = new File(attachFolder + fileName);
+            if(!file.exists())
+            {
+                return new DataResponse(1,null,"请先上传文件！");
+            }
             int len = (int) file.length();
             byte data[] = new byte[len];
             FileInputStream in = new FileInputStream(file);

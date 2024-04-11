@@ -1,6 +1,6 @@
 package com.management.front.controller;
 
-import cn.hutool.core.bean.BeanUtil;
+
 import com.management.front.customComponents.SearchableListView;
 import com.management.front.customComponents.SearchableTableView;
 import com.management.front.request.DataResponse;
@@ -15,7 +15,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import org.controlsfx.property.BeanPropertyUtils;
-import cn.hutool.json.JSONObject;
+
 
 import java.io.IOException;
 import java.util.*;

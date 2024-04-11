@@ -22,7 +22,7 @@ public class Menu extends SplitPane {
     TreeItem<String> item4 = new TreeItem<>("班级管理");
     TreeItem<String> item5 = new TreeItem<>("学生个人信息");
     TreeItem<String> item6 = new TreeItem<>("课程表");
-    TreeItem<String> item7 = new TreeItem<>("测试");
+    TreeItem<String> item7 = new TreeItem<>("创新实践管理");
     public Menu(){
 
         root.setExpanded(true);
@@ -30,7 +30,7 @@ public class Menu extends SplitPane {
         menu.setPrefWidth(70);
         this.setDividerPositions(0.1);
 
-        root.getChildren().addAll(item1, item2, item3, item4,item5, item6);
+        root.getChildren().addAll(item1, item2, item3, item4,item5, item6,item7);
         menu.setRoot(root);
 
         this.getItems().add(menu);
@@ -46,7 +46,7 @@ public class Menu extends SplitPane {
                 case "班级管理": this.getItems().set(1,new AdministrativeClassManagementPage());break;
                 case "学生个人信息":this.getItems().set(1,new StudentPersonalInfoPage());break;
                 case "课程表":this.getItems().set(1,new HomePage());break;
-                case "测试" : this.getItems().set(1,new EditableMapTable((Map)((List) request("/getAllStudents",null).getData()).get(0),Map.of("studentId","学号","name","姓名")));break;
+                case "创新实践管理":this.getItems().set(1,new InnovationManagementPage());break;
             }
         });
     }

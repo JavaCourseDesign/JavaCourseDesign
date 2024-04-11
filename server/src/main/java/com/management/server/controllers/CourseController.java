@@ -93,7 +93,6 @@ public class CourseController {
         lessonRepository.deleteAll(course.getLessons());
 
         BeanUtil.fillBeanWithMap(m, course, true, CopyOptions.create());//要求map键值与对象一致
-
         course.getLessons().clear();//好像很重要，意义待研究  更新course是否要删除所有相关的lesson对象然后重新构建？还是更改现有lesson的属性？后者似乎实现很复杂
 
 

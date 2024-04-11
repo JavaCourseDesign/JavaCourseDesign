@@ -24,8 +24,8 @@ public class LoginPage extends VBox {
     private Button registerButton=new Button("注册");
 
     public LoginPage() throws IOException {
-        idField.setText("");
-        usernameField.setText("admin");
+        idField.setText("201921000");
+        usernameField.setText("");
         passwordField.setText("admin");
 
         this.setAlignment(javafx.geometry.Pos.CENTER);
