@@ -33,6 +33,7 @@ public class CourseManagementPage extends SplitPane {
     private Button updateButton = new Button("Update");
     private SearchableListView teacherListView=new SearchableListView(FXCollections.observableArrayList((ArrayList) request("/getAllTeachers", null).getData()), List.of("teacherId", "name"));
     //包含全局所有教师信息的ListView，用于选择教师
+    private SearchableListView studentListView=new SearchableListView(FXCollections.observableArrayList((ArrayList) request("/getAllStudents", null).getData()), List.of("studentId", "name"));
     private TextField courseIdField = new TextField();
     private TextField nameField = new TextField();
     private TextField referenceField = new TextField();
@@ -45,7 +46,10 @@ public class CourseManagementPage extends SplitPane {
         m.put("name", nameField.getText());
         m.put("reference", referenceField.getText());
         m.put("capacity", capacityField.getText());
-        m.put("personIds", teacherListView.getSelectedItems());
+        m.put("teachers", teacherListView.getSelectedItems());
+        m.put("students", studentListView.getSelectedItems());
+        selectionGrid.course=m;
+        System.out.println("selectionGrid.course:"+selectionGrid.course);
         m.put("lessons", selectionGrid.getSelectedLesson());
         return m;
     }
@@ -114,19 +118,16 @@ public class CourseManagementPage extends SplitPane {
                 nameField.setText((String) course.get("name"));
                 referenceField.setText((String) course.get("reference"));
                 capacityField.setText(course.get("capacity")==null?"": "" +course.get("capacity"));
-                teacherListView.setSelectedItems((List<Map>) course.get("persons"));
 
-                /*List<String> lessonTimes = new ArrayList<>();
-                for (Map lesson : (List<Map>) course.get("lessons")) {
-                    lessonTimes.add((String) lesson.get("time"));
-                }
-                selectionGrid.setSelectedCoordinates(lessonTimes);*/
+                System.out.println("persons"+course.get("persons"));
+                teacherListView.setSelectedItems((List<Map>) course.get("persons"));
+                studentListView.setSelectedItems((List<Map>) course.get("persons"));
 
                 selectionGrid.setSelectedLessons((List<Map>) course.get("lessons"));
-                selectionGrid.course=course;
+                //selectionGrid.course=course;//有问题，更新可以拿到，但添加拿到的是空的
 
                 weekTimeTable.clear();
-                System.out.println(course.get("lessons"));
+                //System.out.println(course.get("lessons"));
                 for (Map lesson : (List<Map>) course.get("lessons")) {
                     weekTimeTable.addEvent(""+lesson.get("name"),""+lesson.get("location"),""+lesson.get("time"));
                 }
@@ -312,7 +313,7 @@ class SelectionGrid extends GridPane {
             lessonBoxes[i][j].checkBox.setSelected(true);
             lessonBoxes[i][j].locationField.setText((String) s.get("location"));
 
-            System.out.println("eventWeek:"+s.get("eventWeek"));
+            //System.out.println("eventWeek:"+s.get("eventWeek"));
             List<Boolean> eventWeekList = (List<Boolean>) s.get("eventWeek");
             boolean[] eventWeek = new boolean[eventWeekList.size()];
             for (int k = 0; k < eventWeekList.size(); k++) {

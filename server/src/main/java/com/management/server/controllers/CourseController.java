@@ -42,9 +42,15 @@ public class CourseController {
         Course course = BeanUtil.mapToBean(m, Course.class, true, CopyOptions.create());//要求map键值与对象一致
 
         List<Person> persons = new ArrayList<>();
-        for (int i = 0; i < ((ArrayList)m.get("personIds")).size(); i++) {
-            persons.add(personRepository.findByPersonId((((Map)((ArrayList)m.get("personIds")).get(i)).get("personId")).toString()));
+        ArrayList<Map> teachers = (ArrayList<Map>) m.get("teachers");
+        for (int i = 0; i < teachers.size(); i++) {
+            persons.add(personRepository.findByPersonId((teachers.get(i).get("personId")).toString()));
         }
+        ArrayList<Map> students = (ArrayList<Map>) m.get("students");
+        for (int i = 0; i < students.size(); i++) {
+            persons.add(personRepository.findByPersonId((students.get(i).get("personId")).toString()));
+        }
+        System.out.println("persons:"+persons);
         course.setPersons(persons);
 
         List<Map> mapLessons = (List<Map>) m.get("lessons");
@@ -91,10 +97,14 @@ public class CourseController {
         course.getLessons().clear();//好像很重要，意义待研究  更新course是否要删除所有相关的lesson对象然后重新构建？还是更改现有lesson的属性？后者似乎实现很复杂
 
 
-        List<Person> persons = course.getPersons();
-        for (int i = 0; i < ((ArrayList)m.get("personIds")).size(); i++) {
-            if(!persons.contains(personRepository.findByPersonId((((Map)((ArrayList)m.get("personIds")).get(i)).get("personId")).toString())))
-                persons.add(personRepository.findByPersonId((((Map)((ArrayList)m.get("personIds")).get(i)).get("personId")).toString()));
+        List<Person> persons = new ArrayList<>();
+        ArrayList<Map> teachers = (ArrayList<Map>) m.get("teachers");
+        for (int i = 0; i < teachers.size(); i++) {
+            persons.add(personRepository.findByPersonId((teachers.get(i).get("personId")).toString()));
+        }
+        ArrayList<Map> students = (ArrayList<Map>) m.get("students");
+        for (int i = 0; i < students.size(); i++) {
+            persons.add(personRepository.findByPersonId((students.get(i).get("personId")).toString()));
         }
         System.out.println("persons:"+persons);
         course.setPersons(persons);
