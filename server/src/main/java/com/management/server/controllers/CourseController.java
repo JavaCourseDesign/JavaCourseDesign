@@ -58,7 +58,11 @@ public class CourseController {
         for (Map mapLesson : mapLessons) {
             Lesson lesson = new Lesson();
             lesson = BeanUtil.mapToBean(mapLesson, lesson.getClass(), true, CopyOptions.create());
+
+            lesson.setPersons(persons);
+
             lessonRepository.save(lesson);
+            System.out.println("lesson:"+lesson+" eventId:"+lesson.getEventId());
             lessons.add(lesson);
         }
         course.setLessons(lessons);
@@ -113,6 +117,9 @@ public class CourseController {
         for (Map mapLesson : mapLessons) {
             Lesson lesson = new Lesson();
             lesson = BeanUtil.mapToBean(mapLesson, lesson.getClass(), true, CopyOptions.create());
+
+            lesson.setPersons(persons);
+
             lessonRepository.save(lesson);
             System.out.println("lesson:"+lesson+" eventId:"+lesson.getEventId());
             lessons.add(lesson);
