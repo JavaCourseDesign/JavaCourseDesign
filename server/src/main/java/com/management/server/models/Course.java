@@ -47,11 +47,14 @@ public class Course{
     @JoinTable(name = "teacher_course")
     private List<Teacher> teachers;*/
 
-    //在老师的示例中有preCourse（前序课程）！！！待实现  关系为@manytoone
-
-    @ManyToOne
+    /*@ManyToOne//一门课只有一门先修课？
     @JoinColumn(name="pre_course_id")
-    private Course preCourse;
+    private Course preCourse;*/
+
+    @ManyToMany
+    @JoinTable(name = "course_course")
+    @JsonIgnoreProperties(value = {"preCourses"})//非常重要，避免自身递归
+    private List<Course> preCourses;
 
     @ManyToMany
     @JoinTable(name = "person_course")
