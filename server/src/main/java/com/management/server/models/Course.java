@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.util.List;
 
@@ -54,6 +55,7 @@ public class Course{
     @ManyToMany
     @JoinTable(name = "course_course")
     @JsonIgnoreProperties(value = {"preCourses"})//非常重要，避免自身递归
+    @ToString.Exclude//也非常重要，避免自身递归
     private List<Course> preCourses;
 
     @ManyToMany

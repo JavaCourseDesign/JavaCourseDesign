@@ -44,7 +44,8 @@ public class CourseManagementPage extends SplitPane {
             })
             .collect(Collectors.toCollection(FXCollections::observableArrayList));
 
-    SearchableListView preCourseListView = new SearchableListView(filteredPreCourseData, List.of("courseId", "name"));
+    private SearchableListView preCourseListView = new SearchableListView(filteredPreCourseData, List.of("courseId", "name"));//存储的course不包含preCourses属性，防止递归
+    private SearchableListView administrativeClassListView = new SearchableListView(FXCollections.observableArrayList((ArrayList) request("/getAllAdministrativeClasses", null).getData()), List.of("name"));
     private TextField courseIdField = new TextField();
     private TextField nameField = new TextField();
     private TextField referenceField = new TextField();
@@ -58,7 +59,20 @@ public class CourseManagementPage extends SplitPane {
         m.put("reference", referenceField.getText());
         m.put("capacity", capacityField.getText());
         m.put("teachers", teacherListView.getSelectedItems());
-        m.put("students", studentListView.getSelectedItems());
+        //m.put("students", studentListView.getSelectedItems());
+        List<Map> studentsToBeAdded = studentListView.getSelectedItems();
+        //把行政班中的学生依次添加到students中，避免重复
+        List<Map> administrativeClasses = administrativeClassListView.getSelectedItems();
+        for (Map<String, Object> administrativeClass : administrativeClasses) {
+            List<Map<String, Object>> students = (List<Map<String, Object>>) administrativeClass.get("students");
+            for (Map<String, Object> student : students) {
+                if (!studentsToBeAdded.contains(student)) {
+                    studentsToBeAdded.add(student);
+                }
+            }
+        }
+        m.put("students", studentsToBeAdded);
+
         m.put("preCourses", preCourseListView.getSelectedItems());
 
         selectionGrid.course=m;//把一部分course的信息给予lesson，注意顺序！
@@ -158,8 +172,11 @@ public class CourseManagementPage extends SplitPane {
                         .collect(Collectors.toList());
                 studentListView.setSelectedItems(students);
 
-                System.out.println("preCourses"+course.get("preCourses"));
+                //System.out.println("preCourses"+course.get("preCourses"));
                 preCourseListView.setSelectedItems((List<Map>) course.get("preCourses"));
+
+                //administrative没法自动选中，只能添加,故设为空
+                administrativeClassListView.setSelectedItems(new ArrayList<>());
 
                 selectionGrid.setSelectedLessons((List<Map>) course.get("lessons"));
                 //selectionGrid.course=course;//有问题，更新可以拿到，但添加拿到的是空的
@@ -176,7 +193,7 @@ public class CourseManagementPage extends SplitPane {
         Pane p=new Pane();
         p.getChildren().add(weekTimeTable);
 
-        controlPanel.getChildren().addAll(courseIdField, nameField, referenceField, capacityField, preCourseListView, teacherListView, selectionGrid, addButton, deleteButton, updateButton, p);
+        controlPanel.getChildren().addAll(courseIdField, nameField, referenceField, capacityField, preCourseListView, teacherListView, administrativeClassListView, selectionGrid, addButton, deleteButton, updateButton, p);
 
         this.getItems().add(controlPanel);
     }

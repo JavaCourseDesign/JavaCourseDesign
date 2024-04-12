@@ -24,11 +24,17 @@ public class AdministrativeClassManagementPage extends SplitPane {
     private Button updateButton = new Button("Update");
 
     private TextField administrativeClassIdField = new TextField();
-    private TextField nameField = new TextField();
+    private TextField administrativeMajorField = new TextField();
+    private TextField administrativeGradeField = new TextField();
+    private TextField administrativeNameField = new TextField();
+    private TextField administrativeClassNumberField = new TextField();
 
     private Map newMapFromFields(Map m) {
         m.put("administrativeClassId", administrativeClassIdField.getText());
-        m.put("name", nameField.getText());
+        m.put("name", administrativeNameField.getText());
+        m.put("major", administrativeMajorField.getText());
+        m.put("grade", administrativeGradeField.getText());
+        m.put("classNumber", administrativeClassNumberField.getText());
         return m;
     }
 
@@ -40,10 +46,18 @@ public class AdministrativeClassManagementPage extends SplitPane {
     }
 
     private void initializeTable() {
-        TableColumn<Map, String> administrativeClassIdColumn = new TableColumn<>("班级号");
+        TableColumn<Map, String> administrativeClassIdColumn = new TableColumn<>("班级ID");
+        TableColumn<Map, String> administrativeNameColumn = new TableColumn<>("班级名");
+        TableColumn<Map, String> administrativeMajorColumn = new TableColumn<>("专业");
+        TableColumn<Map, String> administrativeGradeColumn = new TableColumn<>("年级");
         TableColumn<Map, String> administrativeClassStudentsColumn = new TableColumn<>("学生");
+        TableColumn<Map, String> administrativeClassNumberColumn = new TableColumn<>("班级号");
 
         administrativeClassIdColumn.setCellValueFactory(new MapValueFactory<>("administrativeClassId"));
+        administrativeMajorColumn.setCellValueFactory(new MapValueFactory<>("major"));
+        administrativeGradeColumn.setCellValueFactory(new MapValueFactory<>("grade"));
+        administrativeNameColumn.setCellValueFactory(new MapValueFactory<>("name"));
+        administrativeClassNumberColumn.setCellValueFactory(new MapValueFactory<>("classNumber"));
 
         administrativeClassStudentsColumn.setCellValueFactory(new MapValueFactory<>("persons"));
         administrativeClassStudentsColumn.setCellValueFactory(data -> {
@@ -60,9 +74,9 @@ public class AdministrativeClassManagementPage extends SplitPane {
         });
 
         List<TableColumn<Map, ?>> columns = new ArrayList<>();
-        columns.addAll(List.of(administrativeClassIdColumn, administrativeClassStudentsColumn)) ;
+        columns.addAll(List.of(administrativeClassIdColumn, administrativeMajorColumn, administrativeGradeColumn, administrativeClassNumberColumn, administrativeNameColumn, administrativeClassStudentsColumn)) ;
 
-        administrativeClassTable = new SearchableTableView(observableList, List.of("administrativeClassId","name"), columns);
+        administrativeClassTable = new SearchableTableView(observableList, List.of("administrativeClassNumber","name"), columns);
 
         this.getItems().add(administrativeClassTable);
     }
@@ -71,7 +85,7 @@ public class AdministrativeClassManagementPage extends SplitPane {
         controlPanel.setMinWidth(200);
         controlPanel.setSpacing(10);
 
-        controlPanel.getChildren().addAll(administrativeClassIdField, nameField, addButton, deleteButton, updateButton);
+        controlPanel.getChildren().addAll(administrativeClassIdField, administrativeNameField, administrativeMajorField, administrativeGradeField, administrativeClassNumberField , addButton, deleteButton, updateButton);
 
         addButton.setOnAction(event -> addAdministrativeClass());
         deleteButton.setOnAction(event -> deleteAdministrativeClass());
@@ -81,7 +95,10 @@ public class AdministrativeClassManagementPage extends SplitPane {
             if(administrativeClass!=null)
             {
                 administrativeClassIdField.setText((String) administrativeClass.get("administrativeClassId"));
-                nameField.setText((String) administrativeClass.get("name"));
+                administrativeNameField.setText((String) administrativeClass.get("name"));
+                administrativeMajorField.setText((String) administrativeClass.get("major"));
+                administrativeGradeField.setText((String) administrativeClass.get("grade"));
+                administrativeClassNumberField.setText((String) administrativeClass.get("classNumber"));
             }
         });
         this.getItems().add(controlPanel);

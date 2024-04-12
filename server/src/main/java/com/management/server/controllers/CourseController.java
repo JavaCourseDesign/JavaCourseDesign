@@ -109,7 +109,7 @@ public class CourseController {
         for (int i = 0; i < students.size(); i++) {
             persons.add(personRepository.findByPersonId((students.get(i).get("personId")).toString()));
         }
-        System.out.println("persons:"+persons);
+        //System.out.println("persons:"+persons);
         course.setPersons(persons);
 
         List<Map> mapLessons = (List<Map>) m.get("lessons");
