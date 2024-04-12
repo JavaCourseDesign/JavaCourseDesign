@@ -131,4 +131,31 @@ public class CourseController {
         System.out.println(course);
         return new DataResponse(0,null,"更新成功");
     }
+
+    //选课抽签方法（理论上也可以在前端实现，但鉴于后端没啥东西而且传一堆学生传来传去好像很浪费，故写在后端）
+    @PostMapping("/drawLots")
+    @PreAuthorize("hasRole('ADMIN')")
+    public DataResponse drawLots(@RequestBody Map m){
+        String courseId = (String) m.get("courseId");
+        Double capacity = (Double) m.get("capacity");
+        if(!courseRepository.existsByCourseId(courseId)) {
+            return new DataResponse(-1,null,"课程不存在，无法抽签");
+        }
+        Course course = courseRepository.findByCourseId(courseId);
+
+        List<Person> willingStudents = course.getWillingStudents();
+        if(willingStudents.size()<=capacity){
+            course.setPersons(willingStudents);
+        }else{
+            List<Person> persons = new ArrayList<>();
+            for (int i = 0; i < capacity; i++) {
+                int index = (int) (Math.random() * willingStudents.size());
+                persons.add(willingStudents.get(index));
+                willingStudents.remove(index);
+            }
+            course.setPersons(persons);
+        }
+
+        return new DataResponse(0,null,"抽签成功");
+    }
 }

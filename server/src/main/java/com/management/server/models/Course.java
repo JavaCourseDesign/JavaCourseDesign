@@ -63,6 +63,11 @@ public class Course{
     //@JsonIgnoreProperties(value = {"courses"})
     private List<Person> persons;
 
+    //希望选课的学生
+    @ManyToMany
+    @JoinTable(name = "willing_student_course")
+    private List<Person> willingStudents;
+
     //lesson should be subClass of event, lesson to course should be many to one
     //course should not be subClass of event
 
