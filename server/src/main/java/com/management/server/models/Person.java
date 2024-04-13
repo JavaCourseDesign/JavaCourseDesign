@@ -31,8 +31,8 @@ public abstract class Person {
     @Size(max = 50)
     private String name;
 
-    @Size(max = 2)
-    private String type;
+    /*@Size(max = 2)
+    private String type;*/
 
     @Size(max = 50)
     private String dept;

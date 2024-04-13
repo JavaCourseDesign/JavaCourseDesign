@@ -35,6 +35,7 @@ public class Course{
     private Double beginWeek;//开始周次
 
     private Double endWeek;//结束周次
+    private boolean available;//是否可选
 
 
     @OneToMany

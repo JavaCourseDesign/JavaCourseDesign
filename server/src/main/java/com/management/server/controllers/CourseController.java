@@ -91,6 +91,12 @@ public class CourseController {
         }
         Course course = courseRepository.findByCourseId(courseId);
 
+        List<Person> persons = new ArrayList<>();
+        ArrayList<Map> personsMap = (ArrayList<Map>) m.get("persons");
+        for (int i = 0; i < personsMap.size(); i++) {
+            persons.add(personRepository.findByPersonId((personsMap.get(i).get("personId")).toString()));
+        }
+
         //需要把多对多关系属性忽略掉，student与teacher中亦然，因为这些属性经过传输以及不再具有完整的循环嵌套特征，需要通过主键重新建立联系
         m.remove("persons");
 
@@ -100,13 +106,12 @@ public class CourseController {
         course.getLessons().clear();//好像很重要，意义待研究  更新course是否要删除所有相关的lesson对象然后重新构建？还是更改现有lesson的属性？后者似乎实现很复杂
 
 
-        List<Person> persons = new ArrayList<>();
         ArrayList<Map> teachers = (ArrayList<Map>) m.get("teachers");
-        for (int i = 0; i < teachers.size(); i++) {
+        for (int i = 0; teachers!=null&&i < teachers.size(); i++) {
             persons.add(personRepository.findByPersonId((teachers.get(i).get("personId")).toString()));
         }
         ArrayList<Map> students = (ArrayList<Map>) m.get("students");
-        for (int i = 0; i < students.size(); i++) {
+        for (int i = 0; students!=null&&i < students.size(); i++) {
             persons.add(personRepository.findByPersonId((students.get(i).get("personId")).toString()));
         }
         //System.out.println("persons:"+persons);
@@ -142,6 +147,10 @@ public class CourseController {
             return new DataResponse(-1,null,"课程不存在，无法抽签");
         }
         Course course = courseRepository.findByCourseId(courseId);
+        //if(course.getPersons().stream().filter(person -> person instanceof Student).count()!=0)
+        if(course.getPersons().stream().anyMatch(person -> person instanceof Student))  {
+            return new DataResponse(-1,null,"课程已有学生，无法抽签");//或者应该在前端警告，后端不应该有这个逻辑，而是直接清空学生
+        }
 
         List<Person> willingStudents = course.getWillingStudents();
         if(willingStudents.size()<=capacity){
@@ -157,5 +166,25 @@ public class CourseController {
         }
 
         return new DataResponse(0,null,"抽签成功");
+    }
+
+    @PostMapping("/applyCourse")
+    @PreAuthorize("hasRole('STUDENT')")
+    public DataResponse applyCourse(@RequestBody Map m){
+        String courseId = (String) m.get("courseId");
+        if(!courseRepository.existsByCourseId(courseId)) {
+            return new DataResponse(-1,null,"课程不存在，无法选课");
+        }
+        Course course = courseRepository.findByCourseId(courseId);
+        if(!course.isAvailable()){
+            return new DataResponse(-1,null,"选课未开放/已结束");
+        }
+        Person person = personRepository.findByPersonId((String) m.get("personId"));
+        if(course.getPersons().contains(person)){
+            return new DataResponse(-1,null,"已选中，无需重复选课");
+        }
+        course.getWillingStudents().add(person);
+        courseRepository.save(course);
+        return new DataResponse(0,null,"选课成功");
     }
 }

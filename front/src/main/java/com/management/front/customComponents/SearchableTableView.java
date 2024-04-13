@@ -4,6 +4,7 @@ import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.scene.Parent;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -30,6 +31,7 @@ public class SearchableTableView extends VBox {
     }
 
     private void setupTableView(List<TableColumn<Map, ?>> columns) {
+        tableView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         tableView.getColumns().addAll(columns);
 
         FilteredList<Map> filteredData = new FilteredList<>(data, p -> true);
@@ -83,7 +85,14 @@ public class SearchableTableView extends VBox {
     }
 
     public Map getSelectedItem() {
+        //多选返回null
+        if(tableView.getSelectionModel().getSelectedItems().size() > 1) {
+            return null;
+        }
         return tableView.getSelectionModel().getSelectedItem();
+    }
+    public List<Map> getSelectedItems() {
+        return tableView.getSelectionModel().getSelectedItems();
     }
 
     public void setSelectedItem(int index) {
