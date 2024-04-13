@@ -165,7 +165,7 @@ public class CourseController {
                 persons.add(personRepository.findByPersonId((personsMap.get(i).get("personId")).toString()));
             }//保证老师不会被修改
 
-            for (int i = 0; i <= capacity; i++) {
+            for (int i = 0; i < capacity; i++) {
                 int index = (int) (Math.random() * willingStudents.size());
                 persons.add(studentRepository.findByPersonId(willingStudents.get(index).getPersonId()));
                 willingStudents.remove(index);
@@ -179,7 +179,7 @@ public class CourseController {
 
     @PostMapping("/applyCourse")
     @PreAuthorize("hasRole('STUDENT')")
-    public DataResponse applyCourse(@RequestBody Map m){
+    public DataResponse applyCourse(@RequestBody Map m){//前序课分数要求待添加
         String courseId = (String) m.get("courseId");
         if(!courseRepository.existsByCourseId(courseId)) {
             return new DataResponse(-1,null,"课程不存在，无法选课");

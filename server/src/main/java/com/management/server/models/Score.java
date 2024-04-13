@@ -18,11 +18,11 @@ public class Score {
     @JoinColumn(name = "course_id")
     private Course course;
 
-    private Integer regularMark;
+    private Double regularMark;
 
-    private Integer finalMark;
+    private Double finalMark;
 
-    private Integer mark;
+    private Double mark;
 
-    private Integer ranking;
+    //private Integer ranking;
 }

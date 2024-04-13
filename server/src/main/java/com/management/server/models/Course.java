@@ -26,15 +26,18 @@ public class Course{
 
     private String name;
 
-    private String reference;
+    private String reference;//教师有权限
 
     private Double capacity;//课容量
 
     private Double credit;//学分
 
-    private Double beginWeek;//开始周次
+    private Double regularWeight=0.5;//平时成绩权重 教师有权限
 
-    private Double endWeek;//结束周次
+    /*private Double beginWeek;//开始周次 教师有权限
+
+    private Double endWeek;//结束周次 教师有权限*/ //改为lesson的属性
+
     private boolean available;//是否可选
 
 

@@ -44,7 +44,7 @@ public class StudentPersonalInfoPage extends TabPane {
 
 class BasicInfoTab extends Tab {
     private String fileName;
-    Map student = new HashMap<>();
+    Map student;
     VBox vBox = new VBox();
     GridPane gridPane = new GridPane();
     ImageView photoArea = new ImageView();

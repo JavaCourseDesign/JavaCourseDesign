@@ -345,10 +345,10 @@ public class CourseManagementPage extends SplitPane {
             return;
         }
         for(Map selectedCourse : selectedCourses) {
-            Map<String, Object> requestData = new HashMap<>();
-            requestData.put("courseId", selectedCourse.get("courseId"));
-            requestData.put("capacity", selectedCourse.get("capacity"));
-            DataResponse response = request("/drawLots", requestData);
+            //Map<String, Object> requestData = new HashMap<>();
+            //requestData.put("courseId", selectedCourse.get("courseId"));
+            //requestData.put("capacity", selectedCourse.get("capacity"));
+            DataResponse response = request("/drawLots", selectedCourse);
             if (response.getCode() != 0) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setContentText("抽签失败: " + response.getMsg());

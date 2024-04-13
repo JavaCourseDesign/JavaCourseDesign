@@ -52,6 +52,10 @@ public class TestController {//专门用于添加测试数据
             Student student=new Student();
             student.setStudentId("201921"+String.format("%03d",i));
             student.setName(generateRandomChineseName());
+            if(i==0) student.setName("tst");
+            if(i==1) student.setName("wzk");
+            if(i==2) student.setName("why");
+            if(i==3) student.setName("hzx");
             student.setGender("男");
             student.setMajor("软件工程");
             student.setDept("软件学院");
@@ -99,7 +103,7 @@ public class TestController {//专门用于添加测试数据
         for(int i=0;i<10;i++){
             AdministrativeClass administrativeClass=new AdministrativeClass();
             List<Student> studentsInClass=new ArrayList<>();
-            for (int j = 0; j < r.nextInt(30)+15; j++) {
+            while (studentsInClass.size()<30){
                 Student student=students.get(r.nextInt(students.size()));
                 if(!studentsInClass.contains(student) && !assignedStudents.contains(student)) {
                     studentsInClass.add(student);
