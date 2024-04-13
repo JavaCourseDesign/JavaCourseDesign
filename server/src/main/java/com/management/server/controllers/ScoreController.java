@@ -37,9 +37,21 @@ public class ScoreController {
         return new DataResponse(0,null,"添加成功");
     }
 
-    @PostMapping("/getScoresOfACourse")
+    /*@PostMapping("/getScoresOfACourse")
     @PreAuthorize("hasRole('ADMIN') or hasRole('TEACHER')")
     public DataResponse getScore(@RequestBody Map m){
         return new DataResponse(0,scoreRepository.findByCourseCourseId((String) m.get("courseId")),null);
+    }
+
+    @PostMapping("/getScoresOfAStudent")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('TEACHER')")
+    public DataResponse getScoreOfAStudent(@RequestBody Map m){
+        return new DataResponse(0,scoreRepository.findByStudentStudentId((String) m.get("studentId")),null);
+    }*///搜索逻辑写在前端
+
+    @PostMapping("/getAllScore")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('TEACHER')")
+    public DataResponse getAllScore(){
+        return new DataResponse(0,scoreRepository.findAll(),null);
     }
 }
