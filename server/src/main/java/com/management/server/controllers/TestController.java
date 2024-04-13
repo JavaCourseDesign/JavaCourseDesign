@@ -8,6 +8,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -36,6 +39,13 @@ public class TestController {//专门用于添加测试数据
             return new DataResponse(1,null,"测试数据已存在");
         }
 
+        String filePath = "server/src/main/resources/static/resume.html";
+        String content = null;
+        try {
+            content = new String(Files.readAllBytes(Paths.get(filePath)));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         Random r=new Random();
 
         User user=new User();
@@ -51,7 +61,8 @@ public class TestController {//专门用于添加测试数据
         for(int i=0;i<100;i++){
             Student student=new Student();
             student.setStudentId("201921"+String.format("%03d",i));
-            student.setName(generateRandomChineseName());
+            if(i==0) student.setName("wzk");
+            else student.setName(generateRandomChineseName());
             student.setGender("男");
             student.setMajor("软件工程");
             student.setDept("软件学院");
@@ -61,6 +72,11 @@ public class TestController {//专门用于添加测试数据
             student.setFamilyMemberPhone("1234567890");
             student.setAddress("山东大学宿舍");
             student.setHomeTown("江苏南京");
+            student.setEmail("123@qq.com");
+            student.setBirthday("2000-01-01");
+            student.setPhone("18879635506");
+            student.setIdCardNum("320000200001010000");
+            student.setIntroduce(content);
             students.add(student);
             studentRepository.save(student);
         }

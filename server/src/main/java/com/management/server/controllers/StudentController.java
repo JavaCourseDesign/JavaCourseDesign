@@ -2,28 +2,50 @@ package com.management.server.controllers;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
+import com.management.server.models.Innovation;
 import com.management.server.models.Student;
 import com.management.server.payload.response.DataResponse;
 import com.management.server.repositories.AdministrativeClassRepository;
 import com.management.server.repositories.CourseRepository;
+import com.management.server.repositories.InnovationRepository;
 import com.management.server.repositories.StudentRepository;
+import com.openhtmltopdf.extend.FSSupplier;
+import com.openhtmltopdf.extend.impl.FSDefaultCacheStore;
+import com.openhtmltopdf.pdfboxout.PdfRendererBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
+
+import java.io.InputStream;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.StringTokenizer;
 
 @RestController
 
 public class StudentController {
+    @Autowired
+    private ResourceLoader resourceLoader;  //资源装在服务对象自动注入
+
+    private FSDefaultCacheStore fSDefaultCacheStore = new FSDefaultCacheStore();
     @Autowired
     private StudentRepository studentRepository;
     @Autowired
     private CourseRepository courseRepository;
     @Autowired
     private AdministrativeClassRepository administrativeClassRepository;
+    @Autowired
+    private InnovationRepository innovationRepository;
 
     @PostMapping("/getStudentByPersonId")
     public DataResponse getStudent(@RequestBody Map<String,String> map)
@@ -73,6 +95,108 @@ public class StudentController {
         } else {
             return new DataResponse(-1, null, "学号不存在，无法更新");
         }
+    }
+    @PostMapping("/getStudentIntroduce")
+    public ResponseEntity<StreamingResponseBody> getStudentIntroduce(@RequestBody Map m)
+    {
+        String studentId=(String)m.get("studentId");
+        Map info=getMapFromStudentForIntroduce(studentId);
+        String content = (String)info.get("introduce");
+        content = addHeadInfo(content,"<style> html { font-family: \"SourceHanSansSC\", \"Open Sans\";}  </style> <meta charset='UTF-8' />  <title>Insert title here</title>");
+        content = replaceNameValue(content,info);
+        return getPdfDataFromHtml(content);
+    }
+    public ResponseEntity<StreamingResponseBody> getPdfDataFromHtml(String htmlContent) {
+        try {
+            PdfRendererBuilder builder = new PdfRendererBuilder();
+            builder.withHtmlContent(htmlContent, "classpath:/static/resume.html");
+            builder.useFastMode();
+            //builder.withWmMargins(0, 0, 0, 0).useDefaultPageSize(PageOrientation.PORTRAIT, PageSize.A4);
+            builder.useCacheStore(PdfRendererBuilder.CacheStore.PDF_FONT_METRICS, fSDefaultCacheStore);
+            Resource resource = resourceLoader.getResource("classpath:font/SourceHanSansSC-Regular.ttf");
+            InputStream fontInput = resource.getInputStream();
+            builder.useFont(new FSSupplier<InputStream>() {
+                @Override
+                public InputStream supply() {
+                    return fontInput;
+                }
+            }, "SourceHanSansSC");
+            StreamingResponseBody stream = outputStream -> {
+                builder.toStream(outputStream);
+                builder.run();
+            };
+            return ResponseEntity.ok()
+                    .contentType(MediaType.APPLICATION_PDF)
+                    .body(stream);
+        }
+        catch (Exception e) {
+            return  ResponseEntity.internalServerError().build();
+        }
+    }
+    public static String replaceNameValue(String html, Map<String,String>m) {
+        if(html== null || html.length() == 0)
+            return html;
+        StringBuffer buf = new StringBuffer();
+        StringTokenizer sz = new StringTokenizer(html,"$");
+        if(sz.countTokens()<=1)
+            return html;
+        String str,key,value;
+        Integer index;
+        while(sz.hasMoreTokens()) {
+            str = sz.nextToken();
+            if(str.charAt(0)== '{') {
+                index = str.indexOf("}",1);
+                key = str.substring(1,index);
+                value = m.get(key);
+                if(value== null){
+                    value = "";
+                }
+                buf.append(value+str.substring(index+1,str.length()));
+            }else {
+                buf.append(str);
+            }
+        }
+        return buf.toString();
+    }
+
+    public static String addHeadInfo(String html,String head) {
+        int index0 = html.indexOf("<head>");
+        int index1 = html.indexOf("</head>");
+        return html.substring(0,index0+6)+head + html.substring(index1,html.length());
+    }
+
+    public Map getMapFromStudentForIntroduce(String studentId) {
+        Student student = studentRepository.findByStudentId(studentId);
+        Map map = BeanUtil.beanToMap(student);
+        map.put("className",administrativeClassRepository.findAdministrativeClassByStudent(student)+"班");
+        List<Innovation> list=innovationRepository.findByPersons(student);
+        int cnt1=0;// 学科竞赛
+        int cnt2=0;//科研成果
+        int cnt3=0;//社会实践
+        for(Innovation innovation:list){
+            if(innovation.getType().equals("学科竞赛"))
+            {
+                cnt1++;
+                map.put("competitionTime"+cnt1,innovation.getTime());
+                map.put("competitionName"+cnt1,innovation.getName());
+                map.put("competitionLevel"+cnt1,innovation.getPerformance());
+            }
+            else if(innovation.getType().equals("科研成果"))
+            {
+                cnt2++;
+                map.put("paperName"+cnt2,innovation.getName());
+                map.put("paperLocation"+cnt2,innovation.getLocation());
+                map.put("paperPerformance"+cnt2,innovation.getPerformance());
+            }
+            else if(innovation.getType().equals("社会实践"))
+            {
+                cnt3++;
+                map.put("practiceTime"+cnt3,innovation.getTime());
+                map.put("practiceName"+cnt3,innovation.getName());
+                map.put("practicePerformance"+cnt3,innovation.getPerformance());
+            }
+        }
+        return map;
     }
 
 }

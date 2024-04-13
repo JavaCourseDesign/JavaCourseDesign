@@ -36,7 +36,7 @@ public class Menu extends SplitPane {
         this.getItems().add(menu);
         this.getItems().add(new Pane());
 
-        System.out.println((Map)((List) request("/getAllStudents",null).getData()).get(0));
+        //System.out.println((Map)((List) request("/getAllStudents",null).getData()).get(0));
 
         menu.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             switch (newValue.getValue()) {

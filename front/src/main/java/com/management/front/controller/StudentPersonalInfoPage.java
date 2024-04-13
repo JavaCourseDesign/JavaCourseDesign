@@ -6,6 +6,7 @@ import com.management.front.customComponents.SearchableTableView;
 import com.management.front.request.DataResponse;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.MapValueFactory;
 import javafx.scene.image.Image;
@@ -19,6 +20,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.text.Text;
 import javafx.scene.web.HTMLEditor;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 
 
 import java.io.*;
@@ -30,20 +32,23 @@ import java.util.List;
 import java.util.Map;
 
 import static com.management.front.util.HttpClientUtil.request;
+import static com.management.front.util.HttpClientUtil.requestByteData;
 
 public class StudentPersonalInfoPage extends TabPane {
     public StudentPersonalInfoPage() {
         Map m = new HashMap();
         m.put("personId", LoginPage.personId);
         Map student = (Map) request("/getStudentByPersonId", m).getData();
-        System.out.println(student);
+        //System.out.println(student);
         this.getTabs().add(new BasicInfoTab(student));
         this.getTabs().add(new InnovationTab(student));
     }
 }
 
 class BasicInfoTab extends Tab {
+    private Pagination pagination=new Pagination();
     private String fileName;
+    private PdfModel model;
     Map student = new HashMap<>();
     VBox vBox = new VBox();
     GridPane gridPane = new GridPane();
@@ -103,53 +108,38 @@ class BasicInfoTab extends Tab {
         vBox.getChildren().add(saveButton);
         Button printIntroduceButton = new Button("打印个人简历");
         vBox.getChildren().add(printIntroduceButton);
-        printIntroduceButton.setOnMouseClicked(event -> print());
+        printIntroduceButton.setOnMouseClicked(event -> showPdf());
         refresh();
     }
 
-    public void print() {
-        Document document = new Document();
-
-        // 创建文件选择器
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("选择保存位置");
-        fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
-        fileChooser.setInitialFileName("resume.pdf");
-        FileChooser.ExtensionFilter pdfFilter = new FileChooser.ExtensionFilter("PDF 文件 (*.pdf)", "*.pdf");
-        fileChooser.getExtensionFilters().add(pdfFilter);
-
-        // 显示文件选择对话框
-        File outputFile = fileChooser.showSaveDialog(null);
-
-        if (outputFile != null) {
-            try {
-                // 创建 PDF Writer，并指定输出文件
-                PdfWriter.getInstance(document, new FileOutputStream(outputFile));
-
-                // 打开文档
-                document.open();
-
-                // 添加个人信息
-                Font nameFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 16);
-                Paragraph nameParagraph = new Paragraph("John Doe", nameFont);
-                document.add(nameParagraph);
-
-                Font occupationFont = FontFactory.getFont(FontFactory.HELVETICA, 12);
-                Paragraph occupationParagraph = new Paragraph("Software Engineer", occupationFont);
-                document.add(occupationParagraph);
-
-                // 添加其他内容
-
-                // 关闭文档
-                document.close();
-
-                System.out.println("个人简历 PDF 保存成功。");
-            } catch (DocumentException | FileNotFoundException e) {
-                e.printStackTrace();
+    public void showPdf() {
+        //System.out.println(requestByteData("/getStudentIntroduce",student));
+        byte[] data= requestByteData("/getStudentIntroduce",student);
+        model = new PdfModel(data);
+        pagination.setPageCount(model.numPages());
+        pagination.setPageFactory(index -> new ImageView(model.getImage(index)));
+        Stage s=new Stage();
+        AnchorPane anchorPane=new AnchorPane();
+        Scene scene=new Scene(anchorPane);
+        s.setScene(scene);
+        anchorPane.getChildren().add(pagination);
+        Button button=new Button("导出pdf文件");
+        button.setOnMouseClicked(event -> {
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PDF Files", "*.pdf"));
+            File file = fileChooser.showSaveDialog(s);
+            if (file != null) {
+                try  {
+                    FileOutputStream fos = new FileOutputStream(file);
+                    fos.write(data);
+                    fos.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
-        } else {
-            System.out.println("未选择保存位置。");
-        }
+        });
+        anchorPane.getChildren().add(button);
+        s.show();
     }
 
     public void display() {
@@ -166,7 +156,6 @@ class BasicInfoTab extends Tab {
     }
 
     public void save() {
-
         //request("/updateStudent", student);
     }
     public void refresh() {

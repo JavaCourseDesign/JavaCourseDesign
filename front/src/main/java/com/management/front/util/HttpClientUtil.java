@@ -76,6 +76,26 @@ public class HttpClientUtil {
         }
         return null;
     }
+    public static byte[] requestByteData(String url, Object request){
+        HttpRequest httpRequest = HttpRequest.newBuilder()
+                .uri(URI.create(mainUrl + url))
+                .POST(HttpRequest.BodyPublishers.ofString(gson.toJson(request)))
+                .headers("Content-Type", "application/json")
+                .headers("Authorization", "Bearer "+jwt.getAccessToken())
+                .build();
+        HttpClient client = HttpClient.newHttpClient();
+        try {
+            HttpResponse<byte[]>  response = client.send(httpRequest, HttpResponse.BodyHandlers.ofByteArray());
+            if(response.statusCode() == 200) {
+                return response.body();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
 
     static public Object sendAndReceiveObject(String url, Object parameter) throws IOException {
