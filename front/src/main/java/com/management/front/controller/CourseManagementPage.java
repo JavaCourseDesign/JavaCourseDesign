@@ -33,6 +33,7 @@ public class CourseManagementPage extends SplitPane {
     private Button deleteButton = new Button("删除");
     private Button updateButton = new Button("更新");
     private Button openButton = new Button("开放/关闭选课");
+    private Button drawLotsButton = new Button("抽签");
     private SearchableListView teacherListView=new SearchableListView(FXCollections.observableArrayList((ArrayList) request("/getAllTeachers", null).getData()), List.of("teacherId", "name"));
     //包含全局所有教师信息的ListView，用于选择教师
     private SearchableListView studentListView=new SearchableListView(FXCollections.observableArrayList((ArrayList) request("/getAllStudents", null).getData()), List.of("studentId", "name"));
@@ -144,7 +145,7 @@ public class CourseManagementPage extends SplitPane {
         availableColumn.setCellValueFactory(data -> {
             if(data.getValue().get("available")==null)
             {
-                return new SimpleStringProperty("否");
+                return new SimpleStringProperty("");
             }
             boolean available = (boolean) data.getValue().get("available");
             return new SimpleStringProperty(available ? "是" : "否");
@@ -208,8 +209,9 @@ public class CourseManagementPage extends SplitPane {
         HBox buttons = new HBox(addButton, deleteButton, updateButton);
 
         openButton.setOnAction(event -> openCourses());
+        drawLotsButton.setOnAction(event -> drawLots());
 
-        controlPanel.getChildren().addAll(courseIdField, nameField, referenceField, capacityField, preCourseListView, teacherListView, administrativeClassListView, selectionGrid, buttons, openButton);
+        controlPanel.getChildren().addAll(courseIdField, nameField, referenceField, capacityField, preCourseListView, teacherListView, administrativeClassListView, selectionGrid, buttons, openButton, drawLotsButton);
 
         this.getItems().add(controlPanel);
     }
@@ -328,10 +330,36 @@ public class CourseManagementPage extends SplitPane {
                 return;
             }
         }
+        displayCourses();
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setContentText("开放/关闭选课成功");
         alert.showAndWait();
+    }
+
+    private void drawLots() {
+        List<Map> selectedCourses = courseTable.getSelectedItems();
+        if (selectedCourses.isEmpty()) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setContentText("未选择，无法抽签");
+            alert.showAndWait();
+            return;
+        }
+        for(Map selectedCourse : selectedCourses) {
+            Map<String, Object> requestData = new HashMap<>();
+            requestData.put("courseId", selectedCourse.get("courseId"));
+            requestData.put("capacity", selectedCourse.get("capacity"));
+            DataResponse response = request("/drawLots", requestData);
+            if (response.getCode() != 0) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setContentText("抽签失败: " + response.getMsg());
+                alert.showAndWait();
+                return;
+            }
+        }
         displayCourses();
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setContentText("抽签成功");
+        alert.showAndWait();
     }
 }
 

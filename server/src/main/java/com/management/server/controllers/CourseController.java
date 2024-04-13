@@ -108,11 +108,15 @@ public class CourseController {
 
         ArrayList<Map> teachers = (ArrayList<Map>) m.get("teachers");
         for (int i = 0; teachers!=null&&i < teachers.size(); i++) {
-            persons.add(personRepository.findByPersonId((teachers.get(i).get("personId")).toString()));
+            if(!persons.contains(personRepository.findByPersonId((teachers.get(i).get("personId")).toString()))){
+                persons.add(personRepository.findByPersonId((teachers.get(i).get("personId")).toString()));
+            }
         }
         ArrayList<Map> students = (ArrayList<Map>) m.get("students");
         for (int i = 0; students!=null&&i < students.size(); i++) {
-            persons.add(personRepository.findByPersonId((students.get(i).get("personId")).toString()));
+            if(!persons.contains(personRepository.findByPersonId((students.get(i).get("personId")).toString()))) {
+                persons.add(personRepository.findByPersonId((students.get(i).get("personId")).toString()));
+            }
         }
         //System.out.println("persons:"+persons);
         course.setPersons(persons);
@@ -121,8 +125,8 @@ public class CourseController {
         List<Lesson> lessons = new ArrayList<>();
         for (Map mapLesson : mapLessons) {
             Lesson lesson = new Lesson();
+            mapLesson.remove("persons");
             lesson = BeanUtil.mapToBean(mapLesson, lesson.getClass(), true, CopyOptions.create());
-
             lesson.setPersons(persons);
 
             lessonRepository.save(lesson);
@@ -147,24 +151,29 @@ public class CourseController {
             return new DataResponse(-1,null,"课程不存在，无法抽签");
         }
         Course course = courseRepository.findByCourseId(courseId);
-        //if(course.getPersons().stream().filter(person -> person instanceof Student).count()!=0)
         if(course.getPersons().stream().anyMatch(person -> person instanceof Student))  {
-            return new DataResponse(-1,null,"课程已有学生，无法抽签");//或者应该在前端警告，后端不应该有这个逻辑，而是直接清空学生
+            return new DataResponse(-1,null,"课程已有学生，无法抽签");
         }
 
-        List<Person> willingStudents = course.getWillingStudents();
+        List<Person> willingStudents = new ArrayList<>(course.getWillingStudents());
         if(willingStudents.size()<=capacity){
             course.setPersons(willingStudents);
         }else{
             List<Person> persons = new ArrayList<>();
-            for (int i = 0; i < capacity; i++) {
+            ArrayList<Map> personsMap = (ArrayList<Map>) m.get("persons");
+            for (int i = 0; i < personsMap.size(); i++) {
+                persons.add(personRepository.findByPersonId((personsMap.get(i).get("personId")).toString()));
+            }//保证老师不会被修改
+
+            for (int i = 0; i <= capacity; i++) {
                 int index = (int) (Math.random() * willingStudents.size());
-                persons.add(willingStudents.get(index));
+                persons.add(studentRepository.findByPersonId(willingStudents.get(index).getPersonId()));
                 willingStudents.remove(index);
             }
             course.setPersons(persons);
+            course.setWillingStudents(willingStudents);//如果选课未开放且有人选课，那么这些人就是抽签失败的人
         }
-
+        courseRepository.save(course);
         return new DataResponse(0,null,"抽签成功");
     }
 
