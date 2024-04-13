@@ -58,6 +58,8 @@ public class AdministrativeClassController {
         if (administrativeClass == null) {
             return new DataResponse(-1,null,"行政班不存在");
         }
+        BeanUtil.fillBeanWithMap(m, administrativeClass, true, true);
+        administrativeClass.setName(""+m.get("major")+m.get("grade")+"级"+m.get("classNumber")+"班");
         if(m.get("studentIds") != null){
             List<Student> students = new ArrayList<>();
             for (int i = 0; i < ((ArrayList)m.get("studentIds")).size(); i++) {

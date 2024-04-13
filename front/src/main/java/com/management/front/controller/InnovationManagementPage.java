@@ -79,7 +79,7 @@ public class InnovationManagementPage extends SplitPane {
         updateButton.setOnAction(event -> updateInnovation());
 
         innovationTable.setOnItemClick(innovation->{
-            List<Map<String, Object>> persons = (List<Map<String, Object>>) innovation.get("persons");
+            List<Map<String, Object>> persons = (List<Map<String, Object>>) innovation.get("persons");//逻辑不完整，应该使用slv
             String studentIds = persons.stream()
                     .filter(person -> person.containsKey("studentId"))
                     .map(person -> (String) person.get("studentId"))

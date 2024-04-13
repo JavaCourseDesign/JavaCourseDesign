@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.util.List;
 
@@ -25,15 +26,19 @@ public class Course{
 
     private String name;
 
-    private String reference;
+    private String reference;//教师有权限
 
     private Double capacity;//课容量
 
     private Double credit;//学分
 
-    private Double beginWeek;//开始周次
+    private Double regularWeight=0.5;//平时成绩权重 教师有权限
 
-    private Double endWeek;//结束周次
+    /*private Double beginWeek;//开始周次 教师有权限
+
+    private Double endWeek;//结束周次 教师有权限*/ //改为lesson的属性
+
+    private boolean available;//是否可选
 
 
     @OneToMany
@@ -47,16 +52,25 @@ public class Course{
     @JoinTable(name = "teacher_course")
     private List<Teacher> teachers;*/
 
-    //在老师的示例中有preCourse（前序课程）！！！待实现  关系为@manytoone
-
-    @ManyToOne
+    /*@ManyToOne//一门课只有一门先修课？
     @JoinColumn(name="pre_course_id")
-    private Course preCourse;
+    private Course preCourse;*/
+
+    @ManyToMany
+    @JoinTable(name = "course_course")
+    @JsonIgnoreProperties(value = {"preCourses"})//非常重要，避免自身递归
+    @ToString.Exclude//也非常重要，避免自身递归
+    private List<Course> preCourses;
 
     @ManyToMany
     @JoinTable(name = "person_course")
     //@JsonIgnoreProperties(value = {"courses"})
     private List<Person> persons;
+
+    //希望选课的学生
+    @ManyToMany
+    @JoinTable(name = "willing_student_course")
+    private List<Person> willingStudents;
 
     //lesson should be subClass of event, lesson to course should be many to one
     //course should not be subClass of event

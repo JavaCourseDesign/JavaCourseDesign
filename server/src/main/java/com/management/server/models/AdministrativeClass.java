@@ -13,6 +13,11 @@ public class AdministrativeClass {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String administrativeClassId;
 
+    private String major;
+    private String grade;
+    private String classNumber;
+    private String name;//这样赋值是被允许的吗？
+
     /*@OneToOne
     private Teacher headTeacher;*/ //暂时不考虑班主任
 

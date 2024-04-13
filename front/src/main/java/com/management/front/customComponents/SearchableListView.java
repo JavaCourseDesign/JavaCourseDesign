@@ -99,7 +99,9 @@ public class SearchableListView extends VBox {
 
     public void setSelectedItems(List<Map> selectedItems) {
         List<Map> copyOfSelectedItems = new ArrayList<>(selectedItems);//非常重要！不能直接操作参数，因为传的是引用，会导致原数据被修改
-        copyOfSelectedItems.removeIf(item -> !data.contains(item));
+        //System.out.println("before:"+copyOfSelectedItems);
+        //copyOfSelectedItems.removeIf(item -> !data.contains(item));
+        //System.out.println("after:"+copyOfSelectedItems);
         this.selectedItems = copyOfSelectedItems;
         selectedLabel.setText(selectedItemsToString());
     }
