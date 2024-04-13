@@ -32,7 +32,7 @@ public class ScoreManagementPage extends SplitPane {
         m.put("studentId", studentIdField.getText());
         m.put("courseId", courseIdField.getText());
         m.put("regularMark", regularMarkField.getText());
-        m.put("finalMark", finalMarkField.getText());
+        m.put("finalMark", finalMarkField.getText());//比例在course里，需要好好设计教师界面
         return null;
     }
     public ScoreManagementPage() {
