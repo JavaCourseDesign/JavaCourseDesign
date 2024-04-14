@@ -17,14 +17,10 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
-
 import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
@@ -32,11 +28,9 @@ import java.util.Optional;
 import java.util.StringTokenizer;
 
 @RestController
-
 public class StudentController {
     @Autowired
     private ResourceLoader resourceLoader;  //资源装在服务对象自动注入
-
     private FSDefaultCacheStore fSDefaultCacheStore = new FSDefaultCacheStore();
     @Autowired
     private StudentRepository studentRepository;
@@ -46,7 +40,6 @@ public class StudentController {
     private AdministrativeClassRepository administrativeClassRepository;
     @Autowired
     private InnovationRepository innovationRepository;
-
     @PostMapping("/getStudentByPersonId")
     public DataResponse getStudent(@RequestBody Map<String,String> map)
     {
@@ -57,13 +50,12 @@ public class StudentController {
         student.put("className",administrativeClassRepository.findAdministrativeClassByStudent(s)+"班");
         return new DataResponse(0,student,null);
     }
-
     @PostMapping("/getAllStudents")
     public DataResponse getAllStudents()
     {
+
         return new DataResponse(200,studentRepository.findAll(),null);
     }
-
     @PostMapping("/addStudent")
     public DataResponse addStudent(@RequestBody Map m)
     {
@@ -75,6 +67,7 @@ public class StudentController {
         studentRepository.save(student);
         return new DataResponse(0,null,"添加成功");
     }
+
     @PostMapping("/deleteStudent")
     public DataResponse deleteStudent(@RequestBody Map m)
     {
@@ -114,7 +107,7 @@ public class StudentController {
             //builder.withWmMargins(0, 0, 0, 0).useDefaultPageSize(PageOrientation.PORTRAIT, PageSize.A4);
             builder.useCacheStore(PdfRendererBuilder.CacheStore.PDF_FONT_METRICS, fSDefaultCacheStore);
             Resource resource = resourceLoader.getResource("classpath:font/SourceHanSansSC-Regular.ttf");
-            InputStream fontInput = resource.getInputStream();
+           InputStream fontInput = resource.getInputStream();
             builder.useFont(new FSSupplier<InputStream>() {
                 @Override
                 public InputStream supply() {

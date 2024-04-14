@@ -42,6 +42,7 @@ public class StudentPersonalInfoPage extends TabPane {
         //System.out.println(student);
         this.getTabs().add(new BasicInfoTab(student));
         this.getTabs().add(new InnovationTab(student));
+        this.getTabs().add(new absenceTab(student));
     }
 }
 
@@ -277,5 +278,12 @@ class InnovationTab extends Tab {
             //System.out.println("Selected item: " + item);
         });*/
     }
+}
+class absenceTab extends Tab {
+
+    public absenceTab(Map student) {
+
+    }
+
 }
 

@@ -12,7 +12,10 @@ public class Absence {
     @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
     private String absenceId;
 
-    private String reason;
+    private Boolean isApproved;
+    private String offReason;
+    private String destination;
+    private String time;
 
     @ManyToOne
     @JoinColumn(name="person_id")
