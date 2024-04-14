@@ -16,7 +16,7 @@ public class Honor {
     private Person person;
 
     private String time;
-    private String honorName;
+    private String name;
     @Size(max=1000)
     private String message;
     @Size(max=1000)

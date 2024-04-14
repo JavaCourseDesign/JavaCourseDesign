@@ -17,7 +17,7 @@ public abstract class Event {
 
     private String name;
 
-    private String time;//5,8.30,1.50     周五 8:30 一小时五十分钟  lesson的此属性第一个数值应为-1，开始周与结束周属性在course 中
+    private String time;//12,5,8.30,1.50     第十二周 周五 8:30 一小时五十分钟
 
     private String introduction;
 
@@ -25,7 +25,7 @@ public abstract class Event {
 
     private boolean checked;//用于判定是否已经通知到学生，如果未通知，应在通知栏显示
 
-    private boolean[] eventWeek;
+    //private boolean[] eventWeek; 不能这样设计，必须一节对一个对象，否则单节的请假情况和作业情况难以对应
 
     @ManyToMany
     @JoinTable(name = "person_event")
