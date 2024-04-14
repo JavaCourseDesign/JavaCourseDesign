@@ -101,8 +101,6 @@ public class CourseController {
         for (int i = 0; i < personsMap.size(); i++) {
             persons.add(studentRepository.findByPersonId((personsMap.get(i).get("personId")).toString()));//把map转换为person对象,只转student
         }
-        System.out.println("\npersons: "+persons.size());
-        System.out.println("personsMap: "+personsMap.size());
 
         lessonRepository.deleteAll(course.getLessons());
 
