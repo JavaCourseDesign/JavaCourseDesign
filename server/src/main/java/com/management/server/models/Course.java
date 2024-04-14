@@ -42,7 +42,7 @@ public class Course{
 
 
     @OneToMany
-    private List<Lesson> lessons;
+    private List<Lesson> lessons;//可以通过get0和getSize得到开始结束周次
 
     /*@ManyToMany
     @JoinTable(name = "student_course")

@@ -58,7 +58,7 @@ public class TestController {//专门用于添加测试数据
         userRepository.save(user);
 
         ArrayList<Student> students=new ArrayList<>();
-        for(int i=0;i<100;i++){
+        for(int i=0;i<200;i++){
             Student student=new Student();
             student.setStudentId("201921"+String.format("%03d",i));
             if(i==0) student.setName("wzk");
@@ -110,10 +110,29 @@ public class TestController {//专门用于添加测试数据
             courseRepository.save(course);
         }
 
+        ArrayList<Course> coursesWithoutStudents=new ArrayList<>();
+        for(int i=0;i<3;i++){
+            Course course=new Course();
+            course.setName(generateRandomCourseName());
+            course.setCapacity(1.0*r.nextInt(5));
+            course.setCredit(1.0*r.nextInt(6));
+            List<Person> persons=new ArrayList<>();
+            for (int j = 0; j < r.nextInt(3)+1; j++) {
+                persons.add(teachers.get(r.nextInt(teachers.size())));
+            }
+            course.setPersons(persons);
+            coursesWithoutStudents.add(course);
+            courseRepository.save(course);
+        }
+
         ArrayList<AdministrativeClass> administrativeClasses=new ArrayList<>();
         List<Student> assignedStudents = new ArrayList<>();
-        for(int i=0;i<10;i++){
+        for(int i=0;i<5;i++){
             AdministrativeClass administrativeClass=new AdministrativeClass();
+            administrativeClass.setMajor("软件工程");
+            administrativeClass.setGrade("2019");
+            administrativeClass.setClassNumber(i+1+"");
+            administrativeClass.setName("软件工程2019级"+(i+1)+"班");
             List<Student> studentsInClass=new ArrayList<>();
             for (int j = 0; j < r.nextInt(30)+15; j++) {
                 Student student=students.get(r.nextInt(students.size()));
