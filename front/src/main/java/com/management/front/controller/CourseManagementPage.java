@@ -62,6 +62,7 @@ public class CourseManagementPage extends SplitPane {
         m.put("reference", referenceField.getText());
         m.put("capacity", capacityField.getText());
         m.put("teachers", teacherListView.getSelectedItems());
+        System.out.println("\n包含了这么多teacher"+teacherListView.getSelectedItems().size());
         //m.put("students", studentListView.getSelectedItems());
         List<Map> studentsToBeAdded = studentListView.getSelectedItems();
         //把行政班中的学生依次添加到students中，避免重复
@@ -403,8 +404,8 @@ class SelectionGrid extends GridPane {
             for (int j = 0; j < cols; j++) {
                 lessonBoxes[i][j].checkBox.setSelected(false);
                 lessonBoxes[i][j].locationField.setText("");
-                lessonBoxes[i][j].singleWeek.setSelected(false);
-                lessonBoxes[i][j].doubleWeek.setSelected(false);
+                lessonBoxes[i][j].singleWeek.setSelected(true);
+                lessonBoxes[i][j].doubleWeek.setSelected(true);
                 lessonBoxes[i][j].startWeek.getValueFactory().setValue(1);
                 lessonBoxes[i][j].endWeek.getValueFactory().setValue(20);
             }
