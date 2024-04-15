@@ -1,6 +1,7 @@
 package com.management.server.models;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
@@ -10,6 +11,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.util.List;
+import java.util.Set;
 
 @Entity
 
@@ -21,7 +23,7 @@ import java.util.List;
                 //@NamedAttributeNode("persons")
         },
         subgraphs = {
-                @NamedSubgraph(name = "Event.persons", attributeNodes = @NamedAttributeNode("persons"))
+                //@NamedSubgraph(name = "Event.persons", attributeNodes = @NamedAttributeNode("persons"))
         }
     )
 /*@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "name")//在递归中第二次出现时用name属性替代本对象避免无限递归
@@ -49,7 +51,9 @@ public class Course{
     private boolean available;//是否可选
 
 
-    @OneToMany(cascade = {CascadeType.ALL})
+    @OneToMany(cascade = {CascadeType.ALL},orphanRemoval = true)
+    //@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "eventId")
+    @JsonIgnore
     private List<Lesson> lessons;//可以通过get0和getSize得到开始结束周次
 
     /*@ManyToMany
@@ -69,20 +73,27 @@ public class Course{
     //@JsonIgnoreProperties(value = {"preCourses"})//非常重要，避免自身递归
     //@ToString.Exclude//也非常重要，避免自身递归
     @JsonIgnoreProperties(value = {"preCourses","lessons","persons","willingStudents"})
-    private List<Course> preCourses;
+    //@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "name")
+    private Set<Course> preCourses;
 
     @ManyToMany
     @JoinTable(name = "person_course")
     //@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "personId")
     //@JsonIgnoreProperties(value = {"courses"})
-    private List<Person> persons;
+    private Set<Person> persons;
 
     //希望选课的学生
     @ManyToMany
     @JoinTable(name = "willing_student_course")
-    private List<Person> willingStudents;
+    private Set<Person> willingStudents;
 
     //lesson should be subClass of event, lesson to course should be many to one
     //course should not be subClass of event
 
+    public void setLessons(List<Lesson> lessons) {
+        this.lessons.clear();
+        if (lessons != null) {
+            this.lessons.addAll(lessons);
+        }
+    }
 }

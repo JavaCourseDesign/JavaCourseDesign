@@ -9,10 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -34,6 +31,34 @@ public class CourseController {
         return new DataResponse(0,courseRepository.findAll(),null);
     }
 
+    @PostMapping("/getLessonsByCourseId")
+    public DataResponse getLessonsByCourse(@RequestBody Map m){
+        String courseId = (String) m.get("courseId");
+        if(!courseRepository.existsByCourseId(courseId)) {
+            return new DataResponse(-1, List.of(),"课程不存在，无法获取课程信息");
+        }
+        System.out.println(courseRepository.findByCourseId(courseId).getLessons().size());
+        if(courseRepository.findByCourseId(courseId).getLessons().isEmpty()){
+            System.out.println("无课程信息");
+            return new DataResponse(0, List.of(),"无课程信息");
+        }
+        Course course = courseRepository.findByCourseId(courseId);
+        return new DataResponse(0,course.getLessons(),null);
+    }
+
+    /*@PostMapping("/getPreCoursesByCourseId")
+    public DataResponse getPreCourseByCourse(@RequestBody Map m){
+        String courseId = (String) m.get("courseId");
+        if(!courseRepository.existsByCourseId(courseId)) {
+            return new DataResponse(-1, List.of(),"课程不存在，无法获取课程信息");
+        }
+        Course course = courseRepository.findByCourseId(courseId);
+        if(course.getPreCourses()==null){
+            return new DataResponse(0, List.of(),"无先修课程");
+        }
+        return new DataResponse(0,course.getPreCourses(),null);
+    }*/
+
     @PostMapping("/addCourse")
     @PreAuthorize("hasRole('ADMIN')")
     public DataResponse addCourse(@RequestBody Map m){
@@ -52,7 +77,7 @@ public class CourseController {
                 .collect(Collectors.toMap(Person::getPersonId, Function.identity()));
 
         // 设置 course 的 persons
-        List<Person> persons = new ArrayList<>(personMap.values());
+        Set<Person> persons = new HashSet<>(personMap.values());
         course.setPersons(persons);
 
         // 保存 persons 的更改
@@ -82,7 +107,7 @@ public class CourseController {
                 .collect(Collectors.toMap(Course::getCourseId, Function.identity()));
 
         // 设置 course 的 preCourses
-        List<Course> preCourses = new ArrayList<>(preCourseMap.values());
+        Set<Course> preCourses = new HashSet<>(preCourseMap.values());
         course.setPreCourses(preCourses);
 
         courseRepository.save(course);
@@ -111,7 +136,7 @@ public class CourseController {
                 .collect(Collectors.toMap(Person::getPersonId, Function.identity()));
 
         // 设置 course 的 persons
-        List<Person> persons = new ArrayList<>(personMap.values());
+        Set<Person> persons = new HashSet<>(personMap.values());
         course.setPersons(persons);
 
         // 保存 persons 的更改
@@ -141,7 +166,7 @@ public class CourseController {
                 .collect(Collectors.toMap(Course::getCourseId, Function.identity()));
 
         // 设置 course 的 preCourses
-        List<Course> preCourses = new ArrayList<>(preCourseMap.values());
+        Set<Course> preCourses = new HashSet<>(preCourseMap.values());
         course.setPreCourses(preCourses);
 
         courseRepository.save(course);
@@ -170,11 +195,11 @@ public class CourseController {
             return new DataResponse(-1,null,"课程已有学生，无法抽签");
         }
 
-        List<Person> willingStudents = new ArrayList<>(course.getWillingStudents());
+        Set<Person> willingStudents = new HashSet<>(course.getWillingStudents());
         if(willingStudents.size()<=capacity){
             course.setPersons(willingStudents);
         }else{
-            List<Person> persons = new ArrayList<>();
+            Set<Person> persons = new HashSet<>();
             ArrayList<Map> personsMap = (ArrayList<Map>) m.get("persons");
             for (int i = 0; i < personsMap.size(); i++) {
                 persons.add(personRepository.findByPersonId((personsMap.get(i).get("personId")).toString()));
@@ -182,7 +207,7 @@ public class CourseController {
 
             for (int i = 0; i < capacity; i++) {
                 int index = (int) (Math.random() * willingStudents.size());
-                persons.add(studentRepository.findByPersonId(willingStudents.get(index).getPersonId()));
+                persons.add(studentRepository.findByPersonId(willingStudents.toArray(new Person[0])[index].getPersonId()));
                 willingStudents.remove(index);
             }
             course.setPersons(persons);

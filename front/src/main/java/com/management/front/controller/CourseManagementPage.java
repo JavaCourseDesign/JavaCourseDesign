@@ -121,8 +121,9 @@ public class CourseManagementPage extends SplitPane {
         courseReferenceColumn.setCellValueFactory(new MapValueFactory<>("reference"));
         courseCapacityColumn.setCellValueFactory(new MapValueFactory<>("capacity"));
 
-        preCourseColumn.setCellValueFactory(new MapValueFactory<>("preCourse"));
+        //preCourseColumn.setCellValueFactory(new MapValueFactory<>("preCourses"));
         preCourseColumn.setCellValueFactory(data -> {
+            System.out.println("data.getValue:"+data.getValue());
             List<Map<String, Object>> preCourses = (List<Map<String, Object>>) data.getValue().get("preCourses");
             String preCourseNames = preCourses.stream()
                     .map(preCourse -> (String) preCourse.get("name"))
@@ -193,12 +194,13 @@ public class CourseManagementPage extends SplitPane {
 
                 //System.out.println("preCourses"+course.get("preCourses"));
                 preCourseListView.setSelectedItems((List<Map>) course.get("preCourses"));
+                //preCourseListView.setSelectedItems((List<Map>) request("/getPreCoursesByCourseId", Map.of("courseId", course.get("courseId"))).getData());
 
                 //administrative没法自动选中，只能添加,故设为空
                 administrativeClassListView.setSelectedItems(new ArrayList<>());
 
-                selectionGrid.setSelectedLessons((List<Map>) course.get("lessons"));
-                //selectionGrid.course=course;//有问题，更新可以拿到，但添加拿到的是空的
+                //selectionGrid.setSelectedLessons((List<Map>) course.get("lessons"));
+                selectionGrid.setSelectedLessons((List<Map>) request("/getLessonsByCourseId", Map.of("courseId", course.get("courseId"))).getData());
 
                 weekTimeTable.clear();
 

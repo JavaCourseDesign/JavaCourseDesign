@@ -8,9 +8,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 import static com.management.server.models.EUserType.ROLE_ADMIN;
 
@@ -86,7 +84,7 @@ public class TestController {//专门用于添加测试数据
             course.setName(generateRandomCourseName());
             course.setCapacity(1.0*r.nextInt(100));
             course.setCredit(1.0*r.nextInt(6));
-            List<Person> persons=new ArrayList<>();
+            Set<Person> persons=new HashSet<>();
             for (int j = 0; j < r.nextInt(30); j++) {
                 persons.add(students.get(r.nextInt(students.size())));
             }
@@ -104,7 +102,7 @@ public class TestController {//专门用于添加测试数据
             course.setName(generateRandomCourseName());
             course.setCapacity(1.0*r.nextInt(5));
             course.setCredit(1.0*r.nextInt(6));
-            List<Person> persons=new ArrayList<>();
+            Set<Person> persons=new HashSet<>();
             for (int j = 0; j < r.nextInt(3)+1; j++) {
                 persons.add(teachers.get(r.nextInt(teachers.size())));
             }

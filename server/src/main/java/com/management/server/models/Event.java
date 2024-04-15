@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.Data;
 import java.util.List;
+import java.util.Set;
 
 //should be the super class of course,activities,etc
 @Entity
@@ -18,7 +19,7 @@ import java.util.List;
 @JsonIgnoreProperties(value = {"persons"})*/
 @NamedEntityGraph(name = "Event.persons",
         attributeNodes = @NamedAttributeNode("persons"))
-public abstract class Event {
+public class Event {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String eventId;
@@ -38,7 +39,7 @@ public abstract class Event {
     @ManyToMany
     @JoinTable(name = "person_event")
     @JsonIgnore
-    private List<Person> persons;
+    private Set<Person> persons;
     //private Integer personId;//to be deleted why????
 
     /*@ManyToMany(mappedBy = "events")
