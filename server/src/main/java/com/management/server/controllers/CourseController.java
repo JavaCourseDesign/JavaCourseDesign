@@ -44,13 +44,13 @@ public class CourseController {
         List<Person> persons = new ArrayList<>();
         ArrayList<Map> teachers = (ArrayList<Map>) m.get("teachers");
         for (int i = 0; i < teachers.size(); i++) {
-            persons.add(personRepository.findByPersonId((teachers.get(i).get("personId")).toString()));
+            persons.add(teacherRepository.findByPersonId((teachers.get(i).get("personId")).toString()));
         }
         ArrayList<Map> students = (ArrayList<Map>) m.get("students");
         for (int i = 0; i < students.size(); i++) {
-            persons.add(personRepository.findByPersonId((students.get(i).get("personId")).toString()));
+            persons.add(studentRepository.findByPersonId((students.get(i).get("personId")).toString()));
         }
-        System.out.println("persons:"+persons);
+        //System.out.println("persons:"+persons);
         course.setPersons(persons);
 
         List<Map> mapLessons = (List<Map>) m.get("lessons");
@@ -62,15 +62,15 @@ public class CourseController {
             lesson.setPersons(persons);
 
             lessonRepository.save(lesson);
-            System.out.println("lesson:"+lesson+" eventId:"+lesson.getEventId());
+            //System.out.println("lesson:"+lesson+" eventId:"+lesson.getEventId());
             lessons.add(lesson);
         }
         course.setLessons(lessons);
 
         courseRepository.save(course);
 
-        System.out.println(course);
-        System.out.println(course.getLessons().get(0).getTime());
+        //System.out.println(course);
+        //System.out.println(course.getLessons().get(0).getTime());
 
         return new DataResponse(0,null,"添加成功");
     }
@@ -106,14 +106,16 @@ public class CourseController {
 
         ArrayList<Map> teachers = (ArrayList<Map>) m.get("teachers");
         for (int i = 0; teachers!=null&&i < teachers.size(); i++) {
-            if(!persons.contains(personRepository.findByPersonId((teachers.get(i).get("personId")).toString()))){
-                persons.add(personRepository.findByPersonId((teachers.get(i).get("personId")).toString()));
+            Person teacher = teacherRepository.findByPersonId((teachers.get(i).get("personId")).toString());
+            if(!persons.contains(teacher)){
+                persons.add(teacher);
             }
         }
         ArrayList<Map> students = (ArrayList<Map>) m.get("students");
         for (int i = 0; students!=null&&i < students.size(); i++) {
-            if(!persons.contains(personRepository.findByPersonId((students.get(i).get("personId")).toString()))) {
-                persons.add(personRepository.findByPersonId((students.get(i).get("personId")).toString()));
+            Person student = studentRepository.findByPersonId((students.get(i).get("personId")).toString());
+            if(!persons.contains(student)) {
+                persons.add(student);
             }
         }
         //System.out.println("persons:"+persons);
@@ -125,7 +127,7 @@ public class CourseController {
             Lesson lesson = new Lesson();
             mapLesson.remove("persons");
             lesson = BeanUtil.mapToBean(mapLesson, lesson.getClass(), true, CopyOptions.create());
-            lesson.setPersons(persons);
+            lesson.setPersons(persons); //lesson不设置persons，避免性能损失  ？？？似乎没用
 
             lessonRepository.save(lesson);
             System.out.println("lesson:"+lesson+" eventId:"+lesson.getEventId());
@@ -135,7 +137,7 @@ public class CourseController {
 
         courseRepository.save(course);
 
-        System.out.println(course);
+        //System.out.println(course);
         return new DataResponse(0,null,"更新成功");
     }
 

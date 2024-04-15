@@ -16,8 +16,8 @@ import java.util.List;
 @Data
 @Table(name="course")
 
-//@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "name")//在递归中第二次出现时用name属性替代本对象避免无限递归
-//@JsonIgnoreProperties(value = {"persons"})
+/*@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "name")//在递归中第二次出现时用name属性替代本对象避免无限递归
+@JsonIgnoreProperties(value = {"persons"})*/
 
 public class Course{
     @Id
@@ -64,6 +64,7 @@ public class Course{
 
     @ManyToMany
     @JoinTable(name = "person_course")
+    //@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "personId")
     //@JsonIgnoreProperties(value = {"courses"})
     private List<Person> persons;
 

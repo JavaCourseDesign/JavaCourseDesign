@@ -62,7 +62,7 @@ public class CourseManagementPage extends SplitPane {
         m.put("reference", referenceField.getText());
         m.put("capacity", capacityField.getText());
         m.put("teachers", teacherListView.getSelectedItems());
-        System.out.println("\n包含了这么多teacher"+teacherListView.getSelectedItems().size());
+        //System.out.println("\n包含了这么多teacher"+teacherListView.getSelectedItems().size());
         //m.put("students", studentListView.getSelectedItems());
         List<Map> studentsToBeAdded = studentListView.getSelectedItems();
         //把行政班中的学生依次添加到students中，避免重复
@@ -80,7 +80,7 @@ public class CourseManagementPage extends SplitPane {
         m.put("preCourses", preCourseListView.getSelectedItems());
 
         selectionGrid.course=m;//把一部分course的信息给予lesson，注意顺序！
-        System.out.println("selectionGrid.course:"+selectionGrid.course);
+        //System.out.println("selectionGrid.course:"+selectionGrid.course);
         m.put("lessons", selectionGrid.getSelectedLesson());
 
         return m;
