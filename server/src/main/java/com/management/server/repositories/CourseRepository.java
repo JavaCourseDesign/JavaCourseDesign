@@ -4,6 +4,7 @@ import com.management.server.models.Course;
 import com.management.server.models.Person;
 import com.management.server.models.Teacher;
 import jakarta.transaction.Transactional;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -15,6 +16,8 @@ import java.util.List;
 @Repository
 @Transactional
 public interface CourseRepository extends JpaRepository<Course,String> {
+    @EntityGraph(value = "Course", type = EntityGraph.EntityGraphType.LOAD)
+    List<Course> findAll();
     Course findByCourseId(String courseId);
     @Query("SELECT c FROM Course c JOIN c.persons p WHERE p.personId = :personId")
     List<Course> findCoursesByPersonId(@Param("personId") String personId);

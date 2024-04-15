@@ -14,8 +14,10 @@ import java.util.List;
 @Data
 //@MappedSuperclass
 @Inheritance(strategy = InheritanceType.JOINED)
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "eventId")//在递归中第二次出现时用name属性替代本对象避免无限递归
-@JsonIgnoreProperties(value = {"persons"})
+/*@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "eventId")//在递归中第二次出现时用name属性替代本对象避免无限递归
+@JsonIgnoreProperties(value = {"persons"})*/
+@NamedEntityGraph(name = "Event.persons",
+        attributeNodes = @NamedAttributeNode("persons"))
 public abstract class Event {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

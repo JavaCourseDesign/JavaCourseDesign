@@ -15,7 +15,15 @@ import java.util.List;
 
 @Data
 @Table(name="course")
-
+@NamedEntityGraph(name = "Course",
+        attributeNodes = {
+                @NamedAttributeNode("lessons"),
+                //@NamedAttributeNode("persons")
+        },
+        subgraphs = {
+                @NamedSubgraph(name = "Event.persons", attributeNodes = @NamedAttributeNode("persons"))
+        }
+    )
 /*@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "name")//在递归中第二次出现时用name属性替代本对象避免无限递归
 @JsonIgnoreProperties(value = {"persons"})*/
 
@@ -41,7 +49,7 @@ public class Course{
     private boolean available;//是否可选
 
 
-    @OneToMany
+    @OneToMany(cascade = {CascadeType.ALL})
     private List<Lesson> lessons;//可以通过get0和getSize得到开始结束周次
 
     /*@ManyToMany
@@ -58,8 +66,9 @@ public class Course{
 
     @ManyToMany
     @JoinTable(name = "course_course")
-    @JsonIgnoreProperties(value = {"preCourses"})//非常重要，避免自身递归
-    @ToString.Exclude//也非常重要，避免自身递归
+    //@JsonIgnoreProperties(value = {"preCourses"})//非常重要，避免自身递归
+    //@ToString.Exclude//也非常重要，避免自身递归
+    @JsonIgnoreProperties(value = {"preCourses","lessons","persons","willingStudents"})
     private List<Course> preCourses;
 
     @ManyToMany

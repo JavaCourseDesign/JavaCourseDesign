@@ -14,4 +14,5 @@ import java.util.List;
 @Transactional
 public interface LessonRepository extends JpaRepository<Lesson, String> {
     void deleteByEventId(String eventId);
+
 }

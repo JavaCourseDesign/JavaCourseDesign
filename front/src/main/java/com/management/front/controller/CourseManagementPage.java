@@ -38,16 +38,17 @@ public class CourseManagementPage extends SplitPane {
     //包含全局所有教师信息的ListView，用于选择教师
     private SearchableListView studentListView=new SearchableListView(FXCollections.observableArrayList((ArrayList) request("/getAllStudents", null).getData()), List.of("studentId", "name"));
     //包含全局所有学生信息的ListView，用于选择学生
-    ObservableList<Map<String, Object>> originalPreCourseData = FXCollections.observableArrayList((ArrayList) request("/getAllCourses", null).getData());
-    ObservableList<Map<String, Object>> filteredPreCourseData = originalPreCourseData.stream()
-            .map(item -> {
-                Map<String, Object> newItem = new HashMap<>(item);
-                newItem.remove("preCourses");
-                return newItem;
-            })
-            .collect(Collectors.toCollection(FXCollections::observableArrayList));
-
-    private SearchableListView preCourseListView = new SearchableListView(filteredPreCourseData, List.of("courseId", "name"));//存储的course不包含preCourses属性，防止递归
+    //ObservableList<Map<String, Object>> originalPreCourseData = FXCollections.observableArrayList((ArrayList) request("/getAllCourses", null).getData());
+    //ObservableList<Map<String, Object>> filteredPreCourseData = originalPreCourseData.stream()
+    //        .map(item -> {
+    //            Map<String, Object> newItem = new HashMap<>(item);
+    //            newItem.remove("preCourses");
+    //            return newItem;
+    //        })
+    //        .collect(Collectors.toCollection(FXCollections::observableArrayList));
+//
+    //private SearchableListView preCourseListView = new SearchableListView(filteredPreCourseData, List.of("courseId", "name"));//存储的course不包含preCourses属性，防止递归
+    private SearchableListView preCourseListView = new SearchableListView(FXCollections.observableArrayList((ArrayList) request("/getAllCourses", null).getData()), List.of("courseId", "name"));
     private SearchableListView administrativeClassListView = new SearchableListView(FXCollections.observableArrayList((ArrayList) request("/getAllAdministrativeClasses", null).getData()), List.of("name"));
     private TextField courseIdField = new TextField();
     private TextField nameField = new TextField();
@@ -61,9 +62,11 @@ public class CourseManagementPage extends SplitPane {
         m.put("name", nameField.getText());
         m.put("reference", referenceField.getText());
         m.put("capacity", capacityField.getText());
-        m.put("teachers", teacherListView.getSelectedItems());
-        //System.out.println("\n包含了这么多teacher"+teacherListView.getSelectedItems().size());
-        //m.put("students", studentListView.getSelectedItems());
+
+        List<Map> personsToBeAdded = new ArrayList<>();
+        personsToBeAdded.addAll(teacherListView.getSelectedItems());
+        personsToBeAdded.addAll(studentListView.getSelectedItems());
+
         List<Map> studentsToBeAdded = studentListView.getSelectedItems();
         //把行政班中的学生依次添加到students中，避免重复
         List<Map> administrativeClasses = administrativeClassListView.getSelectedItems();
@@ -75,9 +78,18 @@ public class CourseManagementPage extends SplitPane {
                 }
             }
         }
-        m.put("students", studentsToBeAdded);
+        personsToBeAdded.addAll(studentsToBeAdded);
 
-        m.put("preCourses", preCourseListView.getSelectedItems());
+        m.put("persons", personsToBeAdded);
+
+        List<Map> preCourses = preCourseListView.getSelectedItems().stream()
+                .map(course -> {
+                    Map<String, Object> preCourse = new HashMap<>();
+                    preCourse.put("courseId", course.get("courseId"));
+                    return preCourse;
+                })
+                .collect(Collectors.toList());
+        m.put("preCourses", preCourses);
 
         selectionGrid.course=m;//把一部分course的信息给予lesson，注意顺序！
         //System.out.println("selectionGrid.course:"+selectionGrid.course);
