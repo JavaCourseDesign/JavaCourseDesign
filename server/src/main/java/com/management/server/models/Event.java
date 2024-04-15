@@ -1,5 +1,9 @@
 package com.management.server.models;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.Data;
 import java.util.List;
@@ -10,7 +14,11 @@ import java.util.List;
 @Data
 //@MappedSuperclass
 @Inheritance(strategy = InheritanceType.JOINED)
-public  class Event {
+/*@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "eventId")//在递归中第二次出现时用name属性替代本对象避免无限递归
+@JsonIgnoreProperties(value = {"persons"})*/
+@NamedEntityGraph(name = "Event.persons",
+        attributeNodes = @NamedAttributeNode("persons"))
+public abstract class Event {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String eventId;
@@ -29,6 +37,7 @@ public  class Event {
 
     @ManyToMany
     @JoinTable(name = "person_event")
+    @JsonIgnore
     private List<Person> persons;
     //private Integer personId;//to be deleted why????
 
