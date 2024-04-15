@@ -54,7 +54,6 @@ public abstract class Person {
     @Size(max = 20)
     private String address;
 
-    private String introduce;
     private String social;
 
     /*@OneToMany(mappedBy = "person")

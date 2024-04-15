@@ -39,13 +39,13 @@ public class TestController {//专门用于添加测试数据
             return new DataResponse(1,null,"测试数据已存在");
         }
 
-        String filePath = "server/src/main/resources/static/resume.html";
+        /*String filePath = "server/src/main/resources/static/resume.html";
         String content = null;
         try {
             content = new String(Files.readAllBytes(Paths.get(filePath)));
         } catch (IOException e) {
             throw new RuntimeException(e);
-        }
+        }*/
         Random r=new Random();
 
         User user=new User();
@@ -76,10 +76,17 @@ public class TestController {//专门用于添加测试数据
             student.setBirthday("2000-01-01");
             student.setPhone("18879635506");
             student.setIdCardNum("320000200001010000");
-            student.setIntroduce(content);
             students.add(student);
             studentRepository.save(student);
         }
+        Course coursewzk=new Course();
+        coursewzk.setName("软件工程wzk");
+        coursewzk.setCapacity(1.0*r.nextInt(100));
+        coursewzk.setCredit(1.0*r.nextInt(6));
+        List<Person> personwzk=new ArrayList<>();
+        personwzk.add(students.get(0));
+        coursewzk.setPersons(personwzk);
+        courseRepository.save(coursewzk);
 
         ArrayList<Teacher> teachers=new ArrayList<>();
         for(int i=0;i<50;i++){
@@ -134,7 +141,7 @@ public class TestController {//专门用于添加测试数据
             administrativeClass.setClassNumber(i+1+"");
             administrativeClass.setName("软件工程2019级"+(i+1)+"班");
             List<Student> studentsInClass=new ArrayList<>();
-            for (int j = 0; j < r.nextInt(30)+15; j++) {
+            while(studentsInClass.size()<30){
                 Student student=students.get(r.nextInt(students.size()));
                 if(!studentsInClass.contains(student) && !assignedStudents.contains(student)) {
                     studentsInClass.add(student);

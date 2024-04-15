@@ -33,7 +33,7 @@ public class CourseController {
     }
 
     @PostMapping("/addCourse")
-    @PreAuthorize("hasRole('ADMIN')")
+   // @PreAuthorize("hasRole('ADMIN')")
     public DataResponse addCourse(@RequestBody Map m){
         String courseId = (String) m.get("courseId");
         if(courseRepository.existsByCourseId(courseId)) {
@@ -62,15 +62,15 @@ public class CourseController {
             lesson.setPersons(persons);
 
             lessonRepository.save(lesson);
-            System.out.println("lesson:"+lesson+" eventId:"+lesson.getEventId());
+           // System.out.println("lesson:"+lesson+" eventId:"+lesson.getEventId());
             lessons.add(lesson);
         }
         course.setLessons(lessons);
 
         courseRepository.save(course);
 
-        System.out.println(course);
-        System.out.println(course.getLessons().get(0).getTime());
+        //System.out.println(course);
+       // System.out.println(course.getLessons().get(0).getTime());
 
         return new DataResponse(0,null,"添加成功");
     }
@@ -83,7 +83,7 @@ public class CourseController {
     }
 
     @PostMapping("/updateCourse")
-    @PreAuthorize("hasRole('ADMIN')")
+   // @PreAuthorize("hasRole('ADMIN')")
     public DataResponse updateCourse(@RequestBody Map m){
         String courseId = (String) m.get("courseId");
         if(!courseRepository.existsByCourseId(courseId)) {

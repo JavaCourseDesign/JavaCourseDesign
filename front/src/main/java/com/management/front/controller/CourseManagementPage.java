@@ -79,7 +79,7 @@ public class CourseManagementPage extends SplitPane {
         m.put("preCourses", preCourseListView.getSelectedItems());
 
         selectionGrid.course=m;//把一部分course的信息给予lesson，注意顺序！
-        System.out.println("selectionGrid.course:"+selectionGrid.course);
+        //System.out.println("selectionGrid.course:"+selectionGrid.course);
         m.put("lessons", selectionGrid.getSelectedLesson());
 
         return m;
@@ -188,7 +188,6 @@ public class CourseManagementPage extends SplitPane {
                 //selectionGrid.course=course;//有问题，更新可以拿到，但添加拿到的是空的
 
                 weekTimeTable.clear();
-
             }
         });
 

@@ -21,7 +21,11 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
+
+import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -163,6 +167,14 @@ public class StudentController {
         Map map = BeanUtil.beanToMap(student);
         map.put("className",administrativeClassRepository.findAdministrativeClassByStudent(student)+"班");
         List<Innovation> list=innovationRepository.findByPersons(student);
+        String filePath = "server/src/main/resources/static/resume.html";
+        String content = null;
+        try {
+            content = new String(Files.readAllBytes(Paths.get(filePath)));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        map.put("introduce",content);
         int cnt1=0;// 学科竞赛
         int cnt2=0;//科研成果
         int cnt3=0;//社会实践

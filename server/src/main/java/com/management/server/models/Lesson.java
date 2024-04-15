@@ -12,8 +12,7 @@ import java.util.List;
 @Table(name="lesson")
 public class Lesson extends Event{
 
-    @OneToMany(mappedBy = "lesson")
-    private List<Absence> absences;
+
 
     //homework?
 }
