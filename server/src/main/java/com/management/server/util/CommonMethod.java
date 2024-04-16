@@ -47,7 +47,7 @@ public class CommonMethod {
             return null;
         return userDetails.getId();
     }
-    /*public static String getUsername(){
+    public static String getUsername(){
         Object obj = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if(!(obj instanceof UserDetailsImpl))
             return null;
@@ -57,7 +57,7 @@ public class CommonMethod {
             return userDetails.getUsername();
         else
             return null;
-    }*/
+    }
 
     public static String getNextNum2(String num) {
         String str;

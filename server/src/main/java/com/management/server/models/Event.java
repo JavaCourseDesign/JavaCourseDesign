@@ -18,7 +18,7 @@ import java.util.List;
 @JsonIgnoreProperties(value = {"persons"})*/
 @NamedEntityGraph(name = "Event.persons",
         attributeNodes = @NamedAttributeNode("persons"))
-public abstract class Event {
+public  class Event {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String eventId;

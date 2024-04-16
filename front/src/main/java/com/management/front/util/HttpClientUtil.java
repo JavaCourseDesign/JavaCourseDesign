@@ -16,9 +16,12 @@ import org.apache.http.util.EntityUtils;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URLEncoder;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
 
 public class HttpClientUtil {
     static public String mainUrl = "http://localhost:9090";
@@ -88,6 +91,30 @@ public class HttpClientUtil {
             HttpResponse<byte[]>  response = client.send(httpRequest, HttpResponse.BodyHandlers.ofByteArray());
             if(response.statusCode() == 200) {
                 return response.body();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    public static DataResponse uploadFile(String uri,String filePath,String remoteFile,String fileName)  {
+        try {
+            //remoteFile   你想存在的后端的文件夹，不要加/，直接写名字
+            Path file = Path.of(filePath);
+            HttpClient client = HttpClient.newBuilder().build();
+            String encodedFileName = URLEncoder.encode(fileName.toString(), StandardCharsets.UTF_8.toString());
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(mainUrl+uri+"?uploader=HttpTestApp&remoteFile="+remoteFile + "&fileName="
+                            + encodedFileName))
+                    .POST(HttpRequest.BodyPublishers.ofFile(file))
+                    .headers("Authorization", "Bearer "+jwt.getAccessToken())
+                    .build();
+            HttpResponse<String>  response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            if(response.statusCode() == 200) {
+                DataResponse dataResponse = gson.fromJson(response.body(), DataResponse.class);
+                return dataResponse;
             }
         } catch (IOException e) {
             e.printStackTrace();

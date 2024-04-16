@@ -25,14 +25,15 @@ public class Menu extends SplitPane {
     TreeItem<String> item7 = new TreeItem<>("创新实践管理");
     TreeItem<String> item8 = new TreeItem<>("课程申请");
     TreeItem<String> item9 = new TreeItem<>("请假管理");
-    public Menu(){
+    TreeItem<String> item10 = new TreeItem<>("测试上传文件");
+     public Menu(){
 
         root.setExpanded(true);
         menu.setShowRoot(false);
         menu.setPrefWidth(70);
         this.setDividerPositions(0.1);
 
-        root.getChildren().addAll(item1, item2, item3, item4,item5, item6,item7, item8,item9);
+        root.getChildren().addAll(item1, item2, item3, item4,item5, item6,item7, item8,item9,item10);
         menu.setRoot(root);
 
         this.getItems().add(menu);
@@ -48,6 +49,7 @@ public class Menu extends SplitPane {
                 case "创新实践管理":this.getItems().set(1,new InnovationManagementPage());break;
                 case "课程申请":this.getItems().set(1,new CourseApplyPage());break;
                 case "请假管理":this.getItems().set(1,new StudentAbsenceManagementPage());break;
+                case "测试上传文件":this.getItems().set(1,new FileUploadPage());break;
             }
         });
     }
