@@ -39,9 +39,7 @@ import static com.management.front.util.HttpClientUtil.requestByteData;
 
 public class StudentPersonalInfoPage extends TabPane {
     public StudentPersonalInfoPage() {
-        Map m = new HashMap();
-        m.put("personId", LoginPage.personId);
-        Map student = (Map) request("/getStudentByPersonId", m).getData();
+        Map student = (Map) request("/getStudent", null).getData();
         //System.out.println(student);
         this.getTabs().add(new BasicInfoTab(student));
         this.getTabs().add(new InnovationTab(student));
@@ -87,7 +85,7 @@ class BasicInfoTab extends Tab {
                     byte[] fileContent = Files.readAllBytes(file.toPath());
                     String encodedString = Base64.getEncoder().encodeToString(fileContent);
                     Map<String, String> m = new HashMap<>();
-                    fileName = LoginPage.personId + ".jpg";
+                    //fileName = LoginPage.personId + ".jpg";
                     m.put("fileName", fileName);
                     m.put("fileContent", encodedString);
                     DataResponse r = request("/uploadPhoto", m);
@@ -148,7 +146,7 @@ class BasicInfoTab extends Tab {
 
     public void display() {
         Map<String, String> m = new HashMap<>();
-        m.put("fileName", LoginPage.personId + ".jpg");
+        m.put("fileName", /*LoginPage.personId +*/ ".jpg");
         DataResponse r = request("/getPhotoImageStr", m);
         if (r.getCode() == 0) {
             String base64Image = r.getData().toString();

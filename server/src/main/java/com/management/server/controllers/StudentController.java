@@ -3,12 +3,14 @@ package com.management.server.controllers;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
 import com.management.server.models.Innovation;
+import com.management.server.models.Person;
 import com.management.server.models.Student;
 import com.management.server.payload.response.DataResponse;
 import com.management.server.repositories.AdministrativeClassRepository;
 import com.management.server.repositories.CourseRepository;
 import com.management.server.repositories.InnovationRepository;
 import com.management.server.repositories.StudentRepository;
+import com.management.server.util.CommonMethod;
 import com.openhtmltopdf.extend.FSSupplier;
 import com.openhtmltopdf.extend.impl.FSDefaultCacheStore;
 import com.openhtmltopdf.pdfboxout.PdfRendererBuilder;
@@ -44,14 +46,14 @@ public class StudentController {
     private AdministrativeClassRepository administrativeClassRepository;
     @Autowired
     private InnovationRepository innovationRepository;
-    @PostMapping("/getStudentByPersonId")
-    public DataResponse getStudent(@RequestBody Map<String,String> map)
+    @PostMapping("/getStudent")
+    public DataResponse getStudent()
     {
-        //Map student = (Map) studentRepository.findByPersonId(map.get("personId"));
-        Student  s=studentRepository.findByPersonId(map.get("personId"));
+        String username = CommonMethod.getUsername();
+        Student s = studentRepository.findByStudentId(username);
+
         Map student = BeanUtil.beanToMap(s) ;
-        System.out.println("checkpoint0416"+courseRepository.findCoursesByPersonId(map.get("personId")));
-        student.put("courses",courseRepository.findCoursesByPersonId(map.get("personId")));
+        //student.put("courses",courseRepository.findCoursesByPersonId(map.get("personId")));
         student.put("className",administrativeClassRepository.findAdministrativeClassByStudent(s)+"班");
         return new DataResponse(0,student,null);
     }
@@ -95,9 +97,9 @@ public class StudentController {
         }
     }
     @PostMapping("/getStudentIntroduce")
-    public ResponseEntity<StreamingResponseBody> getStudentIntroduce(@RequestBody Map m)
+    public ResponseEntity<StreamingResponseBody> getStudentIntroduce()
     {
-        String studentId=(String)m.get("studentId");
+        String studentId=CommonMethod.getUsername();
         Map info=getMapFromStudentForIntroduce(studentId);
         String content = (String)info.get("introduce");
         content = addHeadInfo(content,"<style> html { font-family: \"SourceHanSansSC\", \"Open Sans\";}  </style> <meta charset='UTF-8' />  <title>Insert title here</title>");
