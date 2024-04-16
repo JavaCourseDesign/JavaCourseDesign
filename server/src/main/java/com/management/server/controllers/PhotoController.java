@@ -23,7 +23,7 @@ public class PhotoController {
         String fileName = map.get("fileName");
         String str = "";
         try {
-            File file = new File(attachFolder + fileName);
+            File file = new File(attachFolder +"Photo/"+ fileName);
             if(!file.exists())
             {
                 return new DataResponse(1,null,"请先上传文件！");
@@ -47,7 +47,7 @@ public class PhotoController {
         try {
             // Decode the Base64 string to a byte array
             byte[] data = Base64.getDecoder().decode(fileContent);
-            OutputStream os = new FileOutputStream(new File(attachFolder + fileName));
+            OutputStream os = new FileOutputStream(new File(attachFolder +"Photo/"+ fileName));
             os.write(data);
             os.close();
             return new DataResponse(0, "上传成功", null);

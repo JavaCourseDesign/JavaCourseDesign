@@ -14,7 +14,7 @@ import java.util.Map;
 import static com.management.front.util.HttpClientUtil.request;
 
 public class ExperimentalTable extends SplitPane {
-    private TableView<Map> experimentalTable = new TableView<>();
+    private TableView<Map> experimentalTable= new TableView<>();
     private ObservableList<Map> observableList = FXCollections.observableArrayList();
     public ExperimentalTable() {
         this.setWidth(1000);
@@ -27,7 +27,6 @@ public class ExperimentalTable extends SplitPane {
         studentName.setEditable(true);
         studentGender.setEditable(true);
         studentMajor.setEditable(true);
-
         //把map填入单元格
         studentId.setCellValueFactory(new MapValueFactory<>("studentId"));//与后端属性一致
         studentName.setCellValueFactory(new MapValueFactory<>("name"));
@@ -50,7 +49,6 @@ public class ExperimentalTable extends SplitPane {
                 System.out.println(newValue);
             }
         });
-
     }
 
     private void displayStudents(){

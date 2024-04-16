@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>个人简历</title>
+    <style>
+        table try td {
+            width: 30px;
+            height: 30px;
+            text-align: center;
+            font-size: 3px;
+            padding: 0;
+        }
+        .color {
+            background-color: #c4dcf3;
+        }
+
+        .textleft {
+            padding-left: 8px;
+            text-align: left;
+        }
+    </style>
+</head>
+
+<body>
+<h2 style="text-align: center; margin-bottom: 5px;">个人简历</h2>
+<table cellspacing="0" width="570px" height="660px" border="1" align="center">
+    <tr>
+        <td colspan="2" bgcolor="#c4dcf3">姓名</td>
+        <td colspan="2">${name}</td>
+        <td colspan="2" bgcolor="#c4dcf3">性别</td>
+        <td colspan="2">${gender}</td>
+        <td colspan="2" bgcolor="#c4dcf3">籍贯</td>
+        <td colspan="2">${homeTown}</td>
+        <td colspan="2" rowspan="2" style="width: 40px;"></td>
+        <td rowspan="3" colspan="4">
+            <img src="../Photo/1.jpg" alt="个人照片" width="200" height="auto"></img>
+        </td>
+    </tr>
+
+    <tr>
+        <td colspan="2" bgcolor="#c4dcf3">学号</td>
+        <td colspan="2">${studentId}</td>
+        <td colspan="2" bgcolor="#c4dcf3">专业</td>
+        <td colspan="2">${major}</td>
+        <td colspan="2" bgcolor="#c4dcf3">学院</td>
+        <td colspan="2">${dept}</td>
+    </tr>
+
+    <tr>
+        <td colspan="2" bgcolor="#c4dcf3">班级</td>
+        <td colspan="2">${className}</td>
+        <td colspan="2" bgcolor="#c4dcf3">出生年月</td>
+        <td colspan="2">${birthday}</td>
+        <td colspan="2" bgcolor="#c4dcf3">政治面貌</td>
+        <td colspan="2">${social}</td>
+    </tr>
+    <tr>
+        <td colspan="3" bgcolor="#c4dcf3">邮箱</td>
+        <td colspan="3">${email}</td>
+        <td colspan="3" bgcolor="#c4dcf3">高中</td>
+        <td colspan="3">${highSchool}</td>
+        <td bgcolor="#c4dcf3" colspan="3"> 联系电话</td>
+        <td colspan="3">${phone}</td>
+    </tr>
+    <tr>
+        <td colspan="2" rowspan="3" bgcolor="#c4dcf3">社会<br />实践</td>
+        <td colspan="3">项目名称</td>
+        <td colspan="6">时间</td>
+        <td colspan="8">评价</td>
+    </tr>
+    <tr>
+        <td colspan="3">${practiceName1}</td>
+        <td colspan="6">${practiceTime1}</td>
+        <td colspan="8">${practicePerformance1}</td>
+    </tr>
+    <tr>
+        <td colspan="3">${practiceName2}</td>
+        <td colspan="6">${practiceTime2}</td>
+        <td colspan="8">${practicePerformance2}</td>
+    </tr>
+    <tr>
+        <td colspan="2" rowspan="3" bgcolor="#c4dcf3">学科<br />竞赛</td>
+        <td colspan="3">竞赛名称</td>
+        <td colspan="6">时间</td>
+        <td colspan="8">奖次</td>
+    </tr>
+    <tr>
+        <td colspan="3">${competitionName1}</td>
+        <td colspan="6">${competitionTime1}</td>
+        <td colspan="8">${competitionLevel1}</td>
+    </tr>
+    <tr>
+        <td colspan="3">${competitionName2}</td>
+        <td colspan="6">${competitionTime2}</td>
+        <td colspan="8">${competitionLevel2}</td>
+    </tr>
+    <tr>
+        <td colspan="2" rowspan="3" bgcolor="#c4dcf3">科研<br />经历</td>
+        <td colspan="3">论文名称</td>
+        <td colspan="6">发表刊物</td>
+        <td colspan="8">影响因子</td>
+    </tr>
+    <tr>
+        <td colspan="3">${paperName1}</td>
+        <td colspan="6">${paperLocation1}</td>
+        <td colspan="8">${paperPerformance1}</td>
+    </tr>
+    <tr>
+        <td colspan="3">${paper2}</td>
+        <td colspan="6">${paperLocation2}</td>
+        <td colspan="8">${paperPerformance2}</td>
+    </tr>
+    <tr>
+        <td colspan="2" rowspan="1" bgcolor="#c4dcf3">获奖情况</td>
+        <td colspan="17" rowspan="1" >${honor}</td>
+    </tr>
+</table>
+</body>
+
+</html>
+
