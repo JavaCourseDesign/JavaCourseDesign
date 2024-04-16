@@ -48,7 +48,8 @@ public class CourseManagementPage extends SplitPane {
     //        .collect(Collectors.toCollection(FXCollections::observableArrayList));
 //
     //private SearchableListView preCourseListView = new SearchableListView(filteredPreCourseData, List.of("courseId", "name"));//存储的course不包含preCourses属性，防止递归
-    private SearchableListView preCourseListView = new SearchableListView(FXCollections.observableArrayList((ArrayList) request("/getAllCourses", null).getData()), List.of("courseId", "name"));
+    //private SearchableListView preCourseListView = new SearchableListView(FXCollections.observableArrayList((ArrayList) request("/getAllCourses", null).getData()), List.of("courseId", "name"));
+    private TextField preCourseField = new TextField();
     private SearchableListView administrativeClassListView = new SearchableListView(FXCollections.observableArrayList((ArrayList) request("/getAllAdministrativeClasses", null).getData()), List.of("name"));
     private TextField courseIdField = new TextField();
     private TextField nameField = new TextField();
@@ -62,6 +63,7 @@ public class CourseManagementPage extends SplitPane {
         m.put("name", nameField.getText());
         m.put("reference", referenceField.getText());
         m.put("capacity", capacityField.getText());
+        m.put("preCourses", preCourseField.getText());
 
         List<Map> personsToBeAdded = new ArrayList<>();
         personsToBeAdded.addAll(teacherListView.getSelectedItems());
@@ -82,14 +84,14 @@ public class CourseManagementPage extends SplitPane {
 
         m.put("persons", personsToBeAdded);
 
-        List<Map> preCourses = preCourseListView.getSelectedItems().stream()
+        /*List<Map> preCourses = preCourseListView.getSelectedItems().stream()
                 .map(course -> {
                     Map<String, Object> preCourse = new HashMap<>();
                     preCourse.put("courseId", course.get("courseId"));
                     return preCourse;
                 })
                 .collect(Collectors.toList());
-        m.put("preCourses", preCourses);
+        m.put("preCourses", preCourses);*/
 
         selectionGrid.course=m;//把一部分course的信息给予lesson，注意顺序！
         //System.out.println("selectionGrid.course:"+selectionGrid.course);
@@ -121,15 +123,15 @@ public class CourseManagementPage extends SplitPane {
         courseReferenceColumn.setCellValueFactory(new MapValueFactory<>("reference"));
         courseCapacityColumn.setCellValueFactory(new MapValueFactory<>("capacity"));
 
-        //preCourseColumn.setCellValueFactory(new MapValueFactory<>("preCourses"));
-        preCourseColumn.setCellValueFactory(data -> {
+        preCourseColumn.setCellValueFactory(new MapValueFactory<>("preCourses"));
+        /*preCourseColumn.setCellValueFactory(data -> {
             System.out.println("data.getValue:"+data.getValue());
             List<Map<String, Object>> preCourses = (List<Map<String, Object>>) data.getValue().get("preCourses");
             String preCourseNames = preCourses.stream()
                     .map(preCourse -> (String) preCourse.get("name"))
                     .collect(Collectors.joining(", "));
             return new SimpleStringProperty(preCourseNames);
-        });
+        });*/
 
         //teacherColumn.setCellValueFactory(new MapValueFactory<>("teacher"));
         teacherColumn.setCellValueFactory(data -> {
@@ -180,6 +182,8 @@ public class CourseManagementPage extends SplitPane {
                 nameField.setText((String) course.get("name"));
                 referenceField.setText((String) course.get("reference"));
                 capacityField.setText(course.get("capacity")==null?"": "" +course.get("capacity"));
+                preCourseField.setText((String) course.get("preCourses"));
+                //preCourseField.setSelectedItems((List<Map>) course.get("preCourses"));
 
                 List<Map> persons = (List<Map>) course.get("persons");
                 List<Map> teachers = persons.stream()
@@ -193,14 +197,14 @@ public class CourseManagementPage extends SplitPane {
                 studentListView.setSelectedItems(students);
 
                 //System.out.println("preCourses"+course.get("preCourses"));
-                preCourseListView.setSelectedItems((List<Map>) course.get("preCourses"));
+                //preCourseListView.setSelectedItems((List<Map>) course.get("preCourses"));
                 //preCourseListView.setSelectedItems((List<Map>) request("/getPreCoursesByCourseId", Map.of("courseId", course.get("courseId"))).getData());
 
                 //administrative没法自动选中，只能添加,故设为空
                 administrativeClassListView.setSelectedItems(new ArrayList<>());
 
                 //selectionGrid.setSelectedLessons((List<Map>) course.get("lessons"));
-                selectionGrid.setSelectedLessons((List<Map>) request("/getLessonsByCourseId", Map.of("courseId", course.get("courseId"))).getData());
+                selectionGrid.setSelectedLessons((List<Map>) request("/getLessonsByCourseId", Map.of("courseId", ""+course.get("courseId"))).getData());
 
                 weekTimeTable.clear();
 
@@ -218,7 +222,7 @@ public class CourseManagementPage extends SplitPane {
         openButton.setOnAction(event -> openCourses());
         drawLotsButton.setOnAction(event -> drawLots());
 
-        controlPanel.getChildren().addAll(courseIdField, nameField, referenceField, capacityField, preCourseListView, teacherListView, administrativeClassListView, selectionGrid, buttons, openButton, drawLotsButton);
+        controlPanel.getChildren().addAll(courseIdField, nameField, referenceField, capacityField, preCourseField, teacherListView, administrativeClassListView, selectionGrid, buttons, openButton, drawLotsButton);
 
         this.getItems().add(controlPanel);
     }
@@ -226,7 +230,7 @@ public class CourseManagementPage extends SplitPane {
     private void displayCourses(){
         observableList.clear();
 
-        observableList.add(Map.of("persons",List.of(),"lessons",List.of(),"preCourses",List.of())); // 添加一个空行用于添加
+        observableList.add(Map.of("persons",List.of(),"lessons",List.of())); // 添加一个空行用于添加
 
         observableList.addAll(FXCollections.observableArrayList((ArrayList) request("/getAllCourses", null).getData()));
         courseTable.setData(observableList);

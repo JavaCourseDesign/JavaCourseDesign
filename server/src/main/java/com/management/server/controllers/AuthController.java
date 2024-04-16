@@ -43,23 +43,23 @@ public class AuthController {
     }
     @PostMapping("/register")
     public DataResponse registerUser(@RequestBody Map<String,String> map) {
-        String id = map.get("id");
-        String username = map.get("username");
+        String username = map.get("username");//把学号/工号作为用户名
+        String name = map.get("name");//姓名用于验证是否匹配
         String password = passwordEncoder.encode(map.get("password"));
-        Student foundStudent = studentRepository.findByStudentId(id);
-        if (isUserValid(foundStudent, username)) {
+        Student foundStudent = studentRepository.findByStudentId(username);
+        if (isUserValid(foundStudent, name, username)) {
             return registerUser(foundStudent,username, password, EUserType.ROLE_STUDENT);
         }
 
-        Teacher foundTeacher = teacherRepository.findByTeacherId(id);
-        if (isUserValid(foundTeacher, username)) {
+        Teacher foundTeacher = teacherRepository.findByTeacherId(username);
+        if (isUserValid(foundTeacher, name, username)) {
             return registerUser(foundTeacher, username, password, EUserType.ROLE_TEACHER);
         }
         return new DataResponse(-1,null,"注册失败");
     }
 
-    private boolean isUserValid(Person person, String username) {
-        return person != null && person.getName().equals(username) && userRepository.findByUsername(person.getName()) == null;
+    private boolean isUserValid(Person person, String name, String username) {
+        return person != null && person.getName().equals(name) && userRepository.findByUsername(username)==null;
     }
 
     private DataResponse registerUser(Person person, String username, String password, EUserType userType) {

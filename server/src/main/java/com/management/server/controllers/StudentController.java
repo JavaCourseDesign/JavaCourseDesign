@@ -31,6 +31,7 @@ public class StudentController {
         //Map student = (Map) studentRepository.findByPersonId(map.get("personId"));
         Student  s=studentRepository.findByPersonId(map.get("personId"));
         Map student = BeanUtil.beanToMap(s) ;
+        System.out.println("checkpoint0416"+courseRepository.findCoursesByPersonId(map.get("personId")));
         student.put("courses",courseRepository.findCoursesByPersonId(map.get("personId")));
         student.put("className",administrativeClassRepository.findAdministrativeClassByStudent(s)+"班");
         return new DataResponse(0,student,null);

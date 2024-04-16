@@ -16,21 +16,21 @@ import java.util.Map;
 import static com.management.front.util.HttpClientUtil.*;
 
 public class LoginPage extends VBox {
-    public static String personId;
-    private TextField idField=new TextField();
+    //public static String personId;//严重问题！！！后端本身没有区分身份，前端如果被篡改，将有权限访问其他人的信息！！！
+    private TextField nameField=new TextField();
     private TextField usernameField=new TextField();
     private PasswordField passwordField=new PasswordField();
     private Button loginButton=new Button("登录");
     private Button registerButton=new Button("注册");
 
     public LoginPage() throws IOException {
-        idField.setText("201921000");
-        usernameField.setText("");
+        nameField.setText("tst");
+        usernameField.setText("admin");
         passwordField.setText("admin");
 
         this.setAlignment(javafx.geometry.Pos.CENTER);
 
-        this.getChildren().addAll(idField,usernameField,passwordField,loginButton,registerButton);
+        this.getChildren().addAll(nameField,usernameField,passwordField,loginButton,registerButton);
 
         loginButton.setOnMouseClicked(event -> {
             String username = usernameField.getText();
@@ -40,7 +40,7 @@ public class LoginPage extends VBox {
                 Map<String,String> map = new HashMap<>();
                 map.put("username",username);
                 DataResponse r=request("/findPersonIdByUsername",map);
-                personId=(String)r.getData();
+                //personId=(String)r.getData();
                 Menu menu = new Menu();
                 Scene scene = new Scene(menu, 1400, 800);
                 Stage stage = (Stage) loginButton.getScene().getWindow();
@@ -60,7 +60,7 @@ public class LoginPage extends VBox {
 
         registerButton.setOnMouseClicked(event -> {
             Map<String,String> map = new HashMap<>();
-            map.put("id",idField.getText());
+            map.put("name",nameField.getText());
             map.put("username",usernameField.getText());
             map.put("password",passwordField.getText());
             DataResponse response=sendAndReceiveDataResponse("/register",map);
