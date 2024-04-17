@@ -90,14 +90,14 @@ public class CourseApplyPage extends SplitPane {
         List<Map> courses = (ArrayList) request("/getWantedCourses", null).getData();
         System.out.println("wantedCourses"+courses);
         weekTimeTable.clear();
+
+        List<Map> allEvents = new ArrayList<>();
         for (Map course : courses) {
             List<Map> events = (List<Map>) request("/getLessonsByCourseId", Map.of("courseId", course.get("courseId"))).getData();
-            if(events==null)continue;
-            for (Map event : events) {//有问题，同一个时间的event会被多次显示 解决方法1（最优）：完善WeekTimeTable，支持切换周次 解决方法2：对时间进行去重
-                System.out.println(event.get("name")+" "+event.get("location")+" "+event.get("time"));
-                weekTimeTable.addEvent(event.get("name")+"" ,event.get("location")+"",(""+event.get("time")));
-            }
+            //if(events==null) continue;
+            allEvents.addAll(events);
         }
+        weekTimeTable.setEvents(allEvents);
 
         observableList.clear();
         observableList.addAll(FXCollections.observableArrayList((ArrayList) request("/getAllCourses", null).getData()));

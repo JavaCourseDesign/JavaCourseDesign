@@ -128,7 +128,7 @@ public class CourseManagementPage extends SplitPane {
             System.out.println("data.getValue:"+data.getValue());
             List<Map<String, Object>> preCourses = (List<Map<String, Object>>) data.getValue().get("preCourses");
             String preCourseNames = preCourses.stream()
-                    .map(preCourse -> (String) preCourse.get("name"))
+                    .map(preCourse -> " +preCourse.get("name"))
                     .collect(Collectors.joining(", "));
             return new SimpleStringProperty(preCourseNames);
         });*/
@@ -138,7 +138,7 @@ public class CourseManagementPage extends SplitPane {
             List<Map<String, Object>> persons = (List<Map<String, Object>>) data.getValue().get("persons");
             String personNames = persons.stream()
                     .filter(person -> person.containsKey("teacherId"))
-                    .map(person -> (String) person.get("name"))
+                    .map(person -> ""+ person.get("name"))
                     .collect(Collectors.joining(", "));
             return new SimpleStringProperty(personNames);
         });
@@ -178,10 +178,10 @@ public class CourseManagementPage extends SplitPane {
         courseTable.setOnItemClick(course -> {
             if(course!=null)
             {
-                courseIdField.setText((String) course.get("courseId"));
-                nameField.setText((String) course.get("name"));
+                courseIdField. setText((String) course.get("courseId"));
+                nameField.     setText((String) course.get("name"));
                 referenceField.setText((String) course.get("reference"));
-                capacityField.setText(course.get("capacity")==null?"": "" +course.get("capacity"));
+                capacityField. setText(course.get("capacity")==null?"": "" +course.get("capacity"));
                 preCourseField.setText((String) course.get("preCourses"));
                 //preCourseField.setSelectedItems((List<Map>) course.get("preCourses"));
 
@@ -405,8 +405,11 @@ class SelectionGrid extends GridPane {
                             Map<String, Object> lesson = new HashMap<>();//构造lesson
                             lesson.put("name",course.get("name"));
                             lesson.put("location",lessonBoxes[i][j].locationField.getText());
-                            lesson.put("time", k+","+(j+1)+","+transferCoordinateToTime(i)+",1.50");//time的格式： 12,7,8.00,1.50
-
+                            //lesson.put("time", k+","+(j+1)+","+transferCoordinateToTime(i)+",1.50");//time的格式： 12,7,8.00,1.50
+                            lesson.put("week", k);
+                            lesson.put("day", j+1);
+                            lesson.put("time", transferCoordinateToTime(i));
+                            lesson.put("duration", 1.50);
                             selected.add(lesson);
                         }
                     }
@@ -428,20 +431,23 @@ class SelectionGrid extends GridPane {
             }
         }
         for (Map lesson  : lessons) {
-            int i = transferTimeToCoordinate((lesson.get("time")+"").split(",")[2]);
-            int j = Integer.parseInt((lesson.get("time")+"").split(",")[1])-1;
+
+            int i = transferTimeToCoordinate(""+ lesson.get("time"));
+            int j = Integer.parseInt(""+ lesson.get("day"))-1;
             if(!lessonBoxes[i][j].checkBox.isSelected())//判断是否为这一节第一次上课
             {
                 lessonBoxes[i][j].checkBox.setSelected(true);
-                lessonBoxes[i][j].locationField.setText((String) lesson.get("location"));
-                lessonBoxes[i][j].startWeek.getValueFactory().setValue(Integer.parseInt((lesson.get("time")+"").split(",")[0]));
+                lessonBoxes[i][j].locationField.setText(""+ lesson.get("location"));
+                //System.out.println("week:"+lesson.get("week"));
+                //System.out.println("week:"+(Integer)lesson.get("week"));
+                lessonBoxes[i][j].startWeek.getValueFactory().setValue(Integer.parseInt(""+ lesson.get("week")));
             }
-            lessonBoxes[i][j].endWeek.getValueFactory().setValue(Integer.parseInt((lesson.get("time")+"").split(",")[0]));
-            if(Integer.parseInt((lesson.get("time")+"").split(",")[0])%2==0)
+            lessonBoxes[i][j].endWeek.getValueFactory().setValue(Integer.parseInt(""+ lesson.get("week")));
+            if(Integer.parseInt(""+ lesson.get("week"))%2==0)
             {
                 lessonBoxes[i][j].doubleWeek.setSelected(true);
             }
-            if(Integer.parseInt((lesson.get("time")+"").split(",")[0])%2==1)
+            if(Integer.parseInt(""+ lesson.get("week"))%2==1)
             {
                 lessonBoxes[i][j].singleWeek.setSelected(true);
             }
