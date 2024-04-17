@@ -96,6 +96,20 @@ public class StudentController {
             return new DataResponse(-1, null, "学号不存在，无法更新");
         }
     }
+    @PostMapping("/saveStudentPersonalInfo")
+    public DataResponse saveStudentPersonalInfo(@RequestBody Map<String,String> m)
+    {
+        String studentId = CommonMethod.getUsername();
+        Student student = studentRepository.findByStudentId(studentId);
+        student.setPhone(m.get("phone"));
+        student.setAddress(m.get("address"));
+        student.setHomeTown(m.get("homeTown"));
+        student.setFamilyMember(m.get("familyMember"));
+        student.setFamilyMemberPhone(m.get("familyMemberPhone"));
+        student.setEmail(m.get("email"));
+        studentRepository.save(student);
+        return new DataResponse(0,null,"保存成功");
+    }
     @PostMapping("/getStudentIntroduce")
     public ResponseEntity<StreamingResponseBody> getStudentIntroduce()
     {
@@ -178,6 +192,7 @@ public class StudentController {
             throw new RuntimeException(e);
         }
         map.put("introduce",content);
+        map.put("photo","../Photo/" + CommonMethod.getUsername() + ".jpg");
         int cnt1=0;// 学科竞赛
         int cnt2=0;//科研成果
         int cnt3=0;//社会实践

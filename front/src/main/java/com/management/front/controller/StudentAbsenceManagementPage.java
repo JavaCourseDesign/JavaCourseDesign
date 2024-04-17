@@ -51,7 +51,16 @@ public class StudentAbsenceManagementPage extends SplitPane {
     }
     private void displayAbsences() {
         observableList.clear();
-        observableList.addAll(FXCollections.observableArrayList((ArrayList) request("/getAllAbsences", null).getData()));
+        ArrayList<Map> list=(ArrayList<Map>) request("/getAllAbsences", null).getData();
+        for(Map m:list)
+        {
+            if(m.get("person")!=null)
+            {
+               Map person=(Map) m.get("person");
+                m.put("name",person.get("name"));
+            }
+        }
+        observableList.addAll(FXCollections.observableArrayList(list));
         absenceTable.setData(observableList);
         System.out.println(observableList);
     }
@@ -132,7 +141,7 @@ public class StudentAbsenceManagementPage extends SplitPane {
         TableColumn<Map,String> timeColumn= new TableColumn<>("请假时间");
         TableColumn<Map,String> destinationColumn= new TableColumn<>("请假去向");
         TableColumn<Map,String> statusColumn= new TableColumn<>("状态");
-        personColumn.setCellValueFactory(data->{
+       /* personColumn.setCellValueFactory(data->{
             if(data.getValue()!=null)
             {
                 Map<String,Object> person=(Map<String,Object>) data.getValue().get("person");
@@ -140,7 +149,8 @@ public class StudentAbsenceManagementPage extends SplitPane {
                 return new SimpleStringProperty(name);
             }
             else return new SimpleStringProperty("");
-        });
+        });*/
+        personColumn.setCellValueFactory(new MapValueFactory<>("name"));
         offReasonColumn.setCellValueFactory(new MapValueFactory<>("offReason"));
         timeColumn.setCellValueFactory(data->
         {
