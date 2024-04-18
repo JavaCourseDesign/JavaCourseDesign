@@ -26,7 +26,11 @@ public class Event {
 
     private String name;
 
-    private String time;//12,5,8.30,1.50     第十二周 周五 8:30 一小时五十分钟
+    //private String time;//12,5,8.30,1.50     第十二周 周五 8:30 一小时五十分钟
+    private String week;//12,13,14,15
+    private String day;//1,2,3,4,5,6,7
+    private String time;//8.30,10.20,14.00,15.50
+    private String duration;//1.50
 
     private String introduction;
 

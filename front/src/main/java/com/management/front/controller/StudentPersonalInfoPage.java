@@ -41,6 +41,7 @@ public class StudentPersonalInfoPage extends TabPane {
     public StudentPersonalInfoPage() {
         Map student = (Map) request("/getStudent", null).getData();
         //System.out.println(student);
+        this.getStylesheets().add("dark-theme.css");
         this.getTabs().add(new BasicInfoTab(student));
         this.getTabs().add(new InnovationTab(student));
         this.getTabs().add(new absenceTab(student));

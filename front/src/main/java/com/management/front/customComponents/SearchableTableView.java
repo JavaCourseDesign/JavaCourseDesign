@@ -69,7 +69,7 @@ public class SearchableTableView extends VBox {
         sortedData.comparatorProperty().bind(tableView.comparatorProperty());
         tableView.setItems(sortedData);
 
-        this.setStyle("-fx-background-color: #000000; -fx-padding: 10px;");
+        //this.setStyle("-fx-background-color: #000000; -fx-padding: 10px;");
         tableView.prefHeightProperty().bind(this.heightProperty());
         tableView.prefWidthProperty().bind(this.widthProperty());
 
