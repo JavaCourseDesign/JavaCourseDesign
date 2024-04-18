@@ -38,6 +38,7 @@ public class StudentAbsenceManagementPage extends SplitPane {
 
     public StudentAbsenceManagementPage() {
             this.setWidth(1000);
+            this.getStylesheets().add("dark-theme.css");
             initializeTable();
             initializeControlPanel();
             displayAbsences();

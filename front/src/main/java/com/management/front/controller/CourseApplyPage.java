@@ -6,41 +6,42 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Orientation;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.SplitPane;
-import javafx.scene.control.TableColumn;
+import javafx.geometry.Pos;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.MapValueFactory;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.time.LocalDate;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.management.front.util.HttpClientUtil.request;
 
 public class CourseApplyPage extends SplitPane {
     private SearchableTableView courseTable;
-    private VBox controlPanel = new VBox();
     private ObservableList<Map> observableList = FXCollections.observableArrayList();
     private WeekTimeTable weekTimeTable = new WeekTimeTable();
-
-    private Button applyButton = new Button("Apply");
+    private Label creditCount = new Label();
 
     public CourseApplyPage() {
         this.setWidth(1000);
         this.setDividerPosition(0, 0.7);
         this.setOrientation(Orientation.VERTICAL);
+        this.getStylesheets().add("dark-theme.css");
         initializeWeekTimeTable();
         initializeTable();
-        initializeControlPanel();
         displayCourses();
     }
     private void initializeWeekTimeTable() {
-
-        this.getItems().add(weekTimeTable);
+        //HBox hbox = new HBox(weekTimeTable, creditCount);
+        Label time=new Label(LocalDate.now().toString());
+        creditCount.setFont(javafx.scene.text.Font.font(30));
+        VBox infoBox = new VBox(time,creditCount);
+        infoBox.setAlignment(Pos.CENTER);
+        SplitPane splitPane = new SplitPane(weekTimeTable, infoBox);
+        this.getItems().add(splitPane);
     }
 
     private void initializeTable() {
@@ -68,35 +69,46 @@ public class CourseApplyPage extends SplitPane {
             return new SimpleStringProperty(available ? "是" : "否");
         });
 
+        TableColumn<Map, Void> courseApplyColumn = new TableColumn<>("选课");
+        courseApplyColumn.setCellFactory(param -> {
+            final Button applyButton = new Button("选课");
+            TableCell<Map, Void> cell = new TableCell<>() {
+                @Override
+                public void updateItem(Void item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty) {
+                        setGraphic(null);
+                    } else {
+                        applyButton.setOnAction(event -> applyCourse(getTableView().getItems().get(getIndex())));
+                        //if(!(boolean) getTableView().getItems().get(getIndex()).get("available")) applyButton.setDisable(true);
+                        setGraphic(applyButton);
+                    }
+                }
+            };
+            return cell;
+        });
+
         List<TableColumn<Map, ?>> columns = new ArrayList<>();
-        columns.addAll(List.of(courseIdColumn, courseNameColumn, courseCreditColumn, courseTeacherColumn, courseAvailableColumn));
+        columns.addAll(List.of(courseIdColumn, courseNameColumn, courseCreditColumn, courseTeacherColumn, courseAvailableColumn, courseApplyColumn));
         courseTable = new SearchableTableView(observableList, List.of("courseId", "name"), columns);
 
         this.getItems().add(courseTable);
     }
 
-    private void initializeControlPanel() {
-        controlPanel.setMinWidth(200);
-        controlPanel.setSpacing(10);
-
-        applyButton.setOnAction(event -> applyCourse());
-
-        controlPanel.getChildren().addAll(applyButton);
-
-        this.getItems().add(controlPanel);
-    }
-
     private void displayCourses() {
         List<Map> courses = (ArrayList) request("/getWantedCourses", null).getData();
-        System.out.println("wantedCourses"+courses);
+        //System.out.println("wantedCourses"+courses);
         weekTimeTable.clear();
 
         List<Map> allEvents = new ArrayList<>();
+        double credit = 0;
         for (Map course : courses) {
+            credit += course.get("credit") == null ? 0 : (double) course.get("credit");
             List<Map> events = (List<Map>) request("/getLessonsByCourseId", Map.of("courseId", course.get("courseId"))).getData();
             //if(events==null) continue;
             allEvents.addAll(events);
         }
+        creditCount.setText("已选学分：" + credit);
         weekTimeTable.setEvents(allEvents);
 
         observableList.clear();
@@ -104,8 +116,8 @@ public class CourseApplyPage extends SplitPane {
         courseTable.setData(observableList);
     }
 
-    private void applyCourse() {
-        Map selectedCourse = courseTable.getSelectedItem();
+    private void applyCourse(Map selectedCourse) {
+        //Map selectedCourse = courseTable.getSelectedItem();
         if (selectedCourse == null) {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setContentText("未选择，无法申请");

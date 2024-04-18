@@ -76,7 +76,7 @@ public class WeekTimeTable extends Pane{
 
             // 检查累积的滚动量是否达到阈值
             if (Math.abs(scrollAccumulator) >= SCROLL_THRESHOLD) {
-                if (scrollAccumulator > 0) {
+                if (scrollAccumulator < 0) {
                     weekNum++;
                 } else {
                     weekNum--;

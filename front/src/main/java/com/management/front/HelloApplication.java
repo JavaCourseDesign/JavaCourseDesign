@@ -18,7 +18,7 @@ public class HelloApplication extends Application {
 
         sendAndReceiveDataResponse("/test/addTestData",null);
 
-        Scene scene = new Scene(new LoginPage(), 1400, 800);
+        Scene scene = new Scene(new LoginPage(), 300, 400);
         stage.setScene(scene);
         stage.show();
     }

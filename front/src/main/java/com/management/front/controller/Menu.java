@@ -27,11 +27,13 @@ public class Menu extends SplitPane {
     TreeItem<String> item9 = new TreeItem<>("请假管理");
     TreeItem<String> item10 = new TreeItem<>("测试上传文件");
      public Menu(){
+         this.getStylesheets().add("dark-theme.css");
+
 
         root.setExpanded(true);
         menu.setShowRoot(false);
         menu.setPrefWidth(70);
-        this.setDividerPositions(0.1);
+        this.setDividerPositions(0.2);
 
         root.getChildren().addAll(item1, item2, item3, item4,item5, item6,item7, item8,item9,item10);
         menu.setRoot(root);
