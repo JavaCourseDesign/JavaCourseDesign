@@ -24,7 +24,7 @@ public class Menu extends SplitPane {
     TreeItem<String> item6 = new TreeItem<>("课程表");
     TreeItem<String> item7 = new TreeItem<>("创新实践管理");
     TreeItem<String> item8 = new TreeItem<>("课程申请");
-    TreeItem<String> item9 = new TreeItem<>("请假管理");
+    TreeItem<String> item9 = new TreeItem<>("学生日志信息管理");
     TreeItem<String> item10 = new TreeItem<>("测试上传文件");
      public Menu(){
 
@@ -48,7 +48,7 @@ public class Menu extends SplitPane {
                 case "课程表":this.getItems().set(1,new HomePage());break;
                 case "创新实践管理":this.getItems().set(1,new InnovationManagementPage());break;
                 case "课程申请":this.getItems().set(1,new CourseApplyPage());break;
-                case "请假管理":this.getItems().set(1,new StudentAbsenceManagementPage());break;
+                case "学生日志信息管理":this.getItems().set(1,new StudentLogManagementPage());break;
                 case "测试上传文件":this.getItems().set(1,new FileUploadPage());break;
             }
         });

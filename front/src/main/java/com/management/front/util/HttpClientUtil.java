@@ -123,6 +123,29 @@ public class HttpClientUtil {
         }
         return null;
     }
+    public static DataResponse importData(String url, String filePath)  {
+
+        try {
+            Path file = Path.of(filePath);
+            String urlStr = mainUrl+url+"?uploader=HttpTestApp";
+            HttpClient client = HttpClient.newBuilder().build();
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(urlStr))
+                    .POST(HttpRequest.BodyPublishers.ofFile(file))
+                    .headers("Authorization", "Bearer "+jwt.getAccessToken())
+                    .build();
+            HttpResponse<String>  response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            if(response.statusCode() == 200) {
+                DataResponse dataResponse = gson.fromJson(response.body(), DataResponse.class);
+                return dataResponse;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
 
     static public Object sendAndReceiveObject(String url, Object parameter) throws IOException {
