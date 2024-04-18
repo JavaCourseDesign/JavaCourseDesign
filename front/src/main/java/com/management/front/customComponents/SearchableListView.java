@@ -1,5 +1,7 @@
 package com.management.front.customComponents;
 
+import com.jfoenix.controls.JFXListView;
+import com.jfoenix.controls.JFXTextField;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -13,8 +15,8 @@ import java.util.Map;
 public class SearchableListView extends VBox {
     private List<Map> selectedItems = new ArrayList<>();
     private Label selectedLabel = new Label();
-    private TextField searchField = new TextField();
-    private ListView<Map<String, Object>> listView;
+    private JFXTextField searchField = new JFXTextField();
+    private JFXListView<Map<String, Object>> listView;
     private ObservableList<Map<String, Object>> data;
     private FilteredList<Map<String, Object>> filteredItems;
     private List<String> keys;
@@ -52,7 +54,8 @@ public class SearchableListView extends VBox {
 
     private void setupListView() {
         filteredItems = new FilteredList<>(data, p -> true);
-        listView = new ListView<>(filteredItems);
+        listView = new JFXListView<>();
+        listView.setItems(filteredItems);
         listView.setCellFactory(lv -> new ListCell<>() {
             @Override
             protected void updateItem(Map<String, Object> item, boolean empty) {

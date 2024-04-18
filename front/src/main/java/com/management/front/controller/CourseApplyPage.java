@@ -50,6 +50,7 @@ public class CourseApplyPage extends SplitPane {
         TableColumn<Map, String> courseCreditColumn = new TableColumn<>("学分");
         TableColumn<Map, String> courseTeacherColumn = new TableColumn<>("教师");
         TableColumn<Map, String> courseAvailableColumn = new TableColumn<>("可选");
+        TableColumn<Map, String> courseChosenColumn = new TableColumn<>("已选");
 
         courseIdColumn.setCellValueFactory(new MapValueFactory<>("courseId"));
         courseNameColumn.setCellValueFactory(new MapValueFactory<>("name"));
@@ -67,6 +68,13 @@ public class CourseApplyPage extends SplitPane {
         courseAvailableColumn.setCellValueFactory(data -> {
             boolean available = (boolean) data.getValue().get("available");
             return new SimpleStringProperty(available ? "是" : "否");
+        });
+
+        courseChosenColumn.setCellValueFactory(data -> {
+            //boolean chosen = (boolean) data.getValue().get("chosen");
+            List<Map> willingStudents = (List<Map>) data.getValue().get("willingStudents");
+            boolean chosen = willingStudents.stream().anyMatch(student -> student.get("studentId").equals(LoginPage.username));
+            return new SimpleStringProperty(chosen ? "是" : "否");
         });
 
         TableColumn<Map, Void> courseApplyColumn = new TableColumn<>("选课");
@@ -89,7 +97,7 @@ public class CourseApplyPage extends SplitPane {
         });
 
         List<TableColumn<Map, ?>> columns = new ArrayList<>();
-        columns.addAll(List.of(courseIdColumn, courseNameColumn, courseCreditColumn, courseTeacherColumn, courseAvailableColumn, courseApplyColumn));
+        columns.addAll(List.of(courseIdColumn, courseNameColumn, courseCreditColumn, courseTeacherColumn, courseAvailableColumn, courseChosenColumn,courseApplyColumn));
         courseTable = new SearchableTableView(observableList, List.of("courseId", "name"), columns);
 
         this.getItems().add(courseTable);
@@ -98,7 +106,6 @@ public class CourseApplyPage extends SplitPane {
     private void displayCourses() {
         List<Map> courses = (ArrayList) request("/getWantedCourses", null).getData();
         //System.out.println("wantedCourses"+courses);
-        weekTimeTable.clear();
 
         List<Map> allEvents = new ArrayList<>();
         double credit = 0;

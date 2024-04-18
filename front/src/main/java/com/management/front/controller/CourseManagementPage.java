@@ -1,6 +1,7 @@
 package com.management.front.controller;
 
 
+import com.jfoenix.controls.JFXCheckBox;
 import com.management.front.customComponents.SearchableListView;
 import com.management.front.customComponents.SearchableTableView;
 import com.management.front.request.DataResponse;
@@ -472,7 +473,7 @@ class SelectionGrid extends GridPane {
 }
 
 class LessonBox extends MenuButton {//选中课程时需要相应构造课程信息
-    CheckBox checkBox = new CheckBox();
+    JFXCheckBox checkBox = new JFXCheckBox();
     TextField locationField = new TextField();
     CheckBox singleWeek = new CheckBox();
     CheckBox doubleWeek = new CheckBox();

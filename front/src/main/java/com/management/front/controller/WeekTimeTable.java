@@ -1,5 +1,6 @@
 package com.management.front.controller;
 
+import com.jfoenix.controls.JFXButton;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
 import javafx.scene.layout.*;
@@ -29,8 +30,8 @@ public class WeekTimeTable extends Pane{
     private static final String[] weekDays = {"一", "二", "三", "四", "五", "六", "日"};
     private static final String[] timeLine = {"06:00", "07:00", "08:00", "09:00", "10:00", "11:00", "12:00",
             "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00"};
-    private static final List<Map> events=new ArrayList<>();
-    private static int weekNum = 1;
+    private final List<Map> events=new ArrayList<>();
+    private int weekNum = 1;
     private double scrollAccumulator = 0.0; // 滚动累积器
     private static final double SCROLL_THRESHOLD = 100.0; // 滚动阈值，调整这个值来设置滚动敏感度
     private static final LocalDate START_DATE = LocalDate.of(2023, 1, 1); // 开学第一天的日期
@@ -132,7 +133,7 @@ public class WeekTimeTable extends Pane{
         }
     }
     public void setEvents(List<Map> events) {
-        //this.events.clear();
+        this.events.clear();
         this.events.addAll(events);//不直接赋值，避免引用问题
         //System.out.println("events1:"+this.events);
         displayWeek();
@@ -151,11 +152,12 @@ public class WeekTimeTable extends Pane{
 
     private void addEvent(Map event) {
 
-        Pane eventPane = new Pane();
+        Pane eventPane = new Pane();//适应文本有问题，可能要换回pane
         eventPane.setLayoutX(LEFT_BAR_WIDTH+(Integer.parseInt((String) event.get("day"))-1)*DAY_WIDTH);
         eventPane.setLayoutY(TOP_BAR_HEIGHT+(transferTime(Double.parseDouble((String) event.get("time")))-BEGIN_TIME)*HOUR_HEIGHT);
         eventPane.setPrefHeight(transferTime(Double.parseDouble((String) event.get("duration")))*HOUR_HEIGHT);
         eventPane.setPrefWidth(DAY_WIDTH);
+        //eventPane.setMaxWidth(DAY_WIDTH);
         eventPane.setOpacity(NORMAL_OPACITY);
         eventPane.setOnMouseEntered(e -> eventPane.setOpacity(0.8));
         eventPane.setOnMouseExited(e -> eventPane.setOpacity(0.4));
@@ -173,6 +175,7 @@ public class WeekTimeTable extends Pane{
         location.wrappingWidthProperty().bind(eventPane.widthProperty());
 
         VBox eventInfo = new VBox(name, location);
+        //eventPane.setGraphic(eventInfo);
         eventPane.getChildren().add(eventInfo);
 
         this.getChildren().add(eventPane);

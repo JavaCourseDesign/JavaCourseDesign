@@ -61,7 +61,7 @@ public class CourseController {
     }*/
 
     @PostMapping("/addCourse")
-    @PreAuthorize("hasRole('ADMIN')")
+    //@PreAuthorize("hasRole('ADMIN')")
     public DataResponse addCourse(@RequestBody Map m){
         String courseId = (String) m.get("courseId");
         if(courseRepository.existsByCourseId(courseId)) {
@@ -120,7 +120,7 @@ public class CourseController {
     }
 
     @PostMapping("/updateCourse")
-    @PreAuthorize("hasRole('ADMIN')")
+    //@PreAuthorize("hasRole('ADMIN')")
     public DataResponse updateCourse(@RequestBody Map m){
         String courseId = (String) m.get("courseId");
         if(!courseRepository.existsByCourseId(courseId)) {
@@ -161,28 +161,13 @@ public class CourseController {
             course.setLessons(lessons);
         }
 
-
-
-       /* // 获取所有的 preCourses
-        List<String> preCourseIds = ((List<Map>) m.get("preCourses")).stream()
-                .map(preCourseMap -> (String) preCourseMap.get("courseId"))
-                .collect(Collectors.toList());
-
-        Map<String, Course> preCourseMap = courseRepository.findAllById(preCourseIds)
-                .stream()
-                .collect(Collectors.toMap(Course::getCourseId, Function.identity()));
-
-        // 设置 course 的 preCourses
-        Set<Course> preCourses = new HashSet<>(preCourseMap.values());
-        course.setPreCourses(preCourses);*/
-
         courseRepository.save(course);
 
         return new DataResponse(0,null,"更新成功");
     }
 
     @PostMapping("/deleteCourse")
-    @PreAuthorize("hasRole('ADMIN')")
+    //@PreAuthorize("hasRole('ADMIN')")
     public DataResponse deleteCourse(@RequestBody Map m){
         courseRepository.deleteAllByCourseId(""+m.get("courseId"));
         return new DataResponse(0,null,"删除成功");
@@ -190,7 +175,7 @@ public class CourseController {
 
     //选课抽签方法（理论上也可以在前端实现，但鉴于后端没啥东西而且传一堆学生传来传去好像很浪费，故写在后端）
     @PostMapping("/drawLots")
-    @PreAuthorize("hasRole('ADMIN')")
+    //@PreAuthorize("hasRole('ADMIN')")
     public DataResponse drawLots(@RequestBody Map m){
         String courseId = (String) m.get("courseId");
         Double capacity = (Double) m.get("capacity");
@@ -225,7 +210,7 @@ public class CourseController {
     }
 
     @PostMapping("/applyCourse")
-    @PreAuthorize("hasRole('STUDENT')")
+    //@PreAuthorize("hasRole('STUDENT')")
     public DataResponse applyCourse(@RequestBody Map m){//前序课分数要求待添加
         String courseId = (String) m.get("courseId");
         String username = CommonMethod.getUsername();
@@ -244,6 +229,9 @@ public class CourseController {
         if(course.getWillingStudents().contains(person)){
             return new DataResponse(-1,null,"已申请，无需重复选课");
         }
+        if(conflict(new ArrayList<>(courseRepository.findWantedCoursesByPersonId(person.getPersonId())),course)){
+            return new DataResponse(-1,null,"课程时间冲突");
+        }
         course.getWillingStudents().add(person);
         courseRepository.save(course);
         return new DataResponse(0,null,"选课成功");
@@ -252,9 +240,22 @@ public class CourseController {
     @PostMapping("/getWantedCourses")
     public DataResponse getWantedCourses(){//所有与本人相关的都应该通过token提取
         String username = CommonMethod.getUsername();
-        System.out.println(username);
-        System.out.println(studentRepository.findByStudentId(username).getPersonId());
-        System.out.println(courseRepository.findWantedCoursesByPersonId(studentRepository.findByStudentId(username).getPersonId()));
+        //System.out.println(username);
+        //System.out.println(studentRepository.findByStudentId(username).getPersonId());
+        //System.out.println(courseRepository.findWantedCoursesByPersonId(studentRepository.findByStudentId(username).getPersonId()));
         return new DataResponse(0,courseRepository.findWantedCoursesByPersonId(studentRepository.findByStudentId(username).getPersonId()),null);
+    }
+
+    private boolean conflict(List<Course> courses, Course course){
+        for (Course c : courses) {
+            if(c.getLessons().stream().anyMatch(
+                    lesson -> course.getLessons().stream().anyMatch(
+                            lesson1 ->
+                                    (lesson1.getWeek()+lesson1.getDay()+lesson1.getTime())
+                                            .equals(lesson.getWeek()+lesson.getDay()+lesson.getTime())))){//实现不优雅不精确，但是不想写太多了
+                return true;
+            }
+        }
+        return false;
     }
 }

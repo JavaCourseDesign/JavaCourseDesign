@@ -105,6 +105,11 @@
     -fx-text-fill: #a9b7c6; /* Light gray text color for tree cells */
 }
 
+.tree-cell .text {
+    -fx-fill: #a9b7c6; /* Light gray text color for tree cell text */
+    -fx-font-size: 15px; /* Slightly larger font size for better readability */
+}
+
 .tree-cell:selected {
     -fx-background-color: #214283; /* Blue color for selected tree cells */
     -fx-text-fill: white; /* White text for readability */
@@ -116,6 +121,11 @@
     -fx-font-size: 10px; /* Slightly larger font size for better readability */
     -fx-padding: 0; /* Padding for the menu button */
     -fx-border-width: 0; /* No border for the menu button */
+    -fx-cell-size: 20; /* Smaller cell size for the menu button */
+}
+
+.menu-button:hover {
+    -fx-background-color: #4a4c4e; /* Slightly lighter background on hover */
 }
 
 .tab-pane {

@@ -7,7 +7,7 @@ import javafx.scene.Parent;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import com.jfoenix.controls.JFXTextField;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 
@@ -16,7 +16,7 @@ import java.util.Map;
 import java.util.function.Consumer;
 
 public class SearchableTableView extends VBox {
-    private TextField searchField = new TextField();
+    private JFXTextField searchField = new JFXTextField();
     private TableView<Map> tableView = new TableView<>();
     private ObservableList<Map> data;
     private List<String> searchableFields;
