@@ -24,6 +24,9 @@ public class CourseApplyPage extends SplitPane {
     private ObservableList<Map> observableList = FXCollections.observableArrayList();
     private WeekTimeTable weekTimeTable = new WeekTimeTable();
     private Label creditCount = new Label();
+    private Label requiredCreditCount = new Label();
+    private Label optionalCreditCount = new Label();
+    private Label selectiveCreditCount = new Label();
 
     public CourseApplyPage() {
         this.setWidth(1000);
@@ -38,7 +41,7 @@ public class CourseApplyPage extends SplitPane {
         //HBox hbox = new HBox(weekTimeTable, creditCount);
         Label time=new Label(LocalDate.now().toString());
         creditCount.setFont(javafx.scene.text.Font.font(30));
-        VBox infoBox = new VBox(time,creditCount);
+        VBox infoBox = new VBox(time,creditCount,requiredCreditCount,optionalCreditCount,selectiveCreditCount);
         infoBox.setAlignment(Pos.CENTER);
         SplitPane splitPane = new SplitPane(weekTimeTable, infoBox);
         this.getItems().add(splitPane);
@@ -109,13 +112,24 @@ public class CourseApplyPage extends SplitPane {
 
         List<Map> allEvents = new ArrayList<>();
         double credit = 0;
+        double requiredCredit = 0;
+        double optionalCredit = 0;
+        double selectiveCredit = 0;
         for (Map course : courses) {
             credit += course.get("credit") == null ? 0 : (double) course.get("credit");
+            if(course.get("type")!=null&&course.get("type").equals("0")) requiredCredit += course.get("credit") == null ? 0 : (double) course.get("credit");
+            if(course.get("type")!=null&&course.get("type").equals("1")) optionalCredit += course.get("credit") == null ? 0 : (double) course.get("credit");
+            if(course.get("type")!=null&&course.get("type").equals("2")) selectiveCredit += course.get("credit") == null ? 0 : (double) course.get("credit");
             List<Map> events = (List<Map>) request("/getLessonsByCourseId", Map.of("courseId", course.get("courseId"))).getData();
             //if(events==null) continue;
             allEvents.addAll(events);
         }
         creditCount.setText("已选学分：" + credit);
+        requiredCreditCount.setText("必修学分：" + requiredCredit);
+        optionalCreditCount.setText("选修学分：" + optionalCredit);
+        selectiveCreditCount.setText("选修学分：" + selectiveCredit);
+
+
         weekTimeTable.setEvents(allEvents);
 
         observableList.clear();

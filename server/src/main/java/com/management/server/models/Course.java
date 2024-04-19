@@ -44,6 +44,8 @@ public class Course{
 
     private Double regularWeight=0.5;//平时成绩权重 教师有权限
 
+    private String type;//课程类型 0 Required 1 Optional 2 Selective
+
     /*private Double beginWeek;//开始周次 教师有权限
 
     private Double endWeek;//结束周次 教师有权限*/ //改为lesson的属性
