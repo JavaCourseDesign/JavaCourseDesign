@@ -34,8 +34,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.management.front.util.HttpClientUtil.request;
-import static com.management.front.util.HttpClientUtil.requestByteData;
+import static com.management.front.util.HttpClientUtil.*;
 
 public class StudentPersonalInfoPage extends TabPane {
     public StudentPersonalInfoPage() {
@@ -56,6 +55,7 @@ class BasicInfoTab extends Tab {
     VBox vBox = new VBox();
     GridPane gridPane = new GridPane();
     ImageView photoArea = new ImageView();
+    private  Button uploadButton = new Button("上传照片");
    private TextField highSchoolField = new TextField();
    private TextField familyMemberField = new TextField();
    private TextField familyMemberPhoneField = new TextField();
@@ -77,6 +77,16 @@ class BasicInfoTab extends Tab {
         emailField.setText(student.get("email")+"");
         // vBox.getChildren().add(photoArea);
         vBox.getChildren().add(photoArea);
+        vBox.getChildren().add(uploadButton);
+        uploadButton.setOnMouseClicked(event -> {
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.gif"));
+            File file = fileChooser.showOpenDialog(null);
+            if (file != null) {
+               DataResponse r= uploadFile("/uploadPhoto",file.getPath(),file.getName());
+                display();
+            }
+        });
 
         photoArea.setFitHeight(200);
         photoArea.setFitWidth(200);
@@ -84,40 +94,6 @@ class BasicInfoTab extends Tab {
         photoArea.setPreserveRatio(true);
         photoArea.setStyle("-fx-border-color: #000000; -fx-border-width: 10;");
         display();
-        photoArea.setOnDragOver(event -> {
-            if (event.getGestureSource() != photoArea && event.getDragboard().hasFiles()) {
-                event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
-            }
-            event.consume();
-        });
-
-        photoArea.setOnDragDropped(event -> {
-            Dragboard db = event.getDragboard();
-            boolean success = false;
-            if (db.hasFiles()) {
-                try {
-                    File file = db.getFiles().get(0);
-                    byte[] fileContent = Files.readAllBytes(file.toPath());
-                    String encodedString = Base64.getEncoder().encodeToString(fileContent);
-                    Map<String, String> m = new HashMap<>();
-                    //m.put("fileName", fileName);
-                    m.put("fileContent", encodedString);
-                    DataResponse r = request("/uploadPhoto", m);
-                    if (r.getCode() == 0) {
-                        // handle success
-                    } else {
-                        // handle error
-                    }
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-                success = true;
-            }
-            event.setDropCompleted(success);
-            event.consume();
-            display();
-        });
-
         vBox.getChildren().add(gridPane);
         Button saveButton = new Button("保存");
         saveButton.setOnMouseClicked(event -> save());

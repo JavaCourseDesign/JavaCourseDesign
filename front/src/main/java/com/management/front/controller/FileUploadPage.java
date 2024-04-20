@@ -25,9 +25,9 @@ public class FileUploadPage extends VBox {
             if (file != null) {
                 String filePath = file.getPath();
                 String remoteFile = "file";
-                String fileName="作业.pdf";
+                String fileName=file.getName();
                 //remoteFile   你想存在的后端的文件夹，不要加/，直接写名字
-                uploadFile("/uploadFile",filePath, remoteFile,fileName);
+                uploadFile("/uploadFile",filePath,fileName);
             }
         });
         this.getChildren().add(button);

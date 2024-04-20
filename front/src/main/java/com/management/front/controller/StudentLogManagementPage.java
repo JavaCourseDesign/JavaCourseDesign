@@ -81,15 +81,15 @@ class StudentAbsenceManagementTab extends Tab {
         controlPanel.setMinWidth(200);
         controlPanel.setSpacing(10);
         controlPanel.setAlignment(Pos.CENTER);
-        Text text = new Text("临时添加缺勤信息");
+        Label text = new Label("临时添加缺勤信息");
         controlPanel.getChildren().add(text);
-        controlPanel.getChildren().add(new Text("学号工号:"));
+        controlPanel.getChildren().add(new Label("学号工号:"));
         controlPanel.getChildren().add(idField);
-        controlPanel.getChildren().add(new Text("身份:"));
+        controlPanel.getChildren().add(new Label("身份:"));
         controlPanel.getChildren().add(typeField);
-        controlPanel.getChildren().add(new Text("姓名:"));
+        controlPanel.getChildren().add(new Label("姓名:"));
         controlPanel.getChildren().add(nameField);
-        controlPanel.getChildren().add(new Text("请假事件:"));
+        controlPanel.getChildren().add(new Label("请假事件:"));
         controlPanel.getChildren().add(eventListView);
         Button addButton = new Button("添加");
         addButton.setOnMouseClicked(e->{
@@ -251,6 +251,7 @@ class StudentFeeManagementTab extends Tab{
     }
 
     private void uploadFee() {
+
         FileChooser fileDialog = new FileChooser();
         fileDialog.setTitle("前选择消费数据表");
         FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Excel files (*.xlsx)", "*.xlsx");
@@ -258,21 +259,22 @@ class StudentFeeManagementTab extends Tab{
 
         File file = fileDialog.showOpenDialog(null);
         if(file==null)
+        {
+            Alert alert=new Alert(Alert.AlertType.ERROR);
+            alert.setContentText("未选择文件");
             return;
+        }
        DataResponse r= importData("/importFeeData",file.getPath());
-       if(r.getCode()==0)
-       {
-              Alert alert=new Alert(Alert.AlertType.INFORMATION);
-              alert.setContentText("上传成功");
-              alert.showAndWait();
-              displayFees();
-         }
-         else
-         {
-              Alert alert=new Alert(Alert.AlertType.ERROR);
-              alert.setContentText(r.getMsg());
-              alert.showAndWait();
-       }
+        if (r.getCode() == 0) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setContentText("上传成功");
+            alert.showAndWait();
+            displayFees();
+        } else {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setContentText(r.getMsg());
+            alert.showAndWait();
+        }
     }
 
     private void displayFees()
