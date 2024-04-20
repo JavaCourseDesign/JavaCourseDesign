@@ -25,8 +25,10 @@ public class Menu extends SplitPane {
     TreeItem<String> item6 = new TreeItem<>("课程表");
     TreeItem<String> item7 = new TreeItem<>("创新实践管理");
     TreeItem<String> item8 = new TreeItem<>("课程申请");
-    TreeItem<String> item9 = new TreeItem<>("请假管理");
+    TreeItem<String> item9 = new TreeItem<>("学生日志信息管理");
     TreeItem<String> item10 = new TreeItem<>("测试上传文件");
+    TreeItem<String> item11 = new TreeItem<>("学生作业界面");
+    TreeItem<String> item12 = new TreeItem<>("教师作业界面");
      public Menu(){
          this.getStylesheets().add("dark-theme.css");
 
@@ -36,7 +38,7 @@ public class Menu extends SplitPane {
         menu.setPrefWidth(70);
         this.setDividerPositions(0.2);
 
-        root.getChildren().addAll(item1, item2, item3, item4,item5, item6,item7, item8,item9,item10);
+        root.getChildren().addAll(item1, item2, item3, item4,item5, item6,item7, item8,item9,item10 ,item11,item12);
         menu.setRoot(root);
 
         this.getItems().add(menu);
@@ -51,8 +53,9 @@ public class Menu extends SplitPane {
                 case "课程表":this.getItems().set(1,new HomePage());break;
                 case "创新实践管理":this.getItems().set(1,new InnovationManagementPage());break;
                 case "课程申请":this.getItems().set(1,new CourseApplyPage());break;
-                case "请假管理":this.getItems().set(1,new StudentAbsenceManagementPage());break;
+                case "学生日志信息管理":this.getItems().set(1,new StudentLogManagementPage());break;
                 case "测试上传文件":this.getItems().set(1,new FileUploadPage());break;
+                case "学生作业界面":this.getItems().set(1,new StudentHomeworkPage());break;
             }
         });
     }

@@ -34,8 +34,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.management.front.util.HttpClientUtil.request;
-import static com.management.front.util.HttpClientUtil.requestByteData;
+import static com.management.front.util.HttpClientUtil.*;
 
 public class StudentPersonalInfoPage extends TabPane {
     public StudentPersonalInfoPage() {
@@ -56,13 +55,38 @@ class BasicInfoTab extends Tab {
     VBox vBox = new VBox();
     GridPane gridPane = new GridPane();
     ImageView photoArea = new ImageView();
+    private  Button uploadButton = new Button("上传照片");
+   private TextField highSchoolField = new TextField();
+   private TextField familyMemberField = new TextField();
+   private TextField familyMemberPhoneField = new TextField();
+   private TextField addressField = new TextField();
+   private TextField homeTownField = new TextField();
+   private TextField phoneField = new TextField();
+   private TextField emailField = new TextField();
 
     public BasicInfoTab(Map student) {
         this.setText("基本信息");
         this.setContent(vBox);
         this.student = student;
+        highSchoolField.setText(student.get("highSchool")+"");
+        familyMemberField.setText(student.get("familyMember")+"");
+        familyMemberPhoneField.setText(student.get("familyMemberPhone")+"");
+        addressField.setText(student.get("address")+"");
+        homeTownField.setText(student.get("homeTown")+"");
+        phoneField.setText(student.get("phone")+"");
+        emailField.setText(student.get("email")+"");
         // vBox.getChildren().add(photoArea);
         vBox.getChildren().add(photoArea);
+        vBox.getChildren().add(uploadButton);
+        uploadButton.setOnMouseClicked(event -> {
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.gif"));
+            File file = fileChooser.showOpenDialog(null);
+            if (file != null) {
+               DataResponse r= uploadFile("/uploadPhoto",file.getPath(),file.getName());
+                display();
+            }
+        });
 
         photoArea.setFitHeight(200);
         photoArea.setFitWidth(200);
@@ -70,41 +94,6 @@ class BasicInfoTab extends Tab {
         photoArea.setPreserveRatio(true);
         photoArea.setStyle("-fx-border-color: #000000; -fx-border-width: 10;");
         display();
-        photoArea.setOnDragOver(event -> {
-            if (event.getGestureSource() != photoArea && event.getDragboard().hasFiles()) {
-                event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
-            }
-            event.consume();
-        });
-
-        photoArea.setOnDragDropped(event -> {
-            Dragboard db = event.getDragboard();
-            boolean success = false;
-            if (db.hasFiles()) {
-                try {
-                    File file = db.getFiles().get(0);
-                    byte[] fileContent = Files.readAllBytes(file.toPath());
-                    String encodedString = Base64.getEncoder().encodeToString(fileContent);
-                    Map<String, String> m = new HashMap<>();
-                    //fileName = LoginPage.personId + ".jpg";
-                    m.put("fileName", fileName);
-                    m.put("fileContent", encodedString);
-                    DataResponse r = request("/uploadPhoto", m);
-                    if (r.getCode() == 0) {
-                        // handle success
-                    } else {
-                        // handle error
-                    }
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-                success = true;
-            }
-            event.setDropCompleted(success);
-            event.consume();
-            display();
-        });
-
         vBox.getChildren().add(gridPane);
         Button saveButton = new Button("保存");
         saveButton.setOnMouseClicked(event -> save());
@@ -146,9 +135,7 @@ class BasicInfoTab extends Tab {
     }
 
     public void display() {
-        Map<String, String> m = new HashMap<>();
-        m.put("fileName", /*LoginPage.personId +*/ ".jpg");
-        DataResponse r = request("/getPhotoImageStr", m);
+        DataResponse r = request("/getPhotoImageStr", null);
         if (r.getCode() == 0) {
             String base64Image = r.getData().toString();
             byte[] decodedBytes = Base64.getDecoder().decode(base64Image);
@@ -157,9 +144,27 @@ class BasicInfoTab extends Tab {
             photoArea.setImage(image);
         }
     }
+    private Map<String,String> newMapFromFields()
+    {
+        Map<String,String> m=new HashMap<>();
+        m.put("highSchool",highSchoolField.getText());
+        m.put("familyMember",familyMemberField.getText());
+        m.put("familyMemberPhone",familyMemberPhoneField.getText());
+        m.put("address",addressField.getText());
+        m.put("homeTown",homeTownField.getText());
+        m.put("phone",phoneField.getText());
+        m.put("email",emailField.getText());
+        return m;
+    }
 
     public void save() {
-        //request("/updateStudent", student);
+        DataResponse r=request("/saveStudentPersonalInfo", newMapFromFields());
+        if(r.getCode()==0)
+        {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setContentText("保存成功");
+            alert.showAndWait();
+        }
     }
     public void refresh() {
         Label label1 = new Label("毕业高中信息");
@@ -177,13 +182,7 @@ class BasicInfoTab extends Tab {
         Text socilaText=new Text(student.get("social")+"");
         Text cardText=new Text(student.get("idCardNum")+"");
         Text birthdayText=new Text(student.get("birthday")+"");
-        TextField highSchoolField = new TextField(student.get("highSchool")+"");
-        TextField familyMemberField = new TextField(student.get("familyMember")+"");
-        TextField familyMemberPhoneField = new TextField(student.get("familyMemberPhone")+"");
-        TextField addressField = new TextField(student.get("address")+"");
-        TextField homeTownField = new TextField(student.get("homeTown")+"");
-        TextField phoneField = new TextField(student.get("phone")+"");
-        TextField emailField = new TextField(student.get("email")+"");
+
 
         gridPane.addColumn(0,
                 new Label("学号:"),

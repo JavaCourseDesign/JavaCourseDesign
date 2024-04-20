@@ -43,6 +43,7 @@ public abstract class Person {
     private String gender;
 
     private String birthday;
+    
 
     @Size(max = 60)
     @Email
@@ -55,6 +56,7 @@ public abstract class Person {
     private String address;
 
     private String social;
+    private String photo;
 
     /*@OneToMany(mappedBy = "person")
     private List<Absence> absences;*/

@@ -6,6 +6,7 @@ import com.management.server.payload.response.DataResponse;
 import com.management.server.service.UserDetailsImpl;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
@@ -46,6 +47,16 @@ public class CommonMethod {
         if(!(obj instanceof UserDetailsImpl userDetails))
             return null;
         return userDetails.getId();
+    }
+    public static String getUserType(){
+        Object obj = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if(!(obj instanceof UserDetailsImpl userDetails))
+            return null;
+        Collection<? extends GrantedAuthority> authorities = userDetails.getAuthorities();
+        if (!authorities.isEmpty()) {
+            return authorities.iterator().next().getAuthority();
+        }
+        return null;
     }
     public static String getUsername(){
         Object obj = SecurityContextHolder.getContext().getAuthentication().getPrincipal();

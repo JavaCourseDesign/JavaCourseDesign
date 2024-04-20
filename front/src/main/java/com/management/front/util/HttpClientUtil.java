@@ -99,15 +99,37 @@ public class HttpClientUtil {
         }
         return null;
     }
-    public static DataResponse uploadFile(String uri,String filePath,String remoteFile,String fileName)  {
+    public static DataResponse uploadFile(String uri,String filePath,String fileName)  {
         try {
-            //remoteFile   你想存在的后端的文件夹，不要加/，直接写名字
             Path file = Path.of(filePath);
             HttpClient client = HttpClient.newBuilder().build();
             String encodedFileName = URLEncoder.encode(fileName.toString(), StandardCharsets.UTF_8.toString());
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(mainUrl+uri+"?uploader=HttpTestApp&remoteFile="+remoteFile + "&fileName="
+                    .uri(URI.create(mainUrl+uri+  "?fileName="
                             + encodedFileName))
+                    .POST(HttpRequest.BodyPublishers.ofFile(file))
+                    .headers("Authorization", "Bearer "+jwt.getAccessToken())
+                    .build();
+            HttpResponse<String>  response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            if(response.statusCode() == 200) {
+                DataResponse dataResponse = gson.fromJson(response.body(), DataResponse.class);
+                return dataResponse;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    public static DataResponse importData(String url, String filePath)  {
+
+        try {
+            Path file = Path.of(filePath);
+            String urlStr = mainUrl+url+"?uploader=HttpTestApp";
+            HttpClient client = HttpClient.newBuilder().build();
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(urlStr))
                     .POST(HttpRequest.BodyPublishers.ofFile(file))
                     .headers("Authorization", "Bearer "+jwt.getAccessToken())
                     .build();

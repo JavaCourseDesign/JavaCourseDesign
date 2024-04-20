@@ -20,12 +20,10 @@ public class FileController {
     private String attachFolder;
     @PostMapping(path = "/uploadFile")
     public DataResponse uploadFile(@RequestBody byte[] barr,
-                                   @RequestParam(name = "uploader") String uploader,
-                                   @RequestParam(name = "remoteFile") String remoteFile,
     @RequestParam(name = "fileName") String fileName)  {
         try {
             String decodedFileName = URLDecoder.decode(fileName, StandardCharsets.UTF_8.toString());
-            OutputStream os = new FileOutputStream(new File(attachFolder + remoteFile+"/"+ decodedFileName));
+            OutputStream os = new FileOutputStream(new File(attachFolder +"file"+"/"+ decodedFileName));
             os.write(barr);
             os.close();
             return new DataResponse(0, null, "上传成功！");
