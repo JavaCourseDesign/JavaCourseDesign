@@ -138,12 +138,12 @@ public class WeekTimeTable extends Pane{
     {
         return (int)t + ((t - (int)t) *10/6);
     }
-    public static Pane transferTimeToEvent(String Time)//6,8.00,1.50
+    public static Pane transferTimeToEvent(String Time)//12,6,8.00,1.50
     {
         Pane event = new Pane();
-        event.setLayoutX(LEFT_BAR_WIDTH+(Integer.parseInt(Time.split(",")[0])-1)*DAY_WIDTH);
-        event.setLayoutY(TOP_BAR_HEIGHT+(transferTime(Double.parseDouble(Time.split(",")[1]))-BEGIN_TIME)*HOUR_HEIGHT);
-        event.setPrefHeight(transferTime(Double.parseDouble(Time.split(",")[2]))*HOUR_HEIGHT);
+        event.setLayoutX(LEFT_BAR_WIDTH+(Integer.parseInt(Time.split(",")[1])-1)*DAY_WIDTH);
+        event.setLayoutY(TOP_BAR_HEIGHT+(transferTime(Double.parseDouble(Time.split(",")[2]))-BEGIN_TIME)*HOUR_HEIGHT);
+        event.setPrefHeight(transferTime(Double.parseDouble(Time.split(",")[3]))*HOUR_HEIGHT);
         event.setPrefWidth(DAY_WIDTH);
         event.setOpacity(NORMAL_OPACITY);
         event.setOnMouseEntered(e -> event.setOpacity(0.8));

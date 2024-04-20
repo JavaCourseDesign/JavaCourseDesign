@@ -5,6 +5,7 @@ import com.management.front.request.DataResponse;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.geometry.Orientation;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.SplitPane;
@@ -24,15 +25,22 @@ public class CourseApplyPage extends SplitPane {
     private SearchableTableView courseTable;
     private VBox controlPanel = new VBox();
     private ObservableList<Map> observableList = FXCollections.observableArrayList();
+    private WeekTimeTable weekTimeTable = new WeekTimeTable();
 
     private Button applyButton = new Button("Apply");
 
     public CourseApplyPage() {
         this.setWidth(1000);
         this.setDividerPosition(0, 0.7);
+        this.setOrientation(Orientation.VERTICAL);
+        initializeWeekTimeTable();
         initializeTable();
         initializeControlPanel();
         displayCourses();
+    }
+    private void initializeWeekTimeTable() {
+
+        this.getItems().add(weekTimeTable);
     }
 
     private void initializeTable() {
@@ -79,6 +87,18 @@ public class CourseApplyPage extends SplitPane {
     }
 
     private void displayCourses() {
+        List<Map> courses = (ArrayList) request("/getWantedCourses", null).getData();
+        System.out.println("wantedCourses"+courses);
+        weekTimeTable.clear();
+        for (Map course : courses) {
+            List<Map> events = (List<Map>) request("/getLessonsByCourseId", Map.of("courseId", course.get("courseId"))).getData();
+            if(events==null)continue;
+            for (Map event : events) {//有问题，同一个时间的event会被多次显示 解决方法1（最优）：完善WeekTimeTable，支持切换周次 解决方法2：对时间进行去重
+                System.out.println(event.get("name")+" "+event.get("location")+" "+event.get("time"));
+                weekTimeTable.addEvent(event.get("name")+"" ,event.get("location")+"",(""+event.get("time")));
+            }
+        }
+
         observableList.clear();
         observableList.addAll(FXCollections.observableArrayList((ArrayList) request("/getAllCourses", null).getData()));
         courseTable.setData(observableList);
@@ -93,15 +113,13 @@ public class CourseApplyPage extends SplitPane {
             return;
         }
 
-        String personId = LoginPage.personId;
-
         // Create a map to hold the request data
-        Map<String, String> requestData = new HashMap<>();
-        requestData.put("courseId", (String) selectedCourse.get("courseId"));
-        requestData.put("personId", personId);
+        //Map<String, String> requestData = new HashMap<>();
+        //requestData.put("courseId", (String) selectedCourse.get("courseId"));
+        //requestData.put("personId", null);//personId问题待修改
 
         // Send the request to the server
-        DataResponse response = request("/applyCourse", requestData);
+        DataResponse response = request("/applyCourse", Map.of("courseId", (String) selectedCourse.get("courseId")));
 
         // Check the response and show an alert
         if (response.getCode() == 0) {
@@ -113,5 +131,6 @@ public class CourseApplyPage extends SplitPane {
             alert.setContentText("申请失败: " + response.getMsg());
             alert.showAndWait();
         }
+        displayCourses();
     }
 }

@@ -10,10 +10,10 @@ import java.util.List;
 @Entity
 @Data
 @Table(name="lesson")
+
 public class Lesson extends Event{
 
-    @OneToMany(mappedBy = "lesson")
-    private List<Absence> absences;
+
 
     //homework?
 }

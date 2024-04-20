@@ -5,14 +5,14 @@ import cn.hutool.core.bean.copier.CopyOptions;
 import com.management.server.models.*;
 import com.management.server.payload.response.DataResponse;
 import com.management.server.repositories.*;
+import com.management.server.util.CommonMethod;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @RestController
 //@RequestMapping("/course")
@@ -32,6 +32,34 @@ public class CourseController {
         return new DataResponse(0,courseRepository.findAll(),null);
     }
 
+    @PostMapping("/getLessonsByCourseId")
+    public DataResponse getLessonsByCourse(@RequestBody Map m){
+        String courseId = (String) m.get("courseId");
+        if(!courseRepository.existsByCourseId(courseId)) {
+            return new DataResponse(-1, List.of(),"课程不存在，无法获取课程信息");
+        }
+        System.out.println(courseRepository.findByCourseId(courseId).getLessons().size());
+        if(courseRepository.findByCourseId(courseId).getLessons().isEmpty()){
+            //System.out.println("无课程信息");
+            return new DataResponse(0, List.of(),"无课程信息");
+        }
+        Course course = courseRepository.findByCourseId(courseId);
+        return new DataResponse(0,course.getLessons(),null);
+    }
+
+    /*@PostMapping("/getPreCoursesByCourseId")
+    public DataResponse getPreCourseByCourse(@RequestBody Map m){
+        String courseId = (String) m.get("courseId");
+        if(!courseRepository.existsByCourseId(courseId)) {
+            return new DataResponse(-1, List.of(),"课程不存在，无法获取课程信息");
+        }
+        Course course = courseRepository.findByCourseId(courseId);
+        if(course.getPreCourses()==null){
+            return new DataResponse(0, List.of(),"无先修课程");
+        }
+        return new DataResponse(0,course.getPreCourses(),null);
+    }*/
+
     @PostMapping("/addCourse")
     @PreAuthorize("hasRole('ADMIN')")
     public DataResponse addCourse(@RequestBody Map m){
@@ -39,47 +67,56 @@ public class CourseController {
         if(courseRepository.existsByCourseId(courseId)) {
             return new DataResponse(-1,null,"课程已存在，无法添加");
         }
-        Course course = BeanUtil.mapToBean(m, Course.class, true, CopyOptions.create());//要求map键值与对象一致
+        Course course = BeanUtil.mapToBean(m, Course.class, true, CopyOptions.create().ignoreError());//要求map键值与对象一致
 
-        List<Person> persons = new ArrayList<>();
-        ArrayList<Map> teachers = (ArrayList<Map>) m.get("teachers");
-        for (int i = 0; i < teachers.size(); i++) {
-            persons.add(personRepository.findByPersonId((teachers.get(i).get("personId")).toString()));
-        }
-        ArrayList<Map> students = (ArrayList<Map>) m.get("students");
-        for (int i = 0; i < students.size(); i++) {
-            persons.add(personRepository.findByPersonId((students.get(i).get("personId")).toString()));
-        }
-        System.out.println("persons:"+persons);
+        // 获取所有的 persons
+        List<String> personIds = ((List<Map>) m.get("persons")).stream()
+                .map(personMap -> (String) personMap.get("personId"))
+                .collect(Collectors.toList());
+        Map<String, Person> personMap = personRepository.findAllById(personIds)
+                .stream()
+                .collect(Collectors.toMap(Person::getPersonId, Function.identity()));
+
+        // 设置 course 的 persons
+        Set<Person> persons = new HashSet<>(personMap.values());
         course.setPersons(persons);
 
+        // 保存 persons 的更改
+        personRepository.saveAll(persons);
+
+        // 获取所有的 lessons
         List<Map> mapLessons = (List<Map>) m.get("lessons");
         List<Lesson> lessons = new ArrayList<>();
         for (Map mapLesson : mapLessons) {
             Lesson lesson = new Lesson();
-            lesson = BeanUtil.mapToBean(mapLesson, lesson.getClass(), true, CopyOptions.create());
-
+            mapLesson.remove("persons");
+            BeanUtil.fillBeanWithMap(mapLesson, lesson, true, CopyOptions.create());
             lesson.setPersons(persons);
-
-            lessonRepository.save(lesson);
-            System.out.println("lesson:"+lesson+" eventId:"+lesson.getEventId());
             lessons.add(lesson);
         }
+
+        // 批量保存 lessons
+        lessonRepository.saveAll(lessons);
         course.setLessons(lessons);
+
+        /*// 获取所有的 preCourses
+        List<String> preCourseIds = ((List<Map>) m.get("preCourses")).stream()
+                .map(preCourseMap -> (String) preCourseMap.get("courseId"))
+                .collect(Collectors.toList());
+        Map<String, Course> preCourseMap = courseRepository.findAllById(preCourseIds)
+                .stream()
+                .collect(Collectors.toMap(Course::getCourseId, Function.identity()));
+
+        // 设置 course 的 preCourses
+        Set<Course> preCourses = new HashSet<>(preCourseMap.values());
+        course.setPreCourses(preCourses);*/
 
         courseRepository.save(course);
 
-        System.out.println(course);
-        System.out.println(course.getLessons().get(0).getTime());
+        //System.out.println(course);
+        //System.out.println(course.getLessons().get(0).getTime());
 
         return new DataResponse(0,null,"添加成功");
-    }
-
-    @PostMapping("/deleteCourse")
-    @PreAuthorize("hasRole('ADMIN')")
-    public DataResponse deleteCourse(@RequestBody Map m){
-        courseRepository.deleteAllByCourseId(""+m.get("courseId"));
-        return new DataResponse(0,null,"删除成功");
     }
 
     @PostMapping("/updateCourse")
@@ -90,55 +127,65 @@ public class CourseController {
             return new DataResponse(-1,null,"课程不存在，无法更新");
         }
         Course course = courseRepository.findByCourseId(courseId);
+        BeanUtil.fillBeanWithMap(m, course, true, CopyOptions.create().ignoreError());
 
-        List<Person> persons = new ArrayList<>();
-        ArrayList<Map> personsMap = (ArrayList<Map>) m.get("persons");
-        for (int i = 0; i < personsMap.size(); i++) {
-            persons.add(personRepository.findByPersonId((personsMap.get(i).get("personId")).toString()));
-        }
+        // 获取所有的 persons
+        List<String> personIds = ((List<Map>) m.get("persons")).stream()
+                .map(personMap -> (String) personMap.get("personId"))
+                .collect(Collectors.toList());
+        Map<String, Person> personMap = personRepository.findAllById(personIds)
+                .stream()
+                .collect(Collectors.toMap(Person::getPersonId, Function.identity()));
 
-        //需要把多对多关系属性忽略掉，student与teacher中亦然，因为这些属性经过传输以及不再具有完整的循环嵌套特征，需要通过主键重新建立联系
-        m.remove("persons");
-
-        lessonRepository.deleteAll(course.getLessons());
-
-        BeanUtil.fillBeanWithMap(m, course, true, CopyOptions.create());//要求map键值与对象一致
-        course.getLessons().clear();//好像很重要，意义待研究  更新course是否要删除所有相关的lesson对象然后重新构建？还是更改现有lesson的属性？后者似乎实现很复杂
-
-
-        ArrayList<Map> teachers = (ArrayList<Map>) m.get("teachers");
-        for (int i = 0; teachers!=null&&i < teachers.size(); i++) {
-            if(!persons.contains(personRepository.findByPersonId((teachers.get(i).get("personId")).toString()))){
-                persons.add(personRepository.findByPersonId((teachers.get(i).get("personId")).toString()));
-            }
-        }
-        ArrayList<Map> students = (ArrayList<Map>) m.get("students");
-        for (int i = 0; students!=null&&i < students.size(); i++) {
-            if(!persons.contains(personRepository.findByPersonId((students.get(i).get("personId")).toString()))) {
-                persons.add(personRepository.findByPersonId((students.get(i).get("personId")).toString()));
-            }
-        }
-        //System.out.println("persons:"+persons);
+        // 设置 course 的 persons
+        Set<Person> persons = new HashSet<>(personMap.values());
         course.setPersons(persons);
 
-        List<Map> mapLessons = (List<Map>) m.get("lessons");
-        List<Lesson> lessons = new ArrayList<>();
-        for (Map mapLesson : mapLessons) {
-            Lesson lesson = new Lesson();
-            mapLesson.remove("persons");
-            lesson = BeanUtil.mapToBean(mapLesson, lesson.getClass(), true, CopyOptions.create());
-            lesson.setPersons(persons);
+        // 保存 persons 的更改
+        personRepository.saveAll(persons);
 
-            lessonRepository.save(lesson);
-            System.out.println("lesson:"+lesson+" eventId:"+lesson.getEventId());
-            lessons.add(lesson);
+        if(m.get("lessons")!=null){
+            // 获取所有的 lessons
+            List<Map> mapLessons = (List<Map>) m.get("lessons");
+            List<Lesson> lessons = new ArrayList<>();
+            for (Map mapLesson : mapLessons) {
+                Lesson lesson = new Lesson();
+                mapLesson.remove("persons");
+                BeanUtil.fillBeanWithMap(mapLesson, lesson, true, CopyOptions.create());
+                lesson.setPersons(persons);
+                lessons.add(lesson);
+            }
+
+            // 批量保存 lessons
+            lessonRepository.saveAll(lessons);
+            course.setLessons(lessons);
         }
-        course.setLessons(lessons);
+
+
+
+       /* // 获取所有的 preCourses
+        List<String> preCourseIds = ((List<Map>) m.get("preCourses")).stream()
+                .map(preCourseMap -> (String) preCourseMap.get("courseId"))
+                .collect(Collectors.toList());
+
+        Map<String, Course> preCourseMap = courseRepository.findAllById(preCourseIds)
+                .stream()
+                .collect(Collectors.toMap(Course::getCourseId, Function.identity()));
+
+        // 设置 course 的 preCourses
+        Set<Course> preCourses = new HashSet<>(preCourseMap.values());
+        course.setPreCourses(preCourses);*/
 
         courseRepository.save(course);
 
-        System.out.println(course);
         return new DataResponse(0,null,"更新成功");
+    }
+
+    @PostMapping("/deleteCourse")
+    @PreAuthorize("hasRole('ADMIN')")
+    public DataResponse deleteCourse(@RequestBody Map m){
+        courseRepository.deleteAllByCourseId(""+m.get("courseId"));
+        return new DataResponse(0,null,"删除成功");
     }
 
     //选课抽签方法（理论上也可以在前端实现，但鉴于后端没啥东西而且传一堆学生传来传去好像很浪费，故写在后端）
@@ -155,11 +202,11 @@ public class CourseController {
             return new DataResponse(-1,null,"课程已有学生，无法抽签");
         }
 
-        List<Person> willingStudents = new ArrayList<>(course.getWillingStudents());
+        Set<Person> willingStudents = new HashSet<>(course.getWillingStudents());
         if(willingStudents.size()<=capacity){
             course.setPersons(willingStudents);
         }else{
-            List<Person> persons = new ArrayList<>();
+            Set<Person> persons = new HashSet<>();
             ArrayList<Map> personsMap = (ArrayList<Map>) m.get("persons");
             for (int i = 0; i < personsMap.size(); i++) {
                 persons.add(personRepository.findByPersonId((personsMap.get(i).get("personId")).toString()));
@@ -167,7 +214,7 @@ public class CourseController {
 
             for (int i = 0; i < capacity; i++) {
                 int index = (int) (Math.random() * willingStudents.size());
-                persons.add(studentRepository.findByPersonId(willingStudents.get(index).getPersonId()));
+                persons.add(studentRepository.findByPersonId(willingStudents.toArray(new Person[0])[index].getPersonId()));
                 willingStudents.remove(index);
             }
             course.setPersons(persons);
@@ -181,6 +228,7 @@ public class CourseController {
     @PreAuthorize("hasRole('STUDENT')")
     public DataResponse applyCourse(@RequestBody Map m){//前序课分数要求待添加
         String courseId = (String) m.get("courseId");
+        String username = CommonMethod.getUsername();
         if(!courseRepository.existsByCourseId(courseId)) {
             return new DataResponse(-1,null,"课程不存在，无法选课");
         }
@@ -188,12 +236,25 @@ public class CourseController {
         if(!course.isAvailable()){
             return new DataResponse(-1,null,"选课未开放/已结束");
         }
-        Person person = personRepository.findByPersonId((String) m.get("personId"));
+
+        Person person = studentRepository.findByStudentId(username);
         if(course.getPersons().contains(person)){
             return new DataResponse(-1,null,"已选中，无需重复选课");
+        }
+        if(course.getWillingStudents().contains(person)){
+            return new DataResponse(-1,null,"已申请，无需重复选课");
         }
         course.getWillingStudents().add(person);
         courseRepository.save(course);
         return new DataResponse(0,null,"选课成功");
+    }
+
+    @PostMapping("/getWantedCourses")
+    public DataResponse getWantedCourses(){//所有与本人相关的都应该通过token提取
+        String username = CommonMethod.getUsername();
+        System.out.println(username);
+        System.out.println(studentRepository.findByStudentId(username).getPersonId());
+        System.out.println(courseRepository.findWantedCoursesByPersonId(studentRepository.findByStudentId(username).getPersonId()));
+        return new DataResponse(0,courseRepository.findWantedCoursesByPersonId(studentRepository.findByStudentId(username).getPersonId()),null);
     }
 }

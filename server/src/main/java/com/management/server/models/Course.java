@@ -1,6 +1,7 @@
 package com.management.server.models;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
@@ -10,14 +11,23 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.util.List;
+import java.util.Set;
 
 @Entity
 
 @Data
 @Table(name="course")
-
-//@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "name")//在递归中第二次出现时用name属性替代本对象避免无限递归
-//@JsonIgnoreProperties(value = {"persons"})
+@NamedEntityGraph(name = "Course",
+        attributeNodes = {
+                @NamedAttributeNode("lessons"),
+                //@NamedAttributeNode("persons")
+        },
+        subgraphs = {
+                //@NamedSubgraph(name = "Event.persons", attributeNodes = @NamedAttributeNode("persons"))
+        }
+    )
+/*@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "name")//在递归中第二次出现时用name属性替代本对象避免无限递归
+@JsonIgnoreProperties(value = {"persons"})*/
 
 public class Course{
     @Id
@@ -41,8 +51,10 @@ public class Course{
     private boolean available;//是否可选
 
 
-    @OneToMany
-    private List<Lesson> lessons;
+    @OneToMany(cascade = {CascadeType.ALL},orphanRemoval = true)
+    //@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "eventId")
+    @JsonIgnore
+    private List<Lesson> lessons;//可以通过get0和getSize得到开始结束周次
 
     /*@ManyToMany
     @JoinTable(name = "student_course")
@@ -56,23 +68,34 @@ public class Course{
     @JoinColumn(name="pre_course_id")
     private Course preCourse;*/
 
-    @ManyToMany
+    /*@ManyToMany
     @JoinTable(name = "course_course")
-    @JsonIgnoreProperties(value = {"preCourses"})//非常重要，避免自身递归
+    //@JsonIgnoreProperties(value = {"preCourses"})//非常重要，避免自身递归
     @ToString.Exclude//也非常重要，避免自身递归
-    private List<Course> preCourses;
+    @JsonIgnoreProperties(value = {"preCourses","lessons","persons","willingStudents"})
+    //@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "name")
+    private Set<Course> preCourses;*/
+
+    private String preCourses;//用字符串存，不存对象了 存对象有一系列问题，包括但不限于无限递归、指向意义不明（前序课并不一定只有一个课序号，可能存在同名不同时的课程）
 
     @ManyToMany
     @JoinTable(name = "person_course")
+    //@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "personId")
     //@JsonIgnoreProperties(value = {"courses"})
-    private List<Person> persons;
+    private Set<Person> persons;
 
     //希望选课的学生
     @ManyToMany
     @JoinTable(name = "willing_student_course")
-    private List<Person> willingStudents;
+    private Set<Person> willingStudents;
 
     //lesson should be subClass of event, lesson to course should be many to one
     //course should not be subClass of event
 
+    public void setLessons(List<Lesson> lessons) {
+        this.lessons.clear();
+        if (lessons != null) {
+            this.lessons.addAll(lessons);
+        }
+    }
 }

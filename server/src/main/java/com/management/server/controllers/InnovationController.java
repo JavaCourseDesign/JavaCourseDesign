@@ -13,9 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 public class InnovationController {
@@ -38,7 +36,7 @@ public class InnovationController {
     @PostMapping("/addInnovation")
     public DataResponse addInnovation(@RequestBody Map m){
         Student s=studentRepository.findByStudentId((String) m.get("studentId"));
-        List<Person> studentList=new ArrayList<>();
+        Set<Person> studentList=new HashSet<>();
         studentList.add(s);
         Innovation innovation=new Innovation();
         innovation.setName((String) m.get("name"));
@@ -63,7 +61,7 @@ public class InnovationController {
         Innovation innovation=innovationRepository.findByEventId((String) m.get("eventId"));
         List<Map> personsMap = (List<Map>) m.get("persons");
         System.out.println(personsMap);
-        List<Person> persons = new ArrayList<>();
+        Set<Person> persons = new HashSet<>();
         for (Map personMap : personsMap) {
             //改成student突然可以了,目前不知道有没有bug
             Person person = BeanUtil.mapToBean(personMap, Student.class, true, CopyOptions.create());
