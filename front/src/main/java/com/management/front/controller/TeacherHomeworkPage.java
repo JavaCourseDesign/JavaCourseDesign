@@ -47,7 +47,7 @@ public class TeacherHomeworkPage extends SplitPane {
         gridPane.addColumn(0,homeworkContentLabel,deadlineLabel);
         gridPane.addColumn(1,homeworkContentField,deadlineField);
         controlPanel.getChildren().add(gridPane);
-        controlPanel.getChildren().add();
+        //controlPanel.getChildren().add();
     }
 
     private void initializeTable() {
