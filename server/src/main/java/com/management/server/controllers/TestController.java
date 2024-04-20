@@ -100,7 +100,7 @@ public class TestController {//专门用于添加测试数据
         for(int i=0;i<3;i++){
             Course course=new Course();
             course.setName(generateRandomCourseName());
-            course.setCapacity(1.0*r.nextInt(5));
+            course.setCapacity(1.0*r.nextInt(5)+1);
             course.setCredit(1.0*r.nextInt(6));
             Set<Person> persons=new HashSet<>();
             for (int j = 0; j < r.nextInt(3)+1; j++) {

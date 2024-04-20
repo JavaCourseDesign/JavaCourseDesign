@@ -28,8 +28,40 @@ public class CourseController {
     @Autowired
     PersonRepository personRepository;
     @PostMapping("/getAllCourses")
-    public DataResponse getAllCourses(){
-        return new DataResponse(0,courseRepository.findAll(),null);
+    public DataResponse getAllCourses(@RequestBody Map m){
+        String username = CommonMethod.getUsername();
+        List<Course> courses = courseRepository.findAll();
+        //给每个course添加一个抽签状态属性，当这个course不可选且willingStudents中包含了username代表的学生时，抽签状态为false，否则为true
+        if(m.get("getChosenState")!=null&&m.get("getChosenState").toString().equals("true")){
+            courses.forEach(course -> {
+                if(course.getPersons().stream().anyMatch(person -> studentRepository.findByStudentId(username).getPersonId().equals(person.getPersonId()))){
+                    course.setChosen(true);
+                }
+                else if(!course.isAvailable()&&course.getWillingStudents().stream().anyMatch(person -> studentRepository.findByStudentId(username).getPersonId().equals(person.getPersonId()))){
+                    course.setChosen(false);
+                }
+                else
+                {
+                    course.setChosen(null);
+                }
+            });
+        }
+
+        if(m.get("filterConflict")!=null&&m.get("filterConflict").toString().equals("true")){
+            courses = courses.stream().filter(course ->
+                    !conflict(new ArrayList<>(
+                            courseRepository.findWantedCoursesByPersonId(studentRepository.findByStudentId(username).getPersonId())),course)).collect(Collectors.toList());
+        }
+        if(m.get("filterAvailable")!=null&&m.get("filterAvailable").toString().equals("true")){
+            courses = courses.stream().filter(Course::isAvailable).collect(Collectors.toList());
+        }
+        if(m.get("filterChosen")!=null&&m.get("filterChosen").toString().equals("true")){
+            //过滤掉username代表的学生已经在willingStudents的课程
+            courses = courses.stream().filter(course ->
+                    course.getWillingStudents().stream().noneMatch(person ->
+                            studentRepository.findByPersonId(person.getPersonId()).getStudentId().equals(username))).collect(Collectors.toList());
+        }
+        return new DataResponse(0,courses,null);
     }
 
     @PostMapping("/getLessonsByCourseId")
@@ -200,11 +232,12 @@ public class CourseController {
             for (int i = 0; i < capacity; i++) {
                 int index = (int) (Math.random() * willingStudents.size());
                 persons.add(studentRepository.findByPersonId(willingStudents.toArray(new Person[0])[index].getPersonId()));
-                willingStudents.remove(index);
+                willingStudents.remove(willingStudents.toArray(new Person[0])[index]);//此处逻辑需要再探讨
             }
             course.setPersons(persons);
             course.setWillingStudents(willingStudents);//如果选课未开放且有人选课，那么这些人就是抽签失败的人
         }
+        course.setAvailable(false);
         courseRepository.save(course);
         return new DataResponse(0,null,"抽签成功");
     }
@@ -243,7 +276,8 @@ public class CourseController {
         //System.out.println(username);
         //System.out.println(studentRepository.findByStudentId(username).getPersonId());
         //System.out.println(courseRepository.findWantedCoursesByPersonId(studentRepository.findByStudentId(username).getPersonId()));
-        return new DataResponse(0,courseRepository.findWantedCoursesByPersonId(studentRepository.findByStudentId(username).getPersonId()),null);
+        List<Course> courses = courseRepository.findWantedCoursesByPersonId(studentRepository.findByStudentId(username).getPersonId());
+        return new DataResponse(0,courses,null);
     }
 
     private boolean conflict(List<Course> courses, Course course){

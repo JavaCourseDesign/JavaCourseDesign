@@ -1,5 +1,6 @@
 package com.management.front.controller;
 
+import com.jfoenix.controls.JFXToggleButton;
 import com.management.front.customComponents.SearchableTableView;
 import com.management.front.request.DataResponse;
 import javafx.beans.property.SimpleStringProperty;
@@ -27,6 +28,9 @@ public class CourseApplyPage extends SplitPane {
     private Label requiredCreditCount = new Label();
     private Label optionalCreditCount = new Label();
     private Label selectiveCreditCount = new Label();
+    private ToggleButton filterConflict = new ToggleButton();
+    private ToggleButton filterAvailable = new ToggleButton();
+    private ToggleButton filterChosen = new ToggleButton();
 
     public CourseApplyPage() {
         this.setWidth(1000);
@@ -54,6 +58,8 @@ public class CourseApplyPage extends SplitPane {
         TableColumn<Map, String> courseTeacherColumn = new TableColumn<>("教师");
         TableColumn<Map, String> courseAvailableColumn = new TableColumn<>("可选");
         TableColumn<Map, String> courseChosenColumn = new TableColumn<>("已选");
+        TableColumn<Map, String> courseChosenStateColumn = new TableColumn<>("抽签状态");
+        TableColumn<Map, Void> courseApplyColumn = new TableColumn<>("选课");
 
         courseIdColumn.setCellValueFactory(new MapValueFactory<>("courseId"));
         courseNameColumn.setCellValueFactory(new MapValueFactory<>("name"));
@@ -80,7 +86,12 @@ public class CourseApplyPage extends SplitPane {
             return new SimpleStringProperty(chosen ? "是" : "否");
         });
 
-        TableColumn<Map, Void> courseApplyColumn = new TableColumn<>("选课");
+        courseChosenStateColumn.setCellValueFactory(data -> {
+            Boolean chosen = (Boolean) data.getValue().get("chosen");
+            if(chosen==null) return new SimpleStringProperty("未抽签");
+            return new SimpleStringProperty(chosen ? "已抽中" : "未抽中");
+        });
+
         courseApplyColumn.setCellFactory(param -> {
             final Button applyButton = new Button("选课");
             TableCell<Map, Void> cell = new TableCell<>() {
@@ -100,8 +111,23 @@ public class CourseApplyPage extends SplitPane {
         });
 
         List<TableColumn<Map, ?>> columns = new ArrayList<>();
-        columns.addAll(List.of(courseIdColumn, courseNameColumn, courseCreditColumn, courseTeacherColumn, courseAvailableColumn, courseChosenColumn,courseApplyColumn));
+        columns.addAll(List.of(courseIdColumn, courseNameColumn, courseCreditColumn, courseTeacherColumn, courseAvailableColumn, courseChosenColumn,courseChosenStateColumn,courseApplyColumn));
         courseTable = new SearchableTableView(observableList, List.of("courseId", "name"), columns);
+
+        HBox filterPanel = new HBox();
+        filterPanel.setSpacing(10);
+
+        filterConflict.setText("过滤冲突");
+        filterConflict.setOnAction(event -> displayCourses());
+
+        filterAvailable.setText("过滤可选");
+        filterAvailable.setOnAction(event -> displayCourses());
+
+        filterChosen.setText("过滤已选");
+        filterChosen.setOnAction(event -> displayCourses());
+
+        filterPanel.getChildren().addAll(filterConflict, filterAvailable, filterChosen);
+        courseTable.setFilterPanel(filterPanel);
 
         this.getItems().add(courseTable);
     }
@@ -132,8 +158,16 @@ public class CourseApplyPage extends SplitPane {
 
         weekTimeTable.setEvents(allEvents);
 
+        Map filter = new HashMap();
+        filter.put("filterConflict", filterConflict.isSelected());
+        filter.put("filterAvailable", filterAvailable.isSelected());
+        filter.put("filterChosen", filterChosen.isSelected());
+
+        filter.put("getChosenState", "true");
+
+        List<Map> courseList = (ArrayList) request("/getAllCourses", filter).getData();
         observableList.clear();
-        observableList.addAll(FXCollections.observableArrayList((ArrayList) request("/getAllCourses", null).getData()));
+        observableList.addAll(FXCollections.observableArrayList(courseList));
         courseTable.setData(observableList);
     }
 
@@ -146,15 +180,8 @@ public class CourseApplyPage extends SplitPane {
             return;
         }
 
-        // Create a map to hold the request data
-        //Map<String, String> requestData = new HashMap<>();
-        //requestData.put("courseId", (String) selectedCourse.get("courseId"));
-        //requestData.put("personId", null);//personId问题待修改
-
-        // Send the request to the server
         DataResponse response = request("/applyCourse", Map.of("courseId", (String) selectedCourse.get("courseId")));
 
-        // Check the response and show an alert
         if (response.getCode() == 0) {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setContentText("申请成功");

@@ -6,13 +6,14 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.scene.control.*;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class SearchableListView extends VBox {
+public class SearchableListView extends HBox {
     private List<Map> selectedItems = new ArrayList<>();
     private Label selectedLabel = new Label();
     private JFXTextField searchField = new JFXTextField();
@@ -66,6 +67,8 @@ public class SearchableListView extends VBox {
         listView.setOnMouseClicked(event -> handleItemClick());
         listView.setMaxHeight(100);
         listView.setMinHeight(70);
+        listView.setVisible(false);
+        listView.setManaged(false);
     }
 
     private void handleItemClick() {

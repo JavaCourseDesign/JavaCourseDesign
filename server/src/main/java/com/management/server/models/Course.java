@@ -52,6 +52,8 @@ public class Course{
 
     private boolean available;//是否可选
 
+    private Boolean chosen;//是否被选中，由controller根据具体人进行判断
+
 
     @OneToMany(cascade = {CascadeType.ALL},orphanRemoval = true)
     //@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "eventId")

@@ -49,7 +49,6 @@ public class CourseManagementPage extends SplitPane {
     private TextField capacityField = new TextField();
     private JFXComboBox<String> typeField = new JFXComboBox<>();
     private SelectionGrid selectionGrid = new SelectionGrid();
-    private WeekTimeTable weekTimeTable = new WeekTimeTable();//临时测试用
 
     private Map newMapFromFields(Map m) {
         m.put("courseId", courseIdField.getText());
@@ -207,13 +206,10 @@ public class CourseManagementPage extends SplitPane {
 
                 //selectionGrid.setSelectedLessons((List<Map>) course.get("lessons"));
                 selectionGrid.setSelectedLessons((List<Map>) request("/getLessonsByCourseId", Map.of("courseId", ""+course.get("courseId"))).getData());
-
-                weekTimeTable.clear();
             }
         });
 
         Pane p=new Pane();
-        p.getChildren().add(weekTimeTable);//测试用
 
         addButton.setOnAction(event -> addCourse());
         deleteButton.setOnAction(event -> deleteCourse());
@@ -233,7 +229,7 @@ public class CourseManagementPage extends SplitPane {
 
         observableList.add(Map.of("persons",List.of(),"lessons",List.of())); // 添加一个空行用于添加
 
-        observableList.addAll(FXCollections.observableArrayList((ArrayList) request("/getAllCourses", null).getData()));
+        observableList.addAll(FXCollections.observableArrayList((ArrayList) request("/getAllCourses", new HashMap<>()).getData()));
         courseTable.setData(observableList);
 
         //System.out.println(observableList);

@@ -177,3 +177,14 @@
 .combo-box .text {
     -fx-fill: #a9b7c6; /* Light gray text color for combo box label */
 }
+
+.toggle-button {
+    -fx-background-color: #3c3f41; /* Dark background for toggle button */
+    -fx-text-fill: #a9b7c6; /* Light gray text color for toggle button */
+    -fx-border-color: #555759; /* Dark border color */
+}
+
+.toggle-button:selected {
+    -fx-background-color: #214283; /* Blue color for selected toggle button */
+    -fx-text-fill: white; /* White text for readability */
+}
