@@ -16,7 +16,9 @@ module com.management.front {
     requires org.apache.httpcomponents.httpclient;
     requires java.desktop;
     requires itextpdf;
-    requires jdk.jsobject;
+    requires org.apache.pdfbox;
+    requires javafx.swing;
+    requires com.jfoenix;
 
     opens com.management.front to javafx.fxml;
     exports com.management.front;
@@ -28,4 +30,5 @@ module com.management.front {
     opens com.management.front.controller to javafx.fxml;
     exports com.management.front.util;
     opens com.management.front.util to com.google.gson;
+
 }

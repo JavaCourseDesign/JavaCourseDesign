@@ -7,7 +7,8 @@ import javafx.scene.Parent;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import com.jfoenix.controls.JFXTextField;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 
@@ -16,11 +17,13 @@ import java.util.Map;
 import java.util.function.Consumer;
 
 public class SearchableTableView extends VBox {
-    private TextField searchField = new TextField();
+    private JFXTextField searchField = new JFXTextField();
     private TableView<Map> tableView = new TableView<>();
     private ObservableList<Map> data;
     private List<String> searchableFields;
     private Consumer<Map<String, Object>> onItemClick; // Updated to use Map
+    private HBox filterPanel = new HBox();//用于从外部传入筛选面板
+    private HBox searchFieldContainer = new HBox(searchField,filterPanel);
 
 
     public SearchableTableView(ObservableList<Map> data, List<String> searchableFields, List<TableColumn<Map, ?>> columns) {
@@ -69,11 +72,12 @@ public class SearchableTableView extends VBox {
         sortedData.comparatorProperty().bind(tableView.comparatorProperty());
         tableView.setItems(sortedData);
 
-        this.setStyle("-fx-background-color: #000000; -fx-padding: 10px;");
+        //this.setStyle("-fx-background-color: #000000; -fx-padding: 10px;");
         tableView.prefHeightProperty().bind(this.heightProperty());
         tableView.prefWidthProperty().bind(this.widthProperty());
 
-        this.getChildren().addAll(searchField, tableView);
+        searchFieldContainer.setSpacing(10);
+        this.getChildren().addAll(searchFieldContainer, tableView);
     }
 
     private void setupSearchField() {
@@ -108,4 +112,9 @@ public class SearchableTableView extends VBox {
             this.onItemClick = action;
         }
     }//这个逻辑需要再研究一下 还有奇怪的命名
+
+    public void setFilterPanel(HBox filterPanel) {
+        this.filterPanel = filterPanel;
+        searchFieldContainer.getChildren().set(1,filterPanel);
+    }
 }

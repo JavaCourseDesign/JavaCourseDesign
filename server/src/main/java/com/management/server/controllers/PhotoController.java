@@ -1,7 +1,15 @@
 package com.management.server.controllers;
 
+import com.management.server.models.Student;
+import com.management.server.models.Teacher;
 import com.management.server.payload.response.DataResponse;
+import com.management.server.repositories.StudentRepository;
+import com.management.server.repositories.TeacherRepository;
+import com.management.server.service.UserDetailsImpl;
+import com.management.server.util.CommonMethod;
+import com.management.server.util.FileUtil;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,6 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.Map;
 @RestController
@@ -18,12 +28,26 @@ public class PhotoController {
 
     @Value("${attach.folder}")
     private String attachFolder;
+    @Autowired
+    StudentRepository studentRepository;
+    @Autowired
+    TeacherRepository teacherRepository;
     @PostMapping("/getPhotoImageStr")
-    public DataResponse getPhotoImageStr(@Valid @RequestBody Map<String,String> map) {
-        String fileName = map.get("fileName");
-        String str = "";
+    public DataResponse getPhotoImageStr() {
+        String fileName = "";
+        if(CommonMethod.getUserType().equals("ROLE_STUDENT"))
+        {
+            Student s=studentRepository.findByStudentId(CommonMethod.getUsername());
+            fileName=s.getPhoto();
+        }
+        else if(CommonMethod.getUserType().equals("ROLE_TEACHER"))
+        {
+            Teacher t= teacherRepository.findByTeacherId(CommonMethod.getUsername());
+            fileName=t.getPhoto();
+        }
         try {
-            File file = new File(attachFolder + fileName);
+            fileName = URLDecoder.decode(fileName, StandardCharsets.UTF_8.toString());
+            File file = new File(attachFolder +"Photo/"+ fileName);
             if(!file.exists())
             {
                 return new DataResponse(1,null,"请先上传文件！");
@@ -41,19 +65,22 @@ public class PhotoController {
         return new DataResponse(1,null,"下载错误！");
     }
     @PostMapping("/uploadPhoto")
-    public DataResponse uploadPhoto(@RequestBody Map<String, String> map) {
-        String fileName = map.get("fileName");
-        String fileContent = map.get("fileContent");
-        try {
-            // Decode the Base64 string to a byte array
-            byte[] data = Base64.getDecoder().decode(fileContent);
-            OutputStream os = new FileOutputStream(new File(attachFolder + fileName));
-            os.write(data);
-            os.close();
-            return new DataResponse(0, "上传成功", null);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return new DataResponse(1, null, "上传错误！");
+    public DataResponse uploadPhoto(@RequestBody byte[] barr,
+                                   @RequestParam(name = "fileName") String fileName)  {
+        String EuserType= CommonMethod.getUserType();
+        if(EuserType.equals("ROLE_STUDENT"))
+        {
+            Student s=studentRepository.findByStudentId(CommonMethod.getUsername());
+            s.setPhoto(fileName);
+            studentRepository.save(s);
         }
+        else if(EuserType.equals("ROLE_TEACHER"))
+        {
+           Teacher t= teacherRepository.findByTeacherId(CommonMethod.getUsername());
+           t.setPhoto(fileName);
+           teacherRepository.save(t);
+        }
+        DataResponse r=  FileUtil.uploadFile(barr,"Photo",fileName);
+        return r;
     }
 }

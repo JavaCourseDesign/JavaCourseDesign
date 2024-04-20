@@ -6,7 +6,6 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -19,11 +18,7 @@ public class HelloApplication extends Application {
 
         sendAndReceiveDataResponse("/test/addTestData",null);
 
-        Scene scene = new Scene(new LoginPage(), 1400, 800);
-        //将 CSS 文件添加到场景中
-        scene.getStylesheets().add("file:///E:/JavaCourseDesign/front/src/main/resources/com/management/front/loginPageStyle.css");
-        stage.setTitle("山东大学学生管理系统-登录界面");
-        stage.getIcons().add(new Image("E:\\JavaCourseDesign\\front\\src\\main\\resources\\com\\management\\front\\images\\sduicon.jpg"));
+        Scene scene = new Scene(new LoginPage(), 300, 400);
         stage.setScene(scene);
         stage.show();
     }

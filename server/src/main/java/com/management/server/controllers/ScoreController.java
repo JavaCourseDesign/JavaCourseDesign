@@ -24,7 +24,7 @@ public class ScoreController {
     private CourseRepository courseRepository;
 
     @PostMapping("/addScore")
-    @PreAuthorize("hasRole('ADMIN') or hasRole('TEACHER')")
+    //@PreAuthorize("hasRole('ADMIN') or hasRole('TEACHER')")
     public DataResponse addScore(@RequestBody Map m){
         Score score = new Score();
         Course course = courseRepository.findByCourseId((String) m.get("courseId"));
@@ -50,7 +50,7 @@ public class ScoreController {
     }*///搜索逻辑写在前端
 
     @PostMapping("/getAllScore")
-    @PreAuthorize("hasRole('ADMIN') or hasRole('TEACHER')")
+    //@PreAuthorize("hasRole('ADMIN') or hasRole('TEACHER')")
     public DataResponse getAllScore(){
         return new DataResponse(0,scoreRepository.findAll(),null);
     }

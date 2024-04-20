@@ -1,0 +1,190 @@
+.root {
+    -fx-background-color: #2b2b2b; /* Dark background for the whole application */
+    -fx-text-fill: #a9b7c6; /* Light gray text color for all text */
+}
+
+.label {
+    -fx-text-fill: #a9b7c6; /* Light gray text color for labels */
+    -fx-font-size: 16px; /* Slightly larger font size for better readability */
+}
+
+.button {
+    -fx-background-color: #3c3f41;
+    -fx-text-fill: #a9b7c6;
+    -fx-border-color: #555759;
+    -fx-border-width: 1;
+    -fx-border-radius: 4;
+    -fx-background-radius: 4;
+    -fx-padding: 5;
+    -fx-font-weight: bold;
+}
+
+.button:hover {
+    -fx-background-color: #4a4c4e; /* Slightly lighter button background on hover */
+}
+
+.split-pane-divider {
+    -fx-background-color: #4a4c4e; /* Divider background color */
+}
+
+.split-pane {
+    -fx-padding: 0.5em; /* Padding for the split-pane */
+    -fx-background-color: #2b2b2b; /* Background color matching root */
+}
+
+.table-view {
+    -fx-base: #3c3f41; /* Dark color for table rows */
+    -fx-control-inner-background: #2b2b2b; /* Darker background for the table */
+    -fx-table-cell-border-color: #555759; /* Border color for cells */
+    -fx-table-header-border-color: #555759; /* Border color for table header */
+}
+
+.list-view {
+    -fx-base: #3c3f41; /* Dark color for list items */
+    -fx-control-inner-background: #2b2b2b; /* Darker background for the list */
+    -fx-cell-hover-color: #4a4c4e; /* Lighter color on hover */
+}
+
+
+.table-row-cell:filled:selected {
+    -fx-background-color: #214283; /* Blue color for selected rows */
+    -fx-text-fill: white; /* White text for readability */
+}
+
+.table-view .column-header-background .label {
+    -fx-text-fill: #a9b7c6; /* Light gray text color for table headers */
+    -fx-font-weight: bold;
+}
+
+.text-field, .combo-box-base {
+    -fx-background-color: #3c3f41; /* Dark background for text fields and combo boxes */
+    -fx-text-fill: #a9b7c6; /* Light gray text color */
+}
+
+.text-field:focused, .combo-box-base:focused {
+    -fx-background-color: #4a4c4e; /* Lighter background color when focused */
+}
+
+.progress-bar {
+    -fx-accent: #214283; /* Accent color for progress bars */
+}
+
+.scroll-bar {
+    -fx-background-color: #3c3f41; /* Background color for scroll bars */
+    -fx-track-color: #2b2b2b; /* Track color matching the dark theme */
+}
+
+.menu-bar {
+    -fx-background-color: #3c3f41; /* Dark background for menu bar */
+    -fx-text-fill: #a9b7c6; /* Light gray text color for menus */
+}
+
+.radio-button {
+    -fx-text-fill: #a9b7c6; /* Light gray text color for radio buttons */
+    -fx-mark-color: #555759; /* Dark mark color */
+}
+
+.check-box {
+    -fx-text-fill: #a9b7c6; /* Light gray text color for checkboxes */
+    -fx-box-color: #555759; /* Dark box color */
+    -fx-padding: 1; /* Reduce padding to make the checkbox smaller */
+    -fx-font-size: 10px; /* Reduce font size to make the checkbox smaller */
+}
+
+.tooltip {
+    -fx-background-color: #4a4c4e; /* Lighter background for tooltips */
+    -fx-text-fill: #a9b7c6; /* Light gray text color for tooltips */
+}
+
+.tree-view {
+    -fx-background-color: #3c3f41; /* Dark background for tree view */
+    -fx-text-fill: #a9b7c6; /* Light gray text color for tree view */
+}
+
+.tree-cell {
+    -fx-background-color: #3c3f41; /* Dark background for tree cells */
+    -fx-text-fill: #a9b7c6; /* Light gray text color for tree cells */
+}
+
+.tree-cell .text {
+    -fx-fill: #a9b7c6; /* Light gray text color for tree cell text */
+    -fx-font-size: 15px; /* Slightly larger font size for better readability */
+}
+
+.tree-cell:selected {
+    -fx-background-color: #214283; /* Blue color for selected tree cells */
+    -fx-text-fill: white; /* White text for readability */
+}
+
+.menu-button {
+    -fx-background-color: #3c3f41; /* Dark background for menu buttons */
+    -fx-text-fill: #a9b7c6; /* Light gray text color for menu buttons */
+    -fx-font-size: 10px; /* Slightly larger font size for better readability */
+    -fx-padding: 0; /* Padding for the menu button */
+    -fx-border-width: 0; /* No border for the menu button */
+    -fx-cell-size: 20; /* Smaller cell size for the menu button */
+}
+
+.menu-button:hover {
+    -fx-background-color: #4a4c4e; /* Slightly lighter background on hover */
+}
+
+.tab-pane {
+    -fx-background-color: #3c3f41; /* Dark background for tab pane */
+}
+
+.tab-pane .tab-header-background {
+    -fx-background-color: #2b2b2b; /* Darker background for tab header */
+}
+
+.tab-pane .tab {
+    -fx-background-color: #3c3f41; /* Dark background for tabs */
+    -fx-text-fill: #a9b7c6; /* Light gray text color for tabs */
+}
+
+.tab-pane .tab:selected {
+    -fx-background-color: #214283; /* Blue color for selected tab */
+    -fx-text-fill: white; /* White text for readability */
+}
+
+.tab-pane .tab:hover {
+    -fx-background-color: #4a4c4e; /* Slightly lighter background on hover */
+}
+
+.tab-pane .tab .close-button {
+    -fx-background-color: #3c3f41; /* Dark background for close button */
+    -fx-text-fill: #a9b7c6; /* Light gray text color for close button */
+}
+
+.tab-pane .tab .close-button:hover {
+    -fx-background-color: #4a4c4e; /* Slightly lighter background on hover */
+}
+
+.tab-pane .tab .text {
+    -fx-fill: #a9b7c6; /* Light gray text color for tab text */
+}
+
+.combo-box {
+    -fx-background-color: #3c3f41; /* Dark background for combo box */
+    -fx-text-fill: #a9b7c6; /* Light gray text color for combo box */
+}
+
+.combo-box  {
+    -fx-text-fill: #a9b7c6; /* Light gray text color for combo box label */
+    -fx-prompt-text-fill: #a9b7c6; /* Light gray prompt text color */
+}
+
+.combo-box .text {
+    -fx-fill: #a9b7c6; /* Light gray text color for combo box label */
+}
+
+.toggle-button {
+    -fx-background-color: #3c3f41; /* Dark background for toggle button */
+    -fx-text-fill: #a9b7c6; /* Light gray text color for toggle button */
+    -fx-border-color: #555759; /* Dark border color */
+}
+
+.toggle-button:selected {
+    -fx-background-color: #214283; /* Blue color for selected toggle button */
+    -fx-text-fill: white; /* White text for readability */
+}

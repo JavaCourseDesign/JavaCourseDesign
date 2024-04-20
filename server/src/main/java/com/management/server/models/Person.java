@@ -31,7 +31,7 @@ public abstract class Person {
     @Size(max = 50)
     private String name;
 
-    /*@Size(max = 2)
+/*    @Size(max = 2)
     private String type;*/
 
     @Size(max = 50)
@@ -43,6 +43,7 @@ public abstract class Person {
     private String gender;
 
     private String birthday;
+    
 
     @Size(max = 60)
     @Email
@@ -54,9 +55,8 @@ public abstract class Person {
     @Size(max = 20)
     private String address;
 
-    @Size(max = 1000)
-    private String introduce;
     private String social;
+    private String photo;
 
     /*@OneToMany(mappedBy = "person")
     private List<Absence> absences;*/

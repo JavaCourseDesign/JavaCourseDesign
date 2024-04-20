@@ -1,20 +1,23 @@
 package com.management.front.customComponents;
 
+import com.jfoenix.controls.JFXListView;
+import com.jfoenix.controls.JFXTextField;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.scene.control.*;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class SearchableListView extends VBox {
+public class SearchableListView extends HBox {
     private List<Map> selectedItems = new ArrayList<>();
     private Label selectedLabel = new Label();
-    private TextField searchField = new TextField();
-    private ListView<Map<String, Object>> listView;
+    private JFXTextField searchField = new JFXTextField();
+    private JFXListView<Map<String, Object>> listView;
     private ObservableList<Map<String, Object>> data;
     private FilteredList<Map<String, Object>> filteredItems;
     private List<String> keys;
@@ -52,7 +55,8 @@ public class SearchableListView extends VBox {
 
     private void setupListView() {
         filteredItems = new FilteredList<>(data, p -> true);
-        listView = new ListView<>(filteredItems);
+        listView = new JFXListView<>();
+        listView.setItems(filteredItems);
         listView.setCellFactory(lv -> new ListCell<>() {
             @Override
             protected void updateItem(Map<String, Object> item, boolean empty) {
@@ -63,6 +67,8 @@ public class SearchableListView extends VBox {
         listView.setOnMouseClicked(event -> handleItemClick());
         listView.setMaxHeight(100);
         listView.setMinHeight(70);
+        listView.setVisible(false);
+        listView.setManaged(false);
     }
 
     private void handleItemClick() {

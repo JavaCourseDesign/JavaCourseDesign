@@ -38,12 +38,7 @@ public class InnovationController {
         Student s=studentRepository.findByStudentId((String) m.get("studentId"));
         Set<Person> studentList=new HashSet<>();
         studentList.add(s);
-        Innovation innovation=new Innovation();
-        innovation.setName((String) m.get("name"));
-        innovation.setType((String) m.get("type"));
-        innovation.setTime((String) m.get("time"));
-        innovation.setLocation((String) m.get("location"));
-        innovation.setPerformance((String) m.get("performance"));
+        Innovation innovation=BeanUtil.mapToBean(m, Innovation.class, true, CopyOptions.create().ignoreError());
         innovation.setPersons(studentList);
         innovationRepository.save(innovation);
         return new DataResponse(0,null,"添加成功");

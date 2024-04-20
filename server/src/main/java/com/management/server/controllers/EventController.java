@@ -4,6 +4,7 @@ import com.management.server.models.DailyActivity;
 import com.management.server.models.Event;
 import com.management.server.models.Person;
 import com.management.server.models.Student;
+import com.management.server.payload.response.DataResponse;
 import com.management.server.repositories.*;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,8 +30,17 @@ public class EventController {
 
     @Autowired
     private TeacherRepository teacherRepository;
-
-
+    @PostMapping("/getAllEvents")
+    public DataResponse getAllEvents()
+    {
+        return new DataResponse(0,eventRepository.findAll(),null);
+    }
+    @PostMapping("/getEventsByStudent")
+    public DataResponse getEventsByStudent(@RequestBody Map m)
+    {
+        Student student=studentRepository.findByStudentId((String) m.get("studentId"));
+        return new DataResponse(0,eventRepository.findEventsByPerson(student),null);
+    }
 }
 
 //getAllEvents测试代码

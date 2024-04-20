@@ -21,6 +21,9 @@ public interface CourseRepository extends JpaRepository<Course,String> {
     Course findByCourseId(String courseId);
     @Query("SELECT c FROM Course c JOIN c.persons p WHERE p.personId = :personId")
     List<Course> findCoursesByPersonId(@Param("personId") String personId);
+
+    @Query("SELECT c FROM Course c JOIN c.willingStudents p WHERE p.personId = :personId")
+    List<Course> findWantedCoursesByPersonId(@Param("personId") String personId);
     /*@Modifying
     @Query("DELETE FROM Lesson l WHERE l IN (SELECT c.lessons FROM Course c WHERE c.courseId = :courseId)")
     void deleteLessonsByCourseId(@Param("courseId") String courseId);*/

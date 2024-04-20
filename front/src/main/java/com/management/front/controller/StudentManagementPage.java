@@ -27,6 +27,7 @@ public class StudentManagementPage extends SplitPane {
     private TextField studentIdField = new TextField();
     private TextField nameField = new TextField();
     private TextField genderField = new TextField();
+
     private TextField majorField = new TextField();
 
     private Map newMapFromFields(Map m) {
@@ -106,13 +107,9 @@ public class StudentManagementPage extends SplitPane {
 
     private void addStudent() {
         Map m=newMapFromFields(new HashMap<>());
-
         System.out.println(m);
-
         DataResponse r=request("/addStudent",m);
-
         displayStudents();
-
         if(r.getCode()==-1)
         {
             Alert alert=new Alert(Alert.AlertType.INFORMATION);

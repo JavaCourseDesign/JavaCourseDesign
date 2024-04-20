@@ -72,6 +72,8 @@ public class TestController {//专门用于添加测试数据
             Teacher teacher=new Teacher();
             teacher.setTeacherId("10000"+i);
             teacher.setName(generateRandomChineseName());
+            if(i==0) teacher.setName("向辉");
+            if(i==1) teacher.setName("李学庆");
             teacher.setGender("男");
             teacher.setTitle("讲师");
             teachers.add(teacher);
@@ -100,7 +102,7 @@ public class TestController {//专门用于添加测试数据
         for(int i=0;i<3;i++){
             Course course=new Course();
             course.setName(generateRandomCourseName());
-            course.setCapacity(1.0*r.nextInt(5));
+            course.setCapacity(1.0*r.nextInt(5)+1);
             course.setCredit(1.0*r.nextInt(6));
             Set<Person> persons=new HashSet<>();
             for (int j = 0; j < r.nextInt(3)+1; j++) {

@@ -44,11 +44,15 @@ public class Course{
 
     private Double regularWeight=0.5;//平时成绩权重 教师有权限
 
+    private String type;//课程类型 0 Required 1 Optional 2 Selective
+
     /*private Double beginWeek;//开始周次 教师有权限
 
     private Double endWeek;//结束周次 教师有权限*/ //改为lesson的属性
 
     private boolean available;//是否可选
+
+    private Boolean chosen;//是否被选中，由controller根据具体人进行判断
 
 
     @OneToMany(cascade = {CascadeType.ALL},orphanRemoval = true)
@@ -68,13 +72,15 @@ public class Course{
     @JoinColumn(name="pre_course_id")
     private Course preCourse;*/
 
-    @ManyToMany
+    /*@ManyToMany
     @JoinTable(name = "course_course")
     //@JsonIgnoreProperties(value = {"preCourses"})//非常重要，避免自身递归
-    //@ToString.Exclude//也非常重要，避免自身递归
+    @ToString.Exclude//也非常重要，避免自身递归
     @JsonIgnoreProperties(value = {"preCourses","lessons","persons","willingStudents"})
     //@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "name")
-    private Set<Course> preCourses;
+    private Set<Course> preCourses;*/
+
+    private String preCourses;//用字符串存，不存对象了 存对象有一系列问题，包括但不限于无限递归、指向意义不明（前序课并不一定只有一个课序号，可能存在同名不同时的课程）
 
     @ManyToMany
     @JoinTable(name = "person_course")
