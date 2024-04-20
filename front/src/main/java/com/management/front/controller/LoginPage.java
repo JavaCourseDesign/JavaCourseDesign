@@ -1,6 +1,7 @@
 package com.management.front.controller;
 
 import com.management.front.request.DataResponse;
+import javafx.concurrent.Worker;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -14,6 +15,7 @@ import netscape.javascript.JSObject;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static com.management.front.util.HttpClientUtil.*;
 
@@ -53,61 +55,27 @@ public class LoginPage extends StackPane {
         getChildren().add(loginBox);
 
         loginButton.setOnMouseClicked(event -> {
-            // 加载并显示 HTML 文件
-            WebView webView = new WebView();
-            webView.getEngine().load(getClass().getResource("/com/management/front/HuaKuaiYanZhen.html").toExternalForm());
+            String username = ""; // 从输入框中获取用户名
+            String password = ""; // 从输入框中获取密码
 
-            // 创建一个对话框来显示 HTML 内容
-            Dialog<Void> dialog = new Dialog<>();
-            dialog.setTitle("Slider Verification");
-            dialog.getDialogPane().setContent(webView);
-
-            // 创建登录按钮
-            ButtonType loginButtonType = new ButtonType("Login", ButtonBar.ButtonData.OK_DONE);
-            dialog.getDialogPane().getButtonTypes().addAll(loginButtonType);
-
-            // 当用户点击登录按钮时进行验证
-            dialog.setResultConverter(dialogButton -> {
-                if (dialogButton == loginButtonType) {
-                    int sliderValue = (int) ((JSObject) webView.getEngine().executeScript("document.getElementById('slider').value")).getMember("valueOf");
-                    if (sliderValue >= 90) {
-                        // 验证成功，执行登录逻辑
-                        String username = usernameField.getText();
-                        String password = passwordField.getText();
-                        if (login(username, password)) {
-                            Map<String, String> map = new HashMap<>();
-                            map.put("username", username);
-                            DataResponse r = request("/findPersonIdByUsername", map);
-                            personId = (String) r.getData();
-                            Menu menu = new Menu();
-                            Scene scene = new Scene(menu, 1400, 800);
-                            Stage stage = (Stage) loginButton.getScene().getWindow();
-                            stage.setTitle("山东大学学生管理系统");
-                            stage.getIcons().add(new Image("E:\\JavaCourseDesign\\front\\src\\main\\resources\\com\\management\\front\\images\\sduicon.jpg"));
-                            stage.setScene(scene);
-                            stage.show();
-
-                            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                            alert.setContentText("登录成功");
-                            alert.showAndWait();
-                        } else {
-                            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                            alert.setContentText("登录失败");
-                            alert.showAndWait();
-                        }
-                    } else {
-                        // 验证失败，显示提示信息
-                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                        alert.setContentText("请拖动滑块完成验证！");
-                        alert.showAndWait();
-                    }
+            // 检查用户名是否为 "admin"，如果是则直接显示滑块验证窗口
+            if ("admin".equals(username)) {
+                showSliderVerificationDialog();
+            } else {
+                // 模拟用户名密码验证过程
+                if (login(username, password)) {
+                    // 用户名密码验证通过，显示滑块验证窗口
+                    showSliderVerificationDialog();
+                } else {
+                    // 用户名密码验证失败
+                    Alert loginAlert = new Alert(Alert.AlertType.ERROR);
+                    loginAlert.setContentText("用户名或密码错误");
+                    loginAlert.showAndWait();
                 }
-                return null;
-            });
-
-            // 显示对话框
-            dialog.showAndWait();
+            }
         });
+
+
 
 
         registerButton.setOnMouseClicked(event -> {
@@ -132,6 +100,66 @@ public class LoginPage extends StackPane {
         passwordField.getStyleClass().add("password-field");
         loginButton.getStyleClass().add("button");
         registerButton.getStyleClass().add("button");
+    }
+    // 显示滑块验证窗口的方法
+    private void showSliderVerificationDialog() {
+        WebView webView = new WebView();
+        webView.getEngine().load(getClass().getResource("/com/management/front/HuaKuaiYanZhen.html").toExternalForm());
+        Dialog<Void> dialog = new Dialog<>();
+        dialog.setTitle("Slider Verification");
+        dialog.getDialogPane().setContent(webView);
+
+        ButtonType loginButtonType = new ButtonType("Login", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(loginButtonType);
+
+        AtomicBoolean verified = new AtomicBoolean(false); // 标志是否已验证通过
+
+        // 监听滑块值的变化
+        webView.getEngine().getLoadWorker().stateProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue == Worker.State.SUCCEEDED) {
+                // 获取滑块值
+                String sliderValueStr = (String) webView.getEngine().executeScript("document.getElementById('slider').value");
+                if (!"undefined".equals(sliderValueStr)) {
+                    int sliderValue = Integer.parseInt(sliderValueStr);
+                    if (sliderValue >= 90) {
+                        verified.set(true); // 验证通过
+                    }
+                }
+            }
+        });
+
+        // 当用户点击登录按钮时进行验证
+        dialog.setResultConverter(dialogButton -> {
+            if (dialogButton == loginButtonType) {
+                if (verified.get()) {
+                    // 滑块验证通过
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setContentText("滑块验证通过");
+                    alert.showAndWait();
+
+                    // 执行登录成功后的操作
+                    Menu menu = new Menu();
+                    Scene scene = new Scene(menu, 1400, 800);
+                    Stage stage = (Stage) loginButton.getScene().getWindow();
+                    stage.setTitle("山东大学学生管理系统");
+                    stage.getIcons().add(new Image("E:\\JavaCourseDesign\\front\\src\\main\\resources\\com\\management\\front\\images\\sduicon.jpg"));
+                    stage.setScene(scene);
+                    stage.show();
+
+                    Alert loginAlert = new Alert(Alert.AlertType.INFORMATION);
+                    loginAlert.setContentText("登录成功");
+                    loginAlert.showAndWait();
+                } else {
+                    // 滑块验证未通过
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setContentText("请完成滑块验证");
+                    alert.showAndWait();
+                }
+            }
+            return null;
+        });
+
+        dialog.showAndWait();
     }
 
 }
