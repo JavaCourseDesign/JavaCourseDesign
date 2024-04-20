@@ -21,6 +21,7 @@ import java.util.Map;
 import static com.management.front.util.HttpClientUtil.*;
 
 public class LoginPage extends GridPane {
+    public static String username;//不知道这样合不合适
     private JFXTextField nameField = new JFXTextField();
     private JFXTextField usernameField = new JFXTextField();
     private JFXPasswordField passwordField = new JFXPasswordField();
@@ -36,7 +37,7 @@ public class LoginPage extends GridPane {
 
         //测试用
         nameField.setText("tst");
-        usernameField.setText("admin");
+        usernameField.setText("201921000");
         passwordField.setText("admin");
     }
 
@@ -64,6 +65,7 @@ public class LoginPage extends GridPane {
         String password = passwordField.getText();
         if (login(username, password)) {
             changeScene();
+            LoginPage.username = username;
             //showAlert("登录成功", Alert.AlertType.INFORMATION);
         } else {
             showAlert("登录失败", Alert.AlertType.ERROR);

@@ -1,6 +1,8 @@
 package com.management.front.controller;
 
 
+import com.jfoenix.controls.JFXCheckBox;
+import com.jfoenix.controls.JFXComboBox;
 import com.management.front.customComponents.SearchableListView;
 import com.management.front.customComponents.SearchableTableView;
 import com.management.front.request.DataResponse;
@@ -45,8 +47,8 @@ public class CourseManagementPage extends SplitPane {
     private TextField creditField = new TextField();
     private TextField referenceField = new TextField();
     private TextField capacityField = new TextField();
+    private JFXComboBox<String> typeField = new JFXComboBox<>();
     private SelectionGrid selectionGrid = new SelectionGrid();
-    private WeekTimeTable weekTimeTable = new WeekTimeTable();//临时测试用
 
     private Map newMapFromFields(Map m) {
         m.put("courseId", courseIdField.getText());
@@ -74,15 +76,12 @@ public class CourseManagementPage extends SplitPane {
         personsToBeAdded.addAll(studentsToBeAdded);
 
         m.put("persons", personsToBeAdded);
-
-        /*List<Map> preCourses = preCourseListView.getSelectedItems().stream()
-                .map(course -> {
-                    Map<String, Object> preCourse = new HashMap<>();
-                    preCourse.put("courseId", course.get("courseId"));
-                    return preCourse;
-                })
-                .collect(Collectors.toList());
-        m.put("preCourses", preCourses);*/
+        m.put("type", switch (typeField.getSelectionModel().getSelectedItem()) {
+            case "必选" -> "0";
+            case "任选" -> "1";
+            case "限选" -> "2";
+            default -> "0";
+        });
 
         selectionGrid.course=m;//把一部分course的信息给予lesson，注意顺序！
         //System.out.println("selectionGrid.course:"+selectionGrid.course);
@@ -168,6 +167,8 @@ public class CourseManagementPage extends SplitPane {
         controlPanel.setMinWidth(200);
         controlPanel.setSpacing(10);
 
+        typeField.getItems().addAll("必选", "任选", "限选");
+
         courseTable.setOnItemClick(course -> {
             if(course!=null)
             {
@@ -177,6 +178,12 @@ public class CourseManagementPage extends SplitPane {
                 referenceField.setText((String) course.get("reference"));
                 capacityField. setText(course.get("capacity")==null?"": "" +course.get("capacity"));
                 preCourseField.setText((String) course.get("preCourses"));
+                switch (""+course.get("type")) {
+                    case "0" -> typeField.getSelectionModel().select(0);
+                    case "1" -> typeField.getSelectionModel().select(1);
+                    case "2" -> typeField.getSelectionModel().select(2);
+                    default -> typeField.getSelectionModel().select(0);
+                }
                 //preCourseField.setSelectedItems((List<Map>) course.get("preCourses"));
 
                 List<Map> persons = (List<Map>) course.get("persons");
@@ -199,13 +206,10 @@ public class CourseManagementPage extends SplitPane {
 
                 //selectionGrid.setSelectedLessons((List<Map>) course.get("lessons"));
                 selectionGrid.setSelectedLessons((List<Map>) request("/getLessonsByCourseId", Map.of("courseId", ""+course.get("courseId"))).getData());
-
-                weekTimeTable.clear();
             }
         });
 
         Pane p=new Pane();
-        p.getChildren().add(weekTimeTable);//测试用
 
         addButton.setOnAction(event -> addCourse());
         deleteButton.setOnAction(event -> deleteCourse());
@@ -215,7 +219,7 @@ public class CourseManagementPage extends SplitPane {
         openButton.setOnAction(event -> openCourses());
         drawLotsButton.setOnAction(event -> drawLots());
 
-        controlPanel.getChildren().addAll(courseIdField, nameField, creditField,referenceField, capacityField, preCourseField, teacherListView, administrativeClassListView, selectionGrid, buttons, openButton, drawLotsButton);
+        controlPanel.getChildren().addAll(courseIdField, nameField, creditField,typeField ,referenceField, capacityField, preCourseField, teacherListView, administrativeClassListView, selectionGrid, buttons, openButton, drawLotsButton);
 
         this.getItems().add(controlPanel);
     }
@@ -225,7 +229,7 @@ public class CourseManagementPage extends SplitPane {
 
         observableList.add(Map.of("persons",List.of(),"lessons",List.of())); // 添加一个空行用于添加
 
-        observableList.addAll(FXCollections.observableArrayList((ArrayList) request("/getAllCourses", null).getData()));
+        observableList.addAll(FXCollections.observableArrayList((ArrayList) request("/getAllCourses", new HashMap<>()).getData()));
         courseTable.setData(observableList);
 
         //System.out.println(observableList);
@@ -472,7 +476,7 @@ class SelectionGrid extends GridPane {
 }
 
 class LessonBox extends MenuButton {//选中课程时需要相应构造课程信息
-    CheckBox checkBox = new CheckBox();
+    JFXCheckBox checkBox = new JFXCheckBox();
     TextField locationField = new TextField();
     CheckBox singleWeek = new CheckBox();
     CheckBox doubleWeek = new CheckBox();

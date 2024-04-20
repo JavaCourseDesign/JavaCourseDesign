@@ -1,5 +1,6 @@
 package com.management.front.controller;
 
+import com.jfoenix.controls.JFXTreeView;
 import com.management.front.customComponents.EditableMapTable;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.TreeItem;
@@ -14,7 +15,7 @@ import java.util.Map;
 import static com.management.front.util.HttpClientUtil.request;
 
 public class Menu extends SplitPane {
-    TreeView<String> menu = new TreeView<>();
+    JFXTreeView<String> menu = new JFXTreeView<>();
     TreeItem<String> root = new TreeItem<>("菜单");
     TreeItem<String> item1 = new TreeItem<>("学生管理");
     TreeItem<String> item2 = new TreeItem<>("教师管理");

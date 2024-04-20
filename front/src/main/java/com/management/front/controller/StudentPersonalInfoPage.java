@@ -56,13 +56,13 @@ class BasicInfoTab extends Tab {
     GridPane gridPane = new GridPane();
     ImageView photoArea = new ImageView();
     private  Button uploadButton = new Button("上传照片");
-   private TextField highSchoolField = new TextField();
-   private TextField familyMemberField = new TextField();
-   private TextField familyMemberPhoneField = new TextField();
-   private TextField addressField = new TextField();
-   private TextField homeTownField = new TextField();
-   private TextField phoneField = new TextField();
-   private TextField emailField = new TextField();
+    private TextField highSchoolField = new TextField();
+    private TextField familyMemberField = new TextField();
+    private TextField familyMemberPhoneField = new TextField();
+    private TextField addressField = new TextField();
+    private TextField homeTownField = new TextField();
+    private TextField phoneField = new TextField();
+    private TextField emailField = new TextField();
 
     public BasicInfoTab(Map student) {
         this.setText("基本信息");
@@ -94,6 +94,9 @@ class BasicInfoTab extends Tab {
         photoArea.setPreserveRatio(true);
         photoArea.setStyle("-fx-border-color: #000000; -fx-border-width: 10;");
         display();
+
+        //给gridpane设置浅灰色横隔
+        gridPane.setGridLinesVisible(true);
         vBox.getChildren().add(gridPane);
         Button saveButton = new Button("保存");
         saveButton.setOnMouseClicked(event -> save());

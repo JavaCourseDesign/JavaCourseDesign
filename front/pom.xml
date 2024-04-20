@@ -159,6 +159,10 @@
               <noManPages>true</noManPages>
               <stripDebug>true</stripDebug>
               <noHeaderFiles>true</noHeaderFiles>
+              <options>
+                <option>--add-opens</option>
+                <option>java.base/java.lang.reflect=com.jfoenix</option>
+              </options>
             </configuration>
           </execution>
         </executions>
