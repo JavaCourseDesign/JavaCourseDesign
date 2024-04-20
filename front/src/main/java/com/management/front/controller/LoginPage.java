@@ -20,6 +20,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import static com.management.front.util.HttpClientUtil.*;
 
 public class LoginPage extends StackPane {
+    final AtomicBoolean verified = new AtomicBoolean(false); // 标志是否已验证通过
     public static String personId;
     private TextField idField = new TextField();
     private TextField usernameField = new TextField();
@@ -110,8 +111,6 @@ public class LoginPage extends StackPane {
         ButtonType loginButtonType = new ButtonType("Login", ButtonBar.ButtonData.OK_DONE);
         dialog.getDialogPane().getButtonTypes().addAll(loginButtonType);
 
-        AtomicBoolean verified = new AtomicBoolean(false); // 标志是否已验证通过
-
         // 监听滑块值的变化
         webView.getEngine().getLoadWorker().stateProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue == Worker.State.SUCCEEDED) {
@@ -126,15 +125,11 @@ public class LoginPage extends StackPane {
             }
         });
 
-
         // 当用户点击登录按钮时进行验证
         dialog.setResultConverter(dialogButton -> {
             if (dialogButton == loginButtonType) {
                 if (verified.get()) {
                     // 滑块验证通过
-                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.setContentText("滑块验证通过");
-                    alert.showAndWait();
 
                     // 关闭对话框
                     dialog.close();
@@ -163,6 +158,5 @@ public class LoginPage extends StackPane {
 
         dialog.showAndWait();
     }
-
-    }
+}
 
