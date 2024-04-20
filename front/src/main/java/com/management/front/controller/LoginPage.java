@@ -4,10 +4,15 @@ import com.management.front.request.DataResponse;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
+
+import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXTextField;
+import com.jfoenix.controls.JFXPasswordField;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -15,67 +20,99 @@ import java.util.Map;
 
 import static com.management.front.util.HttpClientUtil.*;
 
-public class LoginPage extends VBox {
-    //public static String personId;//严重问题！！！后端本身没有区分身份，前端如果被篡改，将有权限访问其他人的信息！！！
-    private TextField nameField=new TextField();
-    private TextField usernameField=new TextField();
-    private PasswordField passwordField=new PasswordField();
-    private Button loginButton=new Button("登录");
-    private Button registerButton=new Button("注册");
+public class LoginPage extends GridPane {
+    public static String username;//不知道这样合不合适
+    private JFXTextField nameField = new JFXTextField();
+    private JFXTextField usernameField = new JFXTextField();
+    private JFXPasswordField passwordField = new JFXPasswordField();
+    private JFXButton loginButton = new JFXButton("登录");
+    private JFXButton switchToRegisterButton = new JFXButton("去注册");
+    private JFXButton registerButton = new JFXButton("注册");
+    private JFXButton switchToLoginButton = new JFXButton("返回登录");
 
     public LoginPage() throws IOException {
+        setupUI();
+        setupActions();
+        this.getStylesheets().add("dark-theme.css");
+
+        //测试用
         nameField.setText("tst");
-        usernameField.setText("admin");
+        usernameField.setText("201921000");
         passwordField.setText("admin");
+    }
 
+    private void setupUI() {
         this.setAlignment(javafx.geometry.Pos.CENTER);
+        this.setVgap(10);
+        this.add(usernameField, 0, 0);
+        this.add(passwordField, 0, 1);
+        this.add(loginButton, 0, 2);
+        this.add(switchToRegisterButton, 1, 2);
+        switchToLoginButton.setVisible(false); // Initially hide switch to login button
+        registerButton.setVisible(false); // Initially hide register button
+        nameField.setVisible(false); // Initially hide name field
+    }
 
-        this.getChildren().addAll(nameField,usernameField,passwordField,loginButton,registerButton);
+    private void setupActions() {
+        loginButton.setOnMouseClicked(event -> attemptLogin());
+        switchToRegisterButton.setOnMouseClicked(event -> switchToRegister());
+        switchToLoginButton.setOnMouseClicked(event -> switchToLogin());
+        registerButton.setOnMouseClicked(event -> registerUser());
+    }
 
-        loginButton.setOnMouseClicked(event -> {
-            String username = usernameField.getText();
-            String password = passwordField.getText();
-            if(login(username,password))
-            {
-                Map<String,String> map = new HashMap<>();
-                map.put("username",username);
-                DataResponse r=request("/findPersonIdByUsername",map);
-                //personId=(String)r.getData();
-                Menu menu = new Menu();
-                Scene scene = new Scene(menu, 1400, 800);
-                Stage stage = (Stage) loginButton.getScene().getWindow();
-                stage.setScene(scene);
-                stage.show();
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setContentText("登录成功");
-                alert.showAndWait();
-            }
-            else
-            {
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setContentText("登录失败");
-                alert.showAndWait();
-            }
-        });
+    private void attemptLogin() {
+        String username = usernameField.getText();
+        String password = passwordField.getText();
+        if (login(username, password)) {
+            changeScene();
+            LoginPage.username = username;
+            //showAlert("登录成功", Alert.AlertType.INFORMATION);
+        } else {
+            showAlert("登录失败", Alert.AlertType.ERROR);
+        }
+    }
 
-        registerButton.setOnMouseClicked(event -> {
-            Map<String,String> map = new HashMap<>();
-            map.put("name",nameField.getText());
-            map.put("username",usernameField.getText());
-            map.put("password",passwordField.getText());
-            DataResponse response=sendAndReceiveDataResponse("/register",map);
-            if(response.getCode()==0)
-            {
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setContentText(response.getMsg());
-                alert.showAndWait();
-            }
-            else
-            {
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setContentText(response.getMsg());
-                alert.showAndWait();
-            }
-        });
+    private void registerUser() {
+        Map<String, String> map = new HashMap<>();
+        map.put("name", nameField.getText());
+        map.put("username", usernameField.getText());
+        map.put("password", passwordField.getText());
+        DataResponse response = sendAndReceiveDataResponse("/register", map);
+        showAlert(response.getMsg(), response.getCode() == 0 ? Alert.AlertType.INFORMATION : Alert.AlertType.ERROR);
+    }
+
+    private void switchToRegister() {
+        this.getChildren().clear();
+        this.add(nameField, 0, 0);
+        this.add(usernameField, 0, 1);
+        this.add(passwordField, 0, 2);
+        this.add(registerButton, 0, 3);
+        this.add(switchToLoginButton, 1, 3);
+        nameField.setVisible(true);
+        registerButton.setVisible(true);
+        switchToLoginButton.setVisible(true);
+    }
+
+    private void switchToLogin() {
+        this.getChildren().clear();
+        this.add(usernameField, 0, 0);
+        this.add(passwordField, 0, 1);
+        this.add(loginButton, 0, 2);
+        this.add(switchToRegisterButton, 1, 2);
+    }
+
+    private void changeScene() {
+        Menu menu = new Menu();
+        Scene scene = new Scene(menu, 1400, 800);
+        Stage stage = (Stage) this.getScene().getWindow();
+        stage.setScene(scene);
+        stage.setMaximized(true);
+        stage.show();
+    }
+
+    private void showAlert(String message, Alert.AlertType type) {
+        Alert alert = new Alert(type);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }

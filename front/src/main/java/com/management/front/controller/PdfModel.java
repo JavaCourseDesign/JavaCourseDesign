@@ -21,7 +21,7 @@ class PdfModel {
             document = PDDocument.load(path.toFile());
             renderer = new PDFRenderer(document);
         } catch (IOException ex) {
-            throw new UncheckedIOException("PDDocument thorws IOException file=" + path, ex);
+            throw new UncheckedIOException("PDFDocument throws IOException file=" + path, ex);
         }
     }
     PdfModel(byte [] data) {
@@ -29,7 +29,7 @@ class PdfModel {
             document = PDDocument.load(data);
             renderer = new PDFRenderer(document);
         } catch (IOException ex) {
-            throw new UncheckedIOException("PDDocument thorws IOException file=" , ex);
+            throw new UncheckedIOException("PDFDocument throws IOException file=" , ex);
         }
     }
 
