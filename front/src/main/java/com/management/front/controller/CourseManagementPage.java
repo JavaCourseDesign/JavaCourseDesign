@@ -11,10 +11,8 @@ import javafx.collections.ObservableList;
 import javafx.event.Event;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.MapValueFactory;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
+import javafx.scene.image.Image;
+import javafx.scene.layout.*;
 import org.controlsfx.property.BeanPropertyUtils;
 
 
@@ -104,6 +102,10 @@ public class CourseManagementPage extends SplitPane {
         initializeTable();
         initializeControlPanel();
         displayCourses();
+        // 添加背景图片
+        Image backgroundImage = new Image("E:\\JavaCourseDesign\\front\\src\\main\\resources\\com\\management\\front\\images\\menupage02.jpg");
+        BackgroundImage background = new BackgroundImage(backgroundImage, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
+        this.setBackground(new Background(background));
     }
 
     private void initializeTable() {

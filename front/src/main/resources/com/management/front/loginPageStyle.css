@@ -1,0 +1,23 @@
+.text-field {
+    -fx-background-color: lightblue;
+    -fx-font-size: 14px;
+    -fx-padding: 5px;
+    -fx-border-color: navy;
+    -fx-border-width: 2px;
+}
+
+.password-field {
+    -fx-background-color: lightblue;
+    -fx-font-size: 14px;
+    -fx-padding: 5px;
+    -fx-border-color: navy;
+    -fx-border-width: 2px;
+}
+
+.button {
+    -fx-background-color: lightblue;
+    -fx-font-size: 14px;
+    -fx-padding: 5px 10px;
+    -fx-border-color: navy;
+    -fx-border-width: 2px;
+}

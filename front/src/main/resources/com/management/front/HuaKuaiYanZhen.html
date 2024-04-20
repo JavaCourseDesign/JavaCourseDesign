@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complex Slider Verification</title>
+    <style>
+        /* 滑块验证的样式 */
+        .slider-container {
+            width: 300px;
+            height: 50px;
+            position: relative;
+            background-color: #f0f0f0;
+            border-radius: 25px;
+            overflow: hidden;
+        }
+
+        .slider {
+            width: 100px;
+            height: 50px;
+            background-color: #2196F3;
+            position: absolute;
+            cursor: pointer;
+            border-radius: 25px;
+            transition: left 0.3s ease;
+        }
+
+        /* 滑块验证成功后的样式 */
+        .success {
+            background-color: #4CAF50;
+        }
+
+        /* 滑块验证失败后的样式 */
+        .fail {
+            background-color: #F44336;
+        }
+
+        /* 提示信息的样式 */
+        .message {
+            font-size: 14px;
+            margin-top: 10px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<div class="slider-container">
+    <div class="slider" id="slider"></div>
+</div>
+<div class="message" id="message">请拖动滑块完成验证</div>
+
+<script>
+    var slider = document.getElementById("slider");
+    var message = document.getElementById("message");
+
+    var isDragging = false;
+    var initialX = 0;
+
+    slider.addEventListener("mousedown", function(event) {
+        isDragging = true;
+        initialX = event.clientX;
+    });
+
+    document.addEventListener("mousemove", function(event) {
+        if (isDragging) {
+            var offsetX = event.clientX - initialX;
+            var newX = Math.min(200, Math.max(0, offsetX));
+            slider.style.left = newX + "px";
+        }
+    });
+
+    document.addEventListener("mouseup", function() {
+        if (isDragging) {
+            isDragging = false;
+            if (parseInt(slider.style.left) >= 200) {
+                slider.classList.add("success");
+                message.innerText = "验证成功！";
+            } else {
+                slider.classList.add("fail");
+                message.innerText = "验证失败，请重新尝试！";
+                setTimeout(function() {
+                    slider.classList.remove("fail");
+                    slider.style.left = "0px";
+                    message.innerText = "请拖动滑块完成验证";
+                }, 1500); // 1.5秒后重置滑块位置和提示信息
+            }
+        }
+    });
+</script>
+</body>
+</html>

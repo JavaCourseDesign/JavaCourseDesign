@@ -16,6 +16,7 @@ module com.management.front {
     requires org.apache.httpcomponents.httpclient;
     requires java.desktop;
     requires itextpdf;
+    requires jdk.jsobject;
 
     opens com.management.front to javafx.fxml;
     exports com.management.front;
