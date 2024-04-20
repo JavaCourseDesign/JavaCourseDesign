@@ -21,6 +21,7 @@ import javafx.scene.web.HTMLEditor;
 import javafx.stage.FileChooser;
 
 
+
 import java.io.*;
 import java.nio.file.Files;
 import java.util.ArrayList;
@@ -34,7 +35,7 @@ import static com.management.front.util.HttpClientUtil.request;
 public class StudentPersonalInfoPage extends TabPane {
     public StudentPersonalInfoPage() {
         Map m = new HashMap();
-        m.put("personId", LoginPage.personId);
+        m.put("personId", LoginPage.);
         Map student = (Map) request("/getStudentByPersonId", m).getData();
         System.out.println(student);
         this.getTabs().add(new BasicInfoTab(student));
