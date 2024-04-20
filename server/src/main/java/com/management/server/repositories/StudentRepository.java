@@ -1,9 +1,12 @@
 package com.management.server.repositories;
 
+import com.management.server.models.Course;
+import com.management.server.models.Person;
 import com.management.server.models.Student;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -20,7 +23,6 @@ public interface StudentRepository extends JpaRepository<Student,String> {
     boolean existsByStudentId(String studentId);
     Integer deleteAllByStudentId(String studentId);
     Integer deleteAllByPersonId(String personId);
-
 
     /*Optional<Student> findByPersonPersonId(Integer personId);
     Optional<Student> findByPersonNum(String num);

@@ -120,7 +120,7 @@ public class CourseController {
     }
 
     @PostMapping("/updateCourse")
-    @PreAuthorize("hasRole('ADMIN')")
+    //@PreAuthorize("hasRole('ADMIN')")
     public DataResponse updateCourse(@RequestBody Map m){
         String courseId = (String) m.get("courseId");
         if(!courseRepository.existsByCourseId(courseId)) {
@@ -182,7 +182,7 @@ public class CourseController {
     }
 
     @PostMapping("/deleteCourse")
-    @PreAuthorize("hasRole('ADMIN')")
+    //@PreAuthorize("hasRole('ADMIN')")
     public DataResponse deleteCourse(@RequestBody Map m){
         courseRepository.deleteAllByCourseId(""+m.get("courseId"));
         return new DataResponse(0,null,"删除成功");
@@ -190,7 +190,7 @@ public class CourseController {
 
     //选课抽签方法（理论上也可以在前端实现，但鉴于后端没啥东西而且传一堆学生传来传去好像很浪费，故写在后端）
     @PostMapping("/drawLots")
-    @PreAuthorize("hasRole('ADMIN')")
+   // @PreAuthorize("hasRole('ADMIN')")
     public DataResponse drawLots(@RequestBody Map m){
         String courseId = (String) m.get("courseId");
         Double capacity = (Double) m.get("capacity");
@@ -225,7 +225,7 @@ public class CourseController {
     }
 
     @PostMapping("/applyCourse")
-    @PreAuthorize("hasRole('STUDENT')")
+    //@PreAuthorize("hasRole('STUDENT')")
     public DataResponse applyCourse(@RequestBody Map m){//前序课分数要求待添加
         String courseId = (String) m.get("courseId");
         String username = CommonMethod.getUsername();
@@ -256,5 +256,11 @@ public class CourseController {
         System.out.println(studentRepository.findByStudentId(username).getPersonId());
         System.out.println(courseRepository.findWantedCoursesByPersonId(studentRepository.findByStudentId(username).getPersonId()));
         return new DataResponse(0,courseRepository.findWantedCoursesByPersonId(studentRepository.findByStudentId(username).getPersonId()),null);
+    }
+    @PostMapping("/getTeacherCourses")
+    public DataResponse getTeacherCourses(){;
+        String teacherId=teacherRepository.findByTeacherId(CommonMethod.getUsername()).getPersonId();
+        return new DataResponse(0,courseRepository.findCoursesByPersonId(teacherId),null);
+
     }
 }

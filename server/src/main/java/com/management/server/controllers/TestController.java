@@ -72,6 +72,8 @@ public class TestController {//专门用于添加测试数据
             Teacher teacher=new Teacher();
             teacher.setTeacherId("10000"+i);
             teacher.setName(generateRandomChineseName());
+            if(i==0) teacher.setName("向辉");
+            if(i==1) teacher.setName("李学庆");
             teacher.setGender("男");
             teacher.setTitle("讲师");
             teachers.add(teacher);

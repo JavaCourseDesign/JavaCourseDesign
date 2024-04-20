@@ -1,5 +1,7 @@
 package com.management.server.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -11,11 +13,12 @@ public class Homework {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String homeworkId;
     @ManyToOne
-    @JoinColumn(name = "student_id")
+    @JoinColumn
     private Student student;
 
     @ManyToOne
     @JoinColumn(name = "course_id")
+    @JsonIgnoreProperties(value = {"persons","lessons","willingStudents"})
     private Course course;
     private String homeworkContent;
     private String deadline;

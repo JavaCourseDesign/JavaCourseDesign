@@ -55,6 +55,7 @@ public class Menu extends SplitPane {
                 case "学生日志信息管理":this.getItems().set(1,new StudentLogManagementPage());break;
                 case "测试上传文件":this.getItems().set(1,new FileUploadPage());break;
                 case "学生作业界面":this.getItems().set(1,new StudentHomeworkPage());break;
+                case "教师作业界面":this.getItems().set(1,new TeacherHomeworkPage());break;
             }
         });
     }
