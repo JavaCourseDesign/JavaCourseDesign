@@ -14,10 +14,10 @@ import java.util.List;
 @Repository
 @Transactional
 public interface HonorRepository extends JpaRepository<Honor,String> {
-    Honor findByEventId(String honorId);
+    Honor findByHonorId(String honorId);
 
-    @Query("SELECT i FROM Honor i WHERE :person MEMBER OF i.persons")
-    List<Honor> findByPersons(@Param("person") Person person);
+    //@Query("SELECT i FROM Honor i WHERE :person MEMBER OF i.person")
+    List<Honor> findByPerson(/*@Param("person")*/ Person person);
 
-    Integer deleteByEventId(String eventId);
+    void deleteByHonorId(String honorId);
 }

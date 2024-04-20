@@ -31,8 +31,9 @@ public class HonorController {
     @PostMapping("/getHonorsByStudent")
     public DataResponse getHonorByStudent(@RequestBody Map m)
     {
+
         Student s=studentRepository.findByStudentId((String) m.get("studentId"));
-        List<Honor> list=honorRepository.findByPersons(s);
+        List<Honor> list=honorRepository.findByPerson(s);
         return new DataResponse(200,list,null);
     }
     @PostMapping("/addHonor")
@@ -51,14 +52,14 @@ public class HonorController {
     @PostMapping("/deleteHonor")
     public DataResponse deleteHonor(@RequestBody Map m)
     {
-        honorRepository.deleteByEventId((String)m.get("eventId"));
+        honorRepository.deleteByHonorId((String)m.get("eventId"));
         return new DataResponse(0,null,"删除成功");
     }
     @PostMapping("/updateHonor")
     public DataResponse updateHonor(@RequestBody Map m)
     {
         //save()方法既可以用于保存新的实体，也可以用于更新已存在的实体。
-        Honor honor=honorRepository.findByEventId((String) m.get("eventId"));
+        Honor honor=honorRepository.findByHonorId((String) m.get("eventId"));
         List<Map> personsMap = (List<Map>) m.get("persons");
         System.out.println(personsMap);
         Set<Person> persons = new HashSet<>();
