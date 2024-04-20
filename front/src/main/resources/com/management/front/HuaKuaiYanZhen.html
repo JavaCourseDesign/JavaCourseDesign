@@ -72,7 +72,10 @@
     document.addEventListener("mouseup", function() {
         if (isDragging) {
             isDragging = false;
-            if (parseInt(slider.style.left) >= 200) {
+            var sliderRect = slider.getBoundingClientRect();
+            var containerRect = slider.parentElement.getBoundingClientRect();
+            var sliderPosition = sliderRect.left - containerRect.left;
+            if (sliderPosition >= 200) {
                 slider.classList.add("success");
                 message.innerText = "验证成功！";
             } else {

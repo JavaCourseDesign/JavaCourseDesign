@@ -55,8 +55,8 @@ public class LoginPage extends StackPane {
         getChildren().add(loginBox);
 
         loginButton.setOnMouseClicked(event -> {
-            String username = ""; // 从输入框中获取用户名
-            String password = ""; // 从输入框中获取密码
+            String username = usernameField.getText();
+            String password = passwordField.getText();
 
             // 检查用户名是否为 "admin"，如果是则直接显示滑块验证窗口
             if ("admin".equals(username)) {
@@ -74,9 +74,6 @@ public class LoginPage extends StackPane {
                 }
             }
         });
-
-
-
 
         registerButton.setOnMouseClicked(event -> {
             Map<String, String> map = new HashMap<>();
@@ -101,6 +98,7 @@ public class LoginPage extends StackPane {
         loginButton.getStyleClass().add("button");
         registerButton.getStyleClass().add("button");
     }
+
     // 显示滑块验证窗口的方法
     private void showSliderVerificationDialog() {
         WebView webView = new WebView();
@@ -128,6 +126,7 @@ public class LoginPage extends StackPane {
             }
         });
 
+
         // 当用户点击登录按钮时进行验证
         dialog.setResultConverter(dialogButton -> {
             if (dialogButton == loginButtonType) {
@@ -136,6 +135,9 @@ public class LoginPage extends StackPane {
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
                     alert.setContentText("滑块验证通过");
                     alert.showAndWait();
+
+                    // 关闭对话框
+                    dialog.close();
 
                     // 执行登录成功后的操作
                     Menu menu = new Menu();
@@ -162,4 +164,5 @@ public class LoginPage extends StackPane {
         dialog.showAndWait();
     }
 
-}
+    }
+
