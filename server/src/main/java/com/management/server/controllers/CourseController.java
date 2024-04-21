@@ -285,12 +285,6 @@ public class CourseController {
         return new DataResponse(0,courses,null);
     }
 
-    @PostMapping("/getTeacherCourses")
-    public DataResponse getTeacherCourses() {
-        String teacherId = teacherRepository.findByTeacherId(CommonMethod.getUsername()).getPersonId();
-        return new DataResponse(0, courseRepository.findCoursesByPersonId(teacherId), null);
-    }
-
     private boolean conflict(List<Course> courses, Course course){
         for (Course c : courses) {
             if(c.getLessons().stream().anyMatch(
