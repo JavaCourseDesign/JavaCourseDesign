@@ -7,10 +7,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
+import java.util.Base64;
+
 @Component
 public class FileUtil {
     private static String attachFolder;
@@ -30,6 +33,25 @@ public class FileUtil {
             return new DataResponse(0, null, "上传成功！");
         }catch(Exception e){
             return new DataResponse(1, null, "上传错误！");
+        }
+    }
+    public static DataResponse downloadFile(String remoteFile,String fileName){
+        //remoteFile   你想存在的后端的文件夹，不要加/，直接写名字
+        try {
+            String decodedFileName = URLDecoder.decode(fileName, StandardCharsets.UTF_8.toString());
+            File file = new File(attachFolder +remoteFile+"/"+ decodedFileName);
+            FileInputStream in = new FileInputStream(file);
+            byte[] data = new byte[(int) file.length()];
+            in.read(data);
+            in.close();
+            String fileStr = new String(Base64.getEncoder().encode(data));
+            if(file.exists()){
+                return new DataResponse(0,fileStr, "下载成功！");
+            }else{
+                return new DataResponse(1, null, "文件不存在！");
+            }
+        }catch(Exception e){
+            return new DataResponse(1, null, "下载错误！");
         }
     }
 }

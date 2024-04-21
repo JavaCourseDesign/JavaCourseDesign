@@ -5,18 +5,18 @@ import com.management.front.customComponents.SearchableTableView;
 import com.management.front.request.DataResponse;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.MapValueFactory;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.VBox;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.*;
+import javafx.stage.Stage;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 import static com.management.front.util.HttpClientUtil.request;
+import static com.management.front.util.HttpClientUtil.requestByteData;
 
 public class TeacherHomeworkPage extends SplitPane {
     private SearchableTableView homeworkTable;
@@ -27,11 +27,13 @@ public class TeacherHomeworkPage extends SplitPane {
     private Label homeworkContentLabel = new Label("作业内容");
     private Label deadlineLabel = new Label("截止时间");
     private TextField homeworkContentField = new TextField();
-    private TextField deadlineField = new TextField();
+    private DatePicker deadlinePicker = new DatePicker();
     private Button markButton = new Button("批改学生作业");
     private Button addButton = new Button("Add");
     private Button deleteButton = new Button("Delete");
-
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    private PdfModel model;
+    private Pagination pagination=new Pagination();
 
     public TeacherHomeworkPage() {
         this.setWidth(1000);
@@ -41,7 +43,7 @@ public class TeacherHomeworkPage extends SplitPane {
     }
     private Map newMapFromFields(Map m) {
         m.put("homeworkContent", homeworkContentField.getText());
-        m.put("deadline", deadlineField.getText());
+        m.put("deadline", deadlinePicker.getValue().format(formatter));
         m.put("courses", courseListView.getSelectedItems());
         return m;
     }
@@ -50,7 +52,6 @@ public class TeacherHomeworkPage extends SplitPane {
         observableList.clear();
         DataResponse r=request("/getTeacherHomework",null);
         ArrayList<Map> list=(ArrayList<Map>)r.getData();
-        System.out.println(list);
         for(Map m:list)
         {
             if(m.get("student")!=null)
@@ -74,11 +75,12 @@ public class TeacherHomeworkPage extends SplitPane {
         controlPanel.getChildren().add(courseListView);
         gridPane=new GridPane();
         gridPane.addColumn(0,homeworkContentLabel,deadlineLabel);
-        gridPane.addColumn(1,homeworkContentField,deadlineField);
+        gridPane.addColumn(1,homeworkContentField,deadlinePicker);
         controlPanel.getChildren().add(gridPane);
         controlPanel.getChildren().add(addButton);
         controlPanel.getChildren().add(deleteButton);
         controlPanel.getChildren().add(markButton);
+        controlPanel.getChildren().add(new Pane());
         addButton.setOnMouseClicked(event -> {
             addHomework();
         });
@@ -90,14 +92,60 @@ public class TeacherHomeworkPage extends SplitPane {
         });
         this.getItems().add(controlPanel);
     }
+    private void markHomework()
+    {
+        if(homeworkTable.getSelectedItems().isEmpty())
+        {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setContentText("请选择要批改的作业");
+            alert.showAndWait();
+            return;
+        }
+        else
+        {
+            Map m=homeworkTable.getSelectedItem();
+            DataResponse r=request("/getHomeworkFile",m);
+            if(r.getCode()!=0)
+            {
+                Alert alert=new Alert(Alert.AlertType.ERROR);
+                alert.setContentText(r.getMsg());
+                alert.showAndWait();
+                return;
+            }
+            byte[] data= Base64.getDecoder().decode(r.getData().toString());
+            model=new PdfModel(data);
+            pagination.setPageCount(model.numPages());
+            pagination.setPageFactory(index -> new ImageView(model.getImage(index)));
+            ScrollPane scrollPane=new ScrollPane();
+            scrollPane.setContent(pagination);
+            scrollPane.setFitToWidth(true);
+            scrollPane.setFitToHeight(true);
+            HBox hbox = new HBox();
+            hbox.getChildren().add(new Label("按下按钮评分："));
+            for (int i = 0; i < 5; i++) {
+                Button button = new Button((char)('A'+i)+"");
+                hbox.getChildren().add(button);
+                button.setOnMouseClicked(event -> {
+                    m.put("grade",button.getText());
+                    request("/markHomework",m);
+                    controlPanel.getChildren().set(5,new Pane());
+                    displayHomeworks();
+                    // 关闭 ScrollPane
+                });
+            }
+// 创建 VBox 并添加 Pagination 和 HBox
+            VBox vbox = new VBox();
+            vbox.getChildren().addAll(pagination, hbox);
 
-    private void markHomework() {
-
-
+// 创建 ScrollPane 并设置其内容为 VBox
+            scrollPane.setContent(vbox);
+            controlPanel.getChildren().set(5,scrollPane);
+        }
     }
 
 
     private void deleteHomework() {
+
     }
 
     private void addHomework() {
@@ -172,5 +220,4 @@ public class TeacherHomeworkPage extends SplitPane {
         homeworkTable=new SearchableTableView(observableList,List.of("studentId","courseName","grade"),columns);
         this.getItems().add(homeworkTable);
     }
-
 }

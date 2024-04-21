@@ -291,10 +291,8 @@ class absenceTab extends Tab {
     private ObservableList<Map> observableList= FXCollections.observableArrayList();
 
 
-    private TextField idField = new TextField("201921000");
     private TextField offReasonField=new TextField("玩原神");
     private TextField destinationField=new TextField("宿舍");
-    private TextField nameField = new TextField("wzk");
     Map s;
     private SearchableListView eventListView;
     public absenceTab(Map student) {
@@ -307,8 +305,6 @@ class absenceTab extends Tab {
         displayAbsences();
     }
     private Map newMapFromFields(Map m) {
-        m.put("id", idField.getText());
-        m.put("name", nameField.getText());
         m.put("offReason",offReasonField.getText());
         m.put("destination",destinationField.getText());
         m.put("events",eventListView.getSelectedItems());
@@ -327,10 +323,6 @@ class absenceTab extends Tab {
         controlPanel.setAlignment(Pos.CENTER);
         Text text = new Text("请假信息表单");
         controlPanel.getChildren().add(text);
-        controlPanel.getChildren().add(new Text("学号:"));
-        controlPanel.getChildren().add(idField);
-        controlPanel.getChildren().add(new Text("姓名:"));
-        controlPanel.getChildren().add(nameField);
         controlPanel.getChildren().add(new Text("请假原因:"));
         controlPanel.getChildren().add(offReasonField);
         controlPanel.getChildren().add(new Text("请假去向:"));

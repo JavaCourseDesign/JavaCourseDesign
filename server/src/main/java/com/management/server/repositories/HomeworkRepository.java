@@ -13,5 +13,6 @@ import java.util.List;
 @Transactional
 public interface HomeworkRepository extends JpaRepository<Homework, String>{
     List<Homework> findHomeworkByStudent(Student student);
+    Homework findHomeworkByHomeworkId(String homeworkId);
 
 }

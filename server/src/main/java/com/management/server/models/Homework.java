@@ -24,5 +24,6 @@ public class Homework {
     private String deadline;
     private String submitTime;
     private String grade;
+    private String homeworkFile;
 
 }
