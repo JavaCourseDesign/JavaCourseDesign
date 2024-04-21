@@ -1,11 +1,20 @@
-..root {
-    -fx-background-color: linear-gradient(to bottom, #ADD8E6, #FFFFFF); /* 蓝白色渐变背景 */
+.root {
+    -fx-background-color:
+            linear-gradient(to bottom, #0000FF, #FFFFFF), /* 从蓝色渐变到白色的背景 */
+            linear-gradient(to bottom, #FFFFFF, #0000FF); /* 从白色渐变到蓝色的背景 */
+    -fx-background-insets: 0, 50%; /* 第二个渐变从中间开始 */
+    -fx-background-size: 100% 50%, 100% 50%; /* 指定每个渐变的大小 */
+    -fx-background-repeat: no-repeat; /* 防止渐变重复 */
     -fx-text-fill: #000000; /* 所有文本的黑色文本颜色 */
+    -fx-font-family: "Microsoft YaHei";
+    -fx-font-weight: bold; /* 加粗 */
 }
 
 .label {
     -fx-text-fill: #000000; /* 黑色文本颜色 */
     -fx-font-size: 16px; /* 稍大的字体大小，提升可读性 */
+    -fx-font-family: "KaiTi"; /* 楷体字体 */
+    -fx-font-weight: bold; /* 加粗 */
 }
 
 .button {
@@ -16,6 +25,7 @@
     -fx-border-radius: 4;
     -fx-background-radius: 4;
     -fx-padding: 5;
+    -fx-font-family: "SimSun";
     -fx-font-weight: bold;
 }
 
@@ -33,10 +43,11 @@
 }
 
 .table-view {
-    -fx-base: #FFFFFF; /* 表格行的背景色为白色 */
-    -fx-control-inner-background: #87CEEB; /* 表格的内部背景色为浅蓝色 */
-    -fx-table-cell-border-color: #4682B4; /* 表格单元格边框颜色为深蓝色 */
-    -fx-table-header-border-color: #4682B4; /* 表格表头边框颜色为深蓝色 */
+    -fx-background-image: url('/com/management/front/images/menupage01.jpg'); /* 设置背景图片 */
+    -fx-background-size: cover; /* 背景图片尺寸自适应 */
+    -fx-effect: blur(5px); /* 模糊效果，5px 为模糊半径 */
+    -fx-table-cell-border-color: transparent; /* 隐藏表格单元格边框 */
+    -fx-table-header-border-color: transparent; /* 隐藏表格表头边框 */
 }
 
 .list-view {
@@ -46,7 +57,7 @@
 }
 
 .table-row-cell:filled:selected {
-    -fx-background-color: #1E90FF; /* 选定行的背景色为深蓝色 */
+    -fx-background-color: #ADD8E6; /* 选定行的背景色为淡蓝色 */
     -fx-text-fill: #FFFFFF; /* 选定行的文本颜色为白色 */
 }
 
@@ -65,7 +76,7 @@
 }
 
 .progress-bar {
-    -fx-accent: #1E90FF; /* 进度条的强调色为深蓝色 */
+    -fx-accent: rgba(30, 236, 255, 0.8); /* 进度条的强调色为深蓝色 */
 }
 
 .scroll-bar {
@@ -80,16 +91,21 @@
 
 .radio-button {
     -fx-text-fill: #000000; /* 单选按钮文本颜色为黑色 */
-    -fx-mark-color: #4682B4; /* 选中标记颜色为深蓝色 */
+    -fx-mark-color: #8cd8ec; /* 选中标记颜色为深蓝色 */
 }
 
 
 .check-box {
-    -fx-text-fill: #0080FF; /* Blue text color for checkboxes */
-    -fx-box-color: #FFFFFF; /* White box color */
-    -fx-padding: 1; /* Reduce padding to make the checkbox smaller */
-    -fx-font-size: 10px; /* Reduce font size to make the checkbox smaller */
+    -fx-text-fill: #0080FF; /* 设置复选框文本颜色为蓝色 */
+    -fx-background-color: transparent; /* 设置复选框背景色为透明 */
+    -fx-padding: 2; /* 减少内边距以使复选框变小 */
+    -fx-font-size: 9px; /* 减少字体大小以使复选框文本变小 */
 }
+
+.check-box:selected .box {
+    -fx-background-color: #FFFFFF; /* 设置选中复选框的背景色为白色 */
+}
+
 
 .tooltip {
     -fx-background-color: #ADD8E6; /* Light blue background for tooltips */
@@ -112,7 +128,7 @@
 }
 
 .tree-cell:selected {
-    -fx-background-color: #0000FF; /* Blue color for selected tree cells */
+    -fx-background-color: #0095ff; /* Blue color for selected tree cells */
     -fx-text-fill: white; /* White text for readability */
 }
 
