@@ -27,6 +27,7 @@ public class StudentHomeworkPage extends VBox{
     private Button uploadHomeworkButton=new Button("上传作业");
     private ObservableList<Map> observableList= FXCollections.observableArrayList();
     private SearchableTableView homeworkTable;
+
     public StudentHomeworkPage() {
         this.getChildren().add(uploadHomeworkButton);
         uploadHomeworkButton.setPrefWidth(100);
@@ -36,17 +37,20 @@ public class StudentHomeworkPage extends VBox{
             {
                 Alert alert=new Alert(Alert.AlertType.ERROR);
                 alert.setContentText("请先选择一条课程记录");
+                alert.show();
             }
             else
-            uploadHomeWork(homeworkTable.getSelectedItem());
+            {
+                uploadHomeWork(homeworkTable.getSelectedItem());
+            }
         });
         initializeTable();
         displayAllHomework();
     }
 
     private void uploadHomeWork(Map m) {
-       /* String submitTime = "2022-01-01";  // replace with actual submit time
-        String deadline = "2022-01-02";  // replace with actual deadline
+        String submitTime = LocalDate.now().toString();  // set submit time to today
+        String deadline =(String)m.get("deadline");  // get deadline from selected item
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate submitDate = LocalDate.parse(submitTime, formatter);
         LocalDate deadlineDate = LocalDate.parse(deadline, formatter);
@@ -54,8 +58,9 @@ public class StudentHomeworkPage extends VBox{
         if (submitDate.isAfter(deadlineDate)) {
             Alert alert=new Alert(Alert.AlertType.ERROR);
             alert.setContentText("提交时间已经超过截止日期");
+            alert.show();
             return;
-        }*/
+        }
         FileChooser fileDialog = new FileChooser();
         fileDialog.setTitle("选择作业文件");
         FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("PDF and Image files (*.pdf, *.jpg, *.png)", "*.pdf", "*.jpg", "*.png");
@@ -66,25 +71,28 @@ public class StudentHomeworkPage extends VBox{
         {
             Alert alert=new Alert(Alert.AlertType.ERROR);
             alert.setContentText("未选择文件");
+            alert.show();
             return;
         }
-        DataResponse r=uploadFile("/uploadHomeWork",file.getPath(), file.getName());
+        DataResponse r=uploadFile("/uploadHomework",file.getPath(), file.getName(),(String) homeworkTable.getSelectedItem().get("homeworkId"));
         if(r.getCode()==0)
         {
             Alert alert=new Alert(Alert.AlertType.INFORMATION);
             alert.setContentText("上传成功");
+            alert.show();
             displayAllHomework();
         }
         else
         {
             Alert alert=new Alert(Alert.AlertType.ERROR);
             alert.setContentText("上传失败");
+            alert.show();
         }
     }
 
     private void displayAllHomework() {
         observableList.clear();
-        ArrayList<Map> list=(ArrayList<Map>) request("/getAllHomework", null).getData();
+        ArrayList<Map> list=(ArrayList<Map>) request("/getStudentHomework", null).getData();
         for(Map m:list)
         {
             if(m.get("course")!=null)

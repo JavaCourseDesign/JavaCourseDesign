@@ -7,6 +7,7 @@ import com.management.server.models.Event;
 import com.management.server.models.Student;
 import com.management.server.payload.response.DataResponse;
 import com.management.server.repositories.*;
+import com.management.server.util.CommonMethod;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -33,7 +34,7 @@ public class AbsenceController {
     }
     @PostMapping("/getAbsencesByStudent")
     public DataResponse getAbsencesByStudent(@RequestBody Map m) {
-        Student student=studentRepository.findByStudentId((String) m.get("studentId"));
+        Student student=studentRepository.findByStudentId(CommonMethod.getUsername());
         return new DataResponse(0,absenceRepository.findAbsencesByPerson(student),null);
     }
     @PostMapping("/addAbsence")

@@ -27,7 +27,7 @@ public class FileUploadPage extends VBox {
                 String remoteFile = "file";
                 String fileName=file.getName();
                 //remoteFile   你想存在的后端的文件夹，不要加/，直接写名字
-                uploadFile("/uploadFile",filePath,fileName);
+                uploadFile("/uploadFile",filePath,fileName,null);
             }
         });
         this.getChildren().add(button);

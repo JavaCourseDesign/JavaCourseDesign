@@ -150,6 +150,11 @@ public class CourseController {
 
         return new DataResponse(0,null,"添加成功");
     }
+    @PostMapping("/getTeacherCourses")
+    public DataResponse getTeacherCourses(){
+        String teacherId=teacherRepository.findByTeacherId(CommonMethod.getUsername()).getPersonId();
+        return new DataResponse(0,courseRepository.findCoursesByPersonId(teacherId),null);
+    }
 
     @PostMapping("/updateCourse")
     //@PreAuthorize("hasRole('ADMIN')")

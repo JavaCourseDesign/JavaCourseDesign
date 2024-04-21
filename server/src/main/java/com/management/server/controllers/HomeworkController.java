@@ -5,12 +5,17 @@ import com.management.server.models.*;
 import com.management.server.payload.response.DataResponse;
 import com.management.server.repositories.*;
 import com.management.server.util.CommonMethod;
+import com.management.server.util.FileUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -44,6 +49,20 @@ public class HomeworkController {
         }
         return new DataResponse(0,null,null);
     }
+    @PostMapping("/markHomework")
+    @PreAuthorize("hasRole('TEACHER')")
+    public DataResponse markHomework(@RequestBody Map m){
+        Homework h=homeworkRepository.findHomeworkByHomeworkId((String) m.get("homeworkId"));
+        h.setGrade((String) m.get("grade"));
+        homeworkRepository.save(h);
+        return new DataResponse(0,null,null);
+    }
+    @PostMapping("/getStudentHomework")
+    @PreAuthorize("hasRole('STUDENT')")
+    public DataResponse getStudentHomework(){
+        Student s=studentRepository.findByStudentId(CommonMethod.getUsername());
+        return new DataResponse(0,homeworkRepository.findHomeworkByStudent(s),null);
+    }
     @PostMapping("/getTeacherHomework")
     @PreAuthorize("hasRole('TEACHER')")
     public DataResponse getTeacherHomework(){
@@ -65,4 +84,26 @@ public class HomeworkController {
         }
         return new DataResponse(0,homeworkList,null);
     }
+    @PostMapping("/uploadHomework")
+    @PreAuthorize("hasRole('STUDENT')")
+    public DataResponse uploadHomeWork(@RequestBody byte[] barr,
+                                       @RequestParam(name = "fileName") String fileName,
+    @RequestParam(name="paras") String homeworkId ){
+        Homework h=homeworkRepository.findHomeworkByHomeworkId(homeworkId);
+        h.setHomeworkFile(fileName);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        h.setSubmitTime(formatter.format(LocalDate.now()));
+        homeworkRepository.save(h);
+        DataResponse r= FileUtil.uploadFile(barr,"homework",fileName);
+        return r;
+    }
+
+    @PostMapping("/getHomeworkFile")
+    public DataResponse getHomeworkFile(@RequestBody Map m)
+    {
+        Homework h=homeworkRepository.findHomeworkByHomeworkId((String) m.get("homeworkId"));
+        DataResponse r=FileUtil.downloadFile("homework",h.getHomeworkFile());
+        return r;
+    }
+
 }
