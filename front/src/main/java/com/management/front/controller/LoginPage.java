@@ -18,9 +18,13 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+
+
+
 import static com.management.front.util.HttpClientUtil.*;
 
 public class LoginPage extends GridPane {
+
     public static String username;//不知道这样合不合适
     private JFXTextField nameField = new JFXTextField();
     private JFXTextField usernameField = new JFXTextField();
@@ -30,10 +34,10 @@ public class LoginPage extends GridPane {
     private JFXButton registerButton = new JFXButton("注册");
     private JFXButton switchToLoginButton = new JFXButton("返回登录");
 
+
     public LoginPage() throws IOException {
         setupUI();
         setupActions();
-        this.getStylesheets().add("dark-theme.css");
 
         //测试用
         nameField.setText("tst");
@@ -47,7 +51,7 @@ public class LoginPage extends GridPane {
         this.add(usernameField, 0, 0);
         this.add(passwordField, 0, 1);
         this.add(loginButton, 0, 2);
-        this.add(switchToRegisterButton, 1, 2);
+        this.add(switchToRegisterButton, 0, 3);
         switchToLoginButton.setVisible(false); // Initially hide switch to login button
         registerButton.setVisible(false); // Initially hide register button
         nameField.setVisible(false); // Initially hide name field
@@ -87,7 +91,7 @@ public class LoginPage extends GridPane {
         this.add(usernameField, 0, 1);
         this.add(passwordField, 0, 2);
         this.add(registerButton, 0, 3);
-        this.add(switchToLoginButton, 1, 3);
+        this.add(switchToLoginButton, 0, 4);
         nameField.setVisible(true);
         registerButton.setVisible(true);
         switchToLoginButton.setVisible(true);
@@ -98,7 +102,7 @@ public class LoginPage extends GridPane {
         this.add(usernameField, 0, 0);
         this.add(passwordField, 0, 1);
         this.add(loginButton, 0, 2);
-        this.add(switchToRegisterButton, 1, 2);
+        this.add(switchToRegisterButton, 0, 3);
     }
 
     private void changeScene() {

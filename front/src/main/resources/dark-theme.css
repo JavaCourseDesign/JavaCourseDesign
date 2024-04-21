@@ -1,17 +1,17 @@
-.root {
-    -fx-background-color: #2b2b2b; /* Dark background for the whole application */
-    -fx-text-fill: #a9b7c6; /* Light gray text color for all text */
+..root {
+    -fx-background-color: linear-gradient(to bottom, #ADD8E6, #FFFFFF); /* 蓝白色渐变背景 */
+    -fx-text-fill: #000000; /* 所有文本的黑色文本颜色 */
 }
 
 .label {
-    -fx-text-fill: #a9b7c6; /* Light gray text color for labels */
-    -fx-font-size: 16px; /* Slightly larger font size for better readability */
+    -fx-text-fill: #000000; /* 黑色文本颜色 */
+    -fx-font-size: 16px; /* 稍大的字体大小，提升可读性 */
 }
 
 .button {
-    -fx-background-color: #3c3f41;
-    -fx-text-fill: #a9b7c6;
-    -fx-border-color: #555759;
+    -fx-background-color: linear-gradient(to bottom, #87CEEB, #1E90FF); /* 按钮背景色为淡蓝色渐变 */
+    -fx-text-fill: #FFFFFF; /* 按钮文本颜色为白色 */
+    -fx-border-color: #4682B4; /* 按钮边框颜色为深蓝色 */
     -fx-border-width: 1;
     -fx-border-radius: 4;
     -fx-background-radius: 4;
@@ -20,105 +20,105 @@
 }
 
 .button:hover {
-    -fx-background-color: #4a4c4e; /* Slightly lighter button background on hover */
+    -fx-background-color: linear-gradient(to bottom, #1E90FF, #ADD8E6); /* 鼠标悬停时按钮背景色稍微变亮 */
 }
 
 .split-pane-divider {
-    -fx-background-color: #4a4c4e; /* Divider background color */
+    -fx-background-color: #1E90FF; /* 分隔窗格分隔线颜色为深蓝色 */
 }
 
 .split-pane {
-    -fx-padding: 0.5em; /* Padding for the split-pane */
-    -fx-background-color: #2b2b2b; /* Background color matching root */
+    -fx-padding: 0.5em; /* 分隔窗格内边距 */
+    -fx-background-color: #FFFFFF; /* 背景色为白色 */
 }
 
 .table-view {
-    -fx-base: #3c3f41; /* Dark color for table rows */
-    -fx-control-inner-background: #2b2b2b; /* Darker background for the table */
-    -fx-table-cell-border-color: #555759; /* Border color for cells */
-    -fx-table-header-border-color: #555759; /* Border color for table header */
+    -fx-base: #FFFFFF; /* 表格行的背景色为白色 */
+    -fx-control-inner-background: #87CEEB; /* 表格的内部背景色为浅蓝色 */
+    -fx-table-cell-border-color: #4682B4; /* 表格单元格边框颜色为深蓝色 */
+    -fx-table-header-border-color: #4682B4; /* 表格表头边框颜色为深蓝色 */
 }
 
 .list-view {
-    -fx-base: #3c3f41; /* Dark color for list items */
-    -fx-control-inner-background: #2b2b2b; /* Darker background for the list */
-    -fx-cell-hover-color: #4a4c4e; /* Lighter color on hover */
+    -fx-base: #FFFFFF; /* 列表项的背景色为白色 */
+    -fx-control-inner-background: #87CEEB; /* 列表的内部背景色为浅蓝色 */
+    -fx-cell-hover-color: #ADD8E6; /* 鼠标悬停时列表项颜色稍微变亮 */
 }
 
-
 .table-row-cell:filled:selected {
-    -fx-background-color: #214283; /* Blue color for selected rows */
-    -fx-text-fill: white; /* White text for readability */
+    -fx-background-color: #1E90FF; /* 选定行的背景色为深蓝色 */
+    -fx-text-fill: #FFFFFF; /* 选定行的文本颜色为白色 */
 }
 
 .table-view .column-header-background .label {
-    -fx-text-fill: #a9b7c6; /* Light gray text color for table headers */
+    -fx-text-fill: #000000; /* 表头文本颜色为黑色 */
     -fx-font-weight: bold;
 }
 
 .text-field, .combo-box-base {
-    -fx-background-color: #3c3f41; /* Dark background for text fields and combo boxes */
-    -fx-text-fill: #a9b7c6; /* Light gray text color */
+    -fx-background-color: #87CEEB; /* 文本框和组合框的背景色为浅蓝色 */
+    -fx-text-fill: #000000; /* 文本颜色为黑色 */
 }
 
 .text-field:focused, .combo-box-base:focused {
-    -fx-background-color: #4a4c4e; /* Lighter background color when focused */
+    -fx-background-color: #1E90FF; /* 获得焦点时背景色稍微变亮 */
 }
 
 .progress-bar {
-    -fx-accent: #214283; /* Accent color for progress bars */
+    -fx-accent: #1E90FF; /* 进度条的强调色为深蓝色 */
 }
 
 .scroll-bar {
-    -fx-background-color: #3c3f41; /* Background color for scroll bars */
-    -fx-track-color: #2b2b2b; /* Track color matching the dark theme */
+    -fx-background-color: #87CEEB; /* 滚动条的背景色为浅蓝色 */
+    -fx-track-color: #FFFFFF; /* 轨道颜色为白色 */
 }
 
 .menu-bar {
-    -fx-background-color: #3c3f41; /* Dark background for menu bar */
-    -fx-text-fill: #a9b7c6; /* Light gray text color for menus */
+    -fx-background-color: #87CEEB; /* 菜单栏的背景色为浅蓝色 */
+    -fx-text-fill: #000000; /* 菜单项文本颜色为黑色 */
 }
 
 .radio-button {
-    -fx-text-fill: #a9b7c6; /* Light gray text color for radio buttons */
-    -fx-mark-color: #555759; /* Dark mark color */
+    -fx-text-fill: #000000; /* 单选按钮文本颜色为黑色 */
+    -fx-mark-color: #4682B4; /* 选中标记颜色为深蓝色 */
 }
 
+
 .check-box {
-    -fx-text-fill: #a9b7c6; /* Light gray text color for checkboxes */
-    -fx-box-color: #555759; /* Dark box color */
+    -fx-text-fill: #0080FF; /* Blue text color for checkboxes */
+    -fx-box-color: #FFFFFF; /* White box color */
     -fx-padding: 1; /* Reduce padding to make the checkbox smaller */
     -fx-font-size: 10px; /* Reduce font size to make the checkbox smaller */
 }
 
 .tooltip {
-    -fx-background-color: #4a4c4e; /* Lighter background for tooltips */
-    -fx-text-fill: #a9b7c6; /* Light gray text color for tooltips */
+    -fx-background-color: #ADD8E6; /* Light blue background for tooltips */
+    -fx-text-fill: #FFFFFF; /* White text color for tooltips */
 }
 
 .tree-view {
-    -fx-background-color: #3c3f41; /* Dark background for tree view */
-    -fx-text-fill: #a9b7c6; /* Light gray text color for tree view */
+    -fx-background-color: linear-gradient(to bottom, #87CEEB, #FFFFFF); /* Blue and white gradient background */
+    -fx-text-fill: #000000; /* Black text color for tree view */
 }
 
 .tree-cell {
-    -fx-background-color: #3c3f41; /* Dark background for tree cells */
-    -fx-text-fill: #a9b7c6; /* Light gray text color for tree cells */
+    -fx-background-color: #87CEEB; /* Light blue background for tree cells */
+    -fx-text-fill: #000000; /* Black text color for tree cells */
 }
 
 .tree-cell .text {
-    -fx-fill: #a9b7c6; /* Light gray text color for tree cell text */
+    -fx-fill: #000000; /* Black text color for tree cell text */
     -fx-font-size: 15px; /* Slightly larger font size for better readability */
 }
 
 .tree-cell:selected {
-    -fx-background-color: #214283; /* Blue color for selected tree cells */
+    -fx-background-color: #0000FF; /* Blue color for selected tree cells */
     -fx-text-fill: white; /* White text for readability */
 }
 
 .menu-button {
-    -fx-background-color: #3c3f41; /* Dark background for menu buttons */
-    -fx-text-fill: #a9b7c6; /* Light gray text color for menu buttons */
+    -fx-background-color: #87CEEB; /* Light blue background for menu buttons */
+    -fx-text-fill: #FFFFFF; /* White text color for menu buttons */
     -fx-font-size: 10px; /* Slightly larger font size for better readability */
     -fx-padding: 0; /* Padding for the menu button */
     -fx-border-width: 0; /* No border for the menu button */
@@ -126,65 +126,65 @@
 }
 
 .menu-button:hover {
-    -fx-background-color: #4a4c4e; /* Slightly lighter background on hover */
+    -fx-background-color: linear-gradient(to bottom, #BFEFFF, #FFFFFF); /* Light blue to white gradient on hover */
 }
 
 .tab-pane {
-    -fx-background-color: #3c3f41; /* Dark background for tab pane */
+    -fx-background-color: linear-gradient(to bottom, #BFEFFF, #FFFFFF); /* Light blue to white gradient for tab pane */
 }
 
 .tab-pane .tab-header-background {
-    -fx-background-color: #2b2b2b; /* Darker background for tab header */
+    -fx-background-color: #FFFFFF; /* White background for tab header */
 }
 
 .tab-pane .tab {
-    -fx-background-color: #3c3f41; /* Dark background for tabs */
-    -fx-text-fill: #a9b7c6; /* Light gray text color for tabs */
+    -fx-background-color: linear-gradient(to bottom, #BFEFFF, #FFFFFF); /* Light blue to white gradient for tabs */
+    -fx-text-fill: #000000; /* Black text color for tabs */
 }
 
 .tab-pane .tab:selected {
-    -fx-background-color: #214283; /* Blue color for selected tab */
+    -fx-background-color: #87CEEB; /* Light blue color for selected tab */
     -fx-text-fill: white; /* White text for readability */
 }
 
 .tab-pane .tab:hover {
-    -fx-background-color: #4a4c4e; /* Slightly lighter background on hover */
+    -fx-background-color: linear-gradient(to bottom, #BFEFFF, #FFFFFF); /* Light blue to white gradient on hover */
 }
 
 .tab-pane .tab .close-button {
-    -fx-background-color: #3c3f41; /* Dark background for close button */
-    -fx-text-fill: #a9b7c6; /* Light gray text color for close button */
+    -fx-background-color: #87CEEB; /* Light blue background for close button */
+    -fx-text-fill: #FFFFFF; /* White text color for close button */
 }
 
 .tab-pane .tab .close-button:hover {
-    -fx-background-color: #4a4c4e; /* Slightly lighter background on hover */
+    -fx-background-color: linear-gradient(to bottom, #BFEFFF, #FFFFFF); /* Light blue to white gradient on hover */
 }
 
 .tab-pane .tab .text {
-    -fx-fill: #a9b7c6; /* Light gray text color for tab text */
+    -fx-fill: #000000; /* Black text color for tab text */
 }
 
 .combo-box {
-    -fx-background-color: #3c3f41; /* Dark background for combo box */
-    -fx-text-fill: #a9b7c6; /* Light gray text color for combo box */
+    -fx-background-color: linear-gradient(to bottom, #BFEFFF, #FFFFFF); /* Light blue to white gradient for combo box */
+    -fx-text-fill: #000000; /* Black text color for combo box */
 }
 
 .combo-box  {
-    -fx-text-fill: #a9b7c6; /* Light gray text color for combo box label */
-    -fx-prompt-text-fill: #a9b7c6; /* Light gray prompt text color */
+    -fx-text-fill: #000000; /* Black text color for combo box label */
+    -fx-prompt-text-fill: #000000; /* Black prompt text color */
 }
 
 .combo-box .text {
-    -fx-fill: #a9b7c6; /* Light gray text color for combo box label */
+    -fx-fill: #000000; /* Black text color for combo box label */
 }
 
 .toggle-button {
-    -fx-background-color: #3c3f41; /* Dark background for toggle button */
-    -fx-text-fill: #a9b7c6; /* Light gray text color for toggle button */
-    -fx-border-color: #555759; /* Dark border color */
+    -fx-background-color: linear-gradient(to bottom, #BFEFFF, #FFFFFF); /* Light blue to white gradient for toggle button */
+    -fx-text-fill: #000000; /* Black text color for toggle button */
+    -fx-border-color: #87CEEB; /* Light blue border color */
 }
 
 .toggle-button:selected {
-    -fx-background-color: #214283; /* Blue color for selected toggle button */
+    -fx-background-color: #87CEEB; /* Light blue color for selected toggle button */
     -fx-text-fill: white; /* White text for readability */
 }
