@@ -5,6 +5,8 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.util.List;
+
 
 @EqualsAndHashCode(callSuper = true)//设为true时equals和hashcode方法将考虑/包含父类的属性
 @Entity
@@ -30,6 +32,9 @@ public class Student extends Person{
     private String homeTown;
     @Size(max=20)
     private String highSchool;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "student")
+    private List<Family> families;
 
     /*@Size(max = 50)
     private String className;*/

@@ -50,7 +50,7 @@ public class StudentController {
     public DataResponse getStudent()
     {
         String username = CommonMethod.getUsername();
-        Student s = studentRepository.findByStudentId(username);
+        Student s = studentRepository.findFullStudentByStudentId(username);
 
         Map student = BeanUtil.beanToMap(s) ;
         //student.put("courses",courseRepository.findCoursesByPersonId(map.get("personId")));
