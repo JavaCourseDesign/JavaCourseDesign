@@ -1,9 +1,15 @@
 package com.management.front.controller;
 
+import com.management.front.HelloApplication;
 import com.management.front.request.DataResponse;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.MapValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -19,54 +25,45 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Base64;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static com.management.front.util.HttpClientUtil.*;
 
 public class BasicInfoTab extends Tab {
     private Pagination pagination = new Pagination();
-    private String fileName;
     private PdfModel model;
-    Map student = new HashMap<>();
-    VBox vBox = new VBox();
-    GridPane gridPane = new GridPane();
-    ImageView photoArea = new ImageView();
-    private Button uploadButton = new Button("上传照片");
-    private TextField highSchoolField = new TextField();
-    private TextField familyMemberField = new TextField();
-    private TextField familyMemberPhoneField = new TextField();
-    private TextField addressField = new TextField();
-    private TextField homeTownField = new TextField();
-    private TextField phoneField = new TextField();
-    private TextField emailField = new TextField();
+    Map student;
+    //VBox vBox = new VBox();
 
-    public BasicInfoTab(Map student) {
+    @FXML private VBox vBox;
+    @FXML private ImageView photoArea;
+    @FXML private Label NAME;
+    @FXML private Label STUDENTID;
+    @FXML private Label MAJOR;
+    @FXML private Label name;
+    @FXML private Label studentId;
+    @FXML private Label major;
+    @FXML private Label idCardNum;
+    @FXML private Label gender;
+    @FXML private Label birthday;
+    @FXML private Label dept;
+    @FXML private Label administrativeClass;
+    @FXML private Label social;
+    @FXML private TextField phone;
+    @FXML private TextField email;
+    @FXML private TextField other;
+    @FXML private TableView family;
+    @FXML private TableColumn familyRelationship;
+    @FXML private TableColumn familyName;
+    @FXML private TableColumn familyAge;
+    @FXML private TableColumn familyPhone;
 
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("BasicInfoTab.fxml"));
-        fxmlLoader.setController(this);
-        try {
-            VBox content = fxmlLoader.load();
-            this.setContent(content);
-            this.setText("基本信息");
-        } catch (Exception e) {
-            e.printStackTrace(); // 处理加载异常
-        }
 
-
-        this.setText("基本信息");
-        this.setContent(vBox);
-        this.student = student;
-        highSchoolField.setText(student.get("highSchool") + "");
-        familyMemberField.setText(student.get("familyMember") + "");
-        familyMemberPhoneField.setText(student.get("familyMemberPhone") + "");
-        addressField.setText(student.get("address") + "");
-        homeTownField.setText(student.get("homeTown") + "");
-        phoneField.setText(student.get("phone") + "");
-        emailField.setText(student.get("email") + "");
-        // vBox.getChildren().add(photoArea);
-        vBox.getChildren().add(photoArea);
-        vBox.getChildren().add(uploadButton);
-        uploadButton.setOnMouseClicked(event -> {
+    @FXML
+    private void initialize() {
+        photoArea.setStyle("-fx-border-color: black;-fx-border-width: 1px");
+        photoArea.setOnMouseClicked(event -> {
             FileChooser fileChooser = new FileChooser();
             fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.gif"));
             File file = fileChooser.showOpenDialog(null);
@@ -76,25 +73,33 @@ public class BasicInfoTab extends Tab {
             }
         });
 
-        photoArea.setFitHeight(200);
-        photoArea.setFitWidth(200);
-        photoArea.setPickOnBounds(true);
-        photoArea.setPreserveRatio(true);
-        photoArea.setStyle("-fx-border-color: #000000; -fx-border-width: 10;");
-        display();
+        familyRelationship.setCellValueFactory(new MapValueFactory<>("relationship"));
+        familyName.setCellValueFactory(new MapValueFactory<>("name"));
+        familyAge.setCellValueFactory(new MapValueFactory<>("age"));
+        familyPhone.setCellValueFactory(new MapValueFactory<>("phone"));
 
-        //给gridpane设置浅灰色横隔
-        gridPane.setGridLinesVisible(true);
-        vBox.getChildren().add(gridPane);
-        Button saveButton = new Button("保存");
-        saveButton.setOnMouseClicked(event -> save());
-        vBox.getChildren().add(saveButton);
-        Button printIntroduceButton = new Button("打印个人简历");
-        vBox.getChildren().add(printIntroduceButton);
-        printIntroduceButton.setOnMouseClicked(event -> showPdf());
-        refresh();
+        familyRelationship.setCellFactory(TextFieldTableCell.forTableColumn());
+        familyName.setCellFactory(TextFieldTableCell.forTableColumn());
+        familyAge.setCellFactory(TextFieldTableCell.forTableColumn());
+        familyPhone.setCellFactory(TextFieldTableCell.forTableColumn());
+
+
+    }
+    public BasicInfoTab(Map<String, Object> student) {
+        this.student = student;
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("/studentFxml/BasicInfoTab.fxml")); // 确保路径正确
+        fxmlLoader.setController(this);
+        try {
+            VBox content = fxmlLoader.load();
+            this.setContent(content);
+            this.setText("基本信息");
+            refresh();
+        } catch (IOException e) {
+            e.printStackTrace(); // 处理加载异常
+        }
     }
 
+    @FXML
     public void showPdf() {
         //System.out.println(requestByteData("/getStudentIntroduce",student));
         byte[] data = requestByteData("/getStudentIntroduce", student);
@@ -137,17 +142,18 @@ public class BasicInfoTab extends Tab {
     }
 
     private Map<String, String> newMapFromFields() {
-        Map<String, String> m = new HashMap<>();
-        m.put("highSchool", highSchoolField.getText());
-        m.put("familyMember", familyMemberField.getText());
-        m.put("familyMemberPhone", familyMemberPhoneField.getText());
-        m.put("address", addressField.getText());
-        m.put("homeTown", homeTownField.getText());
-        m.put("phone", phoneField.getText());
-        m.put("email", emailField.getText());
+        Map m = new HashMap<>();
+        m.put("phone", phone.getText());
+        m.put("email", email.getText());
+        m.put("other", other.getText());
+        //存入家庭成员信息
+        ObservableList<Map> familyItems = family.getItems();
+        List<Map> familyList = familyItems;
+        m.put("families", familyList);
         return m;
     }
 
+    @FXML
     public void save() {
         DataResponse r = request("/saveStudentPersonalInfo", newMapFromFields());
         if (r.getCode() == 0) {
@@ -157,70 +163,33 @@ public class BasicInfoTab extends Tab {
         }
     }
 
-    public void refresh() {
-        Label label1 = new Label("毕业高中信息");
-        label1.setStyle("-fx-font: 20 arial; -fx-text-fill: blue;");
-        Label label2 = new Label("家庭信息");
-        label2.setStyle("-fx-font: 20 arial; -fx-text-fill: blue;");
-        Label label3 = new Label("校内联系方式");
-        label3.setStyle("-fx-font: 20 arial; -fx-text-fill: blue;");
-        Text studentIdText = new Text(student.get("studentId") + "");
-        Text nameText = new Text(student.get("name") + "");
-        Text genderText = new Text(student.get("gender") + "");
-        Text majorText = new Text(student.get("major") + "");
-        Text deptText = new Text(student.get("dept") + "");
-        Text classNameText = new Text(student.get("className") + "");
-        Text socilaText = new Text(student.get("social") + "");
-        Text cardText = new Text(student.get("idCardNum") + "");
-        Text birthdayText = new Text(student.get("birthday") + "");
+    private void refresh() {
+        if (student != null) {
+            NAME.setText((String) student.get("name"));
+            STUDENTID.setText((String) student.get("studentId"));
+            MAJOR.setText((String) student.get("major"));
+            name.setText((String) student.get("name"));
+            studentId.setText((String) student.get("studentId"));
+            major.setText((String) student.get("major"));
+            idCardNum.setText((String) student.get("idCardNum"));
+            gender.setText((String) student.get("gender"));
+            birthday.setText((String) student.get("birthday"));
+            dept.setText((String) student.get("dept"));
+            administrativeClass.setText((String) student.get("className")); // 假设student Map中的键为className
+            social.setText((String) student.get("social"));
+            phone.setText((String) student.get("phone"));
+            email.setText((String) student.get("email"));
+            other.setText((String) student.get("other")); // 假设有other键
 
-
-        gridPane.addColumn(0,
-                new Label("学号:"),
-                new Label("姓名:"),
-                new Label("性别:"),
-                new Label("专业:"),
-                new Label("学院:"),
-                new Label("班级:"),
-                new Label("政治面貌:"),
-                new Label("身份证号:"),
-                new Label("出生日期:"),
-                label1,
-                new Separator(),
-                new Label("毕业高中:"),
-                label2,
-                new Separator(),
-                new Label("家庭联系人:"),
-                new Label("家庭联系电话:"),
-                new Label("家庭住址:"),
-                new Label("家庭籍贯:"),
-                label3,
-                new Separator(),
-                new Label("电话:"),
-                new Label("email:")
-        );
-        gridPane.addColumn(1,
-                studentIdText,
-                nameText,
-                genderText,
-                majorText,
-                deptText,
-                classNameText,
-                socilaText,
-                cardText,
-                birthdayText,
-                new Text(),
-                new Separator(),
-                highSchoolField,
-                new Text(),
-                new Separator(),
-                familyMemberField,
-                familyMemberPhoneField,
-                addressField,
-                homeTownField,
-                new Text(),
-                new Separator(),
-                phoneField,
-                emailField);
+            System.out.println(student.get("families"));
+            ObservableList<Map> familyItems = FXCollections.observableArrayList();
+            List<Map> familyList = (List<Map>) student.get("families");
+            //familyList.add(Map.of());
+            if(student.get("families") != null) {
+                familyItems = FXCollections.observableArrayList(familyList);
+            }
+            family.setItems(familyItems);
+        }
+        display();
     }
 }

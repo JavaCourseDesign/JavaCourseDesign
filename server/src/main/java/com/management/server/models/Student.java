@@ -24,16 +24,12 @@ public class Student extends Person{
 
     @Size(max = 20)
     private String major;
-    @Size(max = 50)
-    private String familyMember;
-    @Size(max = 20)
-    private String familyMemberPhone;
     @Size(max=20)
     private String homeTown;
     @Size(max=20)
     private String highSchool;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "student")
+    @OneToMany(fetch = FetchType.LAZY,cascade = {CascadeType.ALL},orphanRemoval = true)
     private List<Family> families;
 
     /*@Size(max = 50)

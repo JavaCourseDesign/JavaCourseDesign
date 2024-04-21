@@ -2,14 +2,12 @@ package com.management.server.controllers;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
+import com.management.server.models.Family;
 import com.management.server.models.Innovation;
 import com.management.server.models.Person;
 import com.management.server.models.Student;
 import com.management.server.payload.response.DataResponse;
-import com.management.server.repositories.AdministrativeClassRepository;
-import com.management.server.repositories.CourseRepository;
-import com.management.server.repositories.InnovationRepository;
-import com.management.server.repositories.StudentRepository;
+import com.management.server.repositories.*;
 import com.management.server.util.CommonMethod;
 import com.openhtmltopdf.extend.FSSupplier;
 import com.openhtmltopdf.extend.impl.FSDefaultCacheStore;
@@ -28,10 +26,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.StringTokenizer;
+import java.util.*;
 
 @RestController
 public class StudentController {
@@ -46,6 +41,8 @@ public class StudentController {
     private AdministrativeClassRepository administrativeClassRepository;
     @Autowired
     private InnovationRepository innovationRepository;
+    @Autowired
+    private FamilyRepository familyRepository;
     @PostMapping("/getStudent")
     public DataResponse getStudent()
     {
@@ -97,16 +94,29 @@ public class StudentController {
         }
     }
     @PostMapping("/saveStudentPersonalInfo")
-    public DataResponse saveStudentPersonalInfo(@RequestBody Map<String,String> m)
+    public DataResponse saveStudentPersonalInfo(@RequestBody Map m)
     {
         String studentId = CommonMethod.getUsername();
         Student student = studentRepository.findByStudentId(studentId);
-        student.setPhone(m.get("phone"));
-        student.setAddress(m.get("address"));
-        student.setHomeTown(m.get("homeTown"));
-        student.setFamilyMember(m.get("familyMember"));
-        student.setFamilyMemberPhone(m.get("familyMemberPhone"));
-        student.setEmail(m.get("email"));
+
+        List<Map> familiesList= (List<Map>) m.get("families");
+        m.remove("families");
+
+        BeanUtil.fillBeanWithMap(m,student,true, CopyOptions.create().ignoreError());
+
+        List<Family> families = new ArrayList<>();
+        for(Map familyMap:familiesList)
+        {
+            familyMap.remove("personId");
+            Family family = BeanUtil.fillBeanWithMap(familyMap, new Family(), true, CopyOptions.create());
+            families.add(family);
+        }
+        familyRepository.saveAll(families);
+
+        // Update the families collection in the student object
+        //student.getFamilies().retainAll(families);
+        student.getFamilies().addAll(families);
+
         studentRepository.save(student);
         return new DataResponse(0,null,"保存成功");
     }

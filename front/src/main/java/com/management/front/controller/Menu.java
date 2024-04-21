@@ -2,6 +2,7 @@ package com.management.front.controller;
 
 import com.jfoenix.controls.JFXTreeView;
 import com.management.front.customComponents.EditableMapTable;
+import com.management.front.customComponents.EditableTableView;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
@@ -29,6 +30,7 @@ public class Menu extends SplitPane {
     TreeItem<String> item10 = new TreeItem<>("测试上传文件");
     TreeItem<String> item11 = new TreeItem<>("学生作业界面");
     TreeItem<String> item12 = new TreeItem<>("教师作业界面");
+    TreeItem<String> item13 = new TreeItem<>("组件测试");
      public Menu(){
          this.getStylesheets().add("dark-theme.css");
 
@@ -38,7 +40,7 @@ public class Menu extends SplitPane {
         menu.setPrefWidth(70);
         this.setDividerPositions(0.2);
 
-        root.getChildren().addAll(item1, item2, item3, item4,item5, item6,item7, item8,item9,item10 ,item11,item12);
+        root.getChildren().addAll(item1, item2, item3, item4,item5, item6,item7, item8,item9,item10 ,item11,item12,item13);
         menu.setRoot(root);
 
         this.getItems().add(menu);
@@ -57,6 +59,7 @@ public class Menu extends SplitPane {
                 case "测试上传文件":this.getItems().set(1,new FileUploadPage());break;
                 case "学生作业界面":this.getItems().set(1,new StudentHomeworkPage());break;
                 case "教师作业界面":this.getItems().set(1,new TeacherHomeworkPage());break;
+                case "组件测试":this.getItems().set(1,new EditableTableView<>());break;
             }
         });
     }

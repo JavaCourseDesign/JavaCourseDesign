@@ -4,17 +4,19 @@
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.management.front.controller.BasicInfoTab">
+<VBox prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1">
     <HBox prefHeight="100.0" prefWidth="200.0">
-        <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
+        <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" fx:id="photoArea" />
         <VBox prefHeight="200.0" prefWidth="100.0">
             <Label fx:id="NAME" />
             <Label fx:id="STUDENTID" />
             <Label fx:id="MAJOR" />
+            <Button text="保存" onAction="#save" />
+            <Button text="打印个人简历" onAction="#showPdf" />
         </VBox>
     </HBox>
     <TitledPane animated="false" text="基本信息">
-        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+        <AnchorPane>
             <GridPane>
                 <columnConstraints>
                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -55,12 +57,12 @@
     </TitledPane>
     <TitledPane animated="false" text="家庭信息">
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-             <TableView editable="true" prefHeight="200.0" prefWidth="200.0">
+             <TableView editable="true" fx:id="family">
                  <columns>
-                     <TableColumn prefWidth="75.0" text="关系" />
-                     <TableColumn prefWidth="75.0" text="姓名" />
-                     <TableColumn prefWidth="75.0" text="年龄" />
-                     <TableColumn prefWidth="75.0" text="电话" />
+                     <TableColumn text="关系" fx:id="familyRelationship"/>
+                     <TableColumn text="姓名" fx:id="familyName"/>
+                     <TableColumn text="年龄" fx:id="familyAge"/>
+                     <TableColumn text="电话" fx:id="familyPhone"/>
                  </columns>
              </TableView>
         </AnchorPane>
@@ -81,9 +83,9 @@
                 <Label GridPane.rowIndex="1" text="邮箱" />
                 <Label GridPane.rowIndex="2" text="其他" />
 
-                <Label GridPane.columnIndex="1" GridPane.rowIndex="0" fx:id="phone"/>
-                <Label GridPane.columnIndex="1" GridPane.rowIndex="1" fx:id="email"/>
-                <Label GridPane.columnIndex="1" GridPane.rowIndex="2" fx:id="other"/>
+                <TextField GridPane.columnIndex="1" GridPane.rowIndex="0" fx:id="phone"/>
+                <TextField GridPane.columnIndex="1" GridPane.rowIndex="1" fx:id="email"/>
+                <TextField GridPane.columnIndex="1" GridPane.rowIndex="2" fx:id="other"/>
             </GridPane>
         </AnchorPane>
     </TitledPane>
