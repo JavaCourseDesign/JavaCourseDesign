@@ -145,7 +145,29 @@ public class TeacherHomeworkPage extends SplitPane {
 
 
     private void deleteHomework() {
-
+        if(homeworkTable.getSelectedItems().isEmpty())
+        {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setContentText("请选择要删除的作业");
+            alert.showAndWait();
+            return;
+        }
+        Map m=new HashMap();
+        List<Map> list=new ArrayList<>(homeworkTable.getSelectedItems());
+        DataResponse r=request("/deleteHomework",list);
+        if(r.getCode()!=0)
+        {
+            Alert alert=new Alert(Alert.AlertType.ERROR);
+            alert.setContentText(r.getMsg());
+            alert.showAndWait();
+        }
+        else
+        {
+            Alert alert=new Alert(Alert.AlertType.INFORMATION);
+            alert.setContentText("删除成功");
+            alert.showAndWait();
+        }
+        displayHomeworks();
     }
 
     private void addHomework() {
@@ -217,7 +239,7 @@ public class TeacherHomeworkPage extends SplitPane {
         columns.add(deadlineColumn);
         columns.add(submitTimeColumn);
         columns.add(gradeColumn);
-        homeworkTable=new SearchableTableView(observableList,List.of("studentId","courseName","grade"),columns);
+        homeworkTable=new SearchableTableView(observableList,List.of("studentId","courseName","grade","deadline"),columns);
         this.getItems().add(homeworkTable);
     }
 }
