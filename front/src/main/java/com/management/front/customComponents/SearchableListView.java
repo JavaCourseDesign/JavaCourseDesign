@@ -31,7 +31,8 @@ public class SearchableListView extends HBox {
     private void initializeComponents() {
         setupSearchField();
         setupListView();
-        this.getChildren().addAll(selectedLabel, searchField, listView);
+        VBox vBox = new VBox(selectedLabel, searchField);
+        this.getChildren().addAll(vBox, listView);
     }
 
     private void setupSearchField() {

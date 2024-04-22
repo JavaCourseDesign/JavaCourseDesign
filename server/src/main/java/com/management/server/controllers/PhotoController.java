@@ -46,6 +46,10 @@ public class PhotoController {
             fileName=t.getPhoto();
         }
         try {
+            if(fileName==null||fileName.equals(""))
+            {
+                return new DataResponse(1,null,"请先上传文件！");
+            }
             fileName = URLDecoder.decode(fileName, StandardCharsets.UTF_8.toString());
             File file = new File(attachFolder +"Photo/"+ fileName);
             if(!file.exists())

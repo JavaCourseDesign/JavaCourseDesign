@@ -17,7 +17,7 @@ import java.util.Set;
 
 @Data
 @Table(name="course")
-@NamedEntityGraph(name = "Course",
+/*@NamedEntityGraph(name = "Course",
         attributeNodes = {
                 @NamedAttributeNode("lessons"),
                 //@NamedAttributeNode("persons")
@@ -25,7 +25,7 @@ import java.util.Set;
         subgraphs = {
                 //@NamedSubgraph(name = "Event.persons", attributeNodes = @NamedAttributeNode("persons"))
         }
-    )
+    )*/
 /*@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "name")//在递归中第二次出现时用name属性替代本对象避免无限递归
 @JsonIgnoreProperties(value = {"persons"})*/
 
@@ -56,7 +56,7 @@ public class Course{
     private Boolean chosen;//是否被选中，由controller根据具体人进行判断
 
 
-    @OneToMany(cascade = {CascadeType.ALL},orphanRemoval = true)
+    @OneToMany(fetch = FetchType.LAZY,cascade = {CascadeType.ALL},orphanRemoval = true)
     //@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "eventId")
     @JsonIgnore
     private List<Lesson> lessons;//可以通过get0和getSize得到开始结束周次
@@ -83,24 +83,29 @@ public class Course{
 
     private String preCourses;//用字符串存，不存对象了 存对象有一系列问题，包括但不限于无限递归、指向意义不明（前序课并不一定只有一个课序号，可能存在同名不同时的课程）
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "person_course")
+    //@JsonIgnore
     //@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "personId")
     //@JsonIgnoreProperties(value = {"courses"})
     private Set<Person> persons;
 
     //希望选课的学生
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "willing_student_course")
+    //@JsonIgnore
     private Set<Person> willingStudents;
 
     //lesson should be subClass of event, lesson to course should be many to one
     //course should not be subClass of event
 
-    public void setLessons(List<Lesson> lessons) {
-        this.lessons.clear();
-        if (lessons != null) {
-            this.lessons.addAll(lessons);
+    /*public void setLessons(List<Lesson> lessons) {
+        if(this.lessons!=null)
+        {
+            this.lessons.clear();
+            if (lessons != null) {
+                this.lessons.addAll(lessons);
+            }
         }
-    }
+    }*/
 }

@@ -32,19 +32,20 @@
     -fx-background-color: #2b2b2b; /* Background color matching root */
 }
 
-.table-view {
-    -fx-base: #3c3f41; /* Dark color for table rows */
-    -fx-control-inner-background: #2b2b2b; /* Darker background for the table */
-    -fx-table-cell-border-color: #555759; /* Border color for cells */
-    -fx-table-header-border-color: #555759; /* Border color for table header */
-}
-
 .list-view {
     -fx-base: #3c3f41; /* Dark color for list items */
     -fx-control-inner-background: #2b2b2b; /* Darker background for the list */
     -fx-cell-hover-color: #4a4c4e; /* Lighter color on hover */
 }
 
+
+.table-view {
+    -fx-base: #3c3f41; /* Dark color for table rows */
+    -fx-control-inner-background: #2b2b2b; /* Darker background for the table */
+    -fx-table-cell-border-color: #555759; /* Border color for cells */
+    -fx-table-header-border-color: #555759; /* Border color for table header */
+    -fx-highlight-text-fill: white; /* White text for highlighted cells */
+}
 
 .table-row-cell:filled:selected {
     -fx-background-color: #214283; /* Blue color for selected rows */
@@ -63,7 +64,15 @@
 
 .text-field:focused, .combo-box-base:focused {
     -fx-background-color: #4a4c4e; /* Lighter background color when focused */
+    -fx-text-fill: #a9b7c6;
 }
+
+.table .cell {
+    -fx-text-fill: #a9b7c6; /* Light gray text color for table cells */
+}
+
+
+
 
 .progress-bar {
     -fx-accent: #214283; /* Accent color for progress bars */
@@ -187,4 +196,22 @@
 .toggle-button:selected {
     -fx-background-color: #214283; /* Blue color for selected toggle button */
     -fx-text-fill: white; /* White text for readability */
+}
+
+.titled-pane {
+    -fx-background-color: #3c3f41; /* Dark background for titled pane */
+    -fx-text-fill: #a9b7c6; /* Light gray text color for titled pane */
+}
+
+.titled-pane .title {
+    -fx-background-color: #38444d; /* Dark background for titled pane title */
+    -fx-text-fill: #a9b7c6; /* Light gray text color for titled pane title */
+}
+
+.titled-pane:expanded {
+    -fx-background-color: #214283; /* Blue color for expanded titled pane */
+}
+
+.titled-pane .content {
+    -fx-background-color: #2b2b2b; /* Darker background for the content area */
 }

@@ -16,7 +16,7 @@ import java.util.Map;
 
 import static com.management.front.util.HttpClientUtil.request;
 
-public class ScoreManagementPage extends SplitPane {
+public class ScoreManagementPage extends SplitPane {//成绩录入界面
     SearchableTableView scoreTable;
     ObservableList<Map> observableList= FXCollections.observableArrayList();
     TextField studentIdField = new TextField();

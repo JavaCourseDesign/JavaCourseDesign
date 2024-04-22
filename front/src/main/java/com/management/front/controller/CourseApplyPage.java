@@ -36,7 +36,6 @@ public class CourseApplyPage extends SplitPane {
         this.setWidth(1000);
         this.setDividerPosition(0, 0.7);
         this.setOrientation(Orientation.VERTICAL);
-        this.getStylesheets().add("dark-theme.css");
         initializeWeekTimeTable();
         initializeTable();
         displayCourses();
@@ -165,7 +164,7 @@ public class CourseApplyPage extends SplitPane {
 
         filter.put("getChosenState", "true");
 
-        List<Map> courseList = (ArrayList) request("/getAllCourses", filter).getData();
+        List<Map> courseList = (ArrayList) request("/getAllCoursesForStudent", filter).getData();
         observableList.clear();
         observableList.addAll(FXCollections.observableArrayList(courseList));
         courseTable.setData(observableList);

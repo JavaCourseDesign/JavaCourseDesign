@@ -1,19 +1,10 @@
 package com.management.front.controller;
 
 import com.jfoenix.controls.JFXTreeView;
-import com.management.front.customComponents.EditableMapTable;
 import com.management.front.customComponents.EditableTableView;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeView;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
-
-import java.io.IOException;
-import java.util.List;
-import java.util.Map;
-
-import static com.management.front.util.HttpClientUtil.request;
 
 public class Menu extends SplitPane {
     JFXTreeView<String> menu = new JFXTreeView<>();
@@ -31,8 +22,9 @@ public class Menu extends SplitPane {
     TreeItem<String> item11 = new TreeItem<>("学生作业界面");
     TreeItem<String> item12 = new TreeItem<>("教师作业界面");
     TreeItem<String> item13 = new TreeItem<>("组件测试");
-     public Menu(){
-         this.getStylesheets().add("dark-theme.css");
+
+    public Menu() {
+        //this.getStylesheets().add("dark-theme.css");
 
 
         root.setExpanded(true);
@@ -40,26 +32,52 @@ public class Menu extends SplitPane {
         menu.setPrefWidth(70);
         this.setDividerPositions(0.2);
 
-        root.getChildren().addAll(item1, item2, item3, item4,item5, item6,item7, item8,item9,item10 ,item11,item12,item13);
+        root.getChildren().addAll(item1, item2, item3, item4, item5, item6, item7, item8, item9, item10, item11, item12, item13);
         menu.setRoot(root);
 
         this.getItems().add(menu);
         this.getItems().add(new Pane());
         menu.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             switch (newValue.getValue()) {
-                case "学生管理": this.getItems().set(1,new StudentManagementPage());break;
-                case "教师管理": this.getItems().set(1,new TeacherManagementPage());break;
-                case "课程管理": this.getItems().set(1,new CourseManagementPage());break;
-                case "班级管理": this.getItems().set(1,new AdministrativeClassManagementPage());break;
-                case "学生个人信息":this.getItems().set(1,new StudentPersonalInfoPage());break;
-                case "课程表":this.getItems().set(1,new HomePage());break;
-                case "创新实践管理":this.getItems().set(1,new InnovationManagementPage());break;
-                case "课程申请":this.getItems().set(1,new CourseApplyPage());break;
-                case "学生日志信息管理":this.getItems().set(1,new StudentLogManagementPage());break;
-                case "测试上传文件":this.getItems().set(1,new FileUploadPage());break;
-                case "学生作业界面":this.getItems().set(1,new StudentHomeworkPage());break;
-                case "教师作业界面":this.getItems().set(1,new TeacherHomeworkPage());break;
-                case "组件测试":this.getItems().set(1,new EditableTableView<>());break;
+                case "学生管理":
+                    this.getItems().set(1, new StudentManagementPage());
+                    break;
+                case "教师管理":
+                    this.getItems().set(1, new TeacherManagementPage());
+                    break;
+                case "课程管理":
+                    this.getItems().set(1, new CourseManagementPage());
+                    break;
+                case "班级管理":
+                    this.getItems().set(1, new AdministrativeClassManagementPage());
+                    break;
+                case "学生个人信息":
+                    this.getItems().set(1, new StudentPersonalInfoPage());
+                    break;
+                case "课程表":
+                    this.getItems().set(1, new HomePage());
+                    break;
+                case "创新实践管理":
+                    this.getItems().set(1, new InnovationManagementPage());
+                    break;
+                case "课程申请":
+                    this.getItems().set(1, new CourseApplyPage());
+                    break;
+                case "学生日志信息管理":
+                    this.getItems().set(1, new StudentLogManagementPage());
+                    break;
+                case "测试上传文件":
+                    this.getItems().set(1, new FileUploadPage());
+                    break;
+                case "学生作业界面":
+                    this.getItems().set(1, new StudentHomeworkPage());
+                    break;
+                case "教师作业界面":
+                    this.getItems().set(1, new TeacherHomeworkPage());
+                    break;
+                case "组件测试":
+                    this.getItems().set(1, new EditableTableView<>());
+                    break;
             }
         });
     }

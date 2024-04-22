@@ -15,7 +15,7 @@
             <Button text="打印个人简历" onAction="#showPdf" />
         </VBox>
     </HBox>
-    <TitledPane animated="false" text="基本信息">
+    <TitledPane animated="false" text="基本信息" collapsible="false">
         <AnchorPane>
             <GridPane>
                 <columnConstraints>
@@ -55,19 +55,19 @@
             </GridPane>
         </AnchorPane>
     </TitledPane>
-    <TitledPane animated="false" text="家庭信息">
+    <TitledPane animated="false" text="家庭信息" collapsible="false">
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
              <TableView editable="true" fx:id="family">
                  <columns>
                      <TableColumn text="关系" fx:id="familyRelationship"/>
                      <TableColumn text="姓名" fx:id="familyName"/>
-                     <TableColumn text="年龄" fx:id="familyAge"/>
+                     <TableColumn text="生日" fx:id="familyAge"/>
                      <TableColumn text="电话" fx:id="familyPhone"/>
                  </columns>
              </TableView>
         </AnchorPane>
     </TitledPane>
-    <TitledPane animated="false" text="联系方式">
+    <TitledPane animated="false" text="联系方式" collapsible="false">
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
             <GridPane>
                 <columnConstraints>

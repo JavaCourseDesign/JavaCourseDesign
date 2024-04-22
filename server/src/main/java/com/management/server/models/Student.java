@@ -1,5 +1,6 @@
 package com.management.server.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
@@ -24,12 +25,14 @@ public class Student extends Person{
 
     @Size(max = 20)
     private String major;
+
     @Size(max=20)
     private String homeTown;
     @Size(max=20)
     private String highSchool;
 
     @OneToMany(fetch = FetchType.LAZY,cascade = {CascadeType.ALL},orphanRemoval = true)
+    @JsonIgnore
     private List<Family> families;
 
     /*@Size(max = 50)

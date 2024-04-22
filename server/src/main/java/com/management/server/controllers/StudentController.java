@@ -47,9 +47,10 @@ public class StudentController {
     public DataResponse getStudent()
     {
         String username = CommonMethod.getUsername();
-        Student s = studentRepository.findFullStudentByStudentId(username);
+        Student s = studentRepository.findByStudentId(username);
 
         Map student = BeanUtil.beanToMap(s) ;
+        student.put("families",s.getFamilies());
         //student.put("courses",courseRepository.findCoursesByPersonId(map.get("personId")));
         student.put("className",administrativeClassRepository.findAdministrativeClassByStudent(s)+"班");
         return new DataResponse(0,student,null);
@@ -82,10 +83,9 @@ public class StudentController {
     @PostMapping("/updateStudent")
     public DataResponse updateStudent(@RequestBody Map m) {
         String personId = (String) m.get("personId");
-        Optional<Student> optionalStudent = Optional.ofNullable(studentRepository.findByPersonId(personId));
-        if(optionalStudent.isPresent()) {
-            Student student = optionalStudent.get();
-            System.out.println(m);
+        Student student = studentRepository.findByPersonId(personId);
+        if(student != null) {
+            //System.out.println(m);
             BeanUtil.fillBeanWithMap(m, student, true, CopyOptions.create());
             studentRepository.save(student);
             return new DataResponse(0, null, "更新成功");
@@ -98,6 +98,8 @@ public class StudentController {
     {
         String studentId = CommonMethod.getUsername();
         Student student = studentRepository.findByStudentId(studentId);
+
+        student.getFamilies().clear();
 
         List<Map> familiesList= (List<Map>) m.get("families");
         m.remove("families");
@@ -112,9 +114,6 @@ public class StudentController {
             families.add(family);
         }
         familyRepository.saveAll(families);
-
-        // Update the families collection in the student object
-        //student.getFamilies().retainAll(families);
         student.getFamilies().addAll(families);
 
         studentRepository.save(student);

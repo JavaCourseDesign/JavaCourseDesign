@@ -16,7 +16,7 @@ import java.util.List;
 @Repository
 @Transactional
 public interface CourseRepository extends JpaRepository<Course,String> {
-    @EntityGraph(value = "Course", type = EntityGraph.EntityGraphType.LOAD)
+    //@EntityGraph(value = "Course", type = EntityGraph.EntityGraphType.LOAD)
     List<Course> findAll();
     Course findByCourseId(String courseId);
     @Query("SELECT c FROM Course c JOIN c.persons p WHERE p.personId = :personId")

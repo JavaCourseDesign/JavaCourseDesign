@@ -84,6 +84,7 @@ public class StudentManagementPage extends SplitPane {
         studentTable.setOnItemClick(student -> {
             if(student!=null)
             {
+                System.out.println("student:::"+student);
                 studentIdField.setText((String) student.get("studentId"));
                 nameField.setText((String) student.get("name"));
                 genderField.setText((String) student.get("gender"));

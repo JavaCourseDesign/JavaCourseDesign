@@ -1,32 +1,26 @@
 package com.management.server.repositories;
 
-import com.management.server.models.Course;
-import com.management.server.models.Person;
 import com.management.server.models.Student;
 import jakarta.transaction.Transactional;
-import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
 
 
 @Repository
 @Transactional
 public interface StudentRepository extends JpaRepository<Student,String> {
     //查询完整的学生信息，包括懒加载的内容
-    @EntityGraph(attributePaths = {"families"})
+    /*@EntityGraph(attributePaths = {"families"})
     @Query("select s from Student s where s.studentId = :studentId")
-    Student findFullStudentByStudentId(@Param("studentId") String studentId);
+    Student findFullStudentByStudentId(@Param("studentId") String studentId);*/
 
     Student findByStudentId(String studentId);
     Student findByPersonId(String personId);
     List<Student> findAll();
     boolean existsByStudentId(String studentId);
-    Integer deleteAllByStudentId(String studentId);
+    void deleteAllByStudentId(String studentId);
     Integer deleteAllByPersonId(String personId);
 
     /*Optional<Student> findByPersonPersonId(Integer personId);

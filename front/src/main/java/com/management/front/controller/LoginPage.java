@@ -30,7 +30,7 @@ public class LoginPage extends GridPane {
     private JFXButton registerButton = new JFXButton("注册");
     private JFXButton switchToLoginButton = new JFXButton("返回登录");
 
-    public LoginPage() throws IOException {
+    public LoginPage() {
         setupUI();
         setupActions();
         this.getStylesheets().add("dark-theme.css");

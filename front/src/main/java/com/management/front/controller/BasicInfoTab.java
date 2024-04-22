@@ -4,6 +4,7 @@ import com.management.front.HelloApplication;
 import com.management.front.request.DataResponse;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -75,13 +76,26 @@ public class BasicInfoTab extends Tab {
 
         familyRelationship.setCellValueFactory(new MapValueFactory<>("relationship"));
         familyName.setCellValueFactory(new MapValueFactory<>("name"));
-        familyAge.setCellValueFactory(new MapValueFactory<>("age"));
+        familyAge.setCellValueFactory(new MapValueFactory<>("birthday"));
         familyPhone.setCellValueFactory(new MapValueFactory<>("phone"));
 
         familyRelationship.setCellFactory(TextFieldTableCell.forTableColumn());
         familyName.setCellFactory(TextFieldTableCell.forTableColumn());
         familyAge.setCellFactory(TextFieldTableCell.forTableColumn());
         familyPhone.setCellFactory(TextFieldTableCell.forTableColumn());
+
+        familyRelationship.setOnEditCommit(
+                (EventHandler<TableColumn.CellEditEvent<Map, String>>) t -> (t.getTableView().getItems().get(t.getTablePosition().getRow())).put("relationship", t.getNewValue())
+        );
+        familyName.setOnEditCommit(
+                (EventHandler<TableColumn.CellEditEvent<Map, String>>) t -> (t.getTableView().getItems().get(t.getTablePosition().getRow())).put("name", t.getNewValue())
+        );
+        familyAge.setOnEditCommit(
+                (EventHandler<TableColumn.CellEditEvent<Map, String>>) t -> (t.getTableView().getItems().get(t.getTablePosition().getRow())).put("birthday", t.getNewValue())
+        );
+        familyPhone.setOnEditCommit(
+                (EventHandler<TableColumn.CellEditEvent<Map, String>>) t -> (t.getTableView().getItems().get(t.getTablePosition().getRow())).put("phone", t.getNewValue())
+        );
 
 
     }
@@ -150,6 +164,7 @@ public class BasicInfoTab extends Tab {
         ObservableList<Map> familyItems = family.getItems();
         List<Map> familyList = familyItems;
         m.put("families", familyList);
+        System.out.println(m);
         return m;
     }
 
