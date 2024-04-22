@@ -14,9 +14,7 @@ import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -32,34 +30,67 @@ import java.util.Map;
 import static com.management.front.util.HttpClientUtil.*;
 
 public class BasicInfoTab extends Tab {
-    private Pagination pagination = new Pagination();
-    private PdfModel model;
     Map student;
+    private final Pagination pagination = new Pagination();
+    private PdfModel model;
     //VBox vBox = new VBox();
+    @FXML
+    private ImageView photoArea;
+    @FXML
+    private Label NAME;
+    @FXML
+    private Label STUDENTID;
+    @FXML
+    private Label MAJOR;
+    @FXML
+    private Label name;
+    @FXML
+    private Label studentId;
+    @FXML
+    private Label major;
+    @FXML
+    private Label idCardNum;
+    @FXML
+    private Label gender;
+    @FXML
+    private Label birthday;
+    @FXML
+    private Label dept;
+    @FXML
+    private Label administrativeClass;
+    @FXML
+    private Label social;
+    @FXML
+    private TextField phone;
+    @FXML
+    private TextField email;
+    @FXML
+    private TextField other;
+    @FXML
+    private TableView family;
+    @FXML
+    private TableColumn familyRelationship;
+    @FXML
+    private TableColumn familyName;
+    @FXML
+    private TableColumn familyAge;
+    @FXML
+    private TableColumn familyPhone;
 
-    @FXML private VBox vBox;
-    @FXML private ImageView photoArea;
-    @FXML private Label NAME;
-    @FXML private Label STUDENTID;
-    @FXML private Label MAJOR;
-    @FXML private Label name;
-    @FXML private Label studentId;
-    @FXML private Label major;
-    @FXML private Label idCardNum;
-    @FXML private Label gender;
-    @FXML private Label birthday;
-    @FXML private Label dept;
-    @FXML private Label administrativeClass;
-    @FXML private Label social;
-    @FXML private TextField phone;
-    @FXML private TextField email;
-    @FXML private TextField other;
-    @FXML private TableView family;
-    @FXML private TableColumn familyRelationship;
-    @FXML private TableColumn familyName;
-    @FXML private TableColumn familyAge;
-    @FXML private TableColumn familyPhone;
 
+    public BasicInfoTab(Map<String, Object> student) {
+        this.student = student;
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("/studentFxml/BasicInfoTab.fxml")); // 确保路径正确
+        fxmlLoader.setController(this);
+        try {
+            VBox content = fxmlLoader.load();
+            this.setContent(content);
+            this.setText("基本信息");
+            refresh();
+        } catch (IOException e) {
+            e.printStackTrace(); // 处理加载异常
+        }
+    }
 
     @FXML
     private void initialize() {
@@ -98,19 +129,6 @@ public class BasicInfoTab extends Tab {
         );
 
 
-    }
-    public BasicInfoTab(Map<String, Object> student) {
-        this.student = student;
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("/studentFxml/BasicInfoTab.fxml")); // 确保路径正确
-        fxmlLoader.setController(this);
-        try {
-            VBox content = fxmlLoader.load();
-            this.setContent(content);
-            this.setText("基本信息");
-            refresh();
-        } catch (IOException e) {
-            e.printStackTrace(); // 处理加载异常
-        }
     }
 
     @FXML
@@ -200,7 +218,7 @@ public class BasicInfoTab extends Tab {
             ObservableList<Map> familyItems = FXCollections.observableArrayList();
             List<Map> familyList = (List<Map>) student.get("families");
             //familyList.add(Map.of());
-            if(student.get("families") != null) {
+            if (student.get("families") != null) {
                 familyItems = FXCollections.observableArrayList(familyList);
             }
             family.setItems(familyItems);

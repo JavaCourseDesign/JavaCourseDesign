@@ -232,7 +232,7 @@ public class CourseManagementPage extends SplitPane {
 
         observableList.add(Map.of("persons",List.of(),"lessons",List.of())); // 添加一个空行用于添加
 
-        observableList.addAll(FXCollections.observableArrayList((ArrayList) request("/getAllCoursesForStudent", new HashMap<>()).getData()));
+        observableList.addAll(FXCollections.observableArrayList((ArrayList) request("/getAllCourses", new HashMap<>()).getData()));
         courseTable.setData(observableList);
 
         //System.out.println(observableList);
