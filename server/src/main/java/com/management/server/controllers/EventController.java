@@ -1,9 +1,6 @@
 package com.management.server.controllers;
 
-import com.management.server.models.DailyActivity;
-import com.management.server.models.Event;
-import com.management.server.models.Person;
-import com.management.server.models.Student;
+import com.management.server.models.*;
 import com.management.server.payload.response.DataResponse;
 import com.management.server.repositories.*;
 import jakarta.validation.Valid;
@@ -30,19 +27,31 @@ public class EventController {
 
     @Autowired
     private TeacherRepository teacherRepository;
-    @PostMapping("/getAllEvents")
-    public DataResponse getAllEvents()
-    {
-        return new DataResponse(0,eventRepository.findAll(),null);
-    }
-    @PostMapping("/getEventsByStudent")
-    public DataResponse getEventsByStudent(@RequestBody Map m)
-    {
-        Student student=studentRepository.findByStudentId((String) m.get("studentId"));
-        return new DataResponse(0,eventRepository.findEventsByPerson(student),null);
-    }
-}
 
+    @PostMapping("/getAllEvents")
+    public DataResponse getAllEvents() {
+        return new DataResponse(0, eventRepository.findAll(), null);
+    }
+
+    @PostMapping("/getAllEventsExceptLessons")
+    public DataResponse getAllEventsExceptLessons() {
+        List<Event> list = eventRepository.findAll();
+        List<Event> events = new ArrayList<>();
+        for (Event e : list) {
+            if (!(e instanceof Lesson)) {
+                events.add(e);
+            }
+        }
+        return new DataResponse(0, events, null);
+    }
+
+    @PostMapping("/getEventsByStudent")
+    public DataResponse getEventsByStudent(@RequestBody Map m) {
+        Student student = studentRepository.findByStudentId((String) m.get("studentId"));
+        return new DataResponse(0, eventRepository.findEventsByPerson(student), null);
+    }
+
+}
 //getAllEvents测试代码
 /*Student s=new Student();
         s.setName("tst");

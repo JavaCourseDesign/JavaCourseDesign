@@ -6,12 +6,12 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Base64;
 
 @Component
@@ -52,6 +52,20 @@ public class FileUtil {
             }
         }catch(Exception e){
             return new DataResponse(1, null, "下载错误！");
+        }
+    }
+    public static void deleteFile(String directory, String fileName) {
+        String decoded;
+        try {
+            decoded=URLDecoder.decode(fileName, StandardCharsets.UTF_8.toString());
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
+        Path filePath = Paths.get(attachFolder+directory+"/"+decoded);
+        try {
+            Files.delete(filePath);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }

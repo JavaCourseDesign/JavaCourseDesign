@@ -10,7 +10,6 @@ import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.MapValueFactory;
 import javafx.scene.layout.*;
-import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 
 import java.io.File;
@@ -38,13 +37,9 @@ class StudentAbsenceManagementTab extends Tab {
 
     private SearchableTableView absenceTable;
     private VBox controlPanel = new VBox();
+    private SearchableListView studentListView=new SearchableListView(FXCollections.observableArrayList((ArrayList) request("/getAllStudents",null).getData()), List.of("name","studentId"));
     private ObservableList<Map> observableList= FXCollections.observableArrayList();
-    private SearchableListView eventListView=new SearchableListView(FXCollections.observableArrayList((ArrayList) request("/getAllEvents",null).getData()), List.of("name","time"));
-    private ComboBox typeField = new ComboBox(FXCollections.observableArrayList(
-            "学生", "教师"
-    ));
-    private TextField idField = new TextField("201921000");
-    private TextField nameField = new TextField("wzk");
+    private SearchableListView eventListView=new SearchableListView(FXCollections.observableArrayList((ArrayList) request("/getAllEventsExceptLessons",null).getData()), List.of("name","time"));
 
     public StudentAbsenceManagementTab() {
         this.setText("学生请假信息管理");
@@ -55,15 +50,14 @@ class StudentAbsenceManagementTab extends Tab {
         displayAbsences();
     }
     private Map newMapFromFields(Map m) {
-        m.put("id", idField.getText());
-        m.put("type", typeField.getValue());
-        m.put("name", nameField.getText());
+        m.put("students",studentListView.getSelectedItems());
         m.put("events",eventListView.getSelectedItems());
         return m;
     }
     private void displayAbsences() {
         observableList.clear();
-        ArrayList<Map> list=(ArrayList<Map>) request("/getAllAbsences", null).getData();
+        ArrayList<Map> list=(ArrayList<Map>) request("/getAllStudentAbsences", null).getData();
+        System.out.println(list);
         for(Map m:list)
         {
             if(m.get("person")!=null)
@@ -71,24 +65,25 @@ class StudentAbsenceManagementTab extends Tab {
                 Map person=(Map) m.get("person");
                 m.put("name",person.get("name"));
             }
+            if(m.get("event")!=null)
+            {
+                Map event=(Map) m.get("event");
+                m.put("time",event.get("time"));
+            }
         }
         observableList.addAll(FXCollections.observableArrayList(list));
         absenceTable.setData(observableList);
-        System.out.println(observableList);
+        //System.out.println(observableList);
     }
 
     private void initializeControlPanel() {
         controlPanel.setMinWidth(200);
         controlPanel.setSpacing(10);
         controlPanel.setAlignment(Pos.CENTER);
-        Label text = new Label("临时添加缺勤信息");
+        Label text = new Label("添加学生重要事件缺勤信息");
         controlPanel.getChildren().add(text);
-        controlPanel.getChildren().add(new Label("学号工号:"));
-        controlPanel.getChildren().add(idField);
-        controlPanel.getChildren().add(new Label("身份:"));
-        controlPanel.getChildren().add(typeField);
-        controlPanel.getChildren().add(new Label("姓名:"));
-        controlPanel.getChildren().add(nameField);
+        controlPanel.getChildren().add(new Label("学生:"));
+        controlPanel.getChildren().add(studentListView);
         controlPanel.getChildren().add(new Label("请假事件:"));
         controlPanel.getChildren().add(eventListView);
         Button addButton = new Button("添加");
@@ -115,7 +110,6 @@ class StudentAbsenceManagementTab extends Tab {
             }
             displayAbsences();
         });
-
         Button rejectButton=new Button("不通过");
         rejectButton.setOnMouseClicked(e->{
             List<Map> selectedItems=absenceTable.getSelectedItems();
@@ -142,38 +136,22 @@ class StudentAbsenceManagementTab extends Tab {
         deleteButton.setOnMouseClicked(e->
         {
 
-
         });
         controlPanel.getChildren().addAll(addButton,hBox,deleteButton);
         splitPane.getItems().add(controlPanel);
     }
 
     private void initializeTable() {
-        TableColumn<Map,String> personColumn= new TableColumn<>("学生/教师");
+        TableColumn<Map,String> studentColumn= new TableColumn<>("学生");
+        TableColumn<Map,String> studentIdColumn= new TableColumn<>("学生学号");
         TableColumn<Map,String> offReasonColumn= new TableColumn<>("请假原因");
         TableColumn<Map,String> timeColumn= new TableColumn<>("请假时间");
         TableColumn<Map,String> destinationColumn= new TableColumn<>("请假去向");
         TableColumn<Map,String> statusColumn= new TableColumn<>("状态");
-       /* personColumn.setCellValueFactory(data->{
-            if(data.getValue()!=null)
-            {
-                Map<String,Object> person=(Map<String,Object>) data.getValue().get("person");
-                String name=(String) person.get("name");
-                return new SimpleStringProperty(name);
-            }
-            else return new SimpleStringProperty("");
-        });*/
-        personColumn.setCellValueFactory(new MapValueFactory<>("name"));
+        studentColumn.setCellValueFactory(new MapValueFactory<>("name"));
+        studentIdColumn.setCellValueFactory(new MapValueFactory<>("studentId"));
         offReasonColumn.setCellValueFactory(new MapValueFactory<>("offReason"));
-        timeColumn.setCellValueFactory(data->
-        {
-            if(data.getValue()!=null) {
-                Map<String, Object> person = (Map<String, Object>) data.getValue().get("event");
-                String time = (String) person.get("time");
-                return new SimpleStringProperty(time);
-            }
-            else return new SimpleStringProperty("");
-        });
+        timeColumn.setCellValueFactory(new MapValueFactory<>("time"));
         destinationColumn.setCellValueFactory(new MapValueFactory<>("destination"));
         statusColumn.setCellValueFactory(data->{
             if(data.getValue()==null)
@@ -187,48 +165,55 @@ class StudentAbsenceManagementTab extends Tab {
                 return new SimpleStringProperty("未通过");
         });
         List<TableColumn<Map, ?>> columns = new ArrayList<>();
-        columns.add(personColumn);
+        columns.add(studentColumn);
+        columns.add(studentIdColumn);
         columns.add(offReasonColumn);
         columns.add(timeColumn);
         columns.add(destinationColumn);
         columns.add(statusColumn);
-        absenceTable = new SearchableTableView(observableList,List.of("name","isApproved"),columns);
+        absenceTable = new SearchableTableView(observableList,List.of("name","time","isApproved"),columns);
         splitPane.getItems().add(absenceTable);
     }
     private void addAbsence()
     {
         Map m1 = newMapFromFields(new HashMap());
-        List<Map> list=(List<Map>)m1.get("events");
-        if(list.isEmpty())
+        ArrayList<Map> eventList=(ArrayList<Map>)m1.get("events");
+        ArrayList<Map> studentList=(ArrayList<Map>)m1.get("students");
+        if(eventList.isEmpty() || studentList.isEmpty())
         {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setContentText("请填写完整信息");
             alert.showAndWait();
             return;
         }
-        for(int i=0;i<list.size();i++)
+        if(eventList.size()>1)
         {
-            Map map=newMapFromFields(new HashMap());
-            if(map.get("type")==null||map.get("name")==null||map.get("id")==null)
-            {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setContentText("请填写完整信息");
-                alert.showAndWait();
-                return;
-            }
-            map.remove("events");
-            map.put("eventId",list.get(i).get("eventId"));
-            DataResponse r=request("/addAbsence", map);
-            if(r.getCode()==1) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setContentText(r.getMsg());
-                alert.showAndWait();
-                return;
-            }
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setContentText("只能选择一个事件");
+            alert.showAndWait();
+            studentListView.setSelectedItems(List.of());
+            eventListView.setSelectedItems(List.of());
+            return;
         }
-        Alert alert=new Alert(Alert.AlertType.INFORMATION);
-        alert.setContentText("添加成功");
+        //ListMap不能直接传，要传arraylist
+        Map m2=new HashMap();
+        m2.put("eventId",eventList.get(0).get("eventId"));
+        m2.put("studentList",studentList);
+        DataResponse r=request("/addStudentAbsence",m2);
+        if(r.getCode()!=0)
+        {
+            Alert alert=new Alert(Alert.AlertType.ERROR);
+            alert.setContentText(r.getMsg());
+            alert.showAndWait();
+        }
+        else
+        {
+            Alert alert=new Alert(Alert.AlertType.INFORMATION);
+            alert.setContentText("添加成功");
+            alert.showAndWait();
+        }
         displayAbsences();
+        studentListView.setSelectedItems(List.of());
         eventListView.setSelectedItems(List.of());
     }
 }

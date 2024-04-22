@@ -54,7 +54,6 @@ public class StudentHomeworkPage extends VBox{
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate submitDate = LocalDate.parse(submitTime, formatter);
         LocalDate deadlineDate = LocalDate.parse(deadline, formatter);
-
         if (submitDate.isAfter(deadlineDate)) {
             Alert alert=new Alert(Alert.AlertType.ERROR);
             alert.setContentText("提交时间已经超过截止日期");

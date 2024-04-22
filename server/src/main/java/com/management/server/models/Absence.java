@@ -19,7 +19,6 @@ public class Absence {
     private String destination;
     //private String time;
 
-
     @ManyToOne
     @JoinColumn(name="person_id")
     private Person person;

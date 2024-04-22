@@ -75,7 +75,7 @@ public class HomeworkController {
                 Student s=studentRepository.findByPersonId(p.getPersonId());
                 if(s!=null){
                    List<Homework> homeworkList1=homeworkRepository.findHomeworkByStudent(s);
-                    System.out.println(homeworkList1);
+                    //System.out.println(homeworkList1);
                    for(Homework h:homeworkList1){
                        homeworkList.add(h);
                    }
@@ -90,6 +90,10 @@ public class HomeworkController {
                                        @RequestParam(name = "fileName") String fileName,
     @RequestParam(name="paras") String homeworkId ){
         Homework h=homeworkRepository.findHomeworkByHomeworkId(homeworkId);
+        if(h.getHomeworkFile()!=null)
+        {
+            FileUtil.deleteFile("homework",h.getHomeworkFile());
+        }
         h.setHomeworkFile(fileName);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         h.setSubmitTime(formatter.format(LocalDate.now()));
@@ -104,6 +108,21 @@ public class HomeworkController {
         Homework h=homeworkRepository.findHomeworkByHomeworkId((String) m.get("homeworkId"));
         DataResponse r=FileUtil.downloadFile("homework",h.getHomeworkFile());
         return r;
+    }
+    @PostMapping("/deleteHomework")
+    @PreAuthorize("hasRole('TEACHER')")
+    public DataResponse deleteHomework(@RequestBody List<Map> list)
+    {
+        for(Map m:list)
+        {
+            Homework h=homeworkRepository.findHomeworkByHomeworkId((String) m.get("homeworkId"));
+            if(h.getHomeworkFile()!=null)
+            {
+                FileUtil.deleteFile("homework",h.getHomeworkFile());
+            }
+            homeworkRepository.delete(h);
+        }
+        return new DataResponse(0,null,null);
     }
 
 }
