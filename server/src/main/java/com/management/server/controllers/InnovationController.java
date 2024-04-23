@@ -8,6 +8,7 @@ import com.management.server.models.Student;
 import com.management.server.payload.response.DataResponse;
 import com.management.server.repositories.InnovationRepository;
 import com.management.server.repositories.StudentRepository;
+import com.management.server.util.CommonMethod;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,9 +28,9 @@ public class InnovationController {
         return new DataResponse(200,innovationRepository.findAll(),null);
     }
     @PostMapping("/getInnovationsByStudent")
-    public DataResponse getInnovationByStudent(@RequestBody Map m)
+    public DataResponse getInnovationByStudent()
     {
-        Student s=studentRepository.findByStudentId((String) m.get("studentId"));
+        Student s=studentRepository.findByStudentId(CommonMethod.getUsername());
         List<Innovation> list=innovationRepository.findByPersons(s);
         return new DataResponse(200,list,null);
     }

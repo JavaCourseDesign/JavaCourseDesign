@@ -2,10 +2,7 @@ package com.management.server.controllers;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
-import com.management.server.models.Family;
-import com.management.server.models.Innovation;
-import com.management.server.models.Person;
-import com.management.server.models.Student;
+import com.management.server.models.*;
 import com.management.server.payload.response.DataResponse;
 import com.management.server.repositories.*;
 import com.management.server.util.CommonMethod;
@@ -43,6 +40,8 @@ public class StudentController {
     private InnovationRepository innovationRepository;
     @Autowired
     private FamilyRepository familyRepository;
+    @Autowired
+    private TeacherRepository teacherRepository;
     @PostMapping("/getStudent")
     public DataResponse getStudent()
     {
@@ -55,10 +54,27 @@ public class StudentController {
         student.put("className",administrativeClassRepository.findAdministrativeClassByStudent(s)+"班");
         return new DataResponse(0,student,null);
     }
+    @PostMapping("/getAllStudentsByTeacherCourses")
+    public DataResponse getAllStudentsByTeacherCourses()
+    {
+        String t=teacherRepository.findByTeacherId(CommonMethod.getUsername()).getPersonId();
+        List<Course> courseArrayList=courseRepository.findCoursesByPersonId(t);
+        List<Student> studentList=new ArrayList<>();
+        for(Course c:courseArrayList)
+        {
+            for(Person p:c.getPersons())
+            {
+                if(p instanceof Student)
+                {
+                    studentList.add((Student) p);
+                }
+            }
+        }
+        return new DataResponse(0,studentList,null);
+    }
     @PostMapping("/getAllStudents")
     public DataResponse getAllStudents()
     {
-
         return new DataResponse(200,studentRepository.findAll(),null);
     }
     @PostMapping("/addStudent")
