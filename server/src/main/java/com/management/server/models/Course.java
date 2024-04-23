@@ -96,16 +96,8 @@ public class Course{
     //@JsonIgnore
     private Set<Person> willingStudents;
 
-    //lesson should be subClass of event, lesson to course should be many to one
-    //course should not be subClass of event
-
-    /*public void setLessons(List<Lesson> lessons) {
-        if(this.lessons!=null)
-        {
-            this.lessons.clear();
-            if (lessons != null) {
-                this.lessons.addAll(lessons);
-            }
-        }
-    }*/
+    @OneToMany(cascade = CascadeType.ALL,orphanRemoval = true)
+    @JoinColumn(name = "course_id")
+    @JsonIgnore
+    private List<Score> scores;
 }

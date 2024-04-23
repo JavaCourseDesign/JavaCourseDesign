@@ -1,13 +1,12 @@
 package com.management.front.page;
 
 import com.jfoenix.controls.JFXTreeView;
-import com.management.front.customComponents.EditableTableView;
 import com.management.front.page.admin.*;
 import com.management.front.page.student.CourseApplyPage;
 import com.management.front.page.student.HomePage;
 import com.management.front.page.student.StudentHomeworkPage;
 import com.management.front.page.student.StudentPersonalInfoPage;
-import com.management.front.page.teacher.TeacherHomeworkPage;
+import com.management.front.page.teacher.TeacherCourseMenuPage;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.TreeItem;
 import javafx.scene.layout.Pane;
@@ -27,7 +26,8 @@ public class Menu extends SplitPane {
     TreeItem<String> item10 = new TreeItem<>("测试上传文件");
     TreeItem<String> item11 = new TreeItem<>("学生作业界面");
     TreeItem<String> item12 = new TreeItem<>("教师作业界面");
-    TreeItem<String> item13 = new TreeItem<>("组件测试");
+    TreeItem<String> item13 = new TreeItem<>("成绩管理");
+    TreeItem<String> item14 = new TreeItem<>("教师课程");
 
     public Menu() {
         //this.getStylesheets().add("dark-theme.css");
@@ -38,7 +38,7 @@ public class Menu extends SplitPane {
         menu.setPrefWidth(70);
         this.setDividerPositions(0.2);
 
-        root.getChildren().addAll(item1, item2, item3, item4, item5, item6, item7, item8, item9, item10, item11, item12, item13);
+        root.getChildren().addAll(item1, item2, item3, item4, item5, item6, item7, item8, item9, item10, item11, item12, item13, item14);
         menu.setRoot(root);
 
         this.getItems().add(menu);
@@ -79,10 +79,13 @@ public class Menu extends SplitPane {
                     this.getItems().set(1, new StudentHomeworkPage());
                     break;
                 case "教师作业界面":
-                    this.getItems().set(1, new TeacherHomeworkPage());
+                    this.getItems().set(1, null);
                     break;
-                case "组件测试":
-                    this.getItems().set(1, new EditableTableView<>());
+                case "成绩管理":
+                    this.getItems().set(1, null);
+                    break;
+                case "教师课程":
+                    this.getItems().set(1, new TeacherCourseMenuPage());
                     break;
             }
         });

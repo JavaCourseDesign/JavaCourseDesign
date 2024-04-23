@@ -227,8 +227,6 @@ public class CourseManagementPage extends SplitPane {
 
         observableList.addAll(FXCollections.observableArrayList((ArrayList) request("/getAllCourses", new HashMap<>()).getData()));
         courseTable.setData(observableList);
-
-        //System.out.println(observableList);
     }
 
     private void addCourse() {
@@ -383,8 +381,8 @@ class SelectionGrid extends GridPane {
             {
                 lessonBoxes[i][j].checkBox.setSelected(true);
                 lessonBoxes[i][j].locationField.setText(""+ lesson.get("location"));
-                //System.out.println("week:"+lesson.get("week"));
-                //System.out.println("week:"+(Integer)lesson.get("week"));
+                lessonBoxes[i][j].singleWeek.setSelected(false);
+                lessonBoxes[i][j].doubleWeek.setSelected(false);
                 lessonBoxes[i][j].startWeek.getValueFactory().setValue(Integer.parseInt(""+ lesson.get("week")));
             }
             lessonBoxes[i][j].endWeek.getValueFactory().setValue(Integer.parseInt(""+ lesson.get("week")));
