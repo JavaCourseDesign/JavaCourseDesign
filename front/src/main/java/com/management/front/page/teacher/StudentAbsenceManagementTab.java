@@ -31,6 +31,7 @@ public class StudentAbsenceManagementTab extends Tab {
     public StudentAbsenceManagementTab(Map c) {
         course.put("courseId",c.get("courseId"));
         splitPane.setMinWidth(1000);
+        this.setText("学生缺勤管理");
         this.setContent(splitPane);
         lessonListView=new SearchableListView(FXCollections.observableArrayList((ArrayList) request("/getLessonsByCourseId",course).getData()), List.of("name","time"));
         initializeTable();

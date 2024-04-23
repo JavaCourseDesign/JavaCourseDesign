@@ -123,7 +123,7 @@ public class HomeworkManagementTab extends Tab {
                 button.setOnMouseClicked(event -> {
                     m.put("grade",button.getText());
                     request("/markHomework",m);
-                    controlPanel.getChildren().set(5,new Pane());
+                    controlPanel.getChildren().set(4,new Pane());
                     displayHomeworks();
                     // 关闭 ScrollPane
                 });

@@ -10,10 +10,9 @@ import static com.management.front.util.HttpClientUtil.sendAndReceiveDataRespons
 
 public class HelloApplication extends Application {
     @Override
-    public void start(Stage stage) throws Exception {
+    public void start(Stage stage) {
 
         sendAndReceiveDataResponse("/test/addTestData",null);
-
         Scene scene = new Scene(new LoginPage(), 300, 400);
         stage.setScene(scene);
         stage.show();

@@ -1,5 +1,6 @@
 package com.management.front.page;
 
+import com.calendarfx.view.page.WeekPage;
 import com.jfoenix.controls.JFXTreeView;
 import com.management.front.page.admin.*;
 import com.management.front.page.student.CourseApplyPage;
@@ -32,11 +33,10 @@ public class Menu extends SplitPane {
     public Menu() {
         //this.getStylesheets().add("dark-theme.css");
 
-
         root.setExpanded(true);
         menu.setShowRoot(false);
         menu.setPrefWidth(70);
-        this.setDividerPositions(0.2);
+        this.setDividerPositions(0.1);
 
         root.getChildren().addAll(item1, item2, item3, item4, item5, item6, item7, item8, item9, item10, item11, item12, item13, item14);
         menu.setRoot(root);
@@ -61,7 +61,7 @@ public class Menu extends SplitPane {
                     this.getItems().set(1, new StudentPersonalInfoPage());
                     break;
                 case "课程表":
-                    this.getItems().set(1, new HomePage());
+                    this.getItems().set(1, new WeekPage());
                     break;
                 case "创新实践管理":
                     this.getItems().set(1, new InnovationManagementPage());
