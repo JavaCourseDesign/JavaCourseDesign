@@ -1,4 +1,4 @@
-package com.management.front.page.admin;
+package com.management.front.controller;
 
 
 import com.jfoenix.controls.JFXCheckBox;
@@ -6,17 +6,19 @@ import com.jfoenix.controls.JFXComboBox;
 import com.management.front.customComponents.SearchableListView;
 import com.management.front.customComponents.SearchableTableView;
 import com.management.front.request.DataResponse;
+import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.Event;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.MapValueFactory;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
+import javafx.scene.image.Image;
+import javafx.scene.layout.*;
+import org.controlsfx.property.BeanPropertyUtils;
 
 
+import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -92,6 +94,10 @@ public class CourseManagementPage extends SplitPane {
         initializeTable();
         initializeControlPanel();
         displayCourses();
+        // 添加背景图片
+        Image backgroundImage = new Image("E:\\JavaCourseDesign\\front\\src\\main\\resources\\com\\management\\front\\images\\menupage02.jpg");
+        BackgroundImage background = new BackgroundImage(backgroundImage, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
+        this.setBackground(new Background(background));
     }
 
     private void initializeTable() {
@@ -232,20 +238,56 @@ public class CourseManagementPage extends SplitPane {
     }
 
     private void addCourse() {
-        Map m = newMapFromFields(new HashMap<>());
-        executeTask("/addCourse", m, this::displayCourses);
+        Map m=newMapFromFields(new HashMap<>());
+
+        //System.out.println(m);
+
+        DataResponse r=request("/addCourse",m);
+
+        displayCourses();
+
+        if(r.getCode()==-1)
+        {
+            Alert alert=new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("警告");
+            alert.setContentText(r.getMsg());
+            alert.showAndWait();
+        }
+        else
+        {
+            Alert alert=new Alert(Alert.AlertType.INFORMATION);
+            alert.setContentText(r.getMsg());
+            alert.showAndWait();
+        }
     }
 
     private void deleteCourse() {
         Map m = courseTable.getSelectedItem();
-        if(m==null) {
-            showAlert("未选择，无法删除");
-        } else {
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "确定要删除吗？");
+        if(m==null)
+        {
+            Alert alert=new Alert(Alert.AlertType.INFORMATION);
+            alert.setContentText("未选择，无法删除");
+            alert.showAndWait();
+        }
+        else
+        {
+            Alert alert=new Alert(Alert.AlertType.CONFIRMATION, "确定要删除吗？");
             alert.setTitle("警告");
-            Optional<ButtonType> result = alert.showAndWait();
-            if(result.get() == ButtonType.OK) {
-                executeTask("/deleteCourse", m, this::displayCourses);
+            Optional<ButtonType> result=alert.showAndWait();
+            if(result.get()==ButtonType.OK)
+            {
+                DataResponse r=request("/deleteCourse",m);
+                System.out.println(m);
+                System.out.println(r);
+
+                displayCourses();
+
+                if(r.getCode()==0)
+                {
+                    Alert alert1=new Alert(Alert.AlertType.INFORMATION);
+                    alert1.setContentText("删除成功");
+                    alert1.showAndWait();
+                }
             }
         }
     }
@@ -253,17 +295,30 @@ public class CourseManagementPage extends SplitPane {
     private void updateCourse() {
         Map selected = courseTable.getSelectedItem();
         int index = courseTable.getSelectedIndex();
-        if(selected==null) {
-            showAlert("未选择，无法更新");
-        } else {
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "确定要更新吗？");
-            alert.setTitle("警告");
-            Optional<ButtonType> result = alert.showAndWait();
-            if(result.get() == ButtonType.OK) {
-                executeTask("/updateCourse", newMapFromFields(selected), this::displayCourses);
+        if(selected==null)
+        {
+            Alert alert=new Alert(Alert.AlertType.INFORMATION);
+            alert.setContentText("未选择，无法更新");
+            alert.showAndWait();
+            return;
+        }
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "确定要更新吗？");
+        alert.setTitle("警告");
+        Optional<ButtonType> result=alert.showAndWait();
+        if(result.get()==ButtonType.OK)
+        {
+            DataResponse r=request("/updateCourse",newMapFromFields(selected));
+
+            displayCourses();
+
+            if(r.getCode()==0)
+            {
+                Alert alert1=new Alert(Alert.AlertType.INFORMATION);
+                alert1.setContentText("更新成功");
+                alert1.showAndWait();
             }
         }
-        courseTable.setSelectedItem(index);
+        courseTable.setSelectedItem(index); // 重新选中更新前的行 可能需要加一个空行用于添加
     }
 
     private void openCourses() {
