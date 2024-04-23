@@ -1,6 +1,8 @@
 package com.management.front.page;
 
 import com.jfoenix.controls.JFXTreeView;
+import com.management.front.controller.CourseManagementPage;
+import com.management.front.controller.InnovationManagementPage;
 import com.management.front.page.admin.*;
 import com.management.front.page.student.CourseApplyPage;
 import com.management.front.page.student.HomePage;
