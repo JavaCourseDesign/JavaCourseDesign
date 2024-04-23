@@ -12,7 +12,7 @@ import java.util.List;
 @Repository
 @Transactional
 public interface AbsenceRepository extends JpaRepository<Absence, String> {
-    boolean existsByEvent(Event event);
+    boolean existsByEventAndPerson(Event event, Person person);
     List<Absence> findAbsencesByPerson(Person person);
     Absence findAbsenceByAbsenceId(String absenceId);
 }

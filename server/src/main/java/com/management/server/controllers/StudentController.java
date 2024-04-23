@@ -2,14 +2,12 @@ package com.management.server.controllers;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
+import com.management.server.models.Family;
 import com.management.server.models.Innovation;
 import com.management.server.models.Person;
 import com.management.server.models.Student;
 import com.management.server.payload.response.DataResponse;
-import com.management.server.repositories.AdministrativeClassRepository;
-import com.management.server.repositories.CourseRepository;
-import com.management.server.repositories.InnovationRepository;
-import com.management.server.repositories.StudentRepository;
+import com.management.server.repositories.*;
 import com.management.server.util.CommonMethod;
 import com.openhtmltopdf.extend.FSSupplier;
 import com.openhtmltopdf.extend.impl.FSDefaultCacheStore;
@@ -28,10 +26,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.StringTokenizer;
+import java.util.*;
 
 @RestController
 public class StudentController {
@@ -46,6 +41,8 @@ public class StudentController {
     private AdministrativeClassRepository administrativeClassRepository;
     @Autowired
     private InnovationRepository innovationRepository;
+    @Autowired
+    private FamilyRepository familyRepository;
     @PostMapping("/getStudent")
     public DataResponse getStudent()
     {
@@ -53,6 +50,7 @@ public class StudentController {
         Student s = studentRepository.findByStudentId(username);
 
         Map student = BeanUtil.beanToMap(s) ;
+        student.put("families",s.getFamilies());
         //student.put("courses",courseRepository.findCoursesByPersonId(map.get("personId")));
         student.put("className",administrativeClassRepository.findAdministrativeClassByStudent(s)+"班");
         return new DataResponse(0,student,null);
@@ -85,16 +83,41 @@ public class StudentController {
     @PostMapping("/updateStudent")
     public DataResponse updateStudent(@RequestBody Map m) {
         String personId = (String) m.get("personId");
-        Optional<Student> optionalStudent = Optional.ofNullable(studentRepository.findByPersonId(personId));
-        if(optionalStudent.isPresent()) {
-            Student student = optionalStudent.get();
-            System.out.println(m);
+        Student student = studentRepository.findByPersonId(personId);
+        if(student != null) {
+            //System.out.println(m);
             BeanUtil.fillBeanWithMap(m, student, true, CopyOptions.create());
             studentRepository.save(student);
             return new DataResponse(0, null, "更新成功");
         } else {
             return new DataResponse(-1, null, "学号不存在，无法更新");
         }
+    }
+    @PostMapping("/saveStudentPersonalInfo")
+    public DataResponse saveStudentPersonalInfo(@RequestBody Map m)
+    {
+        String studentId = CommonMethod.getUsername();
+        Student student = studentRepository.findByStudentId(studentId);
+
+        student.getFamilies().clear();
+
+        List<Map> familiesList= (List<Map>) m.get("families");
+        m.remove("families");
+
+        BeanUtil.fillBeanWithMap(m,student,true, CopyOptions.create().ignoreError());
+
+        List<Family> families = new ArrayList<>();
+        for(Map familyMap:familiesList)
+        {
+            familyMap.remove("personId");
+            Family family = BeanUtil.fillBeanWithMap(familyMap, new Family(), true, CopyOptions.create());
+            families.add(family);
+        }
+        familyRepository.saveAll(families);
+        student.getFamilies().addAll(families);
+
+        studentRepository.save(student);
+        return new DataResponse(0,null,"保存成功");
     }
     @PostMapping("/getStudentIntroduce")
     public ResponseEntity<StreamingResponseBody> getStudentIntroduce()
@@ -178,6 +201,7 @@ public class StudentController {
             throw new RuntimeException(e);
         }
         map.put("introduce",content);
+        map.put("photo","../Photo/" + CommonMethod.getUsername() + ".jpg");
         int cnt1=0;// 学科竞赛
         int cnt2=0;//科研成果
         int cnt3=0;//社会实践

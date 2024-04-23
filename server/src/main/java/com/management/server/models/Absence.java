@@ -1,5 +1,7 @@
 package com.management.server.models;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -16,7 +18,6 @@ public class Absence {
     private String offReason;
     private String destination;
     //private String time;
-
 
     @ManyToOne
     @JoinColumn(name="person_id")

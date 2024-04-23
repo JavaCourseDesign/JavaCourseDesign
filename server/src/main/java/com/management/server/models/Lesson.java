@@ -14,6 +14,4 @@ import java.util.List;
 public class Lesson extends Event{
 
 
-
-    //homework?
 }

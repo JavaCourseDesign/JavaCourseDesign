@@ -28,6 +28,8 @@ public class TestController {//专门用于添加测试数据
     private AdministrativeClassRepository administrativeClassRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private FamilyRepository familyRepository;
     @PostMapping("/test/addTestData")
     public DataResponse addTestData(){
         if(studentRepository.count()!=0||teacherRepository.count()!=0||courseRepository.count()!=0){
@@ -45,22 +47,27 @@ public class TestController {//专门用于添加测试数据
         userTypeRepository.save(userType);
         userRepository.save(user);
 
+        Family f=new Family();
+        f.setPhone("12345678901");
+        f.setRelationship("父亲");
+        f.setName("谭斌");
+        f.setGender("男");
+        familyRepository.save(f);
+
         ArrayList<Student> students=new ArrayList<>();
         for(int i=0;i<200;i++){
             Student student=new Student();
             student.setStudentId("201921"+String.format("%03d",i));
             student.setName(generateRandomChineseName());
-            if(i==0) student.setName("tst");
-            if(i==1) student.setName("wzk");
-            if(i==2) student.setName("why");
-            if(i==3) student.setName("hzx");
+            if(i==0) {student.setName("tst");student.setFamilies(Collections.singletonList(f));}
+            if(i==1)  student.setName("wzk");
+            if(i==2)  student.setName("why");
+            if(i==3)  student.setName("hzx");
             student.setGender("男");
             student.setMajor("软件工程");
             student.setDept("软件学院");
             student.setSocial("群众");
             student.setHighSchool("南京市第一中学");
-            student.setFamilyMember("父亲");
-            student.setFamilyMemberPhone("1234567890");
             student.setAddress("山东大学宿舍");
             student.setHomeTown("江苏南京");
             students.add(student);
@@ -72,6 +79,8 @@ public class TestController {//专门用于添加测试数据
             Teacher teacher=new Teacher();
             teacher.setTeacherId("10000"+i);
             teacher.setName(generateRandomChineseName());
+            if(i==0) teacher.setName("向辉");
+            if(i==1) teacher.setName("李学庆");
             teacher.setGender("男");
             teacher.setTitle("讲师");
             teachers.add(teacher);

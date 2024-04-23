@@ -17,8 +17,8 @@ import java.util.Set;
 @Inheritance(strategy = InheritanceType.JOINED)
 /*@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "eventId")//在递归中第二次出现时用name属性替代本对象避免无限递归
 @JsonIgnoreProperties(value = {"persons"})*/
-@NamedEntityGraph(name = "Event.persons",
-        attributeNodes = @NamedAttributeNode("persons"))
+/*@NamedEntityGraph(name = "Event.persons",
+        attributeNodes = @NamedAttributeNode("persons"))*/
 public class Event {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

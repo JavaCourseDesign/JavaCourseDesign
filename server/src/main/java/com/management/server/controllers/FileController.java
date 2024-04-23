@@ -1,7 +1,6 @@
 package com.management.server.controllers;
 
 import com.management.server.payload.response.DataResponse;
-import com.management.server.util.CommonMethod;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,12 +19,10 @@ public class FileController {
     private String attachFolder;
     @PostMapping(path = "/uploadFile")
     public DataResponse uploadFile(@RequestBody byte[] barr,
-                                   @RequestParam(name = "uploader") String uploader,
-                                   @RequestParam(name = "remoteFile") String remoteFile,
     @RequestParam(name = "fileName") String fileName)  {
         try {
             String decodedFileName = URLDecoder.decode(fileName, StandardCharsets.UTF_8.toString());
-            OutputStream os = new FileOutputStream(new File(attachFolder + remoteFile+"/"+ decodedFileName));
+            OutputStream os = new FileOutputStream(new File(attachFolder + "homework" +"/"+ decodedFileName));
             os.write(barr);
             os.close();
             return new DataResponse(0, null, "上传成功！");

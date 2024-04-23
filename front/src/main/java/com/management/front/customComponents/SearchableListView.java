@@ -31,7 +31,8 @@ public class SearchableListView extends HBox {
     private void initializeComponents() {
         setupSearchField();
         setupListView();
-        this.getChildren().addAll(selectedLabel, searchField, listView);
+        VBox vBox = new VBox(selectedLabel, searchField);
+        this.getChildren().addAll(vBox, listView);
     }
 
     private void setupSearchField() {
@@ -41,8 +42,8 @@ public class SearchableListView extends HBox {
 
     private void filterItems(String newValue) {
         boolean showListView = newValue != null && !newValue.isEmpty();
-        listView.setVisible(showListView);
-        listView.setManaged(showListView);
+        //listView.setVisible(showListView);
+        //listView.setManaged(showListView);
 
         filteredItems.setPredicate(item -> {
             if (newValue == null || newValue.isEmpty()) {
@@ -67,8 +68,8 @@ public class SearchableListView extends HBox {
         listView.setOnMouseClicked(event -> handleItemClick());
         listView.setMaxHeight(100);
         listView.setMinHeight(70);
-        listView.setVisible(false);
-        listView.setManaged(false);
+        //listView.setVisible(false);
+        //listView.setManaged(false);
     }
 
     private void handleItemClick() {
