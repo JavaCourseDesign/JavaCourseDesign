@@ -31,6 +31,7 @@ public class SearchableListView extends HBox {
     private void initializeComponents() {
         setupSearchField();
         setupListView();
+        selectedLabel.setWrapText(true);
         VBox vBox = new VBox(selectedLabel, searchField);
         this.getChildren().addAll(vBox, listView);
     }

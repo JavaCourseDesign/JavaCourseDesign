@@ -26,8 +26,8 @@ public class StudentPersonalInfoPage extends TabPane {
         //System.out.println(student);
         this.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
         this.getTabs().add(new BasicInfoTab(student));
-        this.getTabs().add(new InnovationTab(student));
-        this.getTabs().add(new absenceTab(student));
+        this.getTabs().add(new InnovationTab());
+        this.getTabs().add(new absenceTab());
     }
 }
 
@@ -37,9 +37,7 @@ class InnovationTab extends Tab {
     private VBox controlPanel = new VBox();
     private ObservableList<Map> observableList = FXCollections.observableArrayList();
 
-    Map m = new HashMap();
-    public InnovationTab(Map student) {
-        m=student;
+    public InnovationTab() {
         this.setText("创新实践信息管理");
         this.setContent(anchorPane);
         initializeTable();
@@ -47,7 +45,7 @@ class InnovationTab extends Tab {
     }
     private void displayInnovations() {
         observableList.clear();
-        observableList.addAll(FXCollections.observableArrayList((ArrayList) request("/getInnovationsByStudent", m).getData()));
+        observableList.addAll(FXCollections.observableArrayList((ArrayList) request("/getInnovationsByStudent", null).getData()));
         innovationTable.setData(observableList);
     }
     private void initializeTable()
@@ -88,11 +86,9 @@ class absenceTab extends Tab {
 
     private TextField offReasonField=new TextField("玩原神");
     private TextField destinationField=new TextField("宿舍");
-    Map s;
     private SearchableListView eventListView;
-    public absenceTab(Map student) {
-        s=student;
-        eventListView=new SearchableListView(FXCollections.observableArrayList((ArrayList) request("/getEventsByStudent",s).getData()),List.of("name","time"));
+    public absenceTab() {
+        eventListView=new SearchableListView(FXCollections.observableArrayList((ArrayList) request("/getEventsByStudent",null).getData()),List.of("name","time"));
         this.setText("请假信息管理");
         this.setContent(splitPane);
         initializeTable();
@@ -107,7 +103,7 @@ class absenceTab extends Tab {
     }
     private void displayAbsences() {
         observableList.clear();
-        observableList.addAll(FXCollections.observableArrayList((ArrayList) request("/getAbsencesByStudent", s).getData()));
+        observableList.addAll(FXCollections.observableArrayList((ArrayList) request("/getAbsencesByStudent", null).getData()));
         absenceTable.setData(observableList);
         System.out.println(observableList);
     }
@@ -140,21 +136,21 @@ class absenceTab extends Tab {
     }
 
     private void initializeTable() {
-        TableColumn<Map,String> personColumn= new TableColumn<>("学生姓名");
         TableColumn<Map,String> offReasonColumn= new TableColumn<>("请假原因");
+        TableColumn<Map,String> eventColumn= new TableColumn<>("请假事件");
         TableColumn<Map,String> timeColumn= new TableColumn<>("请假时间");
         TableColumn<Map,String> destinationColumn= new TableColumn<>("请假去向");
         TableColumn<Map,String> statusColumn= new TableColumn<>("状态");
-        personColumn.setCellValueFactory(data->{
+        offReasonColumn.setCellValueFactory(new MapValueFactory<>("offReason"));
+        eventColumn.setCellValueFactory(data->{
             if(data.getValue()!=null)
             {
-                Map<String,Object> person=(Map<String,Object>) data.getValue().get("person");
-                String name=(String) person.get("name");
+                Map<String,Object> event=(Map<String,Object>) data.getValue().get("event");
+                String name=(String) event.get("name");
                 return new SimpleStringProperty(name);
             }
             else return new SimpleStringProperty("");
         });
-        offReasonColumn.setCellValueFactory(new MapValueFactory<>("offReason"));
         timeColumn.setCellValueFactory(data->
         {
             if(data.getValue()!=null) {
@@ -177,12 +173,12 @@ class absenceTab extends Tab {
                 return new SimpleStringProperty("未通过");
         });
         List<TableColumn<Map, ?>> columns = new ArrayList<>();
-        columns.add(personColumn);
         columns.add(offReasonColumn);
+        columns.add(eventColumn);
         columns.add(timeColumn);
         columns.add(destinationColumn);
         columns.add(statusColumn);
-        absenceTable = new SearchableTableView(observableList,List.of("name","isApproved"),columns);
+        absenceTable = new SearchableTableView(observableList,List.of("isApproved"),columns);
         splitPane.getItems().add(absenceTable);
     }
     private void uploadAbsence()
@@ -196,25 +192,24 @@ class absenceTab extends Tab {
             alert.showAndWait();
             return;
         }
-        for(int i=0;i<list.size();i++)
+        if(list.size()>1)
         {
-            Map map=newMapFromFields(new HashMap());
-            if(map.get("offReason")==null||map.get("destination")==null||map.get("name")==null||map.get("id")==null)
-            {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setContentText("请填写完整信息");
-                alert.showAndWait();
-                return;
-            }
-            map.remove("events");
-            map.put("eventId",list.get(i).get("eventId"));
-            DataResponse r=request("/uploadAbsence", map);
-            if(r.getCode()==1) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setContentText("上传失败,"+r.getMsg());
-                alert.showAndWait();
-                return;
-            }
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setContentText("只能选择一个事件");
+            alert.showAndWait();
+            eventListView.setSelectedItems(List.of());
+            return;
+        }
+        ArrayList<Map> eventList=(ArrayList<Map>) list;
+        m1.put("eventList",eventList);
+        m1.remove("events");
+        DataResponse r = request("/uploadAbsence", m1);
+        if(r.getCode()!=0)
+        {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setContentText(r.getMsg());
+            alert.showAndWait();
+            return;
         }
         Alert alert=new Alert(Alert.AlertType.INFORMATION);
         alert.setContentText("上传成功");

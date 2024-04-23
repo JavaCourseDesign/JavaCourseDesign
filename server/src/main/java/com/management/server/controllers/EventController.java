@@ -3,6 +3,7 @@ package com.management.server.controllers;
 import com.management.server.models.*;
 import com.management.server.payload.response.DataResponse;
 import com.management.server.repositories.*;
+import com.management.server.util.CommonMethod;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -46,8 +47,8 @@ public class EventController {
     }
 
     @PostMapping("/getEventsByStudent")
-    public DataResponse getEventsByStudent(@RequestBody Map m) {
-        Student student = studentRepository.findByStudentId((String) m.get("studentId"));
+    public DataResponse getEventsByStudent() {
+        Student student = studentRepository.findByStudentId(CommonMethod.getUsername());
         return new DataResponse(0, eventRepository.findEventsByPerson(student), null);
     }
 

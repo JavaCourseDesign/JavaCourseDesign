@@ -233,20 +233,13 @@ public class CourseController {
 
         Set<Person> willingStudents = new HashSet<>(course.getWillingStudents());
         if(willingStudents.size()<=capacity){
-            course.setPersons(willingStudents);
+            course.getPersons().addAll(willingStudents);
         }else{
-            Set<Person> persons = new HashSet<>();
-            ArrayList<Map> personsMap = (ArrayList<Map>) m.get("persons");
-            for (int i = 0; i < personsMap.size(); i++) {
-                persons.add(personRepository.findByPersonId((personsMap.get(i).get("personId")).toString()));
-            }//保证老师不会被修改
-
             for (int i = 0; i < capacity; i++) {
                 int index = (int) (Math.random() * willingStudents.size());
-                persons.add(studentRepository.findByPersonId(willingStudents.toArray(new Person[0])[index].getPersonId()));
+                course.getPersons().add(studentRepository.findByPersonId(willingStudents.toArray(new Person[0])[index].getPersonId()));
                 willingStudents.remove(willingStudents.toArray(new Person[0])[index]);//此处逻辑需要再探讨
             }
-            course.setPersons(persons);
             course.setWillingStudents(willingStudents);//如果选课未开放且有人选课，那么这些人就是抽签失败的人
         }
         course.setAvailable(false);

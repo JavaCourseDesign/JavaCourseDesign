@@ -40,8 +40,8 @@ public class LoginPage extends GridPane {
         setupActions();
 
         //测试用
-        nameField.setText("tst");
-        usernameField.setText("201921000");
+        nameField.setText("向辉");
+        usernameField.setText("100000");
         passwordField.setText("admin");
     }
 

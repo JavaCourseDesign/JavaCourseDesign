@@ -43,6 +43,7 @@ public class HomeworkController {
             Student s=studentRepository.findByPersonId(p.getPersonId());
             if(s!=null){
                 Homework h=BeanUtil.mapToBean(m,Homework.class,true);
+                h.setCourse(courseRepository.findByCourseId((String) m.get("courseId")));
                 h.setStudent(s);
                 homeworkRepository.save(h);
             }
