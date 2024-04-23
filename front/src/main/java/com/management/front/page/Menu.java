@@ -1,6 +1,7 @@
 package com.management.front.page;
 
 import com.jfoenix.controls.JFXTreeView;
+import com.management.front.controller.CourseManagementPage;
 import com.management.front.customComponents.EditableTableView;
 import com.management.front.page.admin.*;
 import com.management.front.page.student.CourseApplyPage;
@@ -11,6 +12,7 @@ import com.management.front.page.teacher.TeacherHomeworkPage;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.TreeItem;
 import javafx.scene.layout.Pane;
+
 
 public class Menu extends SplitPane {
     JFXTreeView<String> menu = new JFXTreeView<>();
@@ -64,7 +66,7 @@ public class Menu extends SplitPane {
                     this.getItems().set(1, new HomePage());
                     break;
                 case "创新实践管理":
-                    this.getItems().set(1, new InnovationManagementPage());
+                    this.getItems().set(1, new com.management.front.controller.InnovationManagementPage());
                     break;
                 case "课程申请":
                     this.getItems().set(1, new CourseApplyPage());

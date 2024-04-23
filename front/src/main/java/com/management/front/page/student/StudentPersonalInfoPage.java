@@ -223,4 +223,51 @@ class absenceTab extends Tab {
     }
 
 }
+class HonorTab extends Tab {
+    private SearchableTableView honorTable;
+    private SplitPane anchorPane=new SplitPane();
+    private VBox controlPanel = new VBox();
+    private ObservableList<Map> observableList = FXCollections.observableArrayList();
+
+    Map m = new HashMap();
+    public HonorTab(Map student) {
+        m=student;
+        this.setText("创新实践信息管理");
+        this.setContent(anchorPane);
+        initializeTable();
+        displayHonors();
+    }
+    private void displayHonors() {
+        observableList.clear();
+        observableList.addAll(FXCollections.observableArrayList((ArrayList) request("/getHonorsByStudent", m).getData()));
+        honorTable.setData(observableList);
+    }
+    private void initializeTable()
+    {
+        TableColumn<Map, String> nameColumn = new TableColumn<>("项目名称");
+        TableColumn<Map, String> typeColumn = new TableColumn<>("项目类型");
+        TableColumn<Map, String> timeColumn = new TableColumn<>("时间");
+        TableColumn<Map, String> locationColumn = new TableColumn<>("地点");
+        TableColumn<Map, String> performanceColumn = new TableColumn<>("评价");
+        nameColumn.setCellValueFactory(new MapValueFactory<>("name"));
+        typeColumn.setCellValueFactory(new MapValueFactory<>("type"));
+        timeColumn.setCellValueFactory(new MapValueFactory<>("time"));
+        locationColumn.setCellValueFactory(new MapValueFactory<>("location"));
+        performanceColumn.setCellValueFactory(new MapValueFactory<>("performance"));
+
+
+        List<TableColumn<Map, ?>> columns = new ArrayList<>();
+        columns.add(nameColumn);
+        columns.add(typeColumn);
+        columns.add(timeColumn);
+        columns.add(locationColumn);
+        columns.add(performanceColumn);
+        honorTable = new SearchableTableView(observableList, List.of("name","type"), columns);
+        anchorPane.getItems().add(honorTable);
+
+        /*innovationTable.setOnItemClick(item -> {
+            //System.out.println("Selected item: " + item);
+        });*/
+    }
+}
 
