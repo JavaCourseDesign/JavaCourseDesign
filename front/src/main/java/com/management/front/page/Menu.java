@@ -7,6 +7,7 @@ import com.management.front.page.student.CourseApplyPage;
 import com.management.front.page.student.HomePage;
 import com.management.front.page.student.StudentHomeworkPage;
 import com.management.front.page.student.StudentPersonalInfoPage;
+import com.management.front.page.teacher.StudentAbsenceManagementTab;
 import com.management.front.page.teacher.TeacherHomeworkPage;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.TreeItem;
@@ -84,6 +85,8 @@ public class Menu extends SplitPane {
                 case "组件测试":
                     this.getItems().set(1, new EditableTableView<>());
                     break;
+
+
             }
         });
     }
