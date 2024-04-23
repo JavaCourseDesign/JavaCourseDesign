@@ -36,7 +36,7 @@ private List<Event> events;
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.shape.*?>
 
-<AnchorPane prefHeight="540" prefWidth="600" stylesheets="@week_time_table.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.management.front.controller.WeekTimeTable">
+<AnchorPane prefHeight="540" prefWidth="600" stylesheets="@week_time_table.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.management.front.customComponents.WeekTimeTable">
    <VBox fx:id="background" prefHeight="540.0" prefWidth="100.0">
        <Rectangle fill="#373737" height="30.0" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="600.0" />
        <Rectangle fill="#373737" height="15.0" opacity="0.3" stroke="BLACK" strokeType="INSIDE" width="600.0" />

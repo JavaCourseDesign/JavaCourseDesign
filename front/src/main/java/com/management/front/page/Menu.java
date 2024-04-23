@@ -1,7 +1,13 @@
-package com.management.front.controller;
+package com.management.front.page;
 
 import com.jfoenix.controls.JFXTreeView;
 import com.management.front.customComponents.EditableTableView;
+import com.management.front.page.admin.*;
+import com.management.front.page.student.CourseApplyPage;
+import com.management.front.page.student.HomePage;
+import com.management.front.page.student.StudentHomeworkPage;
+import com.management.front.page.student.StudentPersonalInfoPage;
+import com.management.front.page.teacher.TeacherHomeworkPage;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.TreeItem;
 import javafx.scene.layout.Pane;

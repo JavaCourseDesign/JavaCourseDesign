@@ -1,4 +1,4 @@
-package com.management.front.controller;
+package com.management.front.page.admin;
 
 import com.management.front.customComponents.SearchableTableView;
 import com.management.front.request.DataResponse;
@@ -8,7 +8,6 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.MapValueFactory;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.VBox;
 
 import java.util.*;
 import java.util.stream.Collectors;

@@ -1,7 +1,5 @@
-package com.management.front.controller;
+package com.management.front.page.student;
 
-import com.itextpdf.text.*;
-import com.itextpdf.text.pdf.PdfWriter;
 import com.management.front.customComponents.SearchableListView;
 import com.management.front.customComponents.SearchableTableView;
 import com.management.front.request.DataResponse;
@@ -9,27 +7,13 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.MapValueFactory;
-import javafx.scene.image.Image;
-import javafx.scene.input.Dragboard;
-import javafx.scene.input.TransferMode;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.scene.image.ImageView;
 import javafx.scene.text.Text;
-import javafx.scene.web.HTMLEditor;
-import javafx.stage.FileChooser;
-import javafx.stage.Stage;
 
 
-import java.io.*;
-import java.nio.file.Files;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

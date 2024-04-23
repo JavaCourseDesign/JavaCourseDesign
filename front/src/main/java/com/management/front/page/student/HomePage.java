@@ -1,4 +1,4 @@
-package com.management.front.controller;
+package com.management.front.page.student;
 
 import javafx.scene.layout.BorderPane;
 

@@ -1,8 +1,5 @@
-package com.management.front.controller;
+package com.management.front.customComponents;
 
-import com.jfoenix.controls.JFXButton;
-import javafx.fxml.FXML;
-import javafx.scene.Group;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;

@@ -1,4 +1,4 @@
-package com.management.front.controller;
+package com.management.front.page.admin;
 
 import com.management.front.customComponents.SearchableTableView;
 import com.management.front.request.DataResponse;
@@ -8,7 +8,6 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.MapValueFactory;
 import javafx.scene.layout.VBox;
 
-import java.io.IOException;
 import java.util.*;
 
 import static com.management.front.util.HttpClientUtil.*;

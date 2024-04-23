@@ -1,4 +1,4 @@
-package com.management.front.controller;
+package com.management.front.page.teacher;
 
 import com.management.front.customComponents.SearchableTableView;
 import javafx.collections.FXCollections;

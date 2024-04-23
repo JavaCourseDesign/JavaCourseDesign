@@ -1,8 +1,7 @@
-package com.management.front.controller;
+package com.management.front.page.student;
 
 import com.management.front.customComponents.SearchableTableView;
 import com.management.front.request.DataResponse;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;

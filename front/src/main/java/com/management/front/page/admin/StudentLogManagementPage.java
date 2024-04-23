@@ -1,4 +1,4 @@
-package com.management.front.controller;
+package com.management.front.page.admin;
 
 import com.management.front.customComponents.SearchableListView;
 import com.management.front.customComponents.SearchableTableView;

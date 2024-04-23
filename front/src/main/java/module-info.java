@@ -26,9 +26,17 @@ module com.management.front {
     //following are manually added
     exports com.management.front.request to com.google.gson;
     opens com.management.front.request to com.google.gson;
-    exports com.management.front.controller;
-    opens com.management.front.controller to javafx.fxml;
+    exports com.management.front.page;
+    opens com.management.front.page to javafx.fxml;
     exports com.management.front.util;
     opens com.management.front.util to com.google.gson;
+    exports com.management.front.page.admin;
+    opens com.management.front.page.admin to javafx.fxml;
+    exports com.management.front.page.student;
+    opens com.management.front.page.student to javafx.fxml;
+    exports com.management.front.page.teacher;
+    opens com.management.front.page.teacher to javafx.fxml;
+    exports com.management.front.customComponents;
+    opens com.management.front.customComponents to javafx.fxml;
 
 }

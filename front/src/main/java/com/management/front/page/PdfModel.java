@@ -1,4 +1,4 @@
-package com.management.front.controller;
+package com.management.front.page;
 
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
@@ -11,7 +11,7 @@ import java.io.UncheckedIOException;
 import java.nio.file.Path;
 import java.util.logging.Logger;
 
-class PdfModel {
+public class PdfModel {
     private static final Logger logger = Logger.getLogger(PdfModel.class.getName());
     private PDDocument document;
     private PDFRenderer renderer;
@@ -24,7 +24,7 @@ class PdfModel {
             throw new UncheckedIOException("PDFDocument throws IOException file=" + path, ex);
         }
     }
-    PdfModel(byte [] data) {
+    public PdfModel(byte[] data) {
         try {
             document = PDDocument.load(data);
             renderer = new PDFRenderer(document);
@@ -33,11 +33,11 @@ class PdfModel {
         }
     }
 
-    int numPages() {
+    public int numPages() {
         return document.getPages().getCount();
     }
 
-    Image getImage(int pageNumber) {
+    public Image getImage(int pageNumber) {
         BufferedImage pageImage;
         try {
             pageImage = renderer.renderImage(pageNumber,0.9f);

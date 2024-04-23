@@ -1,22 +1,20 @@
-package com.management.front.controller;
+package com.management.front.page.teacher;
 
 import com.management.front.customComponents.SearchableListView;
 import com.management.front.customComponents.SearchableTableView;
+import com.management.front.page.PdfModel;
 import com.management.front.request.DataResponse;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.MapValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
-import javafx.stage.Stage;
 
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 import static com.management.front.util.HttpClientUtil.request;
-import static com.management.front.util.HttpClientUtil.requestByteData;
 
 public class TeacherHomeworkPage extends SplitPane {
     private SearchableTableView homeworkTable;

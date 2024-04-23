@@ -1,4 +1,4 @@
-package com.management.front.controller;
+package com.management.front.page.admin;
 
 
 import com.jfoenix.controls.JFXCheckBox;
@@ -6,24 +6,17 @@ import com.jfoenix.controls.JFXComboBox;
 import com.management.front.customComponents.SearchableListView;
 import com.management.front.customComponents.SearchableTableView;
 import com.management.front.request.DataResponse;
-import javafx.application.Platform;
-import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.concurrent.Task;
-import javafx.event.Event;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.MapValueFactory;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import org.controlsfx.dialog.ProgressDialog;
-import org.controlsfx.property.BeanPropertyUtils;
 
 
-import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 

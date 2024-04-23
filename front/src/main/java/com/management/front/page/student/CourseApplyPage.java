@@ -1,7 +1,8 @@
-package com.management.front.controller;
+package com.management.front.page.student;
 
-import com.jfoenix.controls.JFXToggleButton;
 import com.management.front.customComponents.SearchableTableView;
+import com.management.front.page.LoginPage;
+import com.management.front.customComponents.WeekTimeTable;
 import com.management.front.request.DataResponse;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -11,7 +12,6 @@ import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.MapValueFactory;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
 import java.time.LocalDate;

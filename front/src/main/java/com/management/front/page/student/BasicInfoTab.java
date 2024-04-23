@@ -1,6 +1,7 @@
-package com.management.front.controller;
+package com.management.front.page.student;
 
 import com.management.front.HelloApplication;
+import com.management.front.page.PdfModel;
 import com.management.front.request.DataResponse;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

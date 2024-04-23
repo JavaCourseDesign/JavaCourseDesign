@@ -1,4 +1,4 @@
-package com.management.front.controller;
+package com.management.front.page;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

@@ -1,12 +1,8 @@
-package com.management.front.controller;
+package com.management.front.page;
 
 import com.management.front.request.DataResponse;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
@@ -14,7 +10,6 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.controls.JFXPasswordField;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
