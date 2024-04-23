@@ -75,6 +75,7 @@ public class TeacherCourseMenuPage extends SplitPane {
             courseTabPane.getTabs().add(new CourseInfoTab(item));
             courseTabPane.getTabs().add(new ScoreManagementTab(item));
             courseTabPane.getTabs().add(new HomeworkManagementTab(item));
+            courseTabPane.getTabs().add(new StudentAbsenceManagementTab(item));
         });
 
         this.getItems().add(courseTable);

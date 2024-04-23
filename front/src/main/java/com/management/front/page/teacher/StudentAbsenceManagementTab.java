@@ -32,7 +32,7 @@ public class StudentAbsenceManagementTab extends Tab {
         course.put("courseId",c.get("courseId"));
         splitPane.setMinWidth(1000);
         this.setContent(splitPane);
-        lessonListView=new SearchableListView(FXCollections.observableArrayList((ArrayList) request("/getAllLessonsByTeacherAndCourse",course).getData()), List.of("name","time"));
+        lessonListView=new SearchableListView(FXCollections.observableArrayList((ArrayList) request("/getLessonsByCourseId",course).getData()), List.of("name","time"));
         initializeTable();
         initializeControlPanel();
         displayAbsences();
