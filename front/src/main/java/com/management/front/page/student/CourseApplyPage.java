@@ -155,7 +155,7 @@ public class CourseApplyPage extends SplitPane {
         selectiveCreditCount.setText("选修学分：" + selectiveCredit);
 
 
-        weekTimeTable.setEvents(allEvents);
+        weekTimeTable.setEvents((List)allEvents);
 
         Map filter = new HashMap();
         filter.put("filterConflict", filterConflict.isSelected());

@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.time.LocalDate;
+
 @Entity
 @Data
 @Table(name="homework")
@@ -21,7 +23,7 @@ public class Homework {
     @JsonIgnoreProperties(value = {"persons","lessons","willingStudents"})
     private Course course;
     private String homeworkContent;
-    private String deadline;
+    private LocalDate deadline;
     private String submitTime;
     private String grade;
     private String homeworkFile;

@@ -162,13 +162,16 @@ public class CourseController {
     @PostMapping("/updateCourse")
     //@PreAuthorize("hasRole('ADMIN')")
     public DataResponse updateCourse(@RequestBody Map m){
+        System.out.println("\nmap:"+m);
         String courseId = (String) m.get("courseId");
         if(!courseRepository.existsByCourseId(courseId)) {
             return new DataResponse(-1,null,"课程不存在，无法更新");
         }
         Course course = courseRepository.findByCourseId(courseId);
 
+        System.out.println("\nmap:"+m);
         List<Map> lessonsMap = (List<Map>) m.get("lessons");
+        System.out.println("\nlessonMap:"+lessonsMap);
         m.remove("lessons");
 
         BeanUtil.fillBeanWithMap(m, course, true, CopyOptions.create().ignoreError());
@@ -287,14 +290,26 @@ public class CourseController {
 
     private boolean conflict(List<Course> courses, Course course){
         for (Course c : courses) {
-            if(c.getLessons().stream().anyMatch(
-                    lesson -> course.getLessons().stream().anyMatch(
-                            lesson1 ->
-                                    (lesson1.getWeek()+lesson1.getDay()+lesson1.getTime())
-                                            .equals(lesson.getWeek()+lesson.getDay()+lesson.getTime())))){//实现不优雅不精确，但是不想写太多了
-                return true;
+            for (Lesson l1 : c.getLessons()) {
+                for (Lesson l2 : course.getLessons()) {
+                    if (isConflict(l1, l2)) {
+                        return true;
+                    }
+                }
             }
         }
         return false;
+    }
+
+    private boolean isConflict(Lesson lesson1, Lesson lesson2) {
+        // Check if the date ranges overlap
+        boolean dateOverlap = !lesson1.getStartDate().isAfter(lesson2.getEndDate())
+                && !lesson1.getEndDate().isBefore(lesson2.getStartDate());
+
+        // Check if the time ranges overlap
+        boolean timeOverlap = !lesson1.getStartTime().isAfter(lesson2.getEndTime())
+                && !lesson1.getEndTime().isBefore(lesson2.getStartTime());
+
+        return dateOverlap && timeOverlap;
     }
 }

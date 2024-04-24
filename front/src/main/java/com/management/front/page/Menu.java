@@ -2,6 +2,7 @@ package com.management.front.page;
 
 import com.calendarfx.view.page.WeekPage;
 import com.jfoenix.controls.JFXTreeView;
+import com.management.front.customComponents.WeekPageTest;
 import com.management.front.page.admin.*;
 import com.management.front.page.student.CourseApplyPage;
 import com.management.front.page.student.HomePage;
@@ -61,7 +62,7 @@ public class Menu extends SplitPane {
                     this.getItems().set(1, new StudentPersonalInfoPage());
                     break;
                 case "课程表":
-                    this.getItems().set(1, new WeekPage());
+                    this.getItems().set(1, new WeekPageTest());
                     break;
                 case "创新实践管理":
                     this.getItems().set(1, new InnovationManagementPage());

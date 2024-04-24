@@ -43,7 +43,7 @@ public class HomeworkManagementTab extends Tab {
     }
     private Map newMapFromFields(Map m) {
         m.put("homeworkContent", homeworkContentField.getText());
-        m.put("deadline", deadlinePicker.getValue().format(formatter));
+        m.put("deadline", deadlinePicker.getValue().toString());
         m.put("courseId", course.get("courseId"));
         return m;
     }

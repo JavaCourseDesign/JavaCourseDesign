@@ -24,9 +24,8 @@ public class CourseInfoTab extends Tab {
         VBox courseInfoBox = new VBox();
 
         WeekTimeTable weekTimeTable = new WeekTimeTable();
-        weekTimeTable.setEvents((List<Map>) request("/getLessonsByCourseId", course).getData());
-        Pane weekTimeTablePane = new Pane(weekTimeTable);
-        weekTimeTablePane.setMaxWidth(600);
+        weekTimeTable.setEvents((List<Map<String,Object>>) request("/getLessonsByCourseId", course).getData());
+
         Label courseIdLabel = new Label("课程号: " + course.get("courseId"));
         Label courseNameLabel = new Label("课程名: " + course.get("name"));
         Label referenceLabel = new Label("参考资料: " + course.get("reference"));
@@ -49,7 +48,7 @@ public class CourseInfoTab extends Tab {
                 .map(person -> ""+ person.get("name"))
                 .collect(Collectors.joining(", ")));
 
-        courseInfoBox.getChildren().addAll(weekTimeTablePane, courseIdLabel, courseNameLabel, referenceLabel, capacityLabel, creditLabel, typeLabel, preCoursesLabel, teacherLabel, studentLabel);
+        courseInfoBox.getChildren().addAll(weekTimeTable, courseIdLabel, courseNameLabel, referenceLabel, capacityLabel, creditLabel, typeLabel, preCoursesLabel, teacherLabel, studentLabel);
 
         this.setContent(courseInfoBox);
     }
