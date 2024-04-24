@@ -2,6 +2,7 @@ package com.management.front.page;
 
 import com.jfoenix.controls.JFXTreeView;
 import com.management.front.controller.CourseManagementPage;
+import com.management.front.controller.HonorManagementPage;
 import com.management.front.controller.InnovationManagementPage;
 import com.management.front.page.admin.*;
 import com.management.front.page.student.CourseApplyPage;
@@ -30,6 +31,7 @@ public class Menu extends SplitPane {
     TreeItem<String> item12 = new TreeItem<>("教师作业界面");
     TreeItem<String> item13 = new TreeItem<>("成绩管理");
     TreeItem<String> item14 = new TreeItem<>("教师课程");
+    TreeItem<String> item15 = new TreeItem<>("个人荣誉管理");
 
     public Menu() {
         //this.getStylesheets().add("dark-theme.css");
@@ -40,7 +42,7 @@ public class Menu extends SplitPane {
         menu.setPrefWidth(70);
         this.setDividerPositions(0.2);
 
-        root.getChildren().addAll(item1, item2, item3, item4, item5, item6, item7, item8, item9, item10, item11, item12, item13, item14);
+        root.getChildren().addAll(item1, item2, item3, item4, item5, item6, item7, item8, item9, item10, item11, item12, item13, item14,item15);
         menu.setRoot(root);
 
         this.getItems().add(menu);
@@ -88,6 +90,9 @@ public class Menu extends SplitPane {
                     break;
                 case "教师课程":
                     this.getItems().set(1, new TeacherCourseMenuPage());
+                    break;
+                case "个人荣誉管理":
+                    this.getItems().set(1, new HonorManagementPage());
                     break;
             }
         });
