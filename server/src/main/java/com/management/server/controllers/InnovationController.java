@@ -25,6 +25,7 @@ public class InnovationController {
     @PostMapping("/getAllInnovations")
     public DataResponse getAllInnovations()
     {
+        ArrayList<Innovation> list=(ArrayList<Innovation>) innovationRepository.findAll();
         return new DataResponse(200,innovationRepository.findAll(),null);
     }
     @PostMapping("/getInnovationsByStudent")
@@ -36,18 +37,25 @@ public class InnovationController {
     }
     @PostMapping("/addInnovation")
     public DataResponse addInnovation(@RequestBody Map m){
-        Student s=studentRepository.findByStudentId((String) m.get("studentId"));
-        Set<Person> studentList=new HashSet<>();
-        studentList.add(s);
+        List<Map> studentList=(ArrayList<Map>)(m.get("studentList"));
+        Set<Person> studentSet=new HashSet<>();
+        for(Map studentMap:studentList)
+        {
+            Student student=studentRepository.findByStudentId((String) studentMap.get("studentId"));
+            studentSet.add(student);
+        }
         Innovation innovation=BeanUtil.mapToBean(m, Innovation.class, true, CopyOptions.create().ignoreError());
-        innovation.setPersons(studentList);
+        innovation.setPersons(studentSet);
         innovationRepository.save(innovation);
         return new DataResponse(0,null,"添加成功");
     }
-    @PostMapping("/deleteInnovation")
-    public DataResponse deleteInnovation(@RequestBody Map m)
+    @PostMapping("/deleteInnovations")
+    public DataResponse deleteInnovation(@RequestBody List<Map> list)
     {
-        innovationRepository.deleteByEventId((String)m.get("eventId"));
+        for(Map m:list)
+        {
+            innovationRepository.deleteByEventId((String)m.get("eventId"));
+        }
         return new DataResponse(0,null,"删除成功");
     }
     @PostMapping("/updateInnovation")
@@ -55,7 +63,7 @@ public class InnovationController {
     {
         //save()方法既可以用于保存新的实体，也可以用于更新已存在的实体。
         Innovation innovation=innovationRepository.findByEventId((String) m.get("eventId"));
-        List<Map> personsMap = (List<Map>) m.get("persons");
+        List<Map> personsMap = (List<Map>) m.get("studentList");
         System.out.println(personsMap);
         Set<Person> persons = new HashSet<>();
         for (Map personMap : personsMap) {
