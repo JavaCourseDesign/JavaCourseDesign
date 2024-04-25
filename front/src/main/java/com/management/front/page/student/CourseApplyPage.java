@@ -128,6 +128,8 @@ public class CourseApplyPage extends SplitPane {
         filterPanel.getChildren().addAll(filterConflict, filterAvailable, filterChosen);
         courseTable.setFilterPanel(filterPanel);
 
+
+
         this.getItems().add(courseTable);
     }
 

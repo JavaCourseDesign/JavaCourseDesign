@@ -31,7 +31,7 @@ public class CourseInfoTab extends Tab {
         Label referenceLabel = new Label("参考资料: " + course.get("reference"));
         Label capacityLabel = new Label("课容量: " + course.get("capacity"));
         Label creditLabel = new Label("学分: " + course.get("credit"));
-        String courseType = switch (course.get("type").toString()) {
+        String courseType = switch (course.get("type")+"") {
             case "0" -> "必选";
             case "1" -> "限选";
             case "2" -> "任选";

@@ -24,7 +24,7 @@ public class Homework {
     private Course course;
     private String homeworkContent;
     private LocalDate deadline;
-    private String submitTime;
+    private LocalDate submitTime;
     private String grade;
     private String homeworkFile;
 
