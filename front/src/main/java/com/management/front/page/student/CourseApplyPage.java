@@ -1,8 +1,11 @@
 package com.management.front.page.student;
 
+import com.calendarfx.model.Calendar;
+import com.calendarfx.model.CalendarSource;
+import com.calendarfx.model.Entry;
+import com.calendarfx.view.page.WeekPage;
 import com.management.front.customComponents.SearchableTableView;
 import com.management.front.page.LoginPage;
-import com.management.front.customComponents.WeekTimeTable;
 import com.management.front.request.DataResponse;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -15,6 +18,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -23,7 +27,7 @@ import static com.management.front.util.HttpClientUtil.request;
 public class CourseApplyPage extends SplitPane {
     private SearchableTableView courseTable;
     private ObservableList<Map> observableList = FXCollections.observableArrayList();
-    private WeekTimeTable weekTimeTable = new WeekTimeTable();
+    private WeekPage weekTimeTable = new WeekPage();
     private Label creditCount = new Label();
     private Label requiredCreditCount = new Label();
     private Label optionalCreditCount = new Label();
@@ -31,7 +35,10 @@ public class CourseApplyPage extends SplitPane {
     private ToggleButton filterConflict = new ToggleButton();
     private ToggleButton filterAvailable = new ToggleButton();
     private ToggleButton filterChosen = new ToggleButton();
-
+    private Calendar chosenCalendar = new Calendar("已中课程");
+    private Calendar selectedCalendar = new Calendar("已选课程");
+    private Calendar preViewCalendar = new Calendar("预览课程");
+    private CalendarSource calendarSource = new CalendarSource("My Calendar Source");
     public CourseApplyPage() {
         this.setWidth(1000);
         this.setDividerPosition(0, 0.7);
@@ -46,6 +53,15 @@ public class CourseApplyPage extends SplitPane {
         creditCount.setFont(javafx.scene.text.Font.font(30));
         VBox infoBox = new VBox(time,creditCount,requiredCreditCount,optionalCreditCount,selectiveCreditCount);
         infoBox.setAlignment(Pos.CENTER);
+
+        chosenCalendar.setStyle(Calendar.Style.STYLE1);
+        selectedCalendar.setStyle(Calendar.Style.STYLE2);
+        preViewCalendar.setStyle(Calendar.Style.STYLE3);
+        calendarSource.getCalendars().addAll(chosenCalendar,selectedCalendar,preViewCalendar);
+        weekTimeTable.getCalendarSources().add(calendarSource);
+
+        setEvents(chosenCalendar, (List<Map>) request("/getEventsByStudent",null).getData());
+
         SplitPane splitPane = new SplitPane(weekTimeTable, infoBox);
         this.getItems().add(splitPane);
     }
@@ -128,6 +144,8 @@ public class CourseApplyPage extends SplitPane {
         filterPanel.getChildren().addAll(filterConflict, filterAvailable, filterChosen);
         courseTable.setFilterPanel(filterPanel);
 
+        courseTable.setOnItemClick(course -> {setEvents(preViewCalendar,(List<Map>) request("/getLessonsByCourse",course).getData());});
+
 
 
         this.getItems().add(courseTable);
@@ -157,7 +175,8 @@ public class CourseApplyPage extends SplitPane {
         selectiveCreditCount.setText("选修学分：" + selectiveCredit);
 
 
-        weekTimeTable.setEvents((List)allEvents);
+        //weekTimeTable.setEvents((List)allEvents);
+        setEvents(selectedCalendar,allEvents);
 
         Map filter = new HashMap();
         filter.put("filterConflict", filterConflict.isSelected());
@@ -193,5 +212,49 @@ public class CourseApplyPage extends SplitPane {
             alert.showAndWait();
         }
         displayCourses();
+    }
+
+    public List<Map> getEvents(Calendar calendar) {
+        List<Map> events = new ArrayList<>();
+        for (Entry<?> entry : (List<Entry>)calendar.findEntries("")) {
+            events.add(convertEntryToMap(entry));
+        }
+        return events;
+    }
+
+    public void setEvents(Calendar calendar, List<Map> events) {
+        calendar.clear();
+        calendar.addEntries(events.stream().map(this::convertMapToEntry).collect(Collectors.toList()));
+    }
+
+    public Entry<String> convertMapToEntry(Map<String, Object> map) {
+        Entry<String> entry = new Entry<>((String) map.get("name"));
+        entry.setInterval(
+                LocalDate.parse(map.get("startDate")+""),
+                LocalTime.parse(map.get("startTime")+"") ,
+                LocalDate.parse(map.get("endDate")+""),
+                LocalTime.parse(map.get("endTime")+"")
+        );
+        entry.setLocation((String) map.get("location"));
+
+        return entry;
+    }
+
+    public Map<String, Object> convertEntryToMap(Entry entry) {
+        String name = entry.getTitle() != null ? entry.getTitle() : "";
+        LocalDate startDate = entry.getStartDate() != null ? entry.getStartDate() : LocalDate.now();
+        LocalDate endDate = entry.getEndDate() != null ? entry.getEndDate() : LocalDate.now();
+        LocalTime startTime = entry.getStartTime() != null ? entry.getStartTime() : LocalTime.now();
+        LocalTime endTime = entry.getEndTime() != null ? entry.getEndTime() : LocalTime.now();
+        String location = entry.getLocation() != null ? entry.getLocation() : "";
+
+        return Map.of(
+                "name", name,
+                "startDate", startDate.toString(),
+                "endDate", endDate.toString(),
+                "startTime", startTime.toString(),
+                "endTime", endTime.toString(),
+                "location", location
+        );
     }
 }

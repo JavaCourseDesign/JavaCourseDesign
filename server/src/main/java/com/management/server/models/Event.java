@@ -1,9 +1,6 @@
 package com.management.server.models;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -52,7 +49,7 @@ public class Event{
 
     //private boolean[] eventWeek; 不能这样设计，必须一节对一个对象，否则单节的请假情况和作业情况难以对应
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "person_event")
     @JsonIgnore
     private Set<Person> persons;

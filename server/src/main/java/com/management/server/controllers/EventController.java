@@ -53,17 +53,3 @@ public class EventController {
     }
 
 }
-//getAllEvents测试代码
-/*Student s=new Student();
-        s.setName("tst");
-        s.setPersonId(1);
-        s.setMajor("software");
-        Event e1=new DailyActivity();
-        Event e2=new DailyActivity();
-        e1.setName("e1");
-        e2.setName("e2");
-        List<Event> es=List.of(e1,e2);
-        s.setEvents(es);
-        eventRepository.save(e1); //先存属性再存本体！！！
-        eventRepository.save(e2);
-        studentRepository.save(s);*/

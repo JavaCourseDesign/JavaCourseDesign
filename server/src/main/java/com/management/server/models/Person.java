@@ -12,6 +12,7 @@ import lombok.Setter;
 
 import java.security.DomainLoadStoreParameter;
 import java.util.List;
+import java.util.Set;
 
 
 @Entity
@@ -69,7 +70,8 @@ public abstract class Person {
     private Dormitory dormitory;*/
 
     /*@ManyToMany(mappedBy = "persons")
-    private List<Event> events;*/
+    @JsonIgnore
+    private Set<Event> events;*/
 
     /*@ManyToMany(mappedBy = "persons")
     @JsonIgnoreProperties(value = {"persons"})//在单个属性中添加@JsonIgnoreProperties注解，可以忽略 该属性中 某个属性 的序列化和反序列化

@@ -87,7 +87,6 @@ public class Course{
     @JoinTable(name = "person_course")
     //@JsonIgnore
     //@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "personId")
-    //@JsonIgnoreProperties(value = {"courses"})
     private Set<Person> persons;
 
     //希望选课的学生

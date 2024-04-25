@@ -30,6 +30,9 @@ public class LoginPage extends GridPane {
         setupActions();
         this.getStylesheets().add("dark-theme.css");
 
+        sendAndReceiveDataResponse("/register", Map.of("name", "向辉", "username", "100000", "password", "admin"));
+        sendAndReceiveDataResponse("/register", Map.of("name", "tst", "username", "201921000", "password", "admin"));
+
         //测试用
         nameField.setText("向辉");
         usernameField.setText("100000");

@@ -245,6 +245,12 @@ public class CourseController {
             }
             course.setWillingStudents(willingStudents);//如果选课未开放且有人选课，那么这些人就是抽签失败的人
         }
+        //更新course的lessons的人员
+        List<Lesson> lessons = course.getLessons();
+        for (Lesson lesson : lessons) {
+            lesson.setPersons(new HashSet<>(course.getPersons()));
+        }
+        lessonRepository.saveAll(lessons);
         course.setAvailable(false);
         courseRepository.save(course);
         return new DataResponse(0,null,"抽签成功");
