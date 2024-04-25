@@ -84,7 +84,7 @@ public class CourseController {
         return new DataResponse(0,courseRepository.findCoursesByPersonId(teacherId),null);
     }
 
-    @PostMapping("/getLessonsByCourseId")
+    @PostMapping("/getLessonsByCourse")
     public DataResponse getLessonsByCourse(@RequestBody Map m){
         String courseId = (String) m.get("courseId");
         if(!courseRepository.existsByCourseId(courseId)) {

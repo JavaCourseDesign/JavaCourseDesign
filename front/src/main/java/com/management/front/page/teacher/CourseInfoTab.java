@@ -24,7 +24,7 @@ public class CourseInfoTab extends Tab {
         VBox courseInfoBox = new VBox();
 
         WeekTimeTable weekTimeTable = new WeekTimeTable();
-        weekTimeTable.setEvents((List<Map<String,Object>>) request("/getLessonsByCourseId", course).getData());
+        weekTimeTable.setEvents((List<Map<String,Object>>) request("/getLessonsByCourse", course).getData());
 
         Label courseIdLabel = new Label("课程号: " + course.get("courseId"));
         Label courseNameLabel = new Label("课程名: " + course.get("name"));

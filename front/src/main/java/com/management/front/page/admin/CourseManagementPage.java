@@ -207,8 +207,8 @@ public class CourseManagementPage extends SplitPane {
                 //selectionGrid.setSelectedLessons((List<Map>) course.get("lessons"));
 
                 //mark
-                //selectionGrid.setSelectedLessons((List<Map>) request("/getLessonsByCourseId", Map.of("courseId", ""+course.get("courseId"))).getData());
-                weekTimeTable.setEvents((List<Map<String,Object>>) request("/getLessonsByCourseId", Map.of("courseId", ""+course.get("courseId"))).getData());
+                //selectionGrid.setSelectedLessons((List<Map>) request("/getLessonsByCourse", Map.of("courseId", ""+course.get("courseId"))).getData());
+                weekTimeTable.setEvents((List<Map<String,Object>>) request("/getLessonsByCourse", Map.of("courseId", ""+course.get("courseId"))).getData());
                 weekTimeTable.setCourse(course);
             }
         });
