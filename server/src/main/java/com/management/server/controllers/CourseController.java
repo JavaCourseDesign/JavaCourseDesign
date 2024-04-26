@@ -27,6 +27,8 @@ public class CourseController {
     TeacherRepository teacherRepository;
     @Autowired
     PersonRepository personRepository;
+    @Autowired
+    AbsenceRepository absenceRepository;
 
     @PostMapping("/getAllCourses")
     public DataResponse getAllCourses(){
@@ -190,7 +192,15 @@ public class CourseController {
         // 保存 persons 的更改
         personRepository.saveAll(persons);
 
-        if(lessonsMap!=null){
+        boolean existStudent = false;
+        for(Person person:persons){
+            if(person instanceof Student){
+                existStudent = true;
+                break;
+            }
+        }
+
+        if(lessonsMap!=null&&!existStudent){//有学生了不准改时间，老师要调课的话不通过这个接口
             course.getLessons().clear();
             // 获取所有的 lessons
             List<Lesson> lessons = new ArrayList<>();

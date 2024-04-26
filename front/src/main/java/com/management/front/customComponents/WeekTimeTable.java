@@ -21,8 +21,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class WeekTimeTable extends WeekPage {
-    private final Calendar calendar;
-    private final Calendar preViewCalendar;
+    public final Calendar calendar;
 
     public WeekTimeTable() {
         this.setPrefHeight(600);
@@ -32,12 +31,7 @@ public class WeekTimeTable extends WeekPage {
         CalendarSource calendarSource = new CalendarSource("My Calendar Source");
         calendarSource.getCalendars().add(this.calendar);
 
-        this.preViewCalendar = new Calendar("Preview Calendar");
-        this.preViewCalendar.setStyle(Calendar.Style.STYLE2);
-        CalendarSource preViewCalendarSource = new CalendarSource("My Preview Calendar Source");
-        preViewCalendarSource.getCalendars().add(this.preViewCalendar);
-
-        this.getCalendarSources().setAll(calendarSource, preViewCalendarSource);
+        this.getCalendarSources().setAll(calendarSource);
     }
 
     public void setCourse(Map<String, Object> course) {
@@ -55,11 +49,6 @@ public class WeekTimeTable extends WeekPage {
     public void setEvents(List<Map<String,Object>> events) {
         this.calendar.clear();
         this.calendar.addEntries(events.stream().map(this::convertMapToEntry).collect(Collectors.toList()));
-    }
-
-    public void setPreViewEvents(List<Map<String,Object>> events) {
-        this.preViewCalendar.clear();
-        this.preViewCalendar.addEntries(events.stream().map(this::convertMapToEntry).collect(Collectors.toList()));
     }
 
     public List<Map> getEvents() {
