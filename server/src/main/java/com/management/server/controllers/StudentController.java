@@ -75,7 +75,7 @@ public class StudentController {
     @PostMapping("/getAllStudents")
     public DataResponse getAllStudents()
     {
-        return new DataResponse(200,studentRepository.findAll(),null);
+        return new DataResponse(0,studentRepository.findAll(),null);
     }
     @PostMapping("/addStudent")
     public DataResponse addStudent(@RequestBody Map m)
@@ -134,6 +134,20 @@ public class StudentController {
 
         studentRepository.save(student);
         return new DataResponse(0,null,"保存成功");
+    }
+    @PostMapping("/getStudentsByInnovation")
+    public DataResponse getStudentsByInnovation(@RequestBody Map m)
+    {
+        Innovation innovation = innovationRepository.findByEventId((String) m.get("eventId"));
+        List<Student> studentList = new ArrayList<>();
+        for(Person p:innovation.getPersons())
+        {
+            if(p instanceof Student)
+            {
+                studentList.add((Student) p);
+            }
+        }
+        return new DataResponse(0,studentList,null);
     }
     @PostMapping("/getStudentIntroduce")
     public ResponseEntity<StreamingResponseBody> getStudentIntroduce()

@@ -166,7 +166,7 @@ public class HomeworkManagementTab extends Tab {
     }
 
     private void addHomework() {
-        Map m=newMapFromFields(new HashMap());;
+        Map m=newMapFromFields(new HashMap());
         if(m.get("homeworkContent")==null || m.get("deadline")==null)
         {
             Alert alert = new Alert(Alert.AlertType.ERROR);
