@@ -210,7 +210,7 @@ public class CourseManagementPage extends SplitPane {
                 List<Map> students = persons.stream()
                         .filter(person -> person.containsKey("studentId"))
                         .collect(Collectors.toList());
-                studentListView.setSelectedItems(students);
+                studentListView.setSelectedItems(students);//暂时没添加到面板
 
                 //System.out.println("preCourses"+course.get("preCourses"));
                 //preCourseListView.setSelectedItems((List<Map>) course.get("preCourses"));
@@ -225,6 +225,10 @@ public class CourseManagementPage extends SplitPane {
                 //selectionGrid.setSelectedLessons((List<Map>) request("/getLessonsByCourse", Map.of("courseId", ""+course.get("courseId"))).getData());
                 weekTimeTable.setEvents((List<Map<String,Object>>) request("/getLessonsByCourse", Map.of("courseId", ""+course.get("courseId"))).getData());
                 weekTimeTable.setCourse(course);
+                if(!students.isEmpty()) {
+                    //weekTimeTable.setEntryFactory(param -> null);
+                    weekTimeTable.calendar.setReadOnly(true);
+                }//如果有学生选了这门课，就不能修改课程时间
             }
         });
 

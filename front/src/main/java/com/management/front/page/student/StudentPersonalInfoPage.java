@@ -57,7 +57,7 @@ class InnovationTab extends Tab {
         TableColumn<Map, String> performanceColumn = new TableColumn<>("评价");
         nameColumn.setCellValueFactory(new MapValueFactory<>("name"));
         typeColumn.setCellValueFactory(new MapValueFactory<>("type"));
-        timeColumn.setCellValueFactory(new MapValueFactory<>("time"));
+        timeColumn.setCellValueFactory(new MapValueFactory<>("startDate"));
         locationColumn.setCellValueFactory(new MapValueFactory<>("location"));
         performanceColumn.setCellValueFactory(new MapValueFactory<>("performance"));
 
@@ -143,6 +143,7 @@ class absenceTab extends Tab {
         TableColumn<Map,String> statusColumn= new TableColumn<>("状态");
         offReasonColumn.setCellValueFactory(new MapValueFactory<>("offReason"));
         eventColumn.setCellValueFactory(data->{
+            System.out.println(data.getValue());
             if(data.getValue()!=null)
             {
                 Map<String,Object> event=(Map<String,Object>) data.getValue().get("event");

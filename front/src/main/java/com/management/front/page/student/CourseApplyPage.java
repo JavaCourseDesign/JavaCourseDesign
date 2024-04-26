@@ -59,7 +59,6 @@ public class CourseApplyPage extends SplitPane {
         calendarSource.getCalendars().addAll(chosenCalendar,selectedCalendar,preViewCalendar);
         weekTimeTable.getCalendarSources().add(calendarSource);
 
-        weekTimeTable.setEntryFactory(param -> null);
         chosenCalendar.setReadOnly(true);
         selectedCalendar.setReadOnly(true);
         preViewCalendar.setReadOnly(true);
