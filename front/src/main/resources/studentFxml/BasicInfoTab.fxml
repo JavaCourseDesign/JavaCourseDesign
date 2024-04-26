@@ -50,7 +50,7 @@
                 <Label GridPane.columnIndex="1" GridPane.rowIndex="4" fx:id="birthday" />
                 <Label GridPane.columnIndex="1" GridPane.rowIndex="5" fx:id="dept" />
                 <Label GridPane.columnIndex="1" GridPane.rowIndex="6" fx:id="major" />
-                <Label GridPane.columnIndex="1" GridPane.rowIndex="7" fx:id="administrativeClass" />
+                <Label GridPane.columnIndex="1" GridPane.rowIndex="7" fx:id="clazz" />
                 <Label GridPane.columnIndex="1" GridPane.rowIndex="8" fx:id="social" />
             </GridPane>
         </AnchorPane>

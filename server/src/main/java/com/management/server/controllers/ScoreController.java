@@ -50,6 +50,22 @@ public class ScoreController {
     @PostMapping("/getCourseScores")
     //@PreAuthorize("hasRole('ADMIN') or hasRole('TEACHER')")
     public DataResponse getCourseScores(@RequestBody Map m){
+
+        List<Score> scores = scoreRepository.findByCourseCourseId((String) m.get("courseId"));
+        if(scores.isEmpty()){//如果没有成绩，就初始化成绩
+            Course course = courseRepository.findByCourseId((String) m.get("courseId"));
+            course.setRegularWeight(Double.parseDouble((String) m.get("regularWeight")));
+            course.getScores().clear();
+            for(Person student:course.getPersons()){
+                if(student instanceof Student) {
+                    Score score = new Score();
+                    //System.out.println(student);
+                    score.setStudent((Student) student);
+                    course.getScores().add(score);
+                    scoreRepository.save(score);
+                }
+            }
+        }
         return new DataResponse(0,scoreRepository.findByCourseCourseId((String) m.get("courseId")),null);
     }
 

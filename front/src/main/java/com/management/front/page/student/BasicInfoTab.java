@@ -58,7 +58,7 @@ public class BasicInfoTab extends Tab {
     @FXML
     private Label dept;
     @FXML
-    private Label administrativeClass;
+    private Label clazz;
     @FXML
     private Label social;
     @FXML
@@ -209,7 +209,7 @@ public class BasicInfoTab extends Tab {
             gender.setText((String) student.get("gender"));
             birthday.setText((String) student.get("birthday"));
             dept.setText((String) student.get("dept"));
-            administrativeClass.setText((String) student.get("className")); // 假设student Map中的键为className
+            clazz.setText((String) student.get("className")); // 假设student Map中的键为className
             social.setText((String) student.get("social"));
             phone.setText((String) student.get("phone"));
             email.setText((String) student.get("email"));

@@ -52,7 +52,7 @@ public class Menu extends SplitPane {
                     this.getItems().set(1, new CourseManagementPage());
                     break;
                 case "班级管理":
-                    this.getItems().set(1, new AdministrativeClassManagementPage());
+                    this.getItems().set(1, new ClazzManagementPage());
                     break;
                 case "学生个人信息":
                     this.getItems().set(1, new StudentPersonalInfoPage());

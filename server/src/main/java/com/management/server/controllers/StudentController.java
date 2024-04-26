@@ -13,10 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
-import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 
 import java.io.IOException;
@@ -35,7 +33,7 @@ public class StudentController {
     @Autowired
     private CourseRepository courseRepository;
     @Autowired
-    private AdministrativeClassRepository administrativeClassRepository;
+    private ClazzRepository clazzRepository;
     @Autowired
     private InnovationRepository innovationRepository;
     @Autowired
@@ -51,7 +49,7 @@ public class StudentController {
         Map student = BeanUtil.beanToMap(s) ;
         student.put("families",s.getFamilies());
         //student.put("courses",courseRepository.findCoursesByPersonId(map.get("personId")));
-        student.put("className",administrativeClassRepository.findAdministrativeClassByStudent(s)+"班");
+        student.put("clazzName", clazzRepository.findClazzByStudent(s)+"班");
         return new DataResponse(0,student,null);
     }
     @PostMapping("/getAllStudentsByTeacherCourses")
@@ -221,7 +219,7 @@ public class StudentController {
     public Map getMapFromStudentForIntroduce(String studentId) {
         Student student = studentRepository.findByStudentId(studentId);
         Map map = BeanUtil.beanToMap(student);
-        map.put("className",administrativeClassRepository.findAdministrativeClassByStudent(student)+"班");
+        map.put("className", clazzRepository.findClazzByStudent(student)+"班");
         List<Innovation> list=innovationRepository.findByPersons(student);
         String filePath = "server/src/main/resources/static/resume.html";
         String content = null;

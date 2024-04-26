@@ -25,7 +25,7 @@ public class TestController {//专门用于添加测试数据
     @Autowired
     private CourseRepository courseRepository;
     @Autowired
-    private AdministrativeClassRepository administrativeClassRepository;
+    private ClazzRepository clazzRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
     @Autowired
@@ -120,14 +120,14 @@ public class TestController {//专门用于添加测试数据
             courseRepository.save(course);
         }
 
-        ArrayList<AdministrativeClass> administrativeClasses=new ArrayList<>();
+        ArrayList<Clazz> clazzes =new ArrayList<>();
         List<Student> assignedStudents = new ArrayList<>();
         for(int i=0;i<5;i++){
-            AdministrativeClass administrativeClass=new AdministrativeClass();
-            administrativeClass.setMajor("软件工程");
-            administrativeClass.setGrade("2019");
-            administrativeClass.setClassNumber(i+1+"");
-            administrativeClass.setName("软件工程2019级"+(i+1)+"班");
+            Clazz clazz =new Clazz();
+            clazz.setMajor("软件工程");
+            clazz.setGrade("2019");
+            clazz.setClassNumber(i+1+"");
+            clazz.setName("软件工程2019级"+(i+1)+"班");
             List<Student> studentsInClass=new ArrayList<>();
             while (studentsInClass.size()<30){
                 Student student=students.get(r.nextInt(students.size()));
@@ -136,9 +136,9 @@ public class TestController {//专门用于添加测试数据
                     assignedStudents.add(student);
                 }
             }
-            administrativeClass.setStudents(studentsInClass);
-            administrativeClasses.add(administrativeClass);
-            administrativeClassRepository.save(administrativeClass);
+            clazz.setStudents(studentsInClass);
+            clazzes.add(clazz);
+            clazzRepository.save(clazz);
         }
 
         return new DataResponse(0,null,"测试数据添加成功");
