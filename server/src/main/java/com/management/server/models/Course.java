@@ -5,10 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import java.util.List;
 import java.util.Set;
@@ -28,6 +25,7 @@ import java.util.Set;
     )*/
 /*@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "name")//在递归中第二次出现时用name属性替代本对象避免无限递归
 @JsonIgnoreProperties(value = {"persons"})*/
+@EqualsAndHashCode(exclude = {"lessons","persons","willingStudents","scores"})
 
 public class Course{
     @Id
@@ -87,11 +85,13 @@ public class Course{
     @JoinTable(name = "person_course")
     //@JsonIgnore
     //@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "personId")
+    @JsonIgnoreProperties(value = {"courses","events"})
     private Set<Person> persons;
 
     //希望选课的学生
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "willing_student_course")
+    @JsonIgnoreProperties(value = {"courses","events"})
     //@JsonIgnore
     private Set<Person> willingStudents;
 

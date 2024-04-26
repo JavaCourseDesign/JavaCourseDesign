@@ -102,6 +102,7 @@ public class CourseManagementPage extends SplitPane {
         TableColumn<Map, String> courseIdColumn = new TableColumn<>("课程号");
         TableColumn<Map, String> courseNameColumn = new TableColumn<>("课程名");
         TableColumn<Map, String> courseCreditColumn = new TableColumn<>("学分");
+        TableColumn<Map, String> courseTypeColumn = new TableColumn<>("类型");
         TableColumn<Map, String> courseReferenceColumn = new TableColumn<>("参考资料");
         TableColumn<Map, String> courseCapacityColumn = new TableColumn<>("课容量");
         TableColumn<Map, String> preCourseColumn = new TableColumn<>("先修课程");
@@ -126,6 +127,20 @@ public class CourseManagementPage extends SplitPane {
         });*/
 
         //teacherColumn.setCellValueFactory(new MapValueFactory<>("teacher"));
+        courseTypeColumn.setCellValueFactory(data -> {
+            String type = (String) data.getValue().get("type");
+            if (type == null) {
+                return new SimpleStringProperty("");
+            } else {
+                return new SimpleStringProperty(switch (type) {
+                    case "0" -> "必选";
+                    case "1" -> "任选";
+                    case "2" -> "限选";
+                    default -> "";
+                });
+            }
+        });
+
         teacherColumn.setCellValueFactory(data -> {
             List<Map<String, Object>> persons = (List<Map<String, Object>>) data.getValue().get("persons");
             String personNames = persons.stream()
@@ -157,7 +172,7 @@ public class CourseManagementPage extends SplitPane {
 
 
         List<TableColumn<Map,?>> columns = new ArrayList<>();
-        columns.addAll(List.of(courseIdColumn, courseNameColumn, courseCreditColumn,courseReferenceColumn, courseCapacityColumn,preCourseColumn ,teacherColumn, studentColumn, availableColumn));
+        columns.addAll(List.of(courseIdColumn, courseNameColumn, courseCreditColumn,courseTypeColumn ,courseReferenceColumn, courseCapacityColumn,preCourseColumn ,teacherColumn, studentColumn, availableColumn));
         courseTable=new SearchableTableView(observableList, List.of("courseId","name","persons"), columns);
 
         this.getItems().add(courseTable);

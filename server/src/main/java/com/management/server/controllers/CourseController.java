@@ -31,7 +31,6 @@ public class CourseController {
     @PostMapping("/getAllCourses")
     public DataResponse getAllCourses(){
         //把persons属性和willingStudents属性包含在返回内容中
-
         return new DataResponse(0,courseRepository.findAll(),null);
     }
 

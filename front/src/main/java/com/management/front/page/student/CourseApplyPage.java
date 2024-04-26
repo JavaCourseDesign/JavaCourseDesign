@@ -48,7 +48,6 @@ public class CourseApplyPage extends SplitPane {
         displayCourses();
     }
     private void initializeWeekTimeTable() {
-        //HBox hbox = new HBox(weekTimeTable, creditCount);
         Label time=new Label(LocalDate.now().toString());
         creditCount.setFont(javafx.scene.text.Font.font(30));
         VBox infoBox = new VBox(time,creditCount,requiredCreditCount,optionalCreditCount,selectiveCreditCount);
@@ -59,6 +58,11 @@ public class CourseApplyPage extends SplitPane {
         preViewCalendar.setStyle(Calendar.Style.STYLE3);
         calendarSource.getCalendars().addAll(chosenCalendar,selectedCalendar,preViewCalendar);
         weekTimeTable.getCalendarSources().add(calendarSource);
+
+        weekTimeTable.setEntryFactory(param -> null);
+        chosenCalendar.setReadOnly(true);
+        selectedCalendar.setReadOnly(true);
+        preViewCalendar.setReadOnly(true);
 
         setEvents(chosenCalendar, (List<Map>) request("/getEventsByStudent",null).getData());
 

@@ -49,7 +49,7 @@ public class EventController {
     @PostMapping("/getEventsByStudent")
     public DataResponse getEventsByStudent() {
         Student student = studentRepository.findByStudentId(CommonMethod.getUsername());
-        return new DataResponse(0, eventRepository.findEventsByPerson(student), null);
+        return new DataResponse(0, student.getEvents(), null);
     }
 
 }

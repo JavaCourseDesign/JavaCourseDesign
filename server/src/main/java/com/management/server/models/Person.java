@@ -7,6 +7,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -22,6 +23,7 @@ import java.util.Set;
 
 //@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "name")//在递归中第二次出现时用name属性替代本对象避免无限递归
 //@JsonIgnoreProperties(value = {"courses"})
+@EqualsAndHashCode(exclude = {"events"})//极为重要！跟json ignore搭配才能解决循环引用问题
 
 @Inheritance(strategy = InheritanceType.JOINED)
 public abstract class Person {
@@ -69,9 +71,9 @@ public abstract class Person {
     @JoinColumn(name = "dormitory_id")
     private Dormitory dormitory;*/
 
-    /*@ManyToMany(mappedBy = "persons")
+    @ManyToMany(mappedBy = "persons")
     @JsonIgnore
-    private Set<Event> events;*/
+    private Set<Event> events;
 
     /*@ManyToMany(mappedBy = "persons")
     @JsonIgnoreProperties(value = {"persons"})//在单个属性中添加@JsonIgnoreProperties注解，可以忽略 该属性中 某个属性 的序列化和反序列化
