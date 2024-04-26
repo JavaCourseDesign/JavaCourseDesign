@@ -42,7 +42,7 @@ public class ClazzManagementPage extends SplitPane {
         this.setWidth(1000);
         initializeTable();
         initializeControlPanel();
-        displayClazzes();
+        displayClazz();
     }
 
     private void initializeTable() {
@@ -104,9 +104,9 @@ public class ClazzManagementPage extends SplitPane {
         this.getItems().add(controlPanel);
     }
 
-    private void displayClazzes(){
+    private void displayClazz(){
         observableList.clear();
-        observableList.addAll(FXCollections.observableArrayList((ArrayList) request("/getAllClazzes", null).getData()));
+        observableList.addAll(FXCollections.observableArrayList((ArrayList) request("/getAllClazz", null).getData()));
         clazzTable.setData(observableList);
         System.out.println(observableList);
     }
@@ -118,7 +118,7 @@ public class ClazzManagementPage extends SplitPane {
 
         DataResponse r=request("/addClazz",m);
 
-        displayClazzes();
+        displayClazz();
 
         if(r.getCode()==-1)
         {
@@ -154,7 +154,7 @@ public class ClazzManagementPage extends SplitPane {
                 System.out.println(m);
                 System.out.println(r);
 
-                displayClazzes();
+                displayClazz();
 
                 if(r.getCode()==0)
                 {
@@ -182,7 +182,7 @@ public class ClazzManagementPage extends SplitPane {
         {
             DataResponse r=request("/updateClazz",newMapFromFields(selected));
 
-            displayClazzes();
+            displayClazz();
 
             if(r.getCode()==0)
             {

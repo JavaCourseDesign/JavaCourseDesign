@@ -49,6 +49,8 @@ public class EventController {
     @PostMapping("/getEventsByStudent")
     public DataResponse getEventsByStudent() {
         Student student = studentRepository.findByStudentId(CommonMethod.getUsername());
+        if(student == null)
+            return new DataResponse(-1, null, "学生不存在");
         return new DataResponse(0, student.getEvents(), null);
     }
 

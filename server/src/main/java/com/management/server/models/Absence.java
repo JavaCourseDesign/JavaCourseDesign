@@ -4,11 +4,13 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.util.List;
 
 @Entity
 @Data
+@EqualsAndHashCode(exclude = {"person","event"})
 public class Absence {
     @Id
     @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)

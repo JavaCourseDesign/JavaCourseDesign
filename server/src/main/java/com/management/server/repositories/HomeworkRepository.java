@@ -14,6 +14,7 @@ import java.util.List;
 public interface HomeworkRepository extends JpaRepository<Homework, String>{
     List<Homework> findHomeworkByStudent(Student student);
     List<Homework> findHomeworkByCourse(Course course);
+    List<Homework> findHomeworkByCourseAndStudent(Course course, Student student);
     Homework findHomeworkByHomeworkId(String homeworkId);
 
 }

@@ -41,6 +41,8 @@ public class ScoreManagementTab extends Tab {//成绩录入界面
         // Create columns
         TableColumn<Map, String> studentIdColumn = new TableColumn<>("学号");
         //TableColumn<Map, String> courseIdColumn = new TableColumn<>("课程号");
+        TableColumn<Map, String> homeworkMarkColumn = new TableColumn<>("作业成绩");
+        TableColumn<Map, String> absenceColumn = new TableColumn<>("缺勤次数");
         TableColumn<Map, String> regularMarkColumn = new TableColumn<>("平时成绩");
         TableColumn<Map, String> finalMarkColumn = new TableColumn<>("期末成绩");
         TableColumn<Map, String> markColumn = new TableColumn<>("总成绩");
@@ -48,13 +50,16 @@ public class ScoreManagementTab extends Tab {//成绩录入界面
         // Set cell value factories
         studentIdColumn.setCellValueFactory(new MapValueFactory<>("student"));
         //courseIdColumn.setCellValueFactory(new MapValueFactory<>("course"));
+        homeworkMarkColumn.setCellValueFactory(new MapValueFactory<>("homework"));
+        absenceColumn.setCellValueFactory(new MapValueFactory<>("absence"));
         regularMarkColumn.setCellValueFactory(new MapValueFactory<>("regularMark"));
         finalMarkColumn.setCellValueFactory(new MapValueFactory<>("finalMark"));
         markColumn.setCellValueFactory(new MapValueFactory<>("mark"));
 
         // Add columns to table
-        List<TableColumn<Map,?>> columns= List.of(studentIdColumn,regularMarkColumn,finalMarkColumn,markColumn);
+        List<TableColumn<Map,?>> columns= List.of(studentIdColumn,homeworkMarkColumn,absenceColumn,regularMarkColumn,finalMarkColumn,markColumn);
         scoreTable= new SearchableTableView(observableList,List.of("studentId"),columns);
+
         splitPane.getItems().add(scoreTable);
     }
 
