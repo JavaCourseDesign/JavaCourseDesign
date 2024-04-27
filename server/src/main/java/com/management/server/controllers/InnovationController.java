@@ -2,6 +2,7 @@ package com.management.server.controllers;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
+import com.management.server.models.Event;
 import com.management.server.models.Innovation;
 import com.management.server.models.Person;
 import com.management.server.models.Student;
@@ -26,14 +27,22 @@ public class InnovationController {
     public DataResponse getAllInnovations()
     {
         ArrayList<Innovation> list=(ArrayList<Innovation>) innovationRepository.findAll();
-        return new DataResponse(200,innovationRepository.findAll(),null);
+        return new DataResponse(0,innovationRepository.findAll(),null);
     }
     @PostMapping("/getInnovationsByStudent")
     public DataResponse getInnovationByStudent()
     {
         Student s=studentRepository.findByStudentId(CommonMethod.getUsername());
-        List<Innovation> list=innovationRepository.findByPersons(s);
-        return new DataResponse(200,list,null);
+        Set<Event> eventList=s.getEvents();
+        List<Innovation> list=new ArrayList<>();
+        for(Event e:eventList)
+        {
+            if(e instanceof Innovation)
+            {
+                list.add((Innovation) e);
+            }
+        }
+        return new DataResponse(0,list,null);
     }
     @PostMapping("/addInnovation")
     public DataResponse addInnovation(@RequestBody Map m){

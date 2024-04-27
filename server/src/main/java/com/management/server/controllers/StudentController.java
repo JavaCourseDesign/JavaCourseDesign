@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 import org.springframework.core.io.ResourceLoader;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -40,6 +41,8 @@ public class StudentController {
     private FamilyRepository familyRepository;
     @Autowired
     private TeacherRepository teacherRepository;
+    @Autowired
+    private DailyActivityRepository dailyActivityRepository;
     @PostMapping("/getStudent")
     public DataResponse getStudent()
     {
@@ -133,6 +136,20 @@ public class StudentController {
         studentRepository.save(student);
         return new DataResponse(0,null,"保存成功");
     }
+    @PostMapping("/getStudentsByDailyActivity")
+    public DataResponse getStudentsByDailyActivity(@RequestBody Map m)
+    {
+        DailyActivity dailyActivity = dailyActivityRepository.findByEventId((String) m.get("eventId"));
+        List<Student> studentList = new ArrayList<>();
+        for(Person p:dailyActivity.getPersons())
+        {
+            if(p instanceof Student)
+            {
+                studentList.add((Student) p);
+            }
+        }
+        return new DataResponse(0,studentList,null);
+    }
     @PostMapping("/getStudentsByInnovation")
     public DataResponse getStudentsByInnovation(@RequestBody Map m)
     {
@@ -148,40 +165,38 @@ public class StudentController {
         return new DataResponse(0,studentList,null);
     }
     @PostMapping("/getStudentIntroduce")
-    public ResponseEntity<StreamingResponseBody> getStudentIntroduce()
+    public ResponseEntity<byte[]> getStudentIntroduce()
     {
         String studentId=CommonMethod.getUsername();
         Map info=getMapFromStudentForIntroduce(studentId);
         String content = (String)info.get("introduce");
         content = addHeadInfo(content,"<style> html { font-family: \"SourceHanSansSC\", \"Open Sans\";}  </style> <meta charset='UTF-8' />  <title>Insert title here</title>");
         content = replaceNameValue(content,info);
-        return getPdfDataFromHtml(content);
+        return ResponseEntity.ok().contentType(MediaType.APPLICATION_PDF)
+                .body(getPdfDataFromHtml(content));
     }
-    public ResponseEntity<StreamingResponseBody> getPdfDataFromHtml(String htmlContent) {
+    public byte[] getPdfDataFromHtml(String htmlContent) {
         try {
             PdfRendererBuilder builder = new PdfRendererBuilder();
             builder.withHtmlContent(htmlContent, "classpath:/static/resume.html");
             builder.useFastMode();
             //builder.withWmMargins(0, 0, 0, 0).useDefaultPageSize(PageOrientation.PORTRAIT, PageSize.A4);
             builder.useCacheStore(PdfRendererBuilder.CacheStore.PDF_FONT_METRICS, fSDefaultCacheStore);
-            Resource resource = resourceLoader.getResource("classpath:font/SourceHanSansSC-Regular.ttf");
-           InputStream fontInput = resource.getInputStream();
+            Resource resource = resourceLoader.getResource("classpath:/font/SourceHanSansSC-Regular.ttf");
+            InputStream fontInput = resource.getInputStream();
             builder.useFont(new FSSupplier<InputStream>() {
                 @Override
                 public InputStream supply() {
                     return fontInput;
                 }
             }, "SourceHanSansSC");
-            StreamingResponseBody stream = outputStream -> {
-                builder.toStream(outputStream);
-                builder.run();
-            };
-            return ResponseEntity.ok()
-                    .contentType(MediaType.APPLICATION_PDF)
-                    .body(stream);
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            builder.toStream(outputStream);
+            builder.run();
+            return outputStream.toByteArray();
         }
         catch (Exception e) {
-            return  ResponseEntity.internalServerError().build();
+            return null;
         }
     }
     public static String replaceNameValue(String html, Map<String,String>m) {
@@ -229,7 +244,7 @@ public class StudentController {
             throw new RuntimeException(e);
         }
         map.put("introduce",content);
-        map.put("photo","../Photo/" + CommonMethod.getUsername() + ".jpg");
+        map.put("photo","../Photo/" + student.getPhoto());
         int cnt1=0;// 学科竞赛
         int cnt2=0;//科研成果
         int cnt3=0;//社会实践

@@ -1,27 +1,30 @@
 package com.management.server.models;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+
+import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Table(	name = "honor")
 @Data
+@EqualsAndHashCode(exclude = {"persons"})
 public class Honor {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String honorId;
-
-    private String time;
-
+    private LocalDate awardDate;//颁奖时间
     private String name;
     @Size(max=1000)
-    private String message;
-    @Size(max=1000)
-    private String department;
+    private String department;//颁奖部门
 
-    @ManyToOne
-    @JoinColumn(name = "person_id")
-    private Person person;
+    @ManyToMany
+    @JoinTable(name = "person_honor")
+    @JsonIgnore
+    private List<Person> persons;
 
     @ManyToOne
     @JoinColumn(name = "event_id")

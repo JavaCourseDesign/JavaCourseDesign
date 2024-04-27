@@ -26,6 +26,8 @@ public class Menu extends SplitPane {
     TreeItem<String> item11 = new TreeItem<>("学生作业界面");
     TreeItem<String> item13 = new TreeItem<>("成绩管理");
     TreeItem<String> item14 = new TreeItem<>("教师课程");
+    TreeItem<String> item15 = new TreeItem<>("日常活动管理");
+    TreeItem<String> item16 = new TreeItem<>("荣誉管理");
 
     public Menu() {
         //this.getStylesheets().add("dark-theme.css");
@@ -35,7 +37,7 @@ public class Menu extends SplitPane {
         menu.setPrefWidth(70);
         this.setDividerPositions(0.1);
 
-        root.getChildren().addAll(item1, item2, item3, item4, item5, item6, item7, item8, item9, item10, item11, item13, item14);
+        root.getChildren().addAll(item1, item2, item3, item4, item5, item6, item7, item8, item9, item10, item11, item13, item14, item15, item16);
         menu.setRoot(root);
 
         this.getItems().add(menu);
@@ -81,6 +83,13 @@ public class Menu extends SplitPane {
                 case "教师课程":
                     this.getItems().set(1, new TeacherCourseMenuPage());
                     break;
+                case "日常活动管理":
+                    this.getItems().set(1, new DailyActivityManagementPage());
+                    break;
+                case "荣誉管理":
+                    this.getItems().set(1, new HonorManagementPage());
+                    break;
+
             }
         });
     }
