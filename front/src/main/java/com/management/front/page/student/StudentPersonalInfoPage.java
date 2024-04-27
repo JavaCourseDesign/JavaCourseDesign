@@ -28,6 +28,7 @@ public class StudentPersonalInfoPage extends TabPane {
         this.getTabs().add(new BasicInfoTab(student));
         this.getTabs().add(new InnovationTab());
         this.getTabs().add(new absenceTab());
+        this.getTabs().add(new DailyActivityTab());
     }
 }
 
@@ -41,9 +42,9 @@ class InnovationTab extends Tab {
         this.setText("创新实践信息管理");
         this.setContent(anchorPane);
         initializeTable();
-        displayInnovations();
+        displayDailyActivities();
     }
-    private void displayInnovations() {
+    private void displayDailyActivities() {
         observableList.clear();
         observableList.addAll(FXCollections.observableArrayList((ArrayList) request("/getInnovationsByStudent", null).getData()));
         innovationTable.setData(observableList);
@@ -217,6 +218,77 @@ class absenceTab extends Tab {
         displayAbsences();
         eventListView.setSelectedItems(List.of());
     }
+}
+class DailyActivityTab extends Tab{
 
+    private SearchableTableView dailyActivityTable;
+    private SplitPane anchorPane=new SplitPane();
+    private VBox controlPanel = new VBox();
+    private ObservableList<Map> observableList = FXCollections.observableArrayList();
+
+    public DailyActivityTab() {
+        this.setText("日常活动管理");
+        this.setContent(anchorPane);
+        initializeTable();
+        displayDailyActivities();
+    }
+    private void displayDailyActivities() {
+        observableList.clear();
+        observableList.addAll(FXCollections.observableArrayList((ArrayList) request("/getDailyActivitiesByStudent", null).getData()));
+        dailyActivityTable.setData(observableList);
+    }
+    private void initializeTable()
+    {
+        TableColumn<Map, String> nameColumn = new TableColumn<>("活动名称");
+        TableColumn<Map, String> typeColumn = new TableColumn<>("活动类型");
+        TableColumn<Map, String> timeColumn = new TableColumn<>("活动时间");
+        TableColumn<Map, String> locationColumn = new TableColumn<>("活动地点");
+        nameColumn.setCellValueFactory(new MapValueFactory<>("name"));
+        typeColumn.setCellValueFactory(new MapValueFactory<>("type"));
+        timeColumn.setCellValueFactory(new MapValueFactory<>("startDate"));
+        locationColumn.setCellValueFactory(new MapValueFactory<>("location"));
+
+        List<TableColumn<Map, ?>> columns = new ArrayList<>();
+        columns.add(nameColumn);
+        columns.add(typeColumn);
+        columns.add(timeColumn);
+        columns.add(locationColumn);
+        dailyActivityTable = new SearchableTableView(observableList, List.of("name","type"), columns);
+        anchorPane.getItems().add(dailyActivityTable);
+
+    }
+}
+class HonorTab extends Tab{
+    private SearchableTableView honorTable;
+    private SplitPane anchorPane=new SplitPane();
+    private ObservableList<Map> observableList = FXCollections.observableArrayList();
+
+    public HonorTab() {
+        this.setText("荣誉信息管理");
+        this.setContent(anchorPane);
+        initializeTable();
+        displayDailyActivities();
+    }
+    private void displayDailyActivities() {
+        observableList.clear();
+        observableList.addAll(FXCollections.observableArrayList((ArrayList) request("/getHonorsByStudent", null).getData()));
+        honorTable.setData(observableList);
+    }
+    private void initializeTable()
+    {
+        TableColumn<Map, String> nameColumn = new TableColumn<>("荣誉名称");
+        TableColumn<Map, String> timeColumn = new TableColumn<>("获得时间");
+        TableColumn<Map, String> departmentComumn = new TableColumn<>("颁奖部门");
+        nameColumn.setCellValueFactory(new MapValueFactory<>("name"));
+        timeColumn.setCellValueFactory(new MapValueFactory<>("awardTime"));
+        departmentComumn.setCellValueFactory(new MapValueFactory<>("department"));
+
+        List<TableColumn<Map, ?>> columns = new ArrayList<>();
+        columns.add(nameColumn);
+        columns.add(timeColumn);
+        columns.add(departmentComumn);
+        honorTable = new SearchableTableView(observableList, List.of("name","awardTime"), columns);
+        anchorPane.getItems().add(honorTable);
+    }
 }
 

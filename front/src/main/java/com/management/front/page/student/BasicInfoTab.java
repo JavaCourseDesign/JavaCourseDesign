@@ -92,6 +92,16 @@ public class BasicInfoTab extends Tab {
             e.printStackTrace(); // 处理加载异常
         }
     }
+    @FXML
+    private void showPortrait() throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("studentFxml/StudentPortrait.fxml"));
+        Scene scene=new Scene(fxmlLoader.load());
+        Stage stage=new Stage();
+        stage.setScene(scene);
+        stage.show();
+        StudentPortraitPage controller = fxmlLoader.getController();
+        controller.setStudent(student);
+    }
 
     @FXML
     private void initialize() {
@@ -134,8 +144,7 @@ public class BasicInfoTab extends Tab {
 
     @FXML
     public void showPdf() {
-        //System.out.println(requestByteData("/getStudentIntroduce",student));
-        byte[] data = requestByteData("/getStudentIntroduce", student);
+        byte[] data=requestByteData("/getStudentIntroduce",null);
         model = new PdfModel(data);
         pagination.setPageCount(model.numPages());
         pagination.setPageFactory(index -> new ImageView(model.getImage(index)));

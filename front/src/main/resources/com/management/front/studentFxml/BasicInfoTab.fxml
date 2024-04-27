@@ -13,6 +13,7 @@
             <Label fx:id="MAJOR" />
             <Button text="保存" onAction="#save" />
             <Button text="打印个人简历" onAction="#showPdf" />
+            <Button text="打印个人画像" onAction="#showPortrait" />
         </VBox>
     </HBox>
     <TitledPane animated="false" text="基本信息" collapsible="false">

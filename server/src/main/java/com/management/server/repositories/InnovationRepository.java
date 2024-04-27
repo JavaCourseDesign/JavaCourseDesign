@@ -17,6 +17,5 @@ public interface InnovationRepository extends JpaRepository<Innovation,String> {
 
     @Query("SELECT i FROM Innovation i WHERE :person MEMBER OF i.persons")
     List<Innovation> findByPersons(@Param("person") Person person);
-
     Integer deleteByEventId(String eventId);
 }

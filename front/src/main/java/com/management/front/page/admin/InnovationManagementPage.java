@@ -91,17 +91,24 @@ public class InnovationManagementPage extends SplitPane {
        innovationTable.setOnItemClick(innovation->{
            if(innovationTable.getSelectedIndex()==0)
            {
+               addButton.setDisable(false);
                studentTable.setVisible(false);
+                nameField.setText("");
+                typeField.setValue("");
+                timePicker.setValue(null);
+                locationField.setText("");
+                performanceField.setText("");
+                studentListView.setSelectedItems(List.of());
                return;
            }
-           System.out.println(innovation);
+           addButton.setDisable(true);
            nameField.setText((String) innovation.get("name"));
            typeField.setValue((String) innovation.get("type"));
            timePicker.setValue(LocalDate.parse((String) innovation.get("startDate")));
            locationField.setText((String) innovation.get("location"));
            performanceField.setText((String) innovation.get("performance"));
            displayStudents(innovation);
-            studentTable.setVisible(true);
+           studentTable.setVisible(true);
         });
 
         controlPanel.getChildren().add(gridPane);
