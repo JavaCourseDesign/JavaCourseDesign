@@ -81,7 +81,7 @@ public class BasicInfoTab extends Tab {
 
     public BasicInfoTab(Map<String, Object> student) {
         this.student = student;
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("/studentFxml/BasicInfoTab.fxml")); // 确保路径正确
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("studentFxml/BasicInfoTab.fxml")); // 确保路径正确
         fxmlLoader.setController(this);
         try {
             VBox content = fxmlLoader.load();

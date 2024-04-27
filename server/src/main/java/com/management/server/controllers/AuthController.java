@@ -3,6 +3,7 @@ package com.management.server.controllers;
 import com.management.server.models.*;
 import com.management.server.payload.response.DataResponse;
 import com.management.server.repositories.*;
+import com.management.server.util.CommonMethod;
 import com.management.server.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -83,5 +84,10 @@ public class AuthController {
             return new DataResponse(-1, null, null);
         }
         return new DataResponse(0, user.getPerson().getPersonId(), null);
+    }
+
+    @PostMapping("/getRole")
+    public DataResponse getRole() {
+        return new DataResponse(0, null, CommonMethod.getUserType());
     }
 }

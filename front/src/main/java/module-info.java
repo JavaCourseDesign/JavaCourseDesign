@@ -20,11 +20,12 @@ module com.management.front {
     requires javafx.swing;
     requires com.jfoenix;
     requires com.calendarfx.view;
+    requires org.burningwave.core;
 
     opens com.management.front to javafx.fxml;
     exports com.management.front;
 
-    //following are manually added
+    /*// 以下是手动添加的模块声明
     exports com.management.front.request to com.google.gson;
     opens com.management.front.request to com.google.gson;
     exports com.management.front.page;
@@ -38,6 +39,5 @@ module com.management.front {
     exports com.management.front.page.teacher;
     opens com.management.front.page.teacher to javafx.fxml;
     exports com.management.front.customComponents;
-    opens com.management.front.customComponents to javafx.fxml;
-
+    opens com.management.front.customComponents to javafx.fxml;*/
 }

@@ -81,15 +81,25 @@
           <artifactId>*</artifactId>
         </exclusion>
       </exclusions>
-    </dependency><dependency>
+    </dependency>
+    <dependency>
       <groupId>org.kordamp.ikonli</groupId>
       <artifactId>ikonli-javafx</artifactId>
       <version>12.3.1</version>
-    </dependency><dependency>
+    </dependency>
+
+    <dependency>
+      <groupId>org.kordamp.ikonli</groupId>
+      <artifactId>ikonli-materialdesign-pack</artifactId>
+      <version>12.3.1</version>
+    </dependency>
+
+    <dependency>
       <groupId>org.kordamp.bootstrapfx</groupId>
       <artifactId>bootstrapfx-core</artifactId>
       <version>0.4.0</version>
-    </dependency><dependency>
+    </dependency>
+    <dependency>
       <groupId>eu.hansolo</groupId>
       <artifactId>tilesfx</artifactId>
       <version>11.48</version>
@@ -100,7 +110,7 @@
         </exclusion>
       </exclusions>
     </dependency>
-<dependency>
+    <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-api</artifactId>
       <version>${junit.version}</version>
@@ -137,6 +147,12 @@
       <version>11.12.7</version>
     </dependency>
 
+    <dependency>
+      <groupId>org.burningwave</groupId>
+      <artifactId>core</artifactId>
+      <version>12.64.3</version>
+    </dependency>
+
   </dependencies>
 
   <build>
@@ -156,7 +172,6 @@
         <version>0.0.8</version>
         <executions>
           <execution>
-            <!-- Default configuration for running with: mvn clean javafx:run -->
             <id>default-cli</id>
             <configuration>
               <mainClass>com.management.front/com.management.front.HelloApplication</mainClass>
@@ -169,6 +184,8 @@
               <options>
                 <option>--add-opens</option>
                 <option>java.base/java.lang.reflect=com.jfoenix</option>
+                <option>--add-opens</option>
+                <option>java.base/java.lang=com.jfoenix</option>
               </options>
             </configuration>
           </execution>
