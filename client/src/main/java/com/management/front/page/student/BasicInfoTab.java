@@ -1,6 +1,6 @@
 package com.management.front.page.student;
 
-import com.management.front.HelloApplication;
+import com.management.front.ClientApplication;
 import com.management.front.page.PdfModel;
 import com.management.front.request.DataResponse;
 import javafx.collections.FXCollections;
@@ -81,7 +81,7 @@ public class BasicInfoTab extends Tab {
 
     public BasicInfoTab(Map<String, Object> student) {
         this.student = student;
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("studentFxml/BasicInfoTab.fxml")); // 确保路径正确
+        FXMLLoader fxmlLoader = new FXMLLoader(ClientApplication.class.getResource("studentFxml/BasicInfoTab.fxml")); // 确保路径正确
         fxmlLoader.setController(this);
         try {
             VBox content = fxmlLoader.load();
@@ -94,7 +94,7 @@ public class BasicInfoTab extends Tab {
     }
     @FXML
     private void showPortrait() throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("studentFxml/StudentPortrait.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(ClientApplication.class.getResource("studentFxml/StudentPortrait.fxml"));
         Scene scene=new Scene(fxmlLoader.load());
         Stage stage=new Stage();
         stage.setScene(scene);

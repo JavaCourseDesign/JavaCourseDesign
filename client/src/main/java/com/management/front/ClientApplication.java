@@ -9,7 +9,7 @@ import org.burningwave.core.classes.Modules;
 
 import static com.management.front.util.HttpClientUtil.sendAndReceiveDataResponse;
 
-public class HelloApplication extends Application {
+public class ClientApplication extends Application {
     @Override
     public void start(Stage stage) {
 
@@ -17,6 +17,7 @@ public class HelloApplication extends Application {
         Scene scene = new Scene(new LoginPage(), 300, 400);
         stage.setScene(scene);
         stage.show();
+
     }
 
     public static void main(String[] args) {

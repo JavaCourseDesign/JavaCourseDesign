@@ -1,16 +1,14 @@
 package com.management.front.page;
 
 import com.jfoenix.controls.JFXTreeView;
-import com.management.front.HelloApplication;
+import com.management.front.ClientApplication;
 import com.management.front.page.admin.*;
 import com.management.front.page.student.*;
 import com.management.front.page.teacher.TeacherCourseMenuPage;
 import com.management.front.request.DataResponse;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Label;
 import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeView;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import org.kordamp.ikonli.javafx.FontIcon;
@@ -59,7 +57,7 @@ public class Menu extends AnchorPane {
 
     public Menu(){
         //this.setStyle("-fx-background-color: red;");
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("/com/management/front/menu.fxml")); // 确保路径正确
+        FXMLLoader fxmlLoader = new FXMLLoader(ClientApplication.class.getResource("/com/management/front/menu.fxml")); // 确保路径正确
         fxmlLoader.setController(this);
         try {
             borderPane=fxmlLoader.load();
