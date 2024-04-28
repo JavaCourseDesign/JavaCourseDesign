@@ -32,6 +32,8 @@ public class LoginPage extends GridPane {
 
         sendAndReceiveDataResponse("/register", Map.of("name", "向辉", "username", "100000", "password", "admin"));
         sendAndReceiveDataResponse("/register", Map.of("name", "tst", "username", "201921000", "password", "admin"));
+        sendAndReceiveDataResponse("/register", Map.of("name", "wzk", "username", "201921001", "password", "admin"));
+        sendAndReceiveDataResponse("/register", Map.of("name", "why", "username", "201921002", "password", "admin"));
 
         //测试用
         nameField.setText("向辉");
