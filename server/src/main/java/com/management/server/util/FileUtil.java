@@ -3,8 +3,6 @@ package com.management.server.util;
 import com.management.server.payload.response.DataResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.io.*;
 import java.net.URLDecoder;
@@ -67,5 +65,28 @@ public class FileUtil {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+    public static String getPhotoImageStr(String fileName) {
+        try {
+            if (fileName == null || fileName.equals("")) {
+                return "请先上传文件！";
+            }
+            fileName = URLDecoder.decode(fileName, StandardCharsets.UTF_8.toString());
+            File file = new File(attachFolder + "photo/" + fileName);
+            if (!file.exists()) {
+                return "请先上传文件！";
+            }
+            int len = (int) file.length();
+            byte data[] = new byte[len];
+            FileInputStream in = new FileInputStream(file);
+            in.read(data);
+            in.close();
+            String imageStr = "data:image/jpeg;base64,";
+            imageStr = imageStr + new String(Base64.getEncoder().encode(data));
+            return imageStr;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

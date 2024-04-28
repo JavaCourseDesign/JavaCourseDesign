@@ -5,24 +5,20 @@ import com.management.server.models.Teacher;
 import com.management.server.payload.response.DataResponse;
 import com.management.server.repositories.StudentRepository;
 import com.management.server.repositories.TeacherRepository;
-import com.management.server.service.UserDetailsImpl;
 import com.management.server.util.CommonMethod;
 import com.management.server.util.FileUtil;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
-import java.util.Map;
+
 @RestController
 public class PhotoController {
 
@@ -51,7 +47,7 @@ public class PhotoController {
                 return new DataResponse(1,null,"请先上传文件！");
             }
             fileName = URLDecoder.decode(fileName, StandardCharsets.UTF_8.toString());
-            File file = new File(attachFolder +"Photo/"+ fileName);
+            File file = new File(attachFolder + "photo/" + fileName);
             if(!file.exists())
             {
                 return new DataResponse(1,null,"请先上传文件！");
@@ -84,7 +80,7 @@ public class PhotoController {
            t.setPhoto(fileName);
            teacherRepository.save(t);
         }
-        DataResponse r=  FileUtil.uploadFile(barr,"Photo",fileName);
+        DataResponse r=  FileUtil.uploadFile(barr, "photo",fileName);
         return r;
     }
 }

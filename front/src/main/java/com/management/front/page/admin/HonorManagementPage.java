@@ -2,6 +2,8 @@ package com.management.front.page.admin;
 
 import com.management.front.customComponents.SearchableListView;
 import com.management.front.customComponents.SearchableTableView;
+import com.management.front.request.DataResponse;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
@@ -10,9 +12,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static com.management.front.util.HttpClientUtil.request;
 
@@ -29,7 +29,7 @@ public class HonorManagementPage extends SplitPane {
     private Button addButton = new Button("Add");
     private Button deleteButton = new Button("Delete");
     private Button updateButton = new Button("Update");
-    private DatePicker awardTimePicker=new DatePicker();
+    private DatePicker awardDatePicker=new DatePicker();
     private TextField nameField = new TextField("优秀团员");
     private TextField departmentField = new TextField("软院团支部");
 
@@ -45,8 +45,7 @@ public class HonorManagementPage extends SplitPane {
         m.put("studentList",studentListView.getSelectedItems());
         m.put("name",nameField.getText());
         m.put("department",departmentField.getText());
-        m.put("awardTime",awardTimePicker.getValue()+"");
-        m.put("event",eventListView.getSelectedItems().get(0));
+        m.put("awardDate",awardDatePicker.getValue()+"");
         return m;
     }
     private void displayHonors() {
@@ -69,7 +68,7 @@ public class HonorManagementPage extends SplitPane {
                 studentListView,
                 nameField,
                 departmentField,
-                awardTimePicker,
+                awardDatePicker,
                 eventListView
         );
         gridPane.addRow(6, addButton, deleteButton, updateButton);
@@ -84,7 +83,7 @@ public class HonorManagementPage extends SplitPane {
                 studentTable.setVisible(false);
                 nameField.setText("");
                 departmentField.setText("");
-                awardTimePicker.setValue(null);
+                awardDatePicker.setValue(null);
                 eventListView.setSelectedItems(List.of());
                 studentListView.setSelectedItems(List.of());
                 return;
@@ -92,7 +91,8 @@ public class HonorManagementPage extends SplitPane {
             addButton.setDisable(true);
             nameField.setText((String) h.get("name"));
             departmentField.setText((String) h.get("department"));
-            awardTimePicker.setValue(LocalDate.parse((String) h.get("awardTime")));
+            awardDatePicker.setValue(LocalDate.parse((String) h.get("awardDate")));
+            eventListView.setSelectedItems(List.of((Map) h.get("event")));
             displayStudents(h);
             studentTable.setVisible(true);
         });
@@ -103,28 +103,132 @@ public class HonorManagementPage extends SplitPane {
     }
 
     private void updateHonor() {
+        if(honorTable.getSelectedItem()==null)
+        {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setContentText("请选择要修改的荣誉");
+            alert.showAndWait();
+            return;
+        }
+        if(eventListView.getSelectedItems().size()>1)
+        {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setContentText("只能选择一个获奖事件");
+            alert.showAndWait();
+            eventListView.setSelectedItems(List.of());
+            return;
+        }
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "确定要更新吗？");
+        alert.setTitle("警告");
+        Optional<ButtonType> result=alert.showAndWait();
+        if(result.get()==ButtonType.OK)
+        {
+            Map  m=newMapFromFields(honorTable.getSelectedItem());
+            m.put("event",eventListView.getSelectedItems().get(0));
+            DataResponse r=request("/updateHonor",m);
+            displayHonors();
+            displayStudents(m);
+            if(r.getCode()==0)
+            {
+                Alert alert1=new Alert(Alert.AlertType.INFORMATION);
+                alert1.setContentText("更新成功");
+                alert1.showAndWait();
+            }
+        }
+
     }
 
     private void deleteHonors() {
-
+        if(honorTable.getSelectedItems().size()==0)
+        {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setContentText("请选择要删除的荣誉");
+            alert.showAndWait();
+            return;
+        }
+        ArrayList<Map> honorList=new ArrayList<>(honorTable.getSelectedItems());
+        Alert alert=new Alert(Alert.AlertType.CONFIRMATION, "确定要删除吗？");
+        alert.setTitle("警告");
+        Optional<ButtonType> result=alert.showAndWait();
+        if(result.get()==ButtonType.OK)
+        {
+            DataResponse r=request("/deleteHonors",honorList);
+            if(r.getCode()==0)
+            {
+                Alert alert1=new Alert(Alert.AlertType.INFORMATION);
+                alert1.setContentText("删除成功");
+                alert1.showAndWait();
+            }
+            displayHonors();
+        }
     }
 
     private void addHonor() {
-
+        if(eventListView.getSelectedItems().size()>1)
+        {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setContentText("只能选择一个获奖事件");
+            alert.showAndWait();
+            eventListView.setSelectedItems(List.of());
+            return;
+        }
+        if(eventListView.getSelectedItems().size()==0)
+        {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setContentText("请选择获奖事件");
+            alert.showAndWait();
+            return;
+        }
+        Map m=newMapFromFields(new HashMap());
+        m.put("event",eventListView.getSelectedItems().get(0));
+        if(m.get("name").equals("")||m.get("department").equals("")||m.get("awardDate").equals("")||studentListView.getSelectedItems().isEmpty()
+        ||m.get("name")==null||m.get("department")==null||m.get("awardDate").equals("null"))
+        {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setContentText("请填写完整信息");
+            alert.showAndWait();
+            return;
+        }
+        DataResponse r=request("/addHonor",m);
+        if(r.getCode()!=0)
+        {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setContentText(r.getMsg());
+            alert.showAndWait();
+            return;
+        }
+        else
+        {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setContentText(r.getMsg());
+            alert.showAndWait();
+        }
+        displayHonors();
+        studentListView.setSelectedItems(List.of());
+        eventListView.setSelectedItems(List.of());
     }
 
     private void initializeTable(){
         TableColumn<Map, String> nameColumn = new TableColumn<>("荣誉名称");
-        TableColumn<Map, String> awardTimeColumn = new TableColumn<>("颁奖时间");
+        TableColumn<Map, String> awardDateColumn = new TableColumn<>("颁奖时间");
         TableColumn<Map, String> departmentColumn = new TableColumn<>("颁奖部门");
+        TableColumn<Map, String> eventColumn = new TableColumn<>("获奖事件");
         nameColumn.setCellValueFactory(new MapValueFactory<>("name"));
-        awardTimeColumn.setCellValueFactory(new MapValueFactory<>("awardTime"));
+        awardDateColumn.setCellValueFactory(new MapValueFactory<>("awardDate"));
         departmentColumn.setCellValueFactory(new MapValueFactory<>("department"));
+        eventColumn.setCellValueFactory(data->
+        {
+            if(data.getValue().isEmpty()) return new SimpleStringProperty("");
+            Map<String,Object> event=(Map<String,Object>) data.getValue().get("event");
+            String name=(String) event.get("name");
+            return new SimpleStringProperty(name);
+        });
         List<TableColumn<Map, ?>> columns = new ArrayList<>();
         columns.add(nameColumn);
-        columns.add(awardTimeColumn);
+        columns.add(awardDateColumn);
         columns.add(departmentColumn);
-        honorTable = new SearchableTableView(observableList, List.of("name","department","awardTime"),columns);
+        columns.add(eventColumn);
+        honorTable = new SearchableTableView(observableList, List.of("name","department","awardDate"),columns);
         this.getItems().add(honorTable);
     }
     private void initializeStudentTable()

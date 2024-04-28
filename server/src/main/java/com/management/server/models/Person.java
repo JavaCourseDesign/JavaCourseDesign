@@ -23,7 +23,7 @@ import java.util.Set;
 
 //@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "name")//在递归中第二次出现时用name属性替代本对象避免无限递归
 //@JsonIgnoreProperties(value = {"courses"})
-@EqualsAndHashCode(exclude = {"events"})//极为重要！跟json ignore搭配才能解决循环引用问题
+@EqualsAndHashCode(exclude = {"events","honors"})//极为重要！跟json ignore搭配才能解决循环引用问题
 
 @Inheritance(strategy = InheritanceType.JOINED)
 public abstract class Person {
@@ -75,6 +75,9 @@ public abstract class Person {
     @JsonIgnore
     private Set<Event> events;
 
+    @ManyToMany(mappedBy = "persons")
+    @JsonIgnore
+    private List<Honor> honors;
     /*@ManyToMany(mappedBy = "persons")
     @JsonIgnoreProperties(value = {"persons"})//在单个属性中添加@JsonIgnoreProperties注解，可以忽略 该属性中 某个属性 的序列化和反序列化
     private List<Course> courses;*/ //双向关系是不必要的，可以在course仓库查询实现相同效果
