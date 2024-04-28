@@ -4,6 +4,7 @@ import com.calendarfx.model.Calendar;
 import com.calendarfx.model.CalendarSource;
 import com.calendarfx.model.Entry;
 import com.calendarfx.view.DateControl;
+import com.calendarfx.view.EntryViewBase;
 import com.calendarfx.view.page.WeekPage;
 import com.calendarfx.view.popover.EntryDetailsView;
 import javafx.beans.property.StringProperty;
@@ -11,6 +12,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 
 import java.time.LocalDate;
@@ -32,6 +34,7 @@ public class WeekTimeTable extends WeekPage {
         calendarSource.getCalendars().add(this.calendar);
 
         this.getCalendarSources().setAll(calendarSource);
+
     }
 
     public void setCourse(Map<String, Object> course) {

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 public class AbsenceController {
@@ -45,21 +46,18 @@ public class AbsenceController {
     }
     @PostMapping("/getAllStudentLessonAbsencesByCourse")
     public DataResponse getAllStudentLessonAbsencesByCourse(@RequestBody Map m) {
-        Course course=courseRepository.findByCourseId((String) m.get("courseId"));
-        List<Lesson> lessonList=course.getLessons();
-        List<Absence> studentAbsenceList=new ArrayList<>();
-        for(Lesson l:lessonList)
-        {
-            List<Absence> absenceList=absenceRepository.findAbsenceByEvent(l);
-            for(Absence a:absenceList)
-            {
-                if(a.getPerson() instanceof Student)
-                {
-                    studentAbsenceList.add(a);
-                }
-            }
-        }
-        return new DataResponse(0,studentAbsenceList,null);
+        Course course = courseRepository.findByCourseId((String) m.get("courseId"));
+        List<Lesson> lessonList = course.getLessons();
+
+        // Get all lesson IDs
+        List<String> lessonIds = lessonList.stream()
+                .map(Lesson::getEventId)
+                .collect(Collectors.toList());
+
+        // Get all absences in one query
+        List<Absence> studentAbsenceList = absenceRepository.findAbsencesByEventIdsAndPersonType(lessonIds, Student.class);
+
+        return new DataResponse(0, studentAbsenceList, null);
     }
     @PostMapping("/getAllTeacherAbsences")
     public DataResponse getAllTeacherAbsences() {

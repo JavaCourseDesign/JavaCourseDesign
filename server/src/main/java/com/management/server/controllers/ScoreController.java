@@ -51,6 +51,7 @@ public class ScoreController {
 
         List<Score> scores = scoreRepository.findByCourseCourseId((String) m.get("courseId"));
         if(true||scores.isEmpty()){//如果没有成绩，就初始化成绩
+            scores.clear();
             Course course = courseRepository.findByCourseId((String) m.get("courseId"));
 
             List<Event> lessons = new ArrayList<>(course.getLessons());
@@ -115,9 +116,10 @@ public class ScoreController {
 
                     score.setStudent((Student) student);
                     course.getScores().add(score);
-                    scoreRepository.save(score);
+                    scores.add(score);
                 }
             }
+            scoreRepository.saveAll(scores);
         }
         return new DataResponse(0,scoreRepository.findByCourseCourseId((String) m.get("courseId")),null);
     }

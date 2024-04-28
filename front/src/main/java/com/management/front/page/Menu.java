@@ -3,9 +3,7 @@ package com.management.front.page;
 import com.jfoenix.controls.JFXTreeView;
 import com.management.front.HelloApplication;
 import com.management.front.page.admin.*;
-import com.management.front.page.student.CourseApplyPage;
-import com.management.front.page.student.StudentHomeworkPage;
-import com.management.front.page.student.StudentPersonalInfoPage;
+import com.management.front.page.student.*;
 import com.management.front.page.teacher.TeacherCourseMenuPage;
 import com.management.front.request.DataResponse;
 import javafx.fxml.FXML;
@@ -46,7 +44,10 @@ public class Menu extends AnchorPane {
     private TreeItem<String> stuPerItm = new TreeItem<>("个人信息");
     private TreeItem<String> tchPerItm = new TreeItem<>("个人信息");
     private TreeItem<String> tchCrsItm = new TreeItem<>("课程信息");
-    private TreeItem<String> stuCrsItm = new TreeItem<>("作业信息");
+    private TreeItem<String> stuCrsItm = new TreeItem<>("课程信息");
+    private TreeItem<String> stuAbsItm = new TreeItem<>("学生请假");
+    private TreeItem<String> stuInoItm = new TreeItem<>("创新实践");
+    private TreeItem<String> stuDlaItm = new TreeItem<>("日常活动");
 
     public Menu(){
         //this.setStyle("-fx-background-color: red;");
@@ -81,7 +82,7 @@ public class Menu extends AnchorPane {
                 break;
             case "ROLE_STUDENT":
                 roleLabel.setText("学生菜单");
-                leftMenu.getRoot().getChildren().addAll(stuCrsItm,crsAppItm,stuPerItm);
+                leftMenu.getRoot().getChildren().addAll(stuCrsItm,crsAppItm,stuPerItm,stuAbsItm,stuInoItm,stuDlaItm);
                 break;
             case "ROLE_TEACHER":
                 roleLabel.setText("教师菜单");
@@ -142,7 +143,19 @@ public class Menu extends AnchorPane {
             }
             else if(newValue == stuCrsItm)
             {
-                borderPane.setCenter(new StudentHomeworkPage());
+                borderPane.setCenter(new StudentCourseMenuPage());
+            }
+            else if(newValue == stuAbsItm)
+            {
+                borderPane.setCenter(new AbsencePage());
+            }
+            else if(newValue == stuInoItm)
+            {
+                borderPane.setCenter(new InnovationPage());
+            }
+            else if(newValue == stuDlaItm)
+            {
+                borderPane.setCenter(new DailyActivityPage());
             }
         });
 
@@ -163,12 +176,12 @@ public class Menu extends AnchorPane {
         stuPerItm.setGraphic(new FontIcon(ID_CARD));
         stuCrsItm.setGraphic(new FontIcon("mdi-book-open-page-variant"));
         stuMngItm.setGraphic(new FontIcon("mdi-account-multiple"));
-        tchMngItm.setGraphic(new FontIcon("mdi-account-multiple"));
+        tchMngItm.setGraphic(new FontIcon("mdi-account-multiple-outline"));
         crsMngItm.setGraphic(new FontIcon("mdi-book-open-page-variant"));
         clzMngItm.setGraphic(new FontIcon("mdi-school"));
         logMngItm.setGraphic(new FontIcon("mdi-file-document"));
         crsAppItm.setGraphic(new FontIcon("mdi-book-open-page-variant"));
-
+        //stuAbsItm.setGraphic(new FontIcon("mdi2a-airport"));
 
 
 
