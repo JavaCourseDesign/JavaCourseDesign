@@ -21,6 +21,7 @@ module com.management.front {
     requires com.jfoenix;
     requires com.calendarfx.view;
     requires org.burningwave.core;
+    requires org.kordamp.ikonli.materialdesign2;
 
     opens com.management.front to javafx.fxml;
     exports com.management.front;

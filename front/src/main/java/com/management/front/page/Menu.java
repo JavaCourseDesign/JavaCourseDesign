@@ -19,6 +19,14 @@ import java.io.IOException;
 
 import static com.management.front.util.HttpClientUtil.request;
 import static org.kordamp.ikonli.fontawesome.FontAwesome.*;
+import static org.kordamp.ikonli.materialdesign2.MaterialDesignA.*;
+import static org.kordamp.ikonli.materialdesign2.MaterialDesignB.BOOK_OPEN_PAGE_VARIANT;
+import static org.kordamp.ikonli.materialdesign2.MaterialDesignB.BOOK_PLUS_MULTIPLE;
+import static org.kordamp.ikonli.materialdesign2.MaterialDesignF.FILE_DOCUMENT;
+import static org.kordamp.ikonli.materialdesign2.MaterialDesignL.LIGHTBULB_ON_OUTLINE;
+import static org.kordamp.ikonli.materialdesign2.MaterialDesignM.*;
+import static org.kordamp.ikonli.materialdesign2.MaterialDesignR.RUN;
+import static org.kordamp.ikonli.materialdesign2.MaterialDesignS.SCHOOL;
 
 public class Menu extends AnchorPane {
     //@FXML
@@ -167,21 +175,26 @@ public class Menu extends AnchorPane {
 
         //leftMenu.setStyle("-fx-background-color: red;-fx-font-size: 15px;");
 
-        root.setGraphic(new FontIcon("mdi-menu"));
+        root.setGraphic(new FontIcon(MENU));
         //tchCrsItm.setGraphic(new ImageView("/icons/teacher.png"));
 
-        tchCrsItm.setGraphic(new FontIcon("mdi-book-open-page-variant"));
+        tchCrsItm.setGraphic(new FontIcon("mdi2b-book-open-page-variant"));
 
         tchPerItm.setGraphic(new FontIcon(ID_CARD));
         stuPerItm.setGraphic(new FontIcon(ID_CARD));
-        stuCrsItm.setGraphic(new FontIcon("mdi-book-open-page-variant"));
-        stuMngItm.setGraphic(new FontIcon("mdi-account-multiple"));
-        tchMngItm.setGraphic(new FontIcon("mdi-account-multiple-outline"));
-        crsMngItm.setGraphic(new FontIcon("mdi-book-open-page-variant"));
-        clzMngItm.setGraphic(new FontIcon("mdi-school"));
-        logMngItm.setGraphic(new FontIcon("mdi-file-document"));
-        crsAppItm.setGraphic(new FontIcon("mdi-book-open-page-variant"));
-        //stuAbsItm.setGraphic(new FontIcon("mdi2a-airport"));
+        stuCrsItm.setGraphic(new FontIcon(BOOK_OPEN_PAGE_VARIANT));
+        stuMngItm.setGraphic(new FontIcon(ACCOUNT_MULTIPLE));
+        tchMngItm.setGraphic(new FontIcon(ACCOUNT_MULTIPLE_OUTLINE));
+        crsMngItm.setGraphic(new FontIcon(BOOK_OPEN_PAGE_VARIANT));
+        clzMngItm.setGraphic(new FontIcon(SCHOOL));
+        logMngItm.setGraphic(new FontIcon(FILE_DOCUMENT));
+        crsAppItm.setGraphic(new FontIcon(BOOK_PLUS_MULTIPLE));
+        stuAbsItm.setGraphic(new FontIcon(AIRPORT));
+        stuInoItm.setGraphic(new FontIcon(LIGHTBULB_ON_OUTLINE));
+        invMngItm.setGraphic(new FontIcon(LIGHTBULB_ON_OUTLINE));
+        stuDlaItm.setGraphic(new FontIcon(RUN));
+        dlaMngItm.setGraphic(new FontIcon(RUN));
+        hnrMngItm.setGraphic(new FontIcon(MEDAL));
 
 
 
