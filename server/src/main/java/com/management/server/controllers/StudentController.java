@@ -6,6 +6,7 @@ import com.management.server.models.*;
 import com.management.server.payload.response.DataResponse;
 import com.management.server.repositories.*;
 import com.management.server.util.CommonMethod;
+import com.management.server.util.FileUtil;
 import com.openhtmltopdf.extend.FSSupplier;
 import com.openhtmltopdf.extend.impl.FSDefaultCacheStore;
 import com.openhtmltopdf.pdfboxout.PdfRendererBuilder;
@@ -43,6 +44,8 @@ public class StudentController {
     private TeacherRepository teacherRepository;
     @Autowired
     private DailyActivityRepository dailyActivityRepository;
+    @Autowired
+    private HonorRepository honorRepository;
     @PostMapping("/getStudent")
     public DataResponse getStudent()
     {
@@ -164,6 +167,20 @@ public class StudentController {
         }
         return new DataResponse(0,studentList,null);
     }
+    @PostMapping("/getStudentsByHonor")
+    public DataResponse getStudentsByHonor(@RequestBody Map m)
+    {
+        Honor honor = honorRepository.findByHonorId((String) m.get("honorId"));
+        List<Student> studentList = new ArrayList<>();
+        for(Person p:honor.getPersons())
+        {
+            if(p instanceof Student)
+            {
+                studentList.add((Student) p);
+            }
+        }
+        return new DataResponse(0,studentList,null);
+    }
     @PostMapping("/getStudentIntroduce")
     public ResponseEntity<byte[]> getStudentIntroduce()
     {
@@ -243,8 +260,9 @@ public class StudentController {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        String imgStr= FileUtil.getPhotoImageStr(student.getPhoto());
         map.put("introduce",content);
-        map.put("photo","../Photo/" + student.getPhoto());
+        map.put("photo",imgStr);
         int cnt1=0;// 学科竞赛
         int cnt2=0;//科研成果
         int cnt3=0;//社会实践

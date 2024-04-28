@@ -8,15 +8,12 @@ import com.management.server.util.CommonMethod;
 import com.management.server.util.FileUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -98,7 +95,7 @@ public class HomeworkController {
         h.setHomeworkFile(fileName);
         h.setSubmitTime(LocalDate.now());
         homeworkRepository.save(h);
-        DataResponse r= FileUtil.uploadFile(barr,"homework",fileName);
+        DataResponse r= FileUtil.uploadFile(barr, "homework",fileName);
         return r;
     }
 
