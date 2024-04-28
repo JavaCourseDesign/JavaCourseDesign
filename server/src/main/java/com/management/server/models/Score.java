@@ -27,10 +27,10 @@ public class Score {
     @JsonIdentityReference(alwaysAsId = true)
     private Course course;
 
-    @Transient
+    //@Transient
     private String homework;
 
-    @Transient
+    //@Transient
     private Double absence;
 
     private Double regularMark;

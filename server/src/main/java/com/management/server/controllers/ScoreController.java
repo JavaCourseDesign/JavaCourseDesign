@@ -9,9 +9,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @RestController
 public class ScoreController {
@@ -53,23 +52,42 @@ public class ScoreController {
         List<Score> scores = scoreRepository.findByCourseCourseId((String) m.get("courseId"));
         if(true||scores.isEmpty()){//如果没有成绩，就初始化成绩
             Course course = courseRepository.findByCourseId((String) m.get("courseId"));
+
+            List<Event> lessons = new ArrayList<>(course.getLessons());
+            List<Person> students=new ArrayList<>();
+            for(Person person:course.getPersons()){
+                if(person instanceof Student) students.add(person);
+            }
+
+            // 一次性获取所有的缺席记录
+            List<Absence> allAbsences = absenceRepository.findAbsencesByEventInAndPersonIn(lessons, students);
+
+            // 一次性获取所有的作业记录
+            List<Homework> allHomeworks = homeworkRepository.findHomeworkByCourseAndStudentIn(course, students);
+
+            // 创建一个映射，用于快速查找学生的缺席记录和作业记录
+            Map<Person, List<Absence>> absenceMap = allAbsences.stream().collect(Collectors.groupingBy(Absence::getPerson));
+            Map<Person, List<Homework>> homeworkMap = allHomeworks.stream().collect(Collectors.groupingBy(Homework::getStudent));
+
+
             course.setRegularWeight(Double.parseDouble("0"+m.get("regularWeight")));
             course.getScores().clear();
             for(Person student:course.getPersons()){
                 if(student instanceof Student) {
                     Score score = new Score();
 
-                    //double disapprovedAbsence=0;
+                    // 使用映射来查找学生的缺席记录
+                    List<Absence> absences = absenceMap.getOrDefault(student, Collections.emptyList());
                     score.setAbsence(0.0);
-                    for(Event event:course.getLessons()){
-                        Absence absence = absenceRepository.findAbsenceByEventAndPerson(event,student);
-                        if(absence!=null&&(absence.getIsApproved()==null||!absence.getIsApproved()))
-                            //disapprovedAbsence++;
-                            score.setAbsence(score.getAbsence()+1);
+                    for (Absence absence : absences) {
+                        if (absence.getIsApproved() == null || !absence.getIsApproved()) {
+                            score.setAbsence(score.getAbsence() + 1);
+                        }
                     }
 
+                    List<Homework> homeworks = homeworkMap.getOrDefault(student, Collections.emptyList());
                     double homeworkA=0,homeworkB=0,homeworkC=0,homeworkD=0,homeworkE=0,unMarked=0,unHanded=0;
-                    for(Homework homework:homeworkRepository.findHomeworkByCourseAndStudent(course,(Student) student)){
+                    for(Homework homework:homeworks){
                         if(homework.getHomeworkFile()==null) unHanded++;
                         else if(homework.getGrade()!=null) switch (homework.getGrade()){
                             case "A":
@@ -92,6 +110,8 @@ public class ScoreController {
                     }
                     //score.setInfo("缺勤次数："+disapprovedAbsence+" 作业A次数："+homeworkA+" 作业B次数："+homeworkB+" 作业C次数："+homeworkC+" 作业D次数："+homeworkD+" 作业E次数："+homeworkE);
                     score.setHomework("A:"+homeworkA+" B:"+homeworkB+" C:"+homeworkC+" D:"+homeworkD+" E:"+homeworkE+" 未批改:"+unMarked+" 未交:"+unHanded);
+
+                    System.out.println("score:"+score);
 
                     score.setStudent((Student) student);
                     course.getScores().add(score);

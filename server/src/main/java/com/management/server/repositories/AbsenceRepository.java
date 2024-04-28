@@ -2,6 +2,7 @@ package com.management.server.repositories;
 
 import com.management.server.models.Absence;
 import com.management.server.models.Event;
+import com.management.server.models.Lesson;
 import com.management.server.models.Person;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -18,4 +19,6 @@ public interface AbsenceRepository extends JpaRepository<Absence, String> {
     Absence findAbsenceByAbsenceId(String absenceId);
 
     Absence findAbsenceByEventAndPerson(Event event, Person person);
+
+    List<Absence> findAbsencesByEventInAndPersonIn(List<Event> lessons, List<Person> students);
 }

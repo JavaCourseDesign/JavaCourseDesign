@@ -146,7 +146,7 @@ public class Menu extends AnchorPane {
             }
         });
 
-        leftMenu.
+
     }
 
     private void initializeIcons()
