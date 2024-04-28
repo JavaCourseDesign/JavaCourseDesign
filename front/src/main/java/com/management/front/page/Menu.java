@@ -1,5 +1,6 @@
 package com.management.front.page;
 
+import com.jfoenix.controls.JFXTreeView;
 import com.management.front.HelloApplication;
 import com.management.front.page.admin.*;
 import com.management.front.page.student.CourseApplyPage;
@@ -9,15 +10,11 @@ import com.management.front.page.teacher.TeacherCourseMenuPage;
 import com.management.front.request.DataResponse;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
-import javafx.scene.text.TextAlignment;
 import org.kordamp.ikonli.javafx.FontIcon;
 
 import java.io.IOException;
@@ -31,9 +28,9 @@ public class Menu extends AnchorPane {
     @FXML
     private BorderPane borderPane;
     @FXML
-    private TreeView<String> leftMenu;
+    private JFXTreeView<String> leftMenu;
     @FXML
-    private Label roleLabel;
+    private Text roleLabel;
 
     private TreeItem<String> root = new TreeItem<>("菜单");
 
@@ -41,6 +38,9 @@ public class Menu extends AnchorPane {
     private TreeItem<String> tchMngItm = new TreeItem<>("教师管理");
     private TreeItem<String> crsMngItm = new TreeItem<>("课程管理");
     private TreeItem<String> clzMngItm = new TreeItem<>("班级管理");
+    private TreeItem<String> invMngItm = new TreeItem<>("创新实践管理");
+    private TreeItem<String> dlaMngItm = new TreeItem<>("日常活动管理");
+    private TreeItem<String> hnrMngItm = new TreeItem<>("荣誉管理");
     private TreeItem<String> logMngItm = new TreeItem<>("日志管理");
     private TreeItem<String> crsAppItm = new TreeItem<>("课程申请");
     private TreeItem<String> stuPerItm = new TreeItem<>("个人信息");
@@ -50,7 +50,7 @@ public class Menu extends AnchorPane {
 
     public Menu(){
         //this.setStyle("-fx-background-color: red;");
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("/menu.fxml")); // 确保路径正确
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("/com/management/front/menu.fxml")); // 确保路径正确
         fxmlLoader.setController(this);
         try {
             borderPane=fxmlLoader.load();
@@ -77,7 +77,7 @@ public class Menu extends AnchorPane {
         {
             case "ROLE_ADMIN":
                 roleLabel.setText("管理员菜单");
-                leftMenu.getRoot().getChildren().addAll(stuMngItm,tchMngItm,crsMngItm,clzMngItm,logMngItm);
+                leftMenu.getRoot().getChildren().addAll(stuMngItm,tchMngItm,crsMngItm,clzMngItm,invMngItm,dlaMngItm,hnrMngItm,logMngItm);
                 break;
             case "ROLE_STUDENT":
                 roleLabel.setText("学生菜单");
@@ -108,6 +108,18 @@ public class Menu extends AnchorPane {
             {
                 borderPane.setCenter(new ClazzManagementPage());
             }
+            else if(newValue == invMngItm)
+            {
+                borderPane.setCenter(new InnovationManagementPage());
+            }
+            else if(newValue == dlaMngItm)
+            {
+                borderPane.setCenter(new DailyActivityManagementPage());
+            }
+            else if(newValue == hnrMngItm)
+            {
+                borderPane.setCenter(new HonorManagementPage());
+            }
             else if(newValue == logMngItm)
             {
                 borderPane.setCenter(new StudentLogManagementPage());
@@ -133,6 +145,8 @@ public class Menu extends AnchorPane {
                 borderPane.setCenter(new StudentHomeworkPage());
             }
         });
+
+        leftMenu.
     }
 
     private void initializeIcons()

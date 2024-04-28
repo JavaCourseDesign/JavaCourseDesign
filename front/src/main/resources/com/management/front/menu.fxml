@@ -1,0 +1,39 @@
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.control.TreeView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
+<?import com.jfoenix.controls.JFXTreeView?>
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml">
+    <top>
+        <AnchorPane BorderPane.alignment="CENTER" style="-fx-background-color: green">
+            <ImageView fitHeight="75.0" pickOnBounds="true"
+                       preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+                       AnchorPane.topAnchor="0.0">
+                <Image url="@images/LOGO.PNG"/>
+            </ImageView>
+            <ImageView pickOnBounds="true" preserveRatio="true"
+                       AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"/>
+        </AnchorPane>
+    </top>
+    <left>
+        <VBox BorderPane.alignment="CENTER" style="-fx-background-color: #3737da" alignment="CENTER">
+            <!--<ImageView fitHeight="51.0" fitWidth="134.0" pickOnBounds="true" preserveRatio="true"/>-->
+            <!--<Label fx:id="roleLabel" style="-fx-text-fill: white"/>-->
+            <StackPane>
+                <ImageView fitHeight="51.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="false">
+                    <Image url="@images/mesh-1430107_1920.png" />
+                </ImageView>
+                <Text fx:id="roleLabel" />
+            </StackPane>
+
+            <JFXTreeView fx:id="leftMenu" VBox.vgrow="ALWAYS" prefWidth="150"/>
+        </VBox>
+    </left>
+</BorderPane>
