@@ -337,7 +337,7 @@ class StudentFeeManagementTab extends Tab{
         columns.add(timeColumn);
         columns.add(goodsColumn);
         columns.add(placeColumn);
-        feeTable = new SearchableTableView(observableList,List.of("name","place"),columns);
+        feeTable = new SearchableTableView(observableList,List.of("name","studentId","time","goods","place"),columns);
         vBox.getChildren().add(feeTable);
         VBox.setVgrow(feeTable, Priority.ALWAYS);
     }
