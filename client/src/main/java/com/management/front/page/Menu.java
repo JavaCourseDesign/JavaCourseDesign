@@ -5,6 +5,7 @@ import com.management.front.ClientApplication;
 import com.management.front.page.admin.*;
 import com.management.front.page.student.*;
 import com.management.front.page.teacher.TeacherCourseMenuPage;
+import com.management.front.page.teacher.TeacherPersonalInfoPage;
 import com.management.front.request.DataResponse;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -141,7 +142,7 @@ public class Menu extends AnchorPane {
             }
             else if(newValue == tchPerItm)
             {
-                //borderPane.setCenter(new TeacherPersonalInfoPage());
+                borderPane.setCenter(new TeacherPersonalInfoPage());
             }
             else if(newValue == tchCrsItm)
             {

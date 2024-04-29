@@ -1,20 +1,14 @@
 package com.management.front.page.student;
 
-import com.management.front.customComponents.SearchableListView;
 import com.management.front.customComponents.SearchableTableView;
-import com.management.front.request.DataResponse;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.MapValueFactory;
-import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
 
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -25,7 +19,7 @@ public class StudentPersonalInfoPage extends TabPane {
         Map student = (Map) request("/getStudent", null).getData();
         //System.out.println(student);
         this.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
-        this.getTabs().add(new BasicInfoTab(student));
+        this.getTabs().add(new StudentBasicInfoTab(student));
         this.getTabs().add(new HonorTab());
     }
 }
@@ -59,7 +53,9 @@ class HonorTab extends Tab{
                 String name=(String) event.get("name");
                 return new SimpleStringProperty(name);
             }
-            else return new SimpleStringProperty("");
+            else {
+                return new SimpleStringProperty("");
+            }
         });
         nameColumn.setCellValueFactory(new MapValueFactory<>("name"));
         timeColumn.setCellValueFactory(new MapValueFactory<>("awardDate"));

@@ -15,6 +15,9 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
 
+/**
+ * @author 23993
+ */
 @SpringBootApplication
 
 public class ServerApplication {

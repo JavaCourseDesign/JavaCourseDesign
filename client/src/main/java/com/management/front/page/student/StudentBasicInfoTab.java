@@ -30,7 +30,7 @@ import java.util.Map;
 
 import static com.management.front.util.HttpClientUtil.*;
 
-public class BasicInfoTab extends Tab {
+public class StudentBasicInfoTab extends Tab {
     Map student;
     private final Pagination pagination = new Pagination();
     private PdfModel model;
@@ -79,9 +79,9 @@ public class BasicInfoTab extends Tab {
     private TableColumn familyPhone;
 
 
-    public BasicInfoTab(Map<String, Object> student) {
+    public StudentBasicInfoTab(Map<String, Object> student) {
         this.student = student;
-        FXMLLoader fxmlLoader = new FXMLLoader(ClientApplication.class.getResource("studentFxml/BasicInfoTab.fxml")); // 确保路径正确
+        FXMLLoader fxmlLoader = new FXMLLoader(ClientApplication.class.getResource("studentFxml/StudentBasicInfoTab.fxml")); // 确保路径正确
         fxmlLoader.setController(this);
         try {
             VBox content = fxmlLoader.load();
@@ -105,10 +105,9 @@ public class BasicInfoTab extends Tab {
 
     @FXML
     private void initialize() {
-        photoArea.setStyle("-fx-border-color: black;-fx-border-width: 1px");
         photoArea.setOnMouseClicked(event -> {
             FileChooser fileChooser = new FileChooser();
-            fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.gif"));
+            fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Image Files",  "*.jpg"));
             File file = fileChooser.showOpenDialog(null);
             if (file != null) {
                 DataResponse r = uploadFile("/uploadPhoto", file.getPath(), file.getName());
@@ -218,11 +217,13 @@ public class BasicInfoTab extends Tab {
             gender.setText((String) student.get("gender"));
             birthday.setText((String) student.get("birthday"));
             dept.setText((String) student.get("dept"));
-            clazz.setText((String) student.get("clazzName")); // 假设student Map中的键为className
+            // 假设student Map中的键为className
+            clazz.setText((String) student.get("clazzName"));
             social.setText((String) student.get("social"));
             phone.setText((String) student.get("phone"));
             email.setText((String) student.get("email"));
-            other.setText((String) student.get("other")); // 假设有other键
+            // 假设有other键
+            other.setText((String) student.get("other"));
 
             System.out.println(student.get("families"));
             ObservableList<Map> familyItems = FXCollections.observableArrayList();
