@@ -23,8 +23,7 @@ public class Student extends Person{
     @Size(max = 20)
     private String major;
 
-    @Size(max=20)
-    private String homeTown;
+
     @Size(max=20)
     private String highSchool;
 

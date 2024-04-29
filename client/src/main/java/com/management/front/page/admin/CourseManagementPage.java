@@ -225,10 +225,10 @@ public class CourseManagementPage extends SplitPane {
                 //selectionGrid.setSelectedLessons((List<Map>) request("/getLessonsByCourse", Map.of("courseId", ""+course.get("courseId"))).getData());
                 weekTimeTable.setEvents((List<Map<String,Object>>) request("/getLessonsByCourse", Map.of("courseId", ""+course.get("courseId"))).getData());
                 weekTimeTable.setCourse(course);
-                if(!students.isEmpty()) {
+                /*if(!students.isEmpty()) {
                     //weekTimeTable.setEntryFactory(param -> null);
                     weekTimeTable.calendar.setReadOnly(true);
-                }//如果有学生选了这门课，就不能修改课程时间
+                }//如果有学生选了这门课，就不能修改课程时间*/
             }
         });
 

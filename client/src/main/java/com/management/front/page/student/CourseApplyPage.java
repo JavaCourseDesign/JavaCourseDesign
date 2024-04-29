@@ -232,6 +232,7 @@ public class CourseApplyPage extends SplitPane {
 
     public Entry<String> convertMapToEntry(Map<String, Object> map) {
         Entry<String> entry = new Entry<>((String) map.get("name"));
+        entry.setId((String) map.get("eventId"));
         entry.setInterval(
                 LocalDate.parse(map.get("startDate")+""),
                 LocalTime.parse(map.get("startTime")+"") ,
@@ -253,6 +254,7 @@ public class CourseApplyPage extends SplitPane {
 
         return Map.of(
                 "name", name,
+                "eventId", entry.getId(),
                 "startDate", startDate.toString(),
                 "endDate", endDate.toString(),
                 "startTime", startTime.toString(),

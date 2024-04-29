@@ -16,4 +16,7 @@ import java.util.List;
 public interface LessonRepository extends JpaRepository<Lesson, String> {
     @Query("SELECT l FROM Lesson l WHERE :person MEMBER OF l.persons")
     List<Lesson> findLessonByPerson(@Param("person") Person p);
+
+    Lesson findByEventId(String lessonId);
+
 }

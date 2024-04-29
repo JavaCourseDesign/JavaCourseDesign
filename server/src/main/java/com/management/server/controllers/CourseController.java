@@ -175,7 +175,7 @@ public class CourseController {
         System.out.println("\nlessonMap:"+lessonsMap);
         m.remove("lessons");
 
-        BeanUtil.fillBeanWithMap(m, course, true, CopyOptions.create().ignoreError());
+        BeanUtil.fillBeanWithMap(m, course, CopyOptions.create().ignoreError());
 
         // 获取所有的 persons
         List<String> personIds = ((List<Map>) m.get("persons")).stream()
@@ -192,33 +192,32 @@ public class CourseController {
         // 保存 persons 的更改
         personRepository.saveAll(persons);
 
-        boolean existStudent = false;
-        for(Person person:persons){
-            if(person instanceof Student){
-                existStudent = true;
-                break;
-            }
+        List<String> lessonIds = lessonsMap.stream().map(map -> (String) map.get("eventId")).toList();
+        List<Lesson> lessons = lessonRepository.findAllById(lessonIds);
+        //删掉不在lessons中的lesson
+        course.getLessons().removeIf(lesson -> !lessonIds.contains(lesson.getEventId()));
+        List<Lesson> newLessons = new ArrayList<>();
+
+        for (Map mapLesson : lessonsMap) {
+            Lesson lesson = lessons.stream()
+                    .filter(l -> l.getEventId().equals(mapLesson.get("eventId")))
+                    .findFirst()
+                    .orElseGet(() -> {
+                        Lesson newLesson = new Lesson();
+                        newLesson.setPersons(persons);
+                        newLessons.add(newLesson);
+                        return newLesson;
+                    });
+            BeanUtil.fillBeanWithMap(mapLesson, lesson, CopyOptions.create());
         }
 
-        if(lessonsMap!=null&&!existStudent){//有学生了不准改时间，老师要调课的话不通过这个接口
-            course.getLessons().clear();
-            // 获取所有的 lessons
-            List<Lesson> lessons = new ArrayList<>();
-            for (Map mapLesson : lessonsMap) {
-                Lesson lesson = new Lesson();
-                mapLesson.remove("persons");
-                BeanUtil.fillBeanWithMap(mapLesson, lesson, true, CopyOptions.create());
-                lesson.setPersons(persons);
-                lessons.add(lesson);
-            }
+        //lessonRepository.saveAll(newLessons); 不用先保存？？？
+        lessonRepository.saveAll(lessons);
 
-            // 批量保存 lessons
-            lessonRepository.saveAll(lessons);
-            course.getLessons().addAll(lessons);
-        }
+        course.getLessons().addAll(newLessons);
+
 
         courseRepository.save(course);
-
         return new DataResponse(0,null,"更新成功");
     }
 

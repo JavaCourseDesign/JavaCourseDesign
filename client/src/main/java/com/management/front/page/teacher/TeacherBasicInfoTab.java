@@ -104,7 +104,7 @@ public class TeacherBasicInfoTab extends Tab {
         if (teacher != null) {
             NAME.setText((String) teacher.get("name"));
             TEACHERID.setText((String) teacher.get("teacherId"));
-            DEPT.setText((String) teacher.get("department"));
+            DEPT.setText((String) teacher.get("dept"));
             name.setText((String) teacher.get("name"));
             teacherId.setText((String) teacher.get("teacherId"));
             title.setText((String) teacher.get("title"));

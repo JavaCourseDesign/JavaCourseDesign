@@ -24,8 +24,6 @@ public class Teacher extends Person{
     @Size(max = 50)
     private String title;
 
-    private String department;
-
     /*@ManyToMany(mappedBy = "teachers")
     private List<Event> events;
 

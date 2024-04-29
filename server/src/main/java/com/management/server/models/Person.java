@@ -58,6 +58,9 @@ public abstract class Person {
     @Size(max = 20)
     private String address;
 
+    @Size(max=20)
+    private String homeTown;
+
     private String social;
     private String photo;
 
