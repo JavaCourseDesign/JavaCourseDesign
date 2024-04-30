@@ -4,7 +4,68 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e82a43fb-52cb-4cdd-a010-327e48d43756" name="Changes" comment="" />
+    <list default="true" id="e82a43fb-52cb-4cdd-a010-327e48d43756" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/client/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/client/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/com/management/front/ClientApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/com/management/client/ClientApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/com/management/front/customComponents/EditableMapTable.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/com/management/client/customComponents/EditableMapTable.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/com/management/front/customComponents/EditableTableView.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/com/management/client/customComponents/EditableTableView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/com/management/front/customComponents/SearchableComboBox.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/com/management/client/customComponents/SearchableComboBox.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/com/management/front/customComponents/SearchableListView.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/com/management/client/customComponents/SearchableListView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/com/management/front/customComponents/SearchableTableView.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/com/management/client/customComponents/SearchableTableView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/com/management/front/customComponents/WeekTimeTable.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/com/management/client/customComponents/WeekTimeTable.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/com/management/front/page/LoginPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/com/management/client/page/LoginPage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/com/management/front/page/Menu.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/com/management/client/page/Menu.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/com/management/front/page/PdfModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/com/management/client/page/PdfModel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/com/management/front/page/admin/ClazzManagementPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/com/management/client/page/admin/ClazzManagementPage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/com/management/front/page/admin/CourseManagementPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/com/management/client/page/admin/CourseManagementPage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/com/management/front/page/admin/DailyActivityManagementPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/com/management/client/page/admin/DailyActivityManagementPage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/com/management/front/page/admin/HonorManagementPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/com/management/client/page/admin/HonorManagementPage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/com/management/front/page/admin/InnovationManagementPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/com/management/client/page/admin/InnovationManagementPage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/com/management/front/page/admin/StudentLogManagementPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/com/management/client/page/admin/StudentLogManagementPage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/com/management/front/page/admin/StudentManagementPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/com/management/client/page/admin/StudentManagementPage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/com/management/front/page/admin/TeacherManagementPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/com/management/client/page/admin/TeacherManagementPage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/com/management/front/page/student/AbsencePage.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/com/management/client/page/student/AbsencePage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/com/management/front/page/student/CourseApplyPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/com/management/client/page/student/CourseApplyPage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/com/management/front/page/student/DailyActivityPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/com/management/client/page/student/DailyActivityPage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/com/management/front/page/student/HomePage.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/com/management/client/page/student/HomePage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/com/management/front/page/student/InnovationPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/com/management/client/page/student/InnovationPage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/com/management/front/page/student/StudentBasicInfoTab.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/com/management/client/page/student/StudentBasicInfoTab.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/com/management/front/page/student/StudentCourseMenuPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/com/management/client/page/student/StudentCourseMenuPage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/com/management/front/page/student/StudentHomeworkPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/com/management/client/page/student/StudentHomeworkPage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/com/management/front/page/student/StudentPersonalInfoPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/com/management/client/page/student/StudentPersonalInfoPage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/com/management/front/page/student/StudentPortraitPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/com/management/client/page/student/StudentPortraitPage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/com/management/front/page/teacher/CourseInfoTab.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/com/management/client/page/teacher/CourseInfoTab.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/com/management/front/page/teacher/HomeworkManagementTab.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/com/management/client/page/teacher/HomeworkManagementTab.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/com/management/front/page/teacher/ScoreManagementTab.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/com/management/client/page/teacher/ScoreManagementTab.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/com/management/front/page/teacher/StudentAbsenceManagementTab.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/com/management/client/page/teacher/StudentAbsenceManagementTab.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/com/management/front/page/teacher/TeacherBasicInfoTab.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/com/management/client/page/teacher/TeacherBasicInfoTab.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/com/management/front/page/teacher/TeacherCourseMenuPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/com/management/client/page/teacher/TeacherCourseMenuPage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/com/management/front/page/teacher/TeacherPersonalInfoPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/com/management/client/page/teacher/TeacherPersonalInfoPage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/com/management/front/request/DataResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/com/management/client/request/DataResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/com/management/front/request/JwtResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/com/management/client/request/JwtResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/com/management/front/util/HttpClientUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/com/management/client/util/HttpClientUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/module-info.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/resources/com/management/front/images/0001.png" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/resources/com/management/client/images/0001.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/resources/com/management/front/images/0002.png" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/resources/com/management/client/images/0002.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/resources/com/management/front/images/0003.png" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/resources/com/management/client/images/0003.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/resources/com/management/front/images/LOGO.PNG" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/resources/com/management/client/images/LOGO.PNG" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/resources/com/management/front/images/background3.png" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/resources/com/management/client/images/background3.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/resources/com/management/front/images/mesh-1430107_1920.png" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/resources/com/management/client/images/mesh-1430107_1920.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/resources/com/management/front/menu.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/resources/com/management/client/menu.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/resources/com/management/front/studentFxml/StudentBasicInfoTab.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/resources/com/management/client/studentFxml/StudentBasicInfoTab.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/resources/com/management/front/studentFxml/StudentPortrait.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/resources/com/management/client/studentFxml/StudentPortrait.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/resources/com/management/front/teacherFxml/TeacherBasicInfoTab.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/resources/com/management/client/teacherFxml/TeacherBasicInfoTab.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/src/main/java/com/management/front/request/DataRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/com/management/server/request/DataRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/src/main/java/com/management/front/request/DataResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/com/management/server/request/DataResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/src/main/java/com/management/front/request/HttpRequestUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/com/management/server/request/HttpRequestUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/src/main/java/com/management/front/request/JwtResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/com/management/server/request/JwtResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/src/main/java/com/management/front/request/LoginRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/com/management/server/request/LoginRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/src/main/java/com/management/front/request/MessageResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/com/management/server/request/MessageResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/src/main/java/com/management/front/request/MyTreeNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/com/management/server/request/MyTreeNode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/src/main/java/com/management/front/request/OptionItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/com/management/server/request/OptionItem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/src/main/java/com/management/front/request/OptionItemList.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/com/management/server/request/OptionItemList.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/src/main/java/com/management/front/request/SQLiteJDBC.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/com/management/server/request/SQLiteJDBC.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -67,13 +128,13 @@
       <recent name="com.management.front.request" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.DemoClient">
+  <component name="RunManager" selected="Spring Boot.ServerApplication">
     <configuration name="DemoClient" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.management.front.DemoClient" />
       <module name="front" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="com.management.front.*" />
+          <option name="PATTERN" value="com.management.client.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -86,7 +147,7 @@
       <module name="front" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="com.management.front.*" />
+          <option name="PATTERN" value="com.management.client.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -131,7 +192,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="jdk-21.0.2-openjdk-21.0.2-4caba194b151-4f524021" />
+        <option value="bundled-jdk-9f38398b9061-18abd8497189-intellij.indexing.shared.core-IU-241.14494.240" />
+        <option value="bundled-js-predefined-1d06a55b98c1-74d2a5396914-JavaScript-IU-241.14494.240" />
       </set>
     </attachedChunks>
   </component>
@@ -148,6 +210,7 @@
       <workItem from="1710750582240" duration="426000" />
       <workItem from="1710753083899" duration="1362000" />
       <workItem from="1710756074943" duration="1050000" />
+      <workItem from="1714492111296" duration="660000" />
     </task>
     <servers />
   </component>
