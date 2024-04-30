@@ -15,20 +15,6 @@ import java.nio.charset.StandardCharsets;
 
 @RestController
 public class FileController {
-    @Value("${attach.folder}")    //环境配置变量获取
-    private String attachFolder;
-    @PostMapping(path = "/uploadFile")
-    public DataResponse uploadFile(@RequestBody byte[] barr,
-    @RequestParam(name = "fileName") String fileName)  {
-        try {
-            String decodedFileName = URLDecoder.decode(fileName, StandardCharsets.UTF_8.toString());
-            OutputStream os = new FileOutputStream(new File(attachFolder + "homework" +"/"+ decodedFileName));
-            os.write(barr);
-            os.close();
-            return new DataResponse(0, null, "上传成功！");
-        }catch(Exception e){
-            return new DataResponse(1, null, "上传错误！");
-        }
-    }
+
 
 }

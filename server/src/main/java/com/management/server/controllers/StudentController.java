@@ -49,6 +49,8 @@ public class StudentController {
     private DailyActivityRepository dailyActivityRepository;
     @Autowired
     private HonorRepository honorRepository;
+    @Autowired
+    private FeeRepository feeRepository;
     @PostMapping("/getStudent")
     public DataResponse getStudent()
     {
@@ -176,6 +178,16 @@ public class StudentController {
         }
         return new DataResponse(0,studentList,null);
     }
+    @PostMapping("/getStudentPortraitData")
+    public DataResponse getStudentPortraitData()
+    {
+        Map m=getMapFromStudentForIntroduce(CommonMethod.getUsername());
+        m.remove("photo");
+        m.remove("introduce");
+        List<Fee> feeList=feeRepository.findByPerson(studentRepository.findByStudentId(CommonMethod.getUsername()));
+        m.put("feeList",feeList);
+        return new DataResponse(0,m,null);
+    }
     @PostMapping("/getStudentsByHonor")
     public DataResponse getStudentsByHonor(@RequestBody Map m)
     {
@@ -263,7 +275,7 @@ public class StudentController {
         map.put("className", clazzRepository.findClazzByStudent(student)+"班");
         List<Innovation> list=innovationRepository.findByPersons(student);
         String filePath = "server/src/main/resources/static/resume.html";
-        String content;
+        String content = null;
         try {
             content = new String(Files.readAllBytes(Paths.get(filePath)));
         } catch (IOException e) {
@@ -272,16 +284,17 @@ public class StudentController {
         String imgStr= FileUtil.getPhotoImageStr(student.getPhoto());
         map.put("introduce",content);
         map.put("photo",imgStr);
-        int cnt1=0; // 学科竞赛
-        int cnt2=0; //科研成果
-        int cnt3=0; //社会实践
+        int cnt1=0;// 学科竞赛
+        int cnt2=0;//科研成果
+        int cnt3=0;//社会实践
+        int cnt4=0;//创新项目
         for(Innovation innovation:list){
             if(innovation.getType().equals("学科竞赛"))
             {
                 cnt1++;
                 map.put("competitionTime"+cnt1,innovation.getStartDate().toString());
                 map.put("competitionName"+cnt1,innovation.getName());
-                map.put("competitionLevel"+cnt1,innovation.getPerformance());
+                map.put("competitionPerformance"+cnt1,innovation.getPerformance());
             }
             else if(innovation.getType().equals("科研成果"))
             {
@@ -297,10 +310,16 @@ public class StudentController {
                 map.put("practiceName"+cnt3,innovation.getName());
                 map.put("practicePerformance"+cnt3,innovation.getPerformance());
             }
+            else if(innovation.getType().equals("创新项目"))
+            {
+                cnt4++;
+                map.put("projectTime"+cnt4,innovation.getStartDate().toString());
+                map.put("projectName"+cnt4,innovation.getName());
+                map.put("projectPerformance"+cnt4,innovation.getPerformance());
+            }
         }
         return map;
     }
-
     private boolean completeStudentById(Student s)
     {
         String id = s.getIdCardNum();
