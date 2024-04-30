@@ -203,6 +203,7 @@ public class StudentBasicInfoTab extends Tab {
             alert.setContentText("保存成功");
             alert.showAndWait();
         }
+        refresh();
     }
 
     private void refresh() {
@@ -232,6 +233,7 @@ public class StudentBasicInfoTab extends Tab {
             if (student.get("families") != null) {
                 familyItems = FXCollections.observableArrayList(familyList);
             }
+            familyItems.add(new HashMap<>());
             family.setItems(familyItems);
         }
         display();

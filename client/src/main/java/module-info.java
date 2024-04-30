@@ -22,6 +22,9 @@ module com.management.front {
     requires com.calendarfx.view;
     requires org.burningwave.core;
     requires org.kordamp.ikonli.materialdesign2;
+    requires cn.hutool;
+    requires com.fasterxml.jackson.databind;
+    requires com.fasterxml.jackson.datatype.jsr310;
 
     opens com.management.front to javafx.fxml;
     exports com.management.front;
