@@ -79,7 +79,7 @@ public class WeekTimeTable extends WeekPage {
 
     public Entry<String> convertMapToEntry(Map<String, Object> map) {
         Entry<String> entry = new Entry<>((String) map.get("name"));
-        entry.setId((String) map.get("eventId"));
+        entry.setUserObject((String) map.get("eventId"));
         entry.setInterval(
                 LocalDate.parse(map.get("startDate")+""),
                 LocalTime.parse(map.get("startTime")+"") ,
@@ -93,7 +93,7 @@ public class WeekTimeTable extends WeekPage {
 
     public Map<String, Object> convertEntryToMap(Entry entry) {
         String name = entry.getTitle() != null ? entry.getTitle() : "";
-        String eventId = entry.getId() != null ? entry.getId() : "";
+        String eventId = entry.getUserObject() != null ? (String) entry.getUserObject() : "";
         LocalDate startDate = entry.getStartDate() != null ? entry.getStartDate() : LocalDate.now();
         LocalDate endDate = entry.getEndDate() != null ? entry.getEndDate() : LocalDate.now();
         LocalTime startTime = entry.getStartTime() != null ? entry.getStartTime() : LocalTime.now();

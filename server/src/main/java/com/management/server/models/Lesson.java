@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import java.util.List;
+import java.util.Set;
 
 @EqualsAndHashCode(callSuper = true)
 @Entity
@@ -13,5 +13,9 @@ import java.util.List;
 
 public class Lesson extends Event{
 
-
+    @Override
+    @Transient
+    public Set<Person> getPersons() { //lesson不再重复存储persons，提升课程管理性能
+        return course.getPersons();
+    }
 }

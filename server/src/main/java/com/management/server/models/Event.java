@@ -16,7 +16,7 @@ import java.util.Set;
 @Data
 //@MappedSuperclass
 @Inheritance(strategy = InheritanceType.JOINED)
-@EqualsAndHashCode(exclude = {"persons"})
+@EqualsAndHashCode(exclude = {"persons","course"})
 /*@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "eventId")//在递归中第二次出现时用name属性替代本对象避免无限递归
 @JsonIgnoreProperties(value = {"persons"})*/
 /*@NamedEntityGraph(name = "Event.persons",
@@ -42,6 +42,9 @@ public class Event{
 
     //private boolean checked;//用于判定是否已经通知到学生，如果未通知，应在通知栏显示 单独弄notice类？
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
+    protected Course course;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "person_event")

@@ -204,11 +204,11 @@ public class CourseController {
                     .findFirst()
                     .orElseGet(() -> {
                         Lesson newLesson = new Lesson();
-                        newLesson.setPersons(persons);
                         newLessons.add(newLesson);
                         return newLesson;
                     });
             BeanUtil.fillBeanWithMap(mapLesson, lesson, CopyOptions.create());
+            //lesson.setPersons(persons);
         }
 
         //lessonRepository.saveAll(newLessons); 不用先保存？？？
