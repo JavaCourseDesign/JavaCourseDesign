@@ -12,10 +12,7 @@ import javafx.scene.control.cell.MapValueFactory;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static com.management.front.util.HttpClientUtil.request;
 
@@ -25,9 +22,8 @@ public class AbsencePage extends SplitPane {
     private VBox controlPanel = new VBox();
     private ObservableList<Map> observableList = FXCollections.observableArrayList();
 
-
-    private TextField offReasonField = new TextField("玩原神");
-    private TextField destinationField = new TextField("宿舍");
+    private TextField offReasonField = new TextField();
+    private TextField destinationField = new TextField();
     private SearchableListView eventListView;
 
     public AbsencePage() {
@@ -72,12 +68,47 @@ public class AbsencePage extends SplitPane {
         deleteButton.setPrefHeight(100);
         deleteButton.setOnMouseClicked(e ->
         {
-
+            deleteAbsence();
         });
         controlPanel.getChildren().addAll(uploadButton, deleteButton);
         this.getItems().add(controlPanel);
     }
-
+    private void deleteAbsence() {
+        List<Map> selectedItems=absenceTable.getSelectedItems();
+        if(selectedItems.isEmpty())
+        {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setContentText("请选择要删除的请假");
+            alert.showAndWait();
+            return;
+        }
+        //不能强转 javafx.scene.control.MultipleSelectionModelBase$1 cannot
+        // be cast to class java.util.ArrayList不知道为什么
+        ArrayList<Map> absenceList=new ArrayList<>();
+        for(Map m:selectedItems)
+        {
+            absenceList.add(m);
+        }
+        Alert alert=new Alert(Alert.AlertType.CONFIRMATION, "确定要删除吗？");
+        alert.setTitle("警告");
+        Optional<ButtonType> result=alert.showAndWait();
+        if(result.get()== ButtonType.OK)
+        {
+            DataResponse r=request("/deleteAbsences",absenceList);
+            if(r.getCode()!=0)
+            {
+                Alert alert1=new Alert(Alert.AlertType.ERROR);
+                alert1.setContentText(r.getMsg());
+                alert1.showAndWait();
+            }
+            else {
+                Alert alert1 = new Alert(Alert.AlertType.INFORMATION);
+                alert1.setContentText("删除成功");
+                alert1.showAndWait();
+            }
+        }
+        displayAbsences();
+    }
     private void initializeTable() {
         TableColumn<Map, String> offReasonColumn = new TableColumn<>("请假原因");
         TableColumn<Map, String> eventColumn = new TableColumn<>("请假事件");

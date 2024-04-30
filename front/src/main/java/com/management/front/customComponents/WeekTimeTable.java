@@ -3,18 +3,24 @@ package com.management.front.customComponents;
 import com.calendarfx.model.Calendar;
 import com.calendarfx.model.CalendarSource;
 import com.calendarfx.model.Entry;
+import com.calendarfx.view.CalendarView;
 import com.calendarfx.view.DateControl;
 import com.calendarfx.view.EntryViewBase;
 import com.calendarfx.view.page.WeekPage;
 import com.calendarfx.view.popover.EntryDetailsView;
+import com.calendarfx.view.popover.PopOverTitledPane;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -27,27 +33,24 @@ public class WeekTimeTable extends WeekPage {
 
     public WeekTimeTable() {
         this.setPrefHeight(600);
-
         this.calendar = new Calendar("Week Calendar");
         this.calendar.setStyle(Calendar.Style.STYLE1);
         CalendarSource calendarSource = new CalendarSource("My Calendar Source");
         calendarSource.getCalendars().add(this.calendar);
-
         this.getCalendarSources().setAll(calendarSource);
-
     }
-
+//
     public void setCourse(Map<String, Object> course) {
         setEntryFactory(param -> {
             Entry<?> newEntry = new Entry<>(course.get("name") + "");
             newEntry.setInterval(param.getZonedDateTime());
             newEntry.setRecurrenceRule("RRULE:FREQ=WEEKLY;COUNT=20");//默认重复20次，每周一次
             //System.out.println(newEntry.recurrenceRuleProperty());
-
             newEntry.setCalendar(calendar);
             return newEntry;
         });
     }
+
 
     public void setEvents(List<Map<String,Object>> events) {
         this.calendar.clear();
@@ -72,8 +75,8 @@ public class WeekTimeTable extends WeekPage {
                 LocalDate.parse(map.get("endDate")+""),
                 LocalTime.parse(map.get("endTime")+"")
         );
-        entry.setLocation((String) map.get("location"));
 
+        entry.setLocation((String) map.get("location"));
         return entry;
     }
 

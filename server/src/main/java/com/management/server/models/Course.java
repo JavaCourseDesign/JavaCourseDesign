@@ -50,7 +50,7 @@ public class Course{
 
     private boolean available;//是否可选
 
-    @Transient//@Transient 注解表示该属性并非一个到数据库表的字段的映射，ORM框架将忽略该属性。
+   @Transient//@Transint 注解表示该属性并非一个到数据库表的字段的映射，ORM框架将忽略该属性。
     private Boolean chosen;//是否被选中，由controller根据具体人进行判断
 
 

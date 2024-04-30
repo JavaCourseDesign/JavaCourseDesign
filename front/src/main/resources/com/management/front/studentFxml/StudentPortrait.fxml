@@ -73,17 +73,17 @@
          </yAxis>
       </BarChart>
       <PieChart fx:id="pieChart" layoutX="274.0" layoutY="308.0" prefHeight="138.0" prefWidth="193.0" />
-      <Text fx:id="innovationText1" fill="#a19c9c" layoutX="63.0" layoutY="331.0" strokeType="OUTSIDE" strokeWidth="0.0" text="teacher management" wrappingWidth="167.0">
+      <Text fx:id="competitionText" fill="#a19c9c" layoutX="63.0" layoutY="331.0" strokeType="OUTSIDE" strokeWidth="0.0" text="teacher management" wrappingWidth="167.0">
          <font>
             <Font size="11.0" />
          </font>
       </Text>
-      <Text fx:id="innovationText2" fill="#a19c9c" layoutX="70.0" layoutY="365.0" strokeType="OUTSIDE" strokeWidth="0.0" text="teacher management" wrappingWidth="177.4000244140625">
+      <Text fx:id="paperText" fill="#a19c9c" layoutX="70.0" layoutY="365.0" strokeType="OUTSIDE" strokeWidth="0.0" text="teacher management" wrappingWidth="177.4000244140625">
          <font>
             <Font size="11.0" />
          </font>
       </Text>
-      <Text fx:id="innovationText3" fill="#a19c9c" layoutX="65.0" layoutY="395.0" strokeType="OUTSIDE" strokeWidth="0.0" text="teacher management" wrappingWidth="187.0">
+      <Text fx:id="projectText" fill="#a19c9c" layoutX="65.0" layoutY="395.0" strokeType="OUTSIDE" strokeWidth="0.0" text="teacher management" wrappingWidth="187.0">
          <font>
             <Font size="11.0" />
          </font>
@@ -116,12 +116,12 @@
             <Font name="System Bold" size="12.0" />
          </font>
       </Text>
-      <ImageView fitHeight="105.0" fitWidth="105.0" layoutX="255.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+<!--      <ImageView fitHeight="105.0" fitWidth="105.0" layoutX="255.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/0003.png" />
          </image>
-      </ImageView>
-      <ImageView fx:id="photo" blendMode="ADD" fitHeight="150.0" fitWidth="105.0" layoutX="253.0" layoutY="-1.0" pickOnBounds="true" preserveRatio="true">
+      </ImageView>-->
+      <ImageView fx:id="photoArea"  fitHeight="145.0" fitWidth="105.0" layoutX="253.0" layoutY="-1.0" pickOnBounds="true" preserveRatio="true">
 
       </ImageView>
       <Text fill="WHITE" layoutX="108.0" layoutY="167.0" strokeType="OUTSIDE" strokeWidth="0.0" text="联系方式" wrappingWidth="131.0">

@@ -213,7 +213,7 @@ public class HomeworkManagementTab extends Tab {
         columns.add(deadlineColumn);
         columns.add(submitTimeColumn);
         columns.add(gradeColumn);
-        homeworkTable=new SearchableTableView(observableList,List.of("studentId","courseName","grade","deadline"),columns);
+        homeworkTable=new SearchableTableView(observableList,List.of("studentId","courseName","grade","deadline","studentName"),columns);
         splitPane.getItems().add(homeworkTable);
     }
 }
