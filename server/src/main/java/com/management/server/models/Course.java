@@ -16,11 +16,7 @@ import java.util.Set;
 @Table(name="course")
 /*@NamedEntityGraph(name = "Course",
         attributeNodes = {
-                @NamedAttributeNode("lessons"),
-                //@NamedAttributeNode("persons")
-        },
-        subgraphs = {
-                //@NamedSubgraph(name = "Event.persons", attributeNodes = @NamedAttributeNode("persons"))
+                @NamedAttributeNode("persons")
         }
     )*/
 /*@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "name")//在递归中第二次出现时用name属性替代本对象避免无限递归

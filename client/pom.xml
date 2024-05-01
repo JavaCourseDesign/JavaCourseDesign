@@ -198,7 +198,7 @@
           <execution>
             <id>default-cli</id>
             <configuration>
-              <mainClass>com.management.front/com.management.front.ClientApplication</mainClass>
+              <mainClass>com.management.front/com.management.client.ClientApplication</mainClass>
               <launcher>app</launcher>
               <jlinkZipName>app</jlinkZipName>
               <jlinkImageName>app</jlinkImageName>

@@ -1,4 +1,4 @@
-module com.management.front {
+module com.management.client {
     requires javafx.controls;
     requires javafx.fxml;
     requires javafx.web;
@@ -26,22 +26,22 @@ module com.management.front {
     requires com.fasterxml.jackson.databind;
     requires com.fasterxml.jackson.datatype.jsr310;
 
-    opens com.management.front to javafx.fxml;
-    exports com.management.front;
+    opens com.management.client to javafx.fxml;
+    exports com.management.client;
 
     /*// 以下是手动添加的模块声明
-    exports com.management.front.request to com.google.gson;
-    opens com.management.front.request to com.google.gson;
-    exports com.management.front.page;
-    opens com.management.front.page to javafx.fxml;
-    exports com.management.front.util;
-    opens com.management.front.util to com.google.gson;
-    exports com.management.front.page.admin;
-    opens com.management.front.page.admin to javafx.fxml;
-    exports com.management.front.page.student;
-    opens com.management.front.page.student to javafx.fxml;
-    exports com.management.front.page.teacher;
-    opens com.management.front.page.teacher to javafx.fxml;
-    exports com.management.front.customComponents;
-    opens com.management.front.customComponents to javafx.fxml;*/
+    exports com.management.client.request to com.google.gson;
+    opens com.management.client.request to com.google.gson;
+    exports com.management.client.page;
+    opens com.management.client.page to javafx.fxml;
+    exports com.management.client.util;
+    opens com.management.client.util to com.google.gson;
+    exports com.management.client.page.admin;
+    opens com.management.client.page.admin to javafx.fxml;
+    exports com.management.client.page.student;
+    opens com.management.client.page.student to javafx.fxml;
+    exports com.management.client.page.teacher;
+    opens com.management.client.page.teacher to javafx.fxml;
+    exports com.management.client.customComponents;
+    opens com.management.client.customComponents to javafx.fxml;*/
 }
