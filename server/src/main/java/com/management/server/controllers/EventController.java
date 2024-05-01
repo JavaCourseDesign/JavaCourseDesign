@@ -4,15 +4,12 @@ import com.management.server.models.*;
 import com.management.server.payload.response.DataResponse;
 import com.management.server.repositories.*;
 import com.management.server.util.CommonMethod;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 //event controller负责实现innovation dailyActivity; lesson course单独实现
 @RestController
@@ -46,8 +43,8 @@ public class EventController {
         return new DataResponse(0, events, null);
     }
 
-    @PostMapping("/getEventsByStudent")
-    public DataResponse getEventsByStudent() {
+    @PostMapping("/getStudentEvents")
+    public DataResponse getStudentEvents() {
         Student student = studentRepository.findByStudentId(CommonMethod.getUsername());
         if(student == null)
             return new DataResponse(-1, null, "学生不存在");

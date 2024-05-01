@@ -63,7 +63,7 @@ public class CourseApplyPage extends SplitPane {
         selectedCalendar.setReadOnly(true);
         preViewCalendar.setReadOnly(true);
 
-        setEvents(chosenCalendar, (List<Map>) request("/getEventsByStudent",null).getData());
+        setEvents(chosenCalendar, (List<Map>) request("/getStudentEvents",null).getData());
 
         SplitPane splitPane = new SplitPane(weekTimeTable, infoBox);
         this.getItems().add(splitPane);

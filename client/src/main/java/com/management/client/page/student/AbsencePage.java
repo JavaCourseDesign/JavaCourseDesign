@@ -31,7 +31,7 @@ public class AbsencePage extends SplitPane {
     private SearchableListView eventListView;
 
     public AbsencePage() {
-        eventListView = new SearchableListView(FXCollections.observableArrayList((ArrayList) request("/getEventsByStudent", null).getData()), List.of("name", "startDate"));
+        eventListView = new SearchableListView(FXCollections.observableArrayList((ArrayList) request("/getStudentEvents", null).getData()), List.of("name", "startDate"));
         initializeTable();
         initializeControlPanel();
         displayAbsences();

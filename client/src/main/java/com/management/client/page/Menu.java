@@ -67,6 +67,9 @@ public class Menu extends AnchorPane {
             AnchorPane.setLeftAnchor(borderPane, 0.0);
             AnchorPane.setRightAnchor(borderPane, 0.0);
             this.getChildren().add(borderPane);
+
+            //this.getStylesheets().add("dark-theme.css");
+
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
