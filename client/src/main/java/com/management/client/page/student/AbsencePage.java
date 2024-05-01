@@ -2,6 +2,7 @@ package com.management.client.page.student;
 
 import com.management.client.customComponents.SearchableListView;
 import com.management.client.customComponents.SearchableTableView;
+import com.management.client.customComponents.WeekTimeTable;
 import com.management.client.request.DataResponse;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -28,10 +29,10 @@ public class AbsencePage extends SplitPane {
 
     private TextField offReasonField = new TextField("玩原神");
     private TextField destinationField = new TextField("宿舍");
-    private SearchableListView eventListView;
+    private WeekTimeTable eventView=new WeekTimeTable();
 
     public AbsencePage() {
-        eventListView = new SearchableListView(FXCollections.observableArrayList((ArrayList) request("/getStudentEvents", null).getData()), List.of("name", "startDate"));
+        eventView.setEvents((List<Map<String, Object>>) request("/getStudentEvents", null).getData());
         initializeTable();
         initializeControlPanel();
         displayAbsences();
@@ -40,7 +41,7 @@ public class AbsencePage extends SplitPane {
     private Map newMapFromFields(Map m) {
         m.put("offReason", offReasonField.getText());
         m.put("destination", destinationField.getText());
-        m.put("events", eventListView.getSelectedItems());
+        m.put("events", eventView.getSelectedEvents());
         return m;
     }
 
@@ -62,7 +63,7 @@ public class AbsencePage extends SplitPane {
         controlPanel.getChildren().add(new Text("请假去向:"));
         controlPanel.getChildren().add(destinationField);
         controlPanel.getChildren().add(new Text("请假事件:"));
-        controlPanel.getChildren().add(eventListView);
+        controlPanel.getChildren().add(eventView);
         Button uploadButton = new Button("提交");
         uploadButton.setOnMouseClicked(e -> {
             uploadAbsence();
@@ -96,8 +97,8 @@ public class AbsencePage extends SplitPane {
         timeColumn.setCellValueFactory(data ->
         {
             if (data.getValue() != null) {
-                Map<String, Object> person = (Map<String, Object>) data.getValue().get("event");
-                String time = (String) person.get("time");
+                Map<String, Object> event = (Map<String, Object>) data.getValue().get("event");
+                String time = event.get("startDate") + " " + event.get("startTime") + "-" + event.get("endDate") + " " + event.get("endTime");
                 return new SimpleStringProperty(time);
             } else return new SimpleStringProperty("");
         });
@@ -136,7 +137,7 @@ public class AbsencePage extends SplitPane {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setContentText("只能选择一个事件");
             alert.showAndWait();
-            eventListView.setSelectedItems(List.of());
+            //eventView.setSelectedItems(List.of());
             return;
         }
         ArrayList<Map> eventList = (ArrayList<Map>) list;
@@ -152,6 +153,6 @@ public class AbsencePage extends SplitPane {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setContentText("上传成功");
         displayAbsences();
-        eventListView.setSelectedItems(List.of());
+        //eventListView.setSelectedItems(List.of());
     }
 }

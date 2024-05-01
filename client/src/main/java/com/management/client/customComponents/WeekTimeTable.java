@@ -61,6 +61,14 @@ public class WeekTimeTable extends WeekPage {
         return events;
     }
 
+    public List<Map> getSelectedEvents() {
+        List<Map> events = new ArrayList<>();
+        for (Entry<?> entry : this.getSelections()) {
+            events.add(convertEntryToMap(entry));
+        }
+        return events;
+    }
+
     public Entry<String> convertMapToEntry(Map<String, Object> map) {
         Entry<String> entry = new Entry<>((String) map.get("name"));
         entry.setUserObject((String) map.get("eventId"));
