@@ -23,7 +23,7 @@ import java.util.Set;
 
 //@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "name")//在递归中第二次出现时用name属性替代本对象避免无限递归
 //@JsonIgnoreProperties(value = {"courses"})
-@EqualsAndHashCode(exclude = {"events","honors","courses"})//极为重要！跟json ignore搭配才能解决循环引用问题
+@EqualsAndHashCode(exclude = {"events","honors","courses","absences","dormitory"})//极为重要！跟json ignore搭配才能解决循环引用问题
 
 @Inheritance(strategy = InheritanceType.JOINED)
 public abstract class Person {
@@ -33,9 +33,6 @@ public abstract class Person {
 
     @Size(max = 50)
     private String name;
-
-/*    @Size(max = 2)
-    private String type;*/
 
     @Size(max = 50)
     private String dept;
@@ -64,15 +61,14 @@ public abstract class Person {
     private String social;
     private String photo;
 
-    /*@OneToMany(mappedBy = "person")
-    private List<Absence> absences;*/
+    @OneToMany(mappedBy = "person")
+    @JsonIgnore
+    private List<Absence> absences;
 
-    /*@OneToMany(mappedBy = "person")
-    private List<Honor> honors;*/
-
-    /*@ManyToOne
+    @ManyToOne
     @JoinColumn(name = "dormitory_id")
-    private Dormitory dormitory;*/
+    @JsonIgnore
+    private Dormitory dormitory;
 
     @ManyToMany(mappedBy = "persons")
     @JsonIgnore

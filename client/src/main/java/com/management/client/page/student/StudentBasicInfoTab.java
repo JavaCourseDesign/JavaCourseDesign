@@ -226,10 +226,8 @@ public class StudentBasicInfoTab extends Tab {
             // 假设有other键
             other.setText((String) student.get("other"));
 
-            System.out.println(student.get("families"));
             ObservableList<Map> familyItems = FXCollections.observableArrayList();
             List<Map> familyList = (List<Map>) student.get("families");
-            //familyList.add(Map.of());
             if (student.get("families") != null) {
                 familyItems = FXCollections.observableArrayList(familyList);
             }

@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 import org.springframework.core.io.ResourceLoader;
@@ -52,6 +53,7 @@ public class StudentController {
     @Autowired
     private FeeRepository feeRepository;
     @PostMapping("/getStudent")
+    @PreAuthorize("hasRole('STUDENT')")
     public DataResponse getStudent()
     {
         String username = CommonMethod.getUsername();
@@ -63,6 +65,20 @@ public class StudentController {
         student.put("clazzName", clazzRepository.findClazzByStudent(s)+"班");
         return new DataResponse(0,student,null);
     }
+
+    @PostMapping("/getStudent")
+    @PreAuthorize("hasRole('ADMIN')")
+    public DataResponse getStudent(@RequestBody Map m)
+    {
+        String studentId = (String) m.get("studentId");
+        Student s = studentRepository.findByStudentId(studentId);
+        Map student = BeanUtil.beanToMap(s) ;
+        student.put("families",s.getFamilies());
+        student.put("clazzName", clazzRepository.findClazzByStudent(s)+"班");
+        return new DataResponse(0,student,null);
+    }
+
+
     @PostMapping("/getAllStudentsByTeacherCourses")
     public DataResponse getAllStudentsByTeacherCourses()
     {
