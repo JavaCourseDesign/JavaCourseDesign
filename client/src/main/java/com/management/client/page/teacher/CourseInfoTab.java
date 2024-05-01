@@ -106,8 +106,8 @@ public class CourseInfoTab extends Tab {
         hBox.getChildren().add(courseInfoBox);
         VBox vBox = new VBox();
         hBox.getChildren().add(vBox);
-        ImageView ppt=new ImageView(new Image(ClientApplication.class.getResourceAsStream("images/ppt.png")));
-        ImageView pdf=new ImageView(new Image(ClientApplication.class.getResourceAsStream("images/pdf.png")));
+        ImageView ppt=new ImageView(new Image(ClientApplication.class.getResourceAsStream("/images/ppt.png")));
+        ImageView pdf=new ImageView(new Image(ClientApplication.class.getResourceAsStream("/images/pdf.png")));
         ppt.setFitHeight(150);
         pdf.setFitHeight(150);
         ppt.setPreserveRatio(true);

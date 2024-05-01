@@ -198,11 +198,5 @@ public class Menu extends AnchorPane {
         dlaMngItm.setGraphic(new FontIcon(RUN));
         hnrMngItm.setGraphic(new FontIcon(MEDAL));
 
-
-
-
-
-
-
     }
 }
