@@ -1,4 +1,5 @@
 module com.management.client {
+
     requires javafx.controls;
     requires javafx.fxml;
     requires javafx.web;

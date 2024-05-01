@@ -61,7 +61,7 @@ public class StudentHomeworkPage extends VBox{
         }
         FileChooser fileDialog = new FileChooser();
         fileDialog.setTitle("选择作业文件");
-        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("PDF and Image files (*.pdf, *.jpg, *.png)", "*.pdf", "*.jpg", "*.png");
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("PDF (*.pdf)", "*.pdf");
         fileDialog.getExtensionFilters().add(extFilter);
 
         File file = fileDialog.showOpenDialog(null);

@@ -4,7 +4,10 @@ import com.management.client.customComponents.SearchableTableView;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.control.*;
+import javafx.scene.control.SplitPane;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
+import javafx.scene.control.TableColumn;
 import javafx.scene.control.cell.MapValueFactory;
 
 
@@ -21,17 +24,18 @@ public class StudentPersonalInfoPage extends TabPane {
         this.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
         this.getTabs().add(new StudentBasicInfoTab(student));
         this.getTabs().add(new HonorTab());
+        this.getTabs().add(new FeeTab());
     }
 }
 
-class HonorTab extends Tab{
+class HonorTab extends Tab {
     private SearchableTableView honorTable;
-    private SplitPane anchorPane=new SplitPane();
+    private SplitPane splitPane=new SplitPane();
     private ObservableList<Map> observableList = FXCollections.observableArrayList();
 
     public HonorTab() {
-        this.setText("荣誉信息管理");
-        this.setContent(anchorPane);
+        this.setText("荣誉信息");
+        this.setContent(splitPane);
         initializeTable();
         displayHonors();
     }
@@ -53,9 +57,7 @@ class HonorTab extends Tab{
                 String name=(String) event.get("name");
                 return new SimpleStringProperty(name);
             }
-            else {
-                return new SimpleStringProperty("");
-            }
+            else return new SimpleStringProperty("");
         });
         nameColumn.setCellValueFactory(new MapValueFactory<>("name"));
         timeColumn.setCellValueFactory(new MapValueFactory<>("awardDate"));
@@ -67,7 +69,43 @@ class HonorTab extends Tab{
         columns.add(departmentColumn);
         columns.add(eventColumn);
         honorTable = new SearchableTableView(observableList, List.of("name","awardDate"), columns);
-        anchorPane.getItems().add(honorTable);
+        splitPane.getItems().add(honorTable);
+    }
+}
+class FeeTab extends Tab{
+    private SearchableTableView feeTable;
+    private SplitPane splitPane=new SplitPane();
+    private ObservableList<Map> observableList = FXCollections.observableArrayList();
+
+    public FeeTab() {
+        this.setText("消费信息");
+        this.setContent(splitPane);
+        initializeTable();
+        displayFees();
+    }
+
+    private void displayFees() {
+        observableList.clear();
+        observableList.addAll(FXCollections.observableArrayList((ArrayList) request("/getFeesByStudent", null).getData()));
+        feeTable.setData(observableList);
+    }
+
+    private void initializeTable() {
+        TableColumn<Map,String> moneyColumn= new TableColumn<>("消费金额");
+        TableColumn<Map,String> timeColumn= new TableColumn<>("消费时间");
+        TableColumn<Map,String> goodsColumn= new TableColumn<>("商品");
+        TableColumn<Map,String> placeColumn= new TableColumn<>("消费地点");
+        moneyColumn.setCellValueFactory(new MapValueFactory<>("money"));
+        timeColumn.setCellValueFactory(new MapValueFactory<>("time"));
+        goodsColumn.setCellValueFactory(new MapValueFactory<>("goods"));
+        placeColumn.setCellValueFactory(new MapValueFactory<>("place"));
+        List<TableColumn<Map, ?>> columns = new ArrayList<>();
+        columns.add(moneyColumn);
+        columns.add(timeColumn);
+        columns.add(goodsColumn);
+        columns.add(placeColumn);
+        feeTable = new SearchableTableView(observableList, List.of("time","goods","place"), columns);
+        splitPane.getItems().add(feeTable);
     }
 }
 

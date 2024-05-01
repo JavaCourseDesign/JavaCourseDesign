@@ -1,6 +1,7 @@
 package com.management.client.page.teacher;
 
 import com.management.client.customComponents.SearchableTableView;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.SplitPane;

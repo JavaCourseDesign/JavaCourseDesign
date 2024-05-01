@@ -13,10 +13,7 @@ import javafx.scene.layout.*;
 import javafx.stage.FileChooser;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static com.management.client.util.HttpClientUtil.importData;
 import static com.management.client.util.HttpClientUtil.request;
@@ -159,18 +156,23 @@ class StudentAbsenceManagementTab extends Tab {
         {
             absenceList.add(m);
         }
-        DataResponse r=request("/deleteAbsences",absenceList);
-        if(r.getCode()!=0)
+        Alert alert=new Alert(Alert.AlertType.CONFIRMATION, "确定要删除吗？");
+        alert.setTitle("警告");
+        Optional<ButtonType> result=alert.showAndWait();
+        if(result.get()== ButtonType.OK)
         {
-            Alert alert=new Alert(Alert.AlertType.ERROR);
-            alert.setContentText(r.getMsg());
-            alert.showAndWait();
-        }
-        else
-        {
-            Alert alert=new Alert(Alert.AlertType.INFORMATION);
-            alert.setContentText("删除成功");
-            alert.showAndWait();
+            DataResponse r=request("/deleteAbsences",absenceList);
+            if(r.getCode()!=0)
+            {
+                Alert alert1=new Alert(Alert.AlertType.ERROR);
+                alert1.setContentText(r.getMsg());
+                alert1.showAndWait();
+            }
+            else {
+                Alert alert1 = new Alert(Alert.AlertType.INFORMATION);
+                alert1.setContentText("删除成功");
+                alert1.showAndWait();
+            }
         }
         displayAbsences();
     }
@@ -337,7 +339,7 @@ class StudentFeeManagementTab extends Tab{
         columns.add(timeColumn);
         columns.add(goodsColumn);
         columns.add(placeColumn);
-        feeTable = new SearchableTableView(observableList,List.of("name","place"),columns);
+        feeTable = new SearchableTableView(observableList,List.of("name","studentId","time","goods","place"),columns);
         vBox.getChildren().add(feeTable);
         VBox.setVgrow(feeTable, Priority.ALWAYS);
     }

@@ -5,6 +5,7 @@ import com.management.server.models.Student;
 import com.management.server.payload.response.DataResponse;
 import com.management.server.repositories.FeeRepository;
 import com.management.server.repositories.StudentRepository;
+import com.management.server.util.CommonMethod;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Optional;
 
@@ -34,6 +36,12 @@ public class FeeController {
         return new DataResponse(0,feeRepository.findAll(),"获取所有费用信息");
     }
 
+    @PostMapping("/getFeesByStudent")
+    public DataResponse getFeesByStudent()
+    {
+        Student s=studentRepository.findByStudentId(CommonMethod.getUsername());
+        return new DataResponse(0,feeRepository.findByPerson(s),null);
+    }
     @PostMapping("/importFeeData")
     public DataResponse importFeeData(@RequestBody byte[] barr,
                                       @RequestParam(name = "uploader") String uploader) {
