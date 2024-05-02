@@ -2,6 +2,7 @@ package com.management.client.page.admin;
 
 import com.management.client.customComponents.SearchableListView;
 import com.management.client.customComponents.SearchableTableView;
+import com.management.client.customComponents.WeekTimeTable;
 import com.management.client.request.DataResponse;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -25,7 +26,7 @@ public class HonorManagementPage extends SplitPane {
     private ObservableList<Map> observableList = FXCollections.observableArrayList();
     private ObservableList<Map> studentObservableList = FXCollections.observableArrayList();
     private SearchableListView studentListView= new SearchableListView(FXCollections.observableArrayList((ArrayList) request("/getAllStudents", null).getData()), List.of("name", "studentId"));
-    private SearchableListView eventListView=new SearchableListView(FXCollections.observableArrayList((ArrayList) request("/getAllEventsExceptLessons",null).getData()), List.of("name","time"));
+    private WeekTimeTable eventView=new WeekTimeTable();
     private Button addButton = new Button("Add");
     private Button deleteButton = new Button("Delete");
     private Button updateButton = new Button("Update");
@@ -33,7 +34,10 @@ public class HonorManagementPage extends SplitPane {
     private TextField nameField = new TextField("优秀团员");
     private TextField departmentField = new TextField("软院团支部");
 
+    List<Map<String, Object>> events = (List<Map<String, Object>>) request("/getAllEventsExceptLessons", null).getData();
     public HonorManagementPage() {
+        eventView.calendar.setReadOnly(true);
+        eventView.setEvents(events);
         this.setWidth(1000);
         initializeTable();
         initializeStudentTable();
@@ -69,7 +73,7 @@ public class HonorManagementPage extends SplitPane {
                 nameField,
                 departmentField,
                 awardDatePicker,
-                eventListView
+                eventView
         );
         gridPane.addRow(6, addButton, deleteButton, updateButton);
         addButton.setOnAction(event -> addHonor());
@@ -84,7 +88,7 @@ public class HonorManagementPage extends SplitPane {
                 nameField.setText("");
                 departmentField.setText("");
                 awardDatePicker.setValue(null);
-                eventListView.setSelectedItems(List.of());
+                eventView.setEvents(events);
                 studentListView.setSelectedItems(List.of());
                 return;
             }
@@ -92,7 +96,8 @@ public class HonorManagementPage extends SplitPane {
             nameField.setText((String) h.get("name"));
             departmentField.setText((String) h.get("department"));
             awardDatePicker.setValue(LocalDate.parse((String) h.get("awardDate")));
-            eventListView.setSelectedItems(List.of((Map) h.get("event")));
+            //eventView.setSelectedEvent((Map<String, Object>) h.get("event"));
+            System.out.println((Map<String, Object>) h.get("event"));
             displayStudents(h);
             studentTable.setVisible(true);
         });
@@ -110,12 +115,11 @@ public class HonorManagementPage extends SplitPane {
             alert.showAndWait();
             return;
         }
-        if(eventListView.getSelectedItems().size()>1)
+        if(eventView.getSelectedEvents().size()>1)
         {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setContentText("只能选择一个获奖事件");
             alert.showAndWait();
-            eventListView.setSelectedItems(List.of());
             return;
         }
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "确定要更新吗？");
@@ -124,7 +128,7 @@ public class HonorManagementPage extends SplitPane {
         if(result.get()==ButtonType.OK)
         {
             Map  m=newMapFromFields(honorTable.getSelectedItem());
-            m.put("event",eventListView.getSelectedItems().get(0));
+            m.put("event",eventView.getSelectedEvents().get(0));
             DataResponse r=request("/updateHonor",m);
             displayHonors();
             displayStudents(m);
@@ -164,15 +168,15 @@ public class HonorManagementPage extends SplitPane {
     }
 
     private void addHonor() {
-        if(eventListView.getSelectedItems().size()>1)
+        if(eventView.getSelectedEvents().size()>1)
         {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setContentText("只能选择一个获奖事件");
             alert.showAndWait();
-            eventListView.setSelectedItems(List.of());
+            //eventListView.setSelectedItems(List.of());
             return;
         }
-        if(eventListView.getSelectedItems().size()==0)
+        if(eventView.getSelectedEvents().isEmpty())
         {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setContentText("请选择获奖事件");
@@ -180,7 +184,7 @@ public class HonorManagementPage extends SplitPane {
             return;
         }
         Map m=newMapFromFields(new HashMap());
-        m.put("event",eventListView.getSelectedItems().get(0));
+        m.put("event",eventView.getSelectedEvents().get(0));
         if(m.get("name").equals("")||m.get("department").equals("")||m.get("awardDate").equals("")||studentListView.getSelectedItems().isEmpty()
         ||m.get("name")==null||m.get("department")==null||m.get("awardDate").equals("null"))
         {
@@ -205,7 +209,7 @@ public class HonorManagementPage extends SplitPane {
         }
         displayHonors();
         studentListView.setSelectedItems(List.of());
-        eventListView.setSelectedItems(List.of());
+       // eventListView.setSelectedItems(List.of());
     }
 
     private void initializeTable(){
@@ -241,10 +245,9 @@ public class HonorManagementPage extends SplitPane {
     }
     private void displayStudents(Map m) {
         studentObservableList.clear();
-        ArrayList<Map> studentlist=(ArrayList<Map>) request("/getStudentsByHonor",m).getData();
-        studentListView.setSelectedItems(studentlist);
-        studentObservableList.addAll(FXCollections.observableArrayList(studentlist));
+        ArrayList<Map> studentList=(ArrayList<Map>) request("/getStudentsByHonor",m).getData();
+        studentListView.setSelectedItems(studentList);
+        studentObservableList.addAll(FXCollections.observableArrayList(studentList));
         studentTable.setItems(studentObservableList);
     }
-
 }

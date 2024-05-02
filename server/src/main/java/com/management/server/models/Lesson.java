@@ -12,7 +12,7 @@ import java.util.Set;
 @Table(name="lesson")
 
 public class Lesson extends Event{
-
+    private String ppt;
     @Override
     @Transient
     public Set<Person> getPersons() { //lesson不再重复存储persons，提升课程管理性能

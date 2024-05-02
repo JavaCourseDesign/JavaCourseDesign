@@ -3,6 +3,7 @@ package com.management.client.page.teacher;
 import com.calendarfx.view.popover.EntryPopOverContentPane;
 import com.management.client.ClientApplication;
 import com.management.client.customComponents.WeekTimeTable;
+import com.management.client.request.DataResponse;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.collections.FXCollections;
@@ -17,8 +18,9 @@ import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 
 import java.io.File;
-import java.util.List;
-import java.util.Map;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.management.client.util.HttpClientUtil.request;
@@ -26,7 +28,6 @@ import static com.management.client.util.HttpClientUtil.uploadFile;
 
 public class CourseInfoTab extends Tab {
     Map course;
-    private String eventId;
     private Button pptUploadButton = new Button("上传PPT");
     private Button pdfUploadButton = new Button("上传参考资料PDF");
     private Button pptDownloadButton = new Button("下载PPT");
@@ -44,12 +45,12 @@ public class CourseInfoTab extends Tab {
         pptDownloadButton.setOnMouseClicked(event -> downloadPPT());
         pdfDownloadButton.setOnMouseClicked(event -> downloadPDF());
         weekTimeTable.getCalendars().get(0).setReadOnly(true);
-        weekTimeTable.setEntryDetailsPopOverContentCallback(
+       /* weekTimeTable.setEntryDetailsPopOverContentCallback(
                 param->{
                     eventId=param.getEntry().getId();
                     return  new EntryPopOverContentPane(param.getPopOver(), param.getDateControl(), param.getEntry());
                 }
-        );
+        );*/
         initializeStudentTable();
         displayCourseInfo();
         this.setText("课程信息");
@@ -68,19 +69,101 @@ public class CourseInfoTab extends Tab {
             alert.show();
             return;
         }
-        uploadFile("/uploadReference",file.getPath(),file.getName(),(String) course.get("courseId"));
+        DataResponse r=uploadFile("/uploadReference",file.getPath(),file.getName(),(String) course.get("courseId"));
+        if(r.getCode()==0)
+        {
+            Alert alert=new Alert(Alert.AlertType.INFORMATION);
+            alert.setContentText("上传成功");
+            alert.show();
+        }
+        else
+        {
+            Alert alert=new Alert(Alert.AlertType.ERROR);
+            alert.setContentText(r.getMsg());
+            alert.show();
+        }
     }
 
     private void downloadPPT() {
-
+        if(weekTimeTable.getSelectedEvents().size()>1)
+        {
+            Alert alert=new Alert(Alert.AlertType.ERROR);
+            alert.setContentText("只能选择一节课");
+            alert.show();
+            return;
+        }
+        Map lesson=weekTimeTable.getSelectedEvents().get(0);
+        if(lesson==null)
+        {
+            Alert alert=new Alert(Alert.AlertType.ERROR);
+            alert.setContentText("未选择对应课");
+            alert.show();
+            return;
+        }
+        DataResponse r=request("/downloadPPT",lesson);
+        if(r.getCode()!=0)
+        {
+            Alert alert=new Alert(Alert.AlertType.ERROR);
+            alert.setContentText(r.getMsg());
+            alert.show();
+            return;
+        }
+        byte[] data= Base64.getDecoder().decode(r.getData().toString());
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PPT Files", "*.pptx","*.ppt"));
+        File file = fileChooser.showSaveDialog(null);
+        if (file != null) {
+            try {
+                FileOutputStream fos = new FileOutputStream(file);
+                fos.write(data);
+                fos.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
 
     }
 
     private void downloadPDF() {
-
+        DataResponse r=request("/downloadReference",course);
+        if(r.getCode()!=0)
+        {
+            Alert alert=new Alert(Alert.AlertType.ERROR);
+            alert.setContentText(r.getMsg());
+            alert.show();
+            return;
+        }
+        byte[] data= Base64.getDecoder().decode(r.getData().toString());
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PDF Files", "*.pdf"));
+        File file = fileChooser.showSaveDialog(null);
+        if (file != null) {
+            try {
+                FileOutputStream fos = new FileOutputStream(file);
+                fos.write(data);
+                fos.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     private void uploadPPT() {
+        if(weekTimeTable.getSelectedEvents().size()>1)
+        {
+            Alert alert=new Alert(Alert.AlertType.ERROR);
+            alert.setContentText("只能选择一节课");
+            alert.show();
+            return;
+        }
+        Map lesson=weekTimeTable.getSelectedEvents().get(0);
+        if(lesson==null)
+        {
+            Alert alert=new Alert(Alert.AlertType.ERROR);
+            alert.setContentText("未选择对应课");
+            alert.show();
+            return;
+        }
         FileChooser fileDialog = new FileChooser();
         fileDialog.setTitle("选择ppt文件");
         FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("PPT files (*.ppt, *.pptx)", "*.ppt", "*.pptx");
@@ -93,11 +176,23 @@ public class CourseInfoTab extends Tab {
             alert.show();
             return;
         }
-        uploadFile("/uploadPPT",file.getPath(),file.getName(),eventId);
+       DataResponse r= uploadFile("/uploadPPT",file.getPath(),file.getName(),(String)lesson.get("eventId") );
+        if(r.getCode()==0)
+        {
+            Alert alert=new Alert(Alert.AlertType.INFORMATION);
+            alert.setContentText("上传成功");
+            alert.show();
+        }
+        else
+        {
+            Alert alert=new Alert(Alert.AlertType.ERROR);
+            alert.setContentText(r.getMsg());
+            alert.show();
+        }
+        displayCourseInfo();
     }
 
     private void displayCourseInfo() {
-
         VBox courseInfoBox = new VBox();
         HBox hBox = new HBox();
         weekTimeTable.setEvents((List<Map<String,Object>>) request("/getLessonsByCourse", course).getData());
@@ -113,10 +208,12 @@ public class CourseInfoTab extends Tab {
         ppt.setPreserveRatio(true);
         pdf.setPreserveRatio(true);
         vBox.getChildren().addAll(ppt, pptUploadButton, pptDownloadButton, pdf, pdfUploadButton, pdfDownloadButton,studentTable);
-
-        Label courseIdLabel = new Label("课程号: " + course.get("courseId"));
+        String courseId="sdu"+String.format("%06d",Integer.parseInt((String) course.get("courseId")));
+        Label courseIdLabel = new Label("课程号: " + courseId);
         Label courseNameLabel = new Label("课程名: " + course.get("name"));
-        Label referenceLabel = new Label("参考资料: " + course.get("reference"));
+        String reference=course.get("reference")+"";
+        reference=reference.replace(".pdf","");
+        Label referenceLabel = new Label("参考资料: " +reference );
         Label capacityLabel = new Label("课容量: " + course.get("capacity"));
         Label creditLabel = new Label("学分: " + course.get("credit"));
         String courseType = switch (course.get("type")+"") {
