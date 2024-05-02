@@ -45,6 +45,15 @@ public class WeekTimeTable extends WeekPage {
             return newEntry;
         });
     }
+   /* public void setInnovation(Map<String,Object> innovation)
+    {
+        setEntryFactory(param -> {
+            Entry<?> newEntry = new Entry<>(innovation.get("name") + "");
+            newEntry.setInterval(param.getZonedDateTime());
+            newEntry.setCalendar(calendar);
+            return newEntry;
+        });
+    }*/
 
     public void setEvents(List<Map<String,Object>> events) {
         this.calendar.clear();
@@ -68,7 +77,11 @@ public class WeekTimeTable extends WeekPage {
         }
         return events;
     }
-
+   /* public void setSelectedEvent(Map<String,Object> map)
+    {
+        this.calendar.clear();
+        this.calendar.addEntry(convertMapToEntry(map));
+    }*/
     public Entry<String> convertMapToEntry(Map<String, Object> map) {
         Entry<String> entry = new Entry<>((String) map.get("name"));
         entry.setUserObject((String) map.get("eventId"));

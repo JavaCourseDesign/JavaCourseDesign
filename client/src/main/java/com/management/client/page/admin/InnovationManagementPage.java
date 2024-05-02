@@ -2,7 +2,9 @@ package com.management.client.page.admin;
 
 import com.management.client.customComponents.SearchableListView;
 import com.management.client.customComponents.SearchableTableView;
+import com.management.client.customComponents.WeekTimeTable;
 import com.management.client.request.DataResponse;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
@@ -33,7 +35,7 @@ public class InnovationManagementPage extends SplitPane {
     private ComboBox<String> typeField = new ComboBox<>(FXCollections.observableArrayList(
             "社会实践","学科竞赛","科研成果","培训讲座","创新项目","校外实习"
     ));
-    private DatePicker timePicker=new DatePicker();
+    private WeekTimeTable eventPicker=new WeekTimeTable();
     private TextField locationField = new TextField("软件学院");
     private TextField performanceField = new TextField("good");
 
@@ -49,9 +51,12 @@ public class InnovationManagementPage extends SplitPane {
         m.put("studentList",studentListView.getSelectedItems());
         m.put("name",nameField.getText());
         m.put("type",typeField.getValue());
-        m.put("startDate",timePicker.getValue()+"");
         m.put("location",locationField.getText());
         m.put("performance",performanceField.getText());
+        m.put("startDate",eventPicker.getEvents().get(0).get("startDate"));
+        m.put("startTime",eventPicker.getEvents().get(0).get("startTime"));
+        m.put("endDate",eventPicker.getEvents().get(0).get("endDate"));
+        m.put("endTime",eventPicker.getEvents().get(0).get("endTime"));
         return m;
     }
 
@@ -77,7 +82,7 @@ public class InnovationManagementPage extends SplitPane {
                 studentListView,
                 nameField,
                 typeField,
-                timePicker,
+                eventPicker,
                 locationField,
                 performanceField
         );
@@ -93,7 +98,7 @@ public class InnovationManagementPage extends SplitPane {
                studentTable.setVisible(false);
                 nameField.setText("");
                 typeField.setValue("");
-                timePicker.setValue(null);
+                eventPicker.setEvents(List.of());
                 locationField.setText("");
                 performanceField.setText("");
                 studentListView.setSelectedItems(List.of());
@@ -102,7 +107,7 @@ public class InnovationManagementPage extends SplitPane {
            addButton.setDisable(true);
            nameField.setText((String) innovation.get("name"));
            typeField.setValue((String) innovation.get("type"));
-           timePicker.setValue(LocalDate.parse((String) innovation.get("startDate")));
+           eventPicker.setEvents(List.of(innovation));
            locationField.setText((String) innovation.get("location"));
            performanceField.setText((String) innovation.get("performance"));
            displayStudents(innovation);
@@ -124,22 +129,29 @@ public class InnovationManagementPage extends SplitPane {
     }
 
     private void updateInnovation() {
-        Map m=innovationTable.getSelectedItem();
-        if(m==null)
+        if(innovationTable.getSelectedItems().isEmpty()||innovationTable.getSelectedIndex()==0)
         {
             Alert alert=new Alert(Alert.AlertType.INFORMATION);
             alert.setContentText("未选择，无法更新");
             alert.showAndWait();
             return;
         }
+       if(innovationTable.getSelectedItems().size()>1)
+       {
+           Alert alert=new Alert(Alert.AlertType.INFORMATION);
+           alert.setContentText("只能选择一个项目");
+           alert.showAndWait();
+           return;
+       }
+        Map innovation=newMapFromFields(innovationTable.getSelectedItems().get(0));
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "确定要更新吗？");
         alert.setTitle("警告");
         Optional<ButtonType> result=alert.showAndWait();
         if(result.get()==ButtonType.OK)
         {
-            DataResponse r=request("/updateInnovation",newMapFromFields(m));
+            DataResponse r=request("/updateInnovation",innovation);
             displayInnovations();
-            displayStudents(m);
+            displayStudents(innovation);
             if(r.getCode()==0)
             {
                 Alert alert1=new Alert(Alert.AlertType.INFORMATION);
@@ -176,10 +188,8 @@ public class InnovationManagementPage extends SplitPane {
 
     private void addInnovation() {
         Map m=newMapFromFields(new HashMap());
-        System.out.println(m);
-        System.out.println(m.get("studentList"));
-        if(m.get("name")==null||m.get("type")==null||m.get("startDate").equals("null")||m.get("performance")==null||m.get("location")==null||
-        studentListView.getSelectedItems().isEmpty()||m.get("name").equals("")||m.get("type").equals("")||m.get("startDate").equals("")||m.get("performance").equals("")||m.get("location").equals(""))
+        if(m.get("name")==null||m.get("type")==null||m.get("performance")==null||m.get("location")==null||eventPicker.getEvents().isEmpty()||
+        studentListView.getSelectedItems().isEmpty()||m.get("name").equals("")||m.get("type").equals("")||m.get("performance").equals("")||m.get("location").equals(""))
         {
             Alert alert=new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("警告");
@@ -188,6 +198,15 @@ public class InnovationManagementPage extends SplitPane {
             studentListView.setSelectedItems(List.of());
             return;
         }
+        if(eventPicker.getEvents().size()>1)
+        {
+            Alert alert=new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("警告");
+            alert.setContentText("只能选择一个事件");
+            alert.showAndWait();
+            return;
+        }
+
         DataResponse r=request("/addInnovation",m);
         if(r.getCode()==-1)
         {
@@ -223,7 +242,14 @@ public class InnovationManagementPage extends SplitPane {
         TableColumn<Map, String> performanceColumn = new TableColumn<>("评价");
         nameColumn.setCellValueFactory(new MapValueFactory<>("name"));
         typeColumn.setCellValueFactory(new MapValueFactory<>("type"));
-        timeColumn.setCellValueFactory(new MapValueFactory<>("startDate"));
+        timeColumn.setCellValueFactory(data ->
+        {
+            if (!data.getValue().isEmpty()) {
+                Map<String, Object> event = (Map<String, Object>) data.getValue();
+                String time = event.get("startDate") + " " + event.get("startTime") + "-" + event.get("endDate") + " " + event.get("endTime");
+                return new SimpleStringProperty(time);
+            } else return new SimpleStringProperty("");
+        });
         locationColumn.setCellValueFactory(new MapValueFactory<>("location"));
         performanceColumn.setCellValueFactory(new MapValueFactory<>("performance"));
 

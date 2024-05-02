@@ -6,6 +6,7 @@ import com.management.server.models.*;
 import com.management.server.payload.response.DataResponse;
 import com.management.server.repositories.*;
 import com.management.server.util.CommonMethod;
+import com.management.server.util.FileUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -326,6 +327,26 @@ public class CourseController {
 
         return dateOverlap && timeOverlap;
     }
-
-    
+    @PostMapping("/uploadReference")
+    public DataResponse uploadReference(@RequestBody byte[] barr,
+                                        @RequestParam(name = "fileName") String fileName,
+                                        @RequestParam(name="paras") String courseId){
+        Course course=courseRepository.findByCourseId(courseId);
+        if(course.getReference()!=null){
+            FileUtil.deleteFile("pdf",course.getReference());
+        }
+        course.setReference(fileName);
+        courseRepository.save(course);
+        DataResponse r=FileUtil.uploadFile(barr,"pdf",fileName);
+        return r;
+    }
+    @PostMapping("/downloadReference")
+    public DataResponse downloadReference(@RequestBody Map m){
+        String courseId = (String) m.get("courseId");
+        Course course = courseRepository.findByCourseId(courseId);
+        if(course.getReference()==null){
+            return new DataResponse(-1,null,"请先上传文件！");
+        }
+        return FileUtil.downloadFile("pdf",course.getReference());
+    }
 }

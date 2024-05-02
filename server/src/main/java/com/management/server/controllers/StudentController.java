@@ -76,7 +76,7 @@ public class StudentController {
         student.put("families",s.getFamilies());
         student.put("clazzName", clazzRepository.findClazzByStudent(s)+"班");
         //文件不存在时可能出现问题，可以把方法的返回字符串调成一个固定图片
-        student.put("image", FileUtil.getPhotoImageStr(s.getPhoto()));
+        student.put("photo", FileUtil.getPhotoImageStr(s.getPhoto()));
         return new DataResponse(0,student,null);
     }
 

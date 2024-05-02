@@ -2,7 +2,9 @@ package com.management.client.page.admin;
 
 import com.management.client.customComponents.SearchableListView;
 import com.management.client.customComponents.SearchableTableView;
+import com.management.client.customComponents.WeekTimeTable;
 import com.management.client.request.DataResponse;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
@@ -32,7 +34,7 @@ public class DailyActivityManagementPage extends SplitPane {
     private ComboBox<String> typeField = new ComboBox<>(FXCollections.observableArrayList(
             "体育活动","外出旅游","文艺演出","聚会"
     ));
-    private DatePicker timePicker=new DatePicker();
+    private WeekTimeTable eventPicker=new WeekTimeTable();
     private TextField locationField = new TextField("软件学院");
     public DailyActivityManagementPage() {
         this.setWidth(1000);
@@ -46,7 +48,10 @@ public class DailyActivityManagementPage extends SplitPane {
         m.put("studentList",studentListView.getSelectedItems());
         m.put("name",nameField.getText());
         m.put("type",typeField.getValue());
-        m.put("startDate",timePicker.getValue()+"");
+        m.put("startDate",eventPicker.getEvents().get(0).get("startDate"));
+        m.put("startTime",eventPicker.getEvents().get(0).get("startTime"));
+        m.put("endDate",eventPicker.getEvents().get(0).get("endDate"));
+        m.put("endTime",eventPicker.getEvents().get(0).get("endTime"));
         m.put("location",locationField.getText());
         return m;
     }
@@ -60,14 +65,22 @@ public class DailyActivityManagementPage extends SplitPane {
     }
     private void addDailyActivity() {
         Map m=newMapFromFields(new HashMap());
-        if(m.get("name")==null||m.get("type")==null||m.get("startDate").equals("null")||m.get("location")==null||
-                studentListView.getSelectedItems().isEmpty()||m.get("name").equals("")||m.get("type").equals("")||m.get("startDate").equals("")||m.get("location").equals(""))
+        if(m.get("name")==null||m.get("type")==null||m.get("location")==null||eventPicker.getEvents().isEmpty()||
+                studentListView.getSelectedItems().isEmpty()||m.get("name").equals("")||m.get("type").equals("")||m.get("location").equals(""))
         {
             Alert alert=new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("警告");
             alert.setContentText("请填写完整信息");
             alert.showAndWait();
             studentListView.setSelectedItems(List.of());
+            return;
+        }
+        if(eventPicker.getEvents().size()>1)
+        {
+            Alert alert=new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("警告");
+            alert.setContentText("只能选择一个事件");
+            alert.showAndWait();
             return;
         }
         DataResponse r=request("/addDailyActivity",m);
@@ -111,20 +124,28 @@ public class DailyActivityManagementPage extends SplitPane {
         }
     }
     private void updateDailyActivity() {
-        Map m=dailyActivityTable.getSelectedItem();
-        if(m==null)
+
+        if(dailyActivityTable.getSelectedItems().isEmpty()||dailyActivityTable.getSelectedIndex()==0)
         {
             Alert alert=new Alert(Alert.AlertType.INFORMATION);
             alert.setContentText("未选择，无法更新");
             alert.showAndWait();
             return;
         }
+        if(dailyActivityTable.getSelectedItems().size()>1)
+        {
+            Alert alert=new Alert(Alert.AlertType.INFORMATION);
+            alert.setContentText("只能选择一个项目");
+            alert.showAndWait();
+            return;
+        }
+        Map m=newMapFromFields(dailyActivityTable.getSelectedItems().get(0));
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "确定要更新吗？");
         alert.setTitle("警告");
         Optional<ButtonType> result=alert.showAndWait();
         if(result.get()==ButtonType.OK)
         {
-            DataResponse r=request("/updateDailyActivity",newMapFromFields(m));
+            DataResponse r=request("/updateDailyActivity",m);
             displayDailyActivities();
             displayStudents(m);
             if(r.getCode()==0)
@@ -147,14 +168,13 @@ public class DailyActivityManagementPage extends SplitPane {
                 studentListView,
                 nameField,
                 typeField,
-                timePicker,
+                eventPicker,
                 locationField
         );
         gridPane.addRow(6, addButton, deleteButton, updateButton);
         addButton.setOnAction(event -> addDailyActivity());
         deleteButton.setOnAction(event ->deleteDailyActivity());
         updateButton.setOnAction(event -> updateDailyActivity());
-
         dailyActivityTable.setOnItemClick(d->{
             if(dailyActivityTable.getSelectedIndex()==0)
             {
@@ -162,7 +182,7 @@ public class DailyActivityManagementPage extends SplitPane {
                 studentTable.setVisible(false);
                 nameField.setText("");
                 typeField.setValue("");
-                timePicker.setValue(null);
+                eventPicker.setEvents(List.of());
                 locationField.setText("");
                 studentListView.setSelectedItems(List.of());
                 return;
@@ -170,12 +190,11 @@ public class DailyActivityManagementPage extends SplitPane {
             addButton.setDisable(true);
             nameField.setText((String) d.get("name"));
             typeField.setValue((String) d.get("type"));
-            timePicker.setValue(LocalDate.parse((String) d.get("startDate")));
+            eventPicker.setEvents(List.of(d));
             locationField.setText((String) d.get("location"));
             displayStudents(d);
             studentTable.setVisible(true);
         });
-
         controlPanel.getChildren().add(gridPane);
         studentTable.setVisible(false);
         controlPanel.getChildren().add(studentTable);
@@ -204,7 +223,14 @@ public class DailyActivityManagementPage extends SplitPane {
         TableColumn<Map, String> locationColumn = new TableColumn<>("地点");
         nameColumn.setCellValueFactory(new MapValueFactory<>("name"));
         typeColumn.setCellValueFactory(new MapValueFactory<>("type"));
-        timeColumn.setCellValueFactory(new MapValueFactory<>("startDate"));
+        timeColumn.setCellValueFactory(data ->
+        {
+            if (!data.getValue().isEmpty()) {
+                Map<String, Object> event = (Map<String, Object>) data.getValue();
+                String time = event.get("startDate") + " " + event.get("startTime") + "-" + event.get("endDate") + " " + event.get("endTime");
+                return new SimpleStringProperty(time);
+            } else return new SimpleStringProperty("");
+        });
         locationColumn.setCellValueFactory(new MapValueFactory<>("location"));
         //搜索使用
         List<TableColumn<Map, ?>> columns = new ArrayList<>();

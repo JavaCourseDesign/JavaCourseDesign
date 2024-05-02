@@ -2,6 +2,7 @@ package com.management.client.page.teacher;
 
 import com.management.client.customComponents.SearchableListView;
 import com.management.client.customComponents.SearchableTableView;
+import com.management.client.customComponents.WeekTimeTable;
 import com.management.client.request.DataResponse;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -23,21 +24,22 @@ public class StudentAbsenceManagementTab extends Tab {
     private VBox controlPanel = new VBox();
     private SearchableListView studentListView=new SearchableListView(FXCollections.observableArrayList((ArrayList) request("/getAllStudentsByTeacherCourses",null).getData()), List.of("name","studentId"));
     private ObservableList<Map> observableList= FXCollections.observableArrayList();
-    private SearchableListView lessonListView;
+    private WeekTimeTable lessonView;
     Map course=new HashMap();
     public StudentAbsenceManagementTab(Map c) {
         course.put("courseId",c.get("courseId"));
         splitPane.setMinWidth(1000);
         this.setText("学生缺勤管理");
         this.setContent(splitPane);
-        lessonListView=new SearchableListView(FXCollections.observableArrayList((ArrayList) request("/getLessonsByCourse",course).getData()), List.of("name","startDate","startTime"));
+        lessonView=new WeekTimeTable();
+        lessonView.setEvents((List<Map<String, Object>>) request("/getLessonsByCourse",course).getData());
         initializeTable();
         initializeControlPanel();
         displayAbsences();
     }
     private Map newMapFromFields(Map m) {
         m.put("students",studentListView.getSelectedItems());
-        m.put("events",lessonListView.getSelectedItems());
+        m.put("events",lessonView.getSelectedEvents());
         return m;
     }
     //待改
@@ -56,7 +58,6 @@ public class StudentAbsenceManagementTab extends Tab {
             if(m.get("event")!=null)
             {
                 Map event=(Map) m.get("event");
-                m.put("time",event.get("startDate")+" "+event.get("startTime"));
                 m.put("lessonName",event.get("name"));
             }
         }
@@ -73,7 +74,7 @@ public class StudentAbsenceManagementTab extends Tab {
         controlPanel.getChildren().add(new Label("学生:"));
         controlPanel.getChildren().add(studentListView);
         controlPanel.getChildren().add(new Label("请假事件:"));
-        controlPanel.getChildren().add(lessonListView);
+        controlPanel.getChildren().add(lessonView);
         Button addButton = new Button("添加");
         addButton.setOnMouseClicked(e->{
             addAbsence();
@@ -176,7 +177,14 @@ public class StudentAbsenceManagementTab extends Tab {
         studentIdColumn.setCellValueFactory(new MapValueFactory<>("studentId"));
         lessonColumn.setCellValueFactory(new MapValueFactory<>("lessonName"));
         offReasonColumn.setCellValueFactory(new MapValueFactory<>("offReason"));
-        timeColumn.setCellValueFactory(new MapValueFactory<>("time"));
+        timeColumn.setCellValueFactory(data ->
+        {
+            if (data.getValue() != null) {
+                Map<String, Object> event = (Map<String, Object>) data.getValue().get("event");
+                String time = event.get("startDate") + " " + event.get("startTime") + "-" + event.get("endDate") + " " + event.get("endTime");
+                return new SimpleStringProperty(time);
+            } else return new SimpleStringProperty("");
+        });
         destinationColumn.setCellValueFactory(new MapValueFactory<>("destination"));
         statusColumn.setCellValueFactory(data->{
             if(data.getValue()==null)
@@ -218,7 +226,7 @@ public class StudentAbsenceManagementTab extends Tab {
             alert.setContentText("只能选择一个事件");
             alert.showAndWait();
             studentListView.setSelectedItems(List.of());
-            lessonListView.setSelectedItems(List.of());
+
             return;
         }
         //ListMap不能直接传，要传arraylist
@@ -240,6 +248,6 @@ public class StudentAbsenceManagementTab extends Tab {
         }
         displayAbsences();
         studentListView.setSelectedItems(List.of());
-        lessonListView.setSelectedItems(List.of());
+
     }
 }
