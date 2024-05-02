@@ -16,16 +16,15 @@ import javafx.scene.layout.Pane;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.util.Base64;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
+import static com.management.client.util.HttpClientUtil.executeTask;
 import static com.management.client.util.HttpClientUtil.request;
 
-public class StudentInfoPane extends Pane {
+public class StudentInfoPane{
 
     private TabPane root;
+    private StudentManagementPage parent;
 
     @FXML
     private ImageView photoArea;
@@ -69,19 +68,24 @@ public class StudentInfoPane extends Pane {
 
 
 
-    private final Map<String, Object> student;
+    private Map<String, Object> student;
 
-    public StudentInfoPane(Map student) {
-        this.student = (Map<String, Object>) request("/getStudentByStudentId", student).getData();
+    public StudentInfoPane(StudentManagementPage parent) {
+
         FXMLLoader fxmlLoader = new FXMLLoader(ClientApplication.class.getResource("/adminFxml/StudentInfoPane.fxml"));
         fxmlLoader.setController(this);
+
+        this.parent = parent;
+
         try {
             root = fxmlLoader.load();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        this.getChildren().add(root);
-        refresh();
+    }
+
+    public TabPane getRoot() {
+        return root;
     }
 
     @FXML
@@ -96,16 +100,37 @@ public class StudentInfoPane extends Pane {
         student.put("major", major.getText());
         //clazz待修改
         student.put("social", social.getText());
-        DataResponse r =request("/updateStudent", student);
-        refresh();
+
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "确定要更新吗？");
+        alert.setTitle("警告");
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == ButtonType.OK) {
+            executeTask("/updateStudent", student, this::refresh);
+        }
     }
 
     @FXML
     private void delete() {
-        request("/deleteStudent", student);
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "确定要删除吗？");
+        alert.setTitle("警告");
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == ButtonType.OK) {
+            executeTask("/deleteStudent", student, parent::displayStudents);
+        }
+        clear();
     }
 
-    private void refresh() {
+    public void setStudent(Map<String, Object> student) {
+        this.student = student;
+        refresh();
+    }
+
+    public void refresh() {
+        DataResponse response = request("/getStudentByPersonId", student);
+        if(response!=null) {
+            student = (Map<String, Object>) response.getData();
+        }
+        //student = (Map<String, Object>) request("/getStudentByPersonId", student).getData();
         String base64Image = student.get("photo")==null?"":student.get("photo").toString();
         byte[] decodedBytes = Base64.getDecoder().decode(base64Image);
         ByteArrayInputStream bis = new ByteArrayInputStream(decodedBytes);
@@ -135,5 +160,12 @@ public class StudentInfoPane extends Pane {
         familyName.setCellValueFactory(new MapValueFactory<>("name"));
         familyAge.setCellValueFactory(new MapValueFactory<>("birthday"));
         familyPhone.setCellValueFactory(new MapValueFactory<>("phone"));
+
+        parent.displayStudents();
+    }
+
+    public void clear() {
+        student = Map.of();
+        refresh();
     }
 }

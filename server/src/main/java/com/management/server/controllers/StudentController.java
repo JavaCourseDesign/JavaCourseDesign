@@ -29,6 +29,8 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
+import static com.management.client.util.NativePlaceUtil.getNativePlace;
+
 @RestController
 public class StudentController {
     @Autowired
@@ -66,17 +68,21 @@ public class StudentController {
         return new DataResponse(0,student,null);
     }
 
-    @PostMapping("/getStudentByStudentId")
+    @PostMapping("/getStudentByPersonId")
     @PreAuthorize("hasRole('ADMIN')")
-    public DataResponse getStudentByStudentId(@RequestBody Map m)
+    public DataResponse getStudentByPersonId(@RequestBody Map m)
     {
-        String studentId = (String) m.get("studentId");
-        Student s = studentRepository.findByStudentId(studentId);
+        String personId = (String) m.get("personId");
+        Student s = studentRepository.findByPersonId(personId);
         Map student = BeanUtil.beanToMap(s) ;
         student.put("families",s.getFamilies());
         student.put("clazzName", clazzRepository.findClazzByStudent(s)+"班");
         //文件不存在时可能出现问题，可以把方法的返回字符串调成一个固定图片
-        student.put("image", FileUtil.getPhotoImageStr(s.getPhoto()));
+        if(s.getPhoto()!=null&&!Objects.equals(s.getPhoto(), "请先上传文件！"))
+        {
+            student.put("photo", FileUtil.getPhotoImageStr(s.getPhoto()));
+            System.out.println("文件合法"+s.getPhoto());
+        }
         return new DataResponse(0,student,null);
     }
 
@@ -341,7 +347,7 @@ public class StudentController {
     {
         String id = s.getIdCardNum();
         if(!IdcardUtil.isValidCard(id)) return false;
-        s.setHomeTown(IdcardUtil.getProvinceByIdCard(id));
+        s.setHomeTown(getNativePlace(Integer.parseInt(IdcardUtil.getDistrictCodeByIdCard(id))));
         s.setGender(IdcardUtil.getGenderByIdCard(id) == 1 ? "男" : "女");
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy年MM月dd日");
         s.setBirthday(IdcardUtil.getBirthDate(id).toLocalDateTime().format(formatter));

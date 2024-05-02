@@ -19,6 +19,7 @@ public class StudentManagementPage extends SplitPane {
     private final VBox controlPanel = new VBox(10, view);
     private final ObservableList<Map> observableList = FXCollections.observableArrayList();
 
+    private StudentInfoPane studentInfoPane=new StudentInfoPane(this);
     /*private final Button addButton = new Button("添加");
     private final Button deleteButton = new Button("删除");
     private final Button updateButton = new Button("更新");
@@ -104,14 +105,13 @@ public class StudentManagementPage extends SplitPane {
         studentTable.setOnItemClick(student -> {
             if(student!=null)
             {
-                System.out.println(student.get("studentId"));
-                this.getItems().add(new StudentInfoPane(student));
+                studentInfoPane.setStudent(student);
             }
         });
-        //this.getItems().add(controlPanel);
+        this.getItems().add(studentInfoPane.getRoot());
     }
 
-    private void displayStudents(){
+    public void displayStudents(){
         observableList.clear();
         observableList.addAll(FXCollections.observableArrayList((ArrayList) request("/getAllStudents", null).getData()));
         studentTable.setData(observableList);

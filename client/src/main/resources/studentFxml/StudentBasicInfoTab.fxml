@@ -60,7 +60,7 @@
         </AnchorPane>
     </TitledPane>
     <TitledPane animated="false" text="家庭信息" collapsible="false">
-        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0">
              <TableView editable="true" fx:id="family">
                  <columns>
                      <TableColumn text="关系" fx:id="familyRelationship"/>
