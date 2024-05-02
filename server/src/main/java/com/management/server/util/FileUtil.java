@@ -73,7 +73,8 @@ public class FileUtil {
             }
             fileName = URLDecoder.decode(fileName, StandardCharsets.UTF_8.toString());
             File file = new File(attachFolder + "photo/" + fileName);
-            if (!file.exists()) {
+            if (!file.exists())
+            {
                 return "请先上传文件！";
             }
             int len = (int) file.length();
@@ -81,9 +82,9 @@ public class FileUtil {
             FileInputStream in = new FileInputStream(file);
             in.read(data);
             in.close();
-            String imageStr = "data:image/jpeg;base64,";
-            imageStr = imageStr + new String(Base64.getEncoder().encode(data));
-            return imageStr;
+            //String imageStr = "data:image/jpeg;base64,";
+            //imageStr = imageStr + new String(Base64.getEncoder().encode(data)); 改为在调用处加
+            return new String(Base64.getEncoder().encode(data));
         } catch (Exception e) {
             e.printStackTrace();
         }

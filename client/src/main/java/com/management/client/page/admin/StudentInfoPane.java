@@ -8,9 +8,12 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.MapValueFactory;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 
+import java.io.ByteArrayInputStream;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -64,8 +67,33 @@ public class StudentInfoPane {
 
     public StudentInfoPane(Map student) {
         this.student = (Map<String, Object>) request("/getStudent", student.get("studentId")).getData();
+        refresh();
+    }
 
-        //photo有问题，缺少通过id拿的方法，管理员没法看到照片
+    @FXML
+    //添加与更新合并为保存
+    private void save() {
+        student.put("name", name.getText());
+        student.put("studentId", studentId.getText());
+        student.put("idCardNum", idCardNum.getText());
+        student.put("dept", dept.getText());
+        student.put("major", major.getText());
+        //clazz待修改
+        student.put("social", social.getText());
+        request("/updateStudent", student);
+    }
+
+    @FXML
+    private void delete() {
+        request("/deleteStudent", student);
+    }
+
+    private void refresh() {
+        String base64Image = student.get("photo")==null?"":student.get("photo").toString();
+        byte[] decodedBytes = Base64.getDecoder().decode(base64Image);
+        ByteArrayInputStream bis = new ByteArrayInputStream(decodedBytes);
+        Image image = new Image(bis);
+        photoArea.setImage(image);
 
         name.setText(student.get("name")==null?"":student.get("name").toString());
         studentId.setText(student.get("studentId")==null?"":student.get("studentId").toString());
@@ -91,23 +119,4 @@ public class StudentInfoPane {
         familyAge.setCellValueFactory(new MapValueFactory<>("birthday"));
         familyPhone.setCellValueFactory(new MapValueFactory<>("phone"));
     }
-
-    @FXML
-    private void save() {
-        student.put("name", name.getText());
-        student.put("studentId", studentId.getText());
-        student.put("idCardNum", idCardNum.getText());
-        student.put("dept", dept.getText());
-        student.put("major", major.getText());
-        //clazz待修改
-        student.put("social", social.getText());
-        request("/updateStudent", student);
-    }
-
-    @FXML
-    private void delete() {
-        request("/deleteStudent", student);
-    }
-
-    //refresh()方法待修改
 }

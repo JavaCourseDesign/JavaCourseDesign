@@ -75,6 +75,8 @@ public class StudentController {
         Map student = BeanUtil.beanToMap(s) ;
         student.put("families",s.getFamilies());
         student.put("clazzName", clazzRepository.findClazzByStudent(s)+"班");
+        //文件不存在时可能出现问题，可以把方法的返回字符串调成一个固定图片
+        student.put("image", FileUtil.getPhotoImageStr(s.getPhoto()));
         return new DataResponse(0,student,null);
     }
 
@@ -297,7 +299,7 @@ public class StudentController {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        String imgStr= FileUtil.getPhotoImageStr(student.getPhoto());
+        String imgStr= "data:image/jpeg;base64,"+FileUtil.getPhotoImageStr(student.getPhoto());
         map.put("introduce",content);
         map.put("photo",imgStr);
         int cnt1=0;// 学科竞赛

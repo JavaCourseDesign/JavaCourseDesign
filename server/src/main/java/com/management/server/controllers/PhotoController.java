@@ -64,6 +64,9 @@ public class PhotoController {
         }
         return new DataResponse(1,null,"下载错误！");
     }
+
+
+
     @PostMapping("/uploadPhoto")
     public DataResponse uploadPhoto(@RequestBody byte[] barr,
                                    @RequestParam(name = "fileName") String fileName)  {
