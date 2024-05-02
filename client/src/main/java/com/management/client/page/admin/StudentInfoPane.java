@@ -1,18 +1,21 @@
 package com.management.client.page.admin;
 
+import com.management.client.ClientApplication;
+import com.management.client.request.DataResponse;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.MapValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
@@ -20,7 +23,10 @@ import java.util.Map;
 
 import static com.management.client.util.HttpClientUtil.request;
 
-public class StudentInfoPane {
+public class StudentInfoPane extends Pane {
+
+    private TabPane root;
+
     @FXML
     private ImageView photoArea;
     @FXML
@@ -66,13 +72,23 @@ public class StudentInfoPane {
     private final Map<String, Object> student;
 
     public StudentInfoPane(Map student) {
-        this.student = (Map<String, Object>) request("/getStudent", student.get("studentId")).getData();
+        this.student = (Map<String, Object>) request("/getStudentByStudentId", student).getData();
+        FXMLLoader fxmlLoader = new FXMLLoader(ClientApplication.class.getResource("/adminFxml/StudentInfoPane.fxml"));
+        fxmlLoader.setController(this);
+        try {
+            root = fxmlLoader.load();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        this.getChildren().add(root);
         refresh();
     }
 
     @FXML
     //添加与更新合并为保存
     private void save() {
+        Map<String, Object> student = new HashMap<>();
+        student.put("personId", this.student.get("personId"));
         student.put("name", name.getText());
         student.put("studentId", studentId.getText());
         student.put("idCardNum", idCardNum.getText());
@@ -80,7 +96,8 @@ public class StudentInfoPane {
         student.put("major", major.getText());
         //clazz待修改
         student.put("social", social.getText());
-        request("/updateStudent", student);
+        DataResponse r =request("/updateStudent", student);
+        refresh();
     }
 
     @FXML

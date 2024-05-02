@@ -66,9 +66,9 @@ public class StudentController {
         return new DataResponse(0,student,null);
     }
 
-    @PostMapping("/getStudent")
+    @PostMapping("/getStudentByStudentId")
     @PreAuthorize("hasRole('ADMIN')")
-    public DataResponse getStudent(@RequestBody Map m)
+    public DataResponse getStudentByStudentId(@RequestBody Map m)
     {
         String studentId = (String) m.get("studentId");
         Student s = studentRepository.findByStudentId(studentId);
@@ -132,14 +132,13 @@ public class StudentController {
         String personId = (String) m.get("personId");
         Student student = studentRepository.findByPersonId(personId);
         if(student != null) {
-            //System.out.println(m);
             BeanUtil.fillBeanWithMap(m, student, CopyOptions.create());
             boolean flag = completeStudentById(student);
             if(!flag) return new DataResponse(-1,null,"身份证号不合法，无法更新");
             studentRepository.save(student);
             return new DataResponse(0, null, "更新成功");
         } else {
-            return new DataResponse(-1, null, "学号不存在，无法更新");
+            return new DataResponse(-1, null, "学生不存在，无法更新");
         }
     }
     @PostMapping("/saveStudentPersonalInfo")
