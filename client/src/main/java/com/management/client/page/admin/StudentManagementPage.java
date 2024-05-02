@@ -56,7 +56,7 @@ public class StudentManagementPage extends SplitPane {
     }*/
 
     public StudentManagementPage() {
-        this.setWidth(1000);
+        this.setDividerPosition(0, 0.7);
         initializeTable();
         initializeControlPanel();
         displayStudents();
