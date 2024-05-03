@@ -7,6 +7,7 @@ import com.management.client.request.DataResponse;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.MapValueFactory;
 import javafx.scene.layout.GridPane;
@@ -25,8 +26,10 @@ public class HonorManagementPage extends SplitPane {
     private VBox controlPanel = new VBox();
     private ObservableList<Map> observableList = FXCollections.observableArrayList();
     private ObservableList<Map> studentObservableList = FXCollections.observableArrayList();
-    private SearchableListView studentListView= new SearchableListView(FXCollections.observableArrayList((ArrayList) request("/getAllStudents", null).getData()), List.of("name", "studentId"));
+    //private SearchableListView studentListView= new SearchableListView(FXCollections.observableArrayList((ArrayList) request("/getAllStudents", null).getData()), List.of("name", "studentId"));
+    private SearchableListView studentListView= new SearchableListView(FXCollections.observableArrayList(List.of()), List.of());
     private WeekTimeTable eventView=new WeekTimeTable();
+    private Button displayButton=new Button("学生(点击以查看):");
     private Button addButton = new Button("Add");
     private Button deleteButton = new Button("Delete");
     private Button updateButton = new Button("Update");
@@ -62,24 +65,42 @@ public class HonorManagementPage extends SplitPane {
     }
     private void initializeControlPanel() {
         gridPane.addColumn(0,
-                new Label("学生"),
+                new Label("获奖事件"),
+                displayButton,
                 new Label("荣誉名称"),
                 new Label("颁奖部门"),
-                new Label("颁奖时间"),
-                new Label("获奖事件")
+                new Label("颁奖时间")
+
         );
         gridPane.addColumn(1,
+                eventView,
                 studentListView,
                 nameField,
                 departmentField,
-                awardDatePicker,
-                eventView
+                awardDatePicker
         );
         gridPane.addRow(6, addButton, deleteButton, updateButton);
         addButton.setOnAction(event -> addHonor());
         deleteButton.setOnAction(event ->deleteHonors());
         updateButton.setOnAction(event -> updateHonor());
-
+        displayButton.setOnMouseClicked(e->
+        {
+            if(eventView.getSelectedEvents().isEmpty())
+            {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setContentText("请选择获奖事件");
+                alert.showAndWait();
+                return;
+            }
+            for (Iterator<Node> it = gridPane.getChildren().iterator(); it.hasNext(); ) {
+                Node node = it.next();
+                if(GridPane.getRowIndex(node) == 1&&GridPane.getColumnIndex(node)==1) {
+                    it.remove();
+                }
+            }
+            studentListView=new SearchableListView(FXCollections.observableArrayList((ArrayList) request("/getStudentsByEvent",eventView.getSelectedEvents().get(0)).getData()), List.of("name","studentId"));
+            gridPane.add(studentListView,1,1);
+        });
         honorTable.setOnItemClick(h->{
             if(honorTable.getSelectedIndex()==0)
             {

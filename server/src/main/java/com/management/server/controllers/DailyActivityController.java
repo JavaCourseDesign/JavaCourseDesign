@@ -81,5 +81,27 @@ public class DailyActivityController {
         dailyActivityRepository.save(dailyActivity);
         return new DataResponse(0,null,"更新成功");
     }
+    @PostMapping("/getStudentsInfoByDailyActivity")
+    public DataResponse getStudentsByDailyActivity(@RequestBody Map m)
+    {
+        DailyActivity dailyActivity = dailyActivityRepository.findByEventId((String) m.get("eventId"));
+        List<Map> studentList = new ArrayList<>();
+        for(Person p:dailyActivity.getPersons())
+        {
+            if(p instanceof Student)
+            {
+                Map student=BeanUtil.beanToMap(p);
+                for(Honor h:p.getHonors())
+                {
+                    if(h.getEvent().getEventId().equals((String) m.get("eventId")))
+                    {
+                        student.put("performance",h.getName());
+                    }
+                }
+                studentList.add(student);
+            }
+        }
+        return new DataResponse(0,studentList,null);
+    }
 
 }

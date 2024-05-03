@@ -54,6 +54,8 @@ public class StudentController {
     private HonorRepository honorRepository;
     @Autowired
     private FeeRepository feeRepository;
+    @Autowired
+    private EventRepository eventRepository;
     @PostMapping("/getStudent")
     @PreAuthorize("hasRole('STUDENT')")
     public DataResponse getStudent()
@@ -173,12 +175,13 @@ public class StudentController {
         studentRepository.save(student);
         return new DataResponse(0,null,"保存成功");
     }
-    @PostMapping("/getStudentsByDailyActivity")
-    public DataResponse getStudentsByDailyActivity(@RequestBody Map m)
+
+    @PostMapping("/getStudentsByInnovation")
+    public DataResponse getStudentsByInnovation(@RequestBody Map m)
     {
-        DailyActivity dailyActivity = dailyActivityRepository.findByEventId((String) m.get("eventId"));
+        Innovation innovation = innovationRepository.findByEventId((String) m.get("eventId"));
         List<Student> studentList = new ArrayList<>();
-        for(Person p:dailyActivity.getPersons())
+        for(Person p:innovation.getPersons())
         {
             if(p instanceof Student)
             {
@@ -187,12 +190,12 @@ public class StudentController {
         }
         return new DataResponse(0,studentList,null);
     }
-    @PostMapping("/getStudentsByInnovation")
-    public DataResponse getStudentsByInnovation(@RequestBody Map m)
+    @PostMapping("/getStudentsByEvent")
+    public DataResponse getStudentsByEvent(@RequestBody Map m)
     {
-        Innovation innovation = innovationRepository.findByEventId((String) m.get("eventId"));
+        Event event=eventRepository.findEventByEventId((String) m.get("eventId"));
         List<Student> studentList = new ArrayList<>();
-        for(Person p:innovation.getPersons())
+        for(Person p:event.getPersons())
         {
             if(p instanceof Student)
             {
@@ -297,6 +300,7 @@ public class StudentController {
         Map map = BeanUtil.beanToMap(student);
         map.put("className", clazzRepository.findClazzByStudent(student)+"班");
         List<Innovation> list=innovationRepository.findByPersons(student);
+        List<Honor> honorList=student.getHonors();
         String filePath = "server/src/main/resources/static/resume.html";
         String content = null;
         try {
@@ -311,35 +315,41 @@ public class StudentController {
         int cnt2=0;//科研成果
         int cnt3=0;//社会实践
         int cnt4=0;//创新项目
-        for(Innovation innovation:list){
-            if(innovation.getType().equals("学科竞赛"))
+        for(Honor h:honorList){
+            if(h.getEvent() instanceof Innovation)
             {
-                cnt1++;
-                map.put("competitionTime"+cnt1,innovation.getStartDate().toString());
-                map.put("competitionName"+cnt1,innovation.getName());
-                map.put("competitionPerformance"+cnt1,innovation.getPerformance());
+                Innovation innovation=(Innovation) h.getEvent();
+                if(innovation.getType().equals("学科竞赛"))
+                {
+                    cnt1++;
+                    map.put("competitionTime"+cnt1,innovation.getStartDate().toString());
+                    map.put("competitionName"+cnt1,innovation.getName());
+                    map.put("competitionPerformance"+cnt1,h.getName());
+                }
+                else if(innovation.getType().equals("科研成果"))
+                {
+                    cnt2++;
+                    map.put("paperName"+cnt2,innovation.getName());
+                    map.put("paperLocation"+cnt2,innovation.getLocation());
+                    map.put("paperPerformance"+cnt2,h.getName());
+                }
+                else if(innovation.getType().equals("社会实践"))
+                {
+                    cnt3++;
+                    map.put("practiceTime"+cnt3,innovation.getStartDate().toString());
+                    map.put("practiceName"+cnt3,innovation.getName());
+                    map.put("practicePerformance"+cnt3,h.getName());
+                }
+                else if(innovation.getType().equals("创新项目"))
+                {
+                    cnt4++;
+                    map.put("projectTime"+cnt4,innovation.getStartDate().toString());
+                    map.put("projectName"+cnt4,innovation.getName());
+                    map.put("projectPerformance"+cnt4,h.getName());
+                }
+
             }
-            else if(innovation.getType().equals("科研成果"))
-            {
-                cnt2++;
-                map.put("paperName"+cnt2,innovation.getName());
-                map.put("paperLocation"+cnt2,innovation.getLocation());
-                map.put("paperPerformance"+cnt2,innovation.getPerformance());
-            }
-            else if(innovation.getType().equals("社会实践"))
-            {
-                cnt3++;
-                map.put("practiceTime"+cnt3,innovation.getStartDate().toString());
-                map.put("practiceName"+cnt3,innovation.getName());
-                map.put("practicePerformance"+cnt3,innovation.getPerformance());
-            }
-            else if(innovation.getType().equals("创新项目"))
-            {
-                cnt4++;
-                map.put("projectTime"+cnt4,innovation.getStartDate().toString());
-                map.put("projectName"+cnt4,innovation.getName());
-                map.put("projectPerformance"+cnt4,innovation.getPerformance());
-            }
+
         }
         return map;
     }

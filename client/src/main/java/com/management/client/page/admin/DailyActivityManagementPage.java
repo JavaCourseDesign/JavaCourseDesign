@@ -202,7 +202,7 @@ public class DailyActivityManagementPage extends SplitPane {
     }
     private void displayStudents(Map m) {
         studentObservableList.clear();
-        ArrayList<Map> studentlist=(ArrayList<Map>) request("/getStudentsByDailyActivity",m).getData();
+        ArrayList<Map> studentlist=(ArrayList<Map>) request("/getStudentsInfoByDailyActivity",m).getData();
         studentListView.setSelectedItems(studentlist);
         studentObservableList.addAll(FXCollections.observableArrayList(studentlist));
         studentTable.setItems(studentObservableList);
@@ -211,9 +211,11 @@ public class DailyActivityManagementPage extends SplitPane {
     {
         TableColumn<Map, String> nameColumn = new TableColumn<>("学生姓名");
         TableColumn<Map, String> studentIdColumn = new TableColumn<>("学号");
+        TableColumn<Map,String> performanceColumn=new TableColumn<>("评价");
+        performanceColumn.setCellValueFactory(new MapValueFactory<>("performance"));
         nameColumn.setCellValueFactory(new MapValueFactory<>("name"));
         studentIdColumn.setCellValueFactory(new MapValueFactory<>("studentId"));
-        studentTable.getColumns().addAll(nameColumn,studentIdColumn);
+        studentTable.getColumns().addAll(nameColumn,studentIdColumn,performanceColumn);
     }
     private void initializeTable()
     {

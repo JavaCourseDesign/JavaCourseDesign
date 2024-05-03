@@ -32,10 +32,11 @@ public class StudentLogManagementPage extends TabPane {
 }
 class StudentAbsenceManagementTab extends Tab {
     private SplitPane splitPane=new SplitPane();
-
+    private Button displayButton=new Button("学生(点击以查看):");
     private SearchableTableView absenceTable;
     private VBox controlPanel = new VBox();
-    private SearchableListView studentListView=new SearchableListView(FXCollections.observableArrayList((ArrayList) request("/getAllStudents",null).getData()), List.of("name","studentId"));
+    //private SearchableListView studentListView=new SearchableListView(FXCollections.observableArrayList((ArrayList) request("/getAllStudents",null).getData()), List.of("name","studentId"));
+    private SearchableListView studentListView=new SearchableListView(FXCollections.observableArrayList(List.of()),List.of());
     private ObservableList<Map> observableList= FXCollections.observableArrayList();
     private WeekTimeTable eventView=new WeekTimeTable();
 ///getAllEventsExceptLessons
@@ -45,6 +46,9 @@ class StudentAbsenceManagementTab extends Tab {
         splitPane.setMinWidth(1000);
         this.setContent(splitPane);
         eventView.setEvents((List<Map<String, Object>>) request("/getAllEventsExceptLessons", null).getData());
+        eventView.getCalendars().get(0).setReadOnly(true);
+        eventView.setSelectionMode(SelectionMode.SINGLE);
+        //studentListView=new SearchableListView(FXCollections.observableArrayList(List.of()), List.of());
         initializeTable();
         initializeControlPanel();
         displayAbsences();
@@ -83,10 +87,24 @@ class StudentAbsenceManagementTab extends Tab {
         controlPanel.setAlignment(Pos.CENTER);
         Label text = new Label("添加学生重要事件缺勤信息");
         controlPanel.getChildren().add(text);
-        controlPanel.getChildren().add(new Label("学生:"));
-        controlPanel.getChildren().add(studentListView);
         controlPanel.getChildren().add(new Label("请假事件:"));
         controlPanel.getChildren().add(eventView);
+        controlPanel.getChildren().add(displayButton);
+        controlPanel.getChildren().add(studentListView);
+        displayButton.setOnMouseClicked(e->
+        {
+            if(eventView.getSelectedEvents().isEmpty())
+            {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setContentText("请选择请假事件");
+                alert.showAndWait();
+                return;
+            }
+            controlPanel.getChildren().remove(studentListView);
+            studentListView=new SearchableListView(FXCollections.observableArrayList((ArrayList) request("/getStudentsByEvent",eventView.getSelectedEvents().get(0)).getData()), List.of("name","studentId"));
+            controlPanel.getChildren().add(4,studentListView);
+        });
+
         Button addButton = new Button("添加");
         addButton.setOnMouseClicked(e->{
             addAbsence();
@@ -262,7 +280,6 @@ class StudentAbsenceManagementTab extends Tab {
         }
         displayAbsences();
         studentListView.setSelectedItems(List.of());
-
     }
 }
 class StudentFeeManagementTab extends Tab{

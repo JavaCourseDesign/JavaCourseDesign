@@ -27,7 +27,7 @@ public class WeekTimeTable extends WeekPage {
         this.getCalendarSources().setAll(calendarSource);
 
         this.setEntryDetailsPopOverContentCallback(param -> {
-            System.out.println(param.getEntry());
+            //System.out.println(param.getEntry());
 
             return new EntryPopOverContentPane(param.getPopOver(), param.getDateControl(), param.getEntry());
         });
@@ -63,7 +63,7 @@ public class WeekTimeTable extends WeekPage {
     public List<Map> getEvents() {
         //return this.calendar.findEntries("").stream().map(this::convertEntryToMap).collect(Collectors.toList());
         List<Map> events = new ArrayList<>();
-        System.out.println(this.calendar.findEntries(""));
+        //System.out.println(this.calendar.findEntries(""));
         for (Entry<?> entry : (List<Entry>)this.calendar.findEntries("")) {
             events.add(convertEntryToMap(entry));
         }
