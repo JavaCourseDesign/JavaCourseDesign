@@ -2,10 +2,7 @@ package com.management.server.controllers;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
-import com.management.server.models.Event;
-import com.management.server.models.Innovation;
-import com.management.server.models.Person;
-import com.management.server.models.Student;
+import com.management.server.models.*;
 import com.management.server.payload.response.DataResponse;
 import com.management.server.repositories.InnovationRepository;
 import com.management.server.repositories.StudentRepository;
@@ -85,5 +82,27 @@ public class InnovationController {
         innovation.setPersons(persons);
         innovationRepository.save(innovation);
         return new DataResponse(0,null,"更新成功");
+    }
+    @PostMapping("/getStudentsInfoByInnovation")
+    public DataResponse getStudentsByInnovation(@RequestBody Map m)
+    {
+        Innovation innovation=innovationRepository.findByEventId((String) m.get("eventId"));
+        List<Map> studentList = new ArrayList<>();
+        for(Person p:innovation.getPersons())
+        {
+            if(p instanceof Student)
+            {
+                Map student=BeanUtil.beanToMap(p);
+                for(Honor h:p.getHonors())
+                {
+                    if(h.getEvent().getEventId().equals((String) m.get("eventId")))
+                    {
+                        student.put("performance",h.getName());
+                    }
+                }
+                studentList.add(student);
+            }
+        }
+        return new DataResponse(0,studentList,null);
     }
 }

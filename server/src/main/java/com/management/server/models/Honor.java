@@ -16,7 +16,6 @@ public class Honor {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String honorId;
-
     private LocalDate awardDate;//颁奖时间
     private String name;
     @Size(max=1000)

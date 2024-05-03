@@ -37,7 +37,7 @@ public class InnovationManagementPage extends SplitPane {
     ));
     private WeekTimeTable eventPicker=new WeekTimeTable();
     private TextField locationField = new TextField("软件学院");
-    private TextField performanceField = new TextField("good");
+    //private TextField performanceField = new TextField("good");
 
     public InnovationManagementPage() {
         this.setWidth(1000);
@@ -52,7 +52,7 @@ public class InnovationManagementPage extends SplitPane {
         m.put("name",nameField.getText());
         m.put("type",typeField.getValue());
         m.put("location",locationField.getText());
-        m.put("performance",performanceField.getText());
+        //m.put("performance",performanceField.getText());
         m.put("startDate",eventPicker.getEvents().get(0).get("startDate"));
         m.put("startTime",eventPicker.getEvents().get(0).get("startTime"));
         m.put("endDate",eventPicker.getEvents().get(0).get("endDate"));
@@ -75,16 +75,14 @@ public class InnovationManagementPage extends SplitPane {
                 new Label("项目名称"),
                 new Label("项目类型"),
                 new Label("时间"),
-                new Label("地点"),
-                new Label("评价")
+                new Label("地点")
                 );
         gridPane.addColumn(1,
                 studentListView,
                 nameField,
                 typeField,
                 eventPicker,
-                locationField,
-                performanceField
+                locationField
         );
         gridPane.addRow(6, addButton, deleteButton, updateButton);
         addButton.setOnAction(event -> addInnovation());
@@ -100,7 +98,6 @@ public class InnovationManagementPage extends SplitPane {
                 typeField.setValue("");
                 eventPicker.setEvents(List.of());
                 locationField.setText("");
-                performanceField.setText("");
                 studentListView.setSelectedItems(List.of());
                return;
            }
@@ -109,7 +106,6 @@ public class InnovationManagementPage extends SplitPane {
            typeField.setValue((String) innovation.get("type"));
            eventPicker.setEvents(List.of(innovation));
            locationField.setText((String) innovation.get("location"));
-           performanceField.setText((String) innovation.get("performance"));
            displayStudents(innovation);
            studentTable.setVisible(true);
         });
@@ -122,7 +118,7 @@ public class InnovationManagementPage extends SplitPane {
 
     private void displayStudents(Map m) {
         studentObservableList.clear();
-        ArrayList<Map> studentlist=(ArrayList<Map>) request("/getStudentsByInnovation",m).getData();
+        ArrayList<Map> studentlist=(ArrayList<Map>) request("/getStudentsInfoByInnovation",m).getData();
         studentListView.setSelectedItems(studentlist);
         studentObservableList.addAll(FXCollections.observableArrayList(studentlist));
         studentTable.setItems(studentObservableList);
@@ -188,8 +184,8 @@ public class InnovationManagementPage extends SplitPane {
 
     private void addInnovation() {
         Map m=newMapFromFields(new HashMap());
-        if(m.get("name")==null||m.get("type")==null||m.get("performance")==null||m.get("location")==null||eventPicker.getEvents().isEmpty()||
-        studentListView.getSelectedItems().isEmpty()||m.get("name").equals("")||m.get("type").equals("")||m.get("performance").equals("")||m.get("location").equals(""))
+        if(m.get("name")==null||m.get("type")==null||m.get("location")==null||eventPicker.getEvents().isEmpty()||
+        studentListView.getSelectedItems().isEmpty()||m.get("name").equals("")||m.get("type").equals("")||m.get("location").equals(""))
         {
             Alert alert=new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("警告");
@@ -228,9 +224,11 @@ public class InnovationManagementPage extends SplitPane {
     {
         TableColumn<Map, String> nameColumn = new TableColumn<>("学生姓名");
         TableColumn<Map, String> studentIdColumn = new TableColumn<>("学号");
+        TableColumn<Map,String> performanceColumn=new TableColumn<>("评价");
         nameColumn.setCellValueFactory(new MapValueFactory<>("name"));
         studentIdColumn.setCellValueFactory(new MapValueFactory<>("studentId"));
-        studentTable.getColumns().addAll(nameColumn,studentIdColumn);
+        performanceColumn.setCellValueFactory(new MapValueFactory<>("performance"));
+        studentTable.getColumns().addAll(nameColumn,studentIdColumn,performanceColumn);
     }
 
     private void initializeTable()
@@ -239,7 +237,6 @@ public class InnovationManagementPage extends SplitPane {
         TableColumn<Map, String> typeColumn = new TableColumn<>("项目类型");
         TableColumn<Map, String> timeColumn = new TableColumn<>("时间");
         TableColumn<Map, String> locationColumn = new TableColumn<>("地点");
-        TableColumn<Map, String> performanceColumn = new TableColumn<>("评价");
         nameColumn.setCellValueFactory(new MapValueFactory<>("name"));
         typeColumn.setCellValueFactory(new MapValueFactory<>("type"));
         timeColumn.setCellValueFactory(data ->
@@ -251,7 +248,6 @@ public class InnovationManagementPage extends SplitPane {
             } else return new SimpleStringProperty("");
         });
         locationColumn.setCellValueFactory(new MapValueFactory<>("location"));
-        performanceColumn.setCellValueFactory(new MapValueFactory<>("performance"));
 
         //搜索使用
         List<TableColumn<Map, ?>> columns = new ArrayList<>();
@@ -259,7 +255,6 @@ public class InnovationManagementPage extends SplitPane {
         columns.add(typeColumn);
         columns.add(timeColumn);
         columns.add(locationColumn);
-        columns.add(performanceColumn);
         innovationTable = new SearchableTableView(observableList, List.of("name","type"), columns);
         this.getItems().add(innovationTable);
     }

@@ -27,6 +27,13 @@ public class SearchableListView extends HBox {
         initializeComponents();
     }
 
+    public void setData(ObservableList<Map<String, Object>> data) {
+        this.data = data;
+        setupSearchField();
+        setupListView();
+        selectedLabel.setWrapText(true);
+    }
+
     private void initializeComponents() {
         setupSearchField();
         setupListView();

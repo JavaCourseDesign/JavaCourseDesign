@@ -12,5 +12,4 @@ import java.util.List;
 public interface HonorRepository extends JpaRepository<Honor, String>{
     Integer deleteByHonorId(String honorId);
     Honor findByHonorId(String honorId);
-
 }
