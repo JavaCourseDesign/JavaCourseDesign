@@ -19,12 +19,16 @@ public class ScoreManagementTab extends Tab {//成绩录入界面
     SearchableTableView scoreTable;
     ObservableList<Map> observableList= FXCollections.observableArrayList();
     VBox controlPanel = new VBox();
-    TextField regularWeightField = new TextField();
-    Button createButton = new Button("创建课程成绩");
+    Spinner homeworkWeightField = new Spinner(0,1,0.3,0.1);
+    Spinner absenceWeightField = new Spinner(0,1,0.2,0.1);
+    TextField finalMarkField = new TextField();
+    Button fillButton = new Button("填充平时成绩");
+    Button saveButton = new Button("保存本行成绩");
     Map course;
     public Map newMapFromFields() {
         Map m = new HashMap();
-        m.put("regularWeight", regularWeightField.getText());
+        m.put("homeworkWeight", homeworkWeightField.getValue());
+        m.put("absenceWeight", absenceWeightField.getValue());
         m.put("courseId", course.get("courseId"));
         return m;
     }
@@ -41,33 +45,38 @@ public class ScoreManagementTab extends Tab {//成绩录入界面
         TableColumn<Map, String> studentIdColumn = new TableColumn<>("学号");
         //TableColumn<Map, String> courseIdColumn = new TableColumn<>("课程号");
         TableColumn<Map, String> homeworkMarkColumn = new TableColumn<>("作业成绩");
-        TableColumn<Map, String> absenceColumn = new TableColumn<>("缺勤次数");
-        TableColumn<Map, String> regularMarkColumn = new TableColumn<>("平时成绩");
+        TableColumn<Map, String> absenceColumn = new TableColumn<>("出勤成绩");
         TableColumn<Map, String> finalMarkColumn = new TableColumn<>("期末成绩");
         TableColumn<Map, String> markColumn = new TableColumn<>("总成绩");
 
         // Set cell value factories
         studentIdColumn.setCellValueFactory(new MapValueFactory<>("student"));
         //courseIdColumn.setCellValueFactory(new MapValueFactory<>("course"));
-        homeworkMarkColumn.setCellValueFactory(new MapValueFactory<>("homework"));
-        absenceColumn.setCellValueFactory(new MapValueFactory<>("absence"));
-        regularMarkColumn.setCellValueFactory(new MapValueFactory<>("regularMark"));
+        homeworkMarkColumn.setCellValueFactory(new MapValueFactory<>("homeworkMark"));
+        absenceColumn.setCellValueFactory(new MapValueFactory<>("absenceMark"));
         finalMarkColumn.setCellValueFactory(new MapValueFactory<>("finalMark"));
         markColumn.setCellValueFactory(new MapValueFactory<>("mark"));
 
         // Add columns to table
-        List<TableColumn<Map,?>> columns= List.of(studentIdColumn,homeworkMarkColumn,absenceColumn,regularMarkColumn,finalMarkColumn,markColumn);
+        List<TableColumn<Map,?>> columns= List.of(studentIdColumn,homeworkMarkColumn,absenceColumn,finalMarkColumn,markColumn);
         scoreTable= new SearchableTableView(observableList,List.of("studentId"),columns);
 
         splitPane.getItems().add(scoreTable);
     }
 
     public void initializeControlPanel() {
-        createButton.setOnMouseClicked(e -> {
-            request("/addCourseScores", newMapFromFields());
+        fillButton.setOnMouseClicked(e -> {
+            request("/fillCourseScores", newMapFromFields());
             displayScores();
         });
-        controlPanel.getChildren().addAll(regularWeightField,createButton);
+
+        saveButton.setOnMouseClicked(e -> {
+            Map score = scoreTable.getSelectedItem();
+            score.put("finalMark", finalMarkField.getText());
+            request("/uploadFinalScore", score);
+            displayScores();
+        });
+        controlPanel.getChildren().addAll(homeworkWeightField,absenceWeightField,fillButton,finalMarkField,saveButton);
         splitPane.getItems().add(controlPanel);
     }
 

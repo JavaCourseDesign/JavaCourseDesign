@@ -35,7 +35,11 @@ public class Course{
 
     private Double credit;//学分
 
-    private Double regularWeight=0.5;//平时成绩权重 教师有权限
+    //private Double regularWeight=0.5;//平时成绩权重 教师有权限 不存入数据库
+
+    private Double homeworkWeight;//作业成绩权重 教师有权限
+
+    private Double absenceWeight;//期末成绩权重 教师有权限
 
     private String type;//课程类型 0 Required 1 Optional 2 Selective
 

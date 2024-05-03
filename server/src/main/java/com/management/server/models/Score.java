@@ -5,8 +5,6 @@ import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.Data;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @Data
@@ -33,7 +31,9 @@ public class Score {
     //@Transient
     private Double absence;
 
-    private Double regularMark;
+    private Double homeworkMark;
+
+    private Double absenceMark;
 
     private Double finalMark;
 
