@@ -1,11 +1,10 @@
 package com.management.server.models;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.util.List;
 import java.util.Set;
@@ -21,7 +20,7 @@ import java.util.Set;
     )*/
 /*@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "name")//在递归中第二次出现时用name属性替代本对象避免无限递归
 @JsonIgnoreProperties(value = {"persons"})*/
-@EqualsAndHashCode(exclude = {"lessons","persons","willingStudents","scores"})
+@EqualsAndHashCode(exclude = {"lessons","persons","willingStudents","scores","homeworks"})
 
 public class Course{
     @Id
@@ -46,7 +45,7 @@ public class Course{
 
     private boolean available;//是否可选
 
-   @Transient//@Transint 注解表示该属性并非一个到数据库表的字段的映射，ORM框架将忽略该属性。
+    @Transient//@Transint 注解表示该属性并非一个到数据库表的字段的映射，ORM框架将忽略该属性。
     private Boolean chosen;//是否被选中，由controller根据具体人进行判断
 
 
@@ -95,4 +94,9 @@ public class Course{
     @JoinColumn(name = "course_id")
     @JsonIgnore
     private List<Score> scores;
+
+    @OneToMany
+    @JoinColumn(name = "course_id")
+    @JsonIgnore
+    private List<Homework> homeworks;
 }
