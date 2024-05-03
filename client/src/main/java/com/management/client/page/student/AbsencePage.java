@@ -1,6 +1,5 @@
 package com.management.client.page.student;
 
-import com.management.client.customComponents.SearchableListView;
 import com.management.client.customComponents.SearchableTableView;
 import com.management.client.customComponents.WeekTimeTable;
 import com.management.client.request.DataResponse;

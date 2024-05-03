@@ -153,7 +153,8 @@ public class Menu extends AnchorPane {
             }
             else if(newValue == stuCrsItm)
             {
-                borderPane.setCenter(new StudentCourseMenuPage());
+                //borderPane.setCenter(new StudentCourseMenuPage());
+                borderPane.setCenter(new StudentHomeworkPage());
             }
             else if(newValue == stuAbsItm)
             {

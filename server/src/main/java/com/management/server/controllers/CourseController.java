@@ -8,8 +8,10 @@ import com.management.server.repositories.*;
 import com.management.server.util.CommonMethod;
 import com.management.server.util.FileUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.*;
 import java.util.function.Function;
@@ -30,6 +32,8 @@ public class CourseController {
     PersonRepository personRepository;
     @Autowired
     AbsenceRepository absenceRepository;
+    @Autowired
+    EventRepository eventRepository;
 
     @PostMapping("/getAllCourses")
     public DataResponse getAllCourses(){
@@ -41,6 +45,7 @@ public class CourseController {
     public DataResponse getAllCoursesForStudent(@RequestBody Map m){
         String username = CommonMethod.getUsername();
         String personId = studentRepository.findByStudentId(username).getPersonId();
+        Student student = studentRepository.findByPersonId(personId);
         List<Course> courses = courseRepository.findAll();
 
         if(m.get("getChosenState")!=null&&m.get("getChosenState").toString().equals("true")){
@@ -62,7 +67,7 @@ public class CourseController {
 
         if(m.get("filterConflict")!=null&&m.get("filterConflict").toString().equals("true")){
             List<Course> wantedCourses = courseRepository.findWantedCoursesByPersonId(personId);
-            courses = courses.stream().filter(course -> !conflict(wantedCourses, course)).collect(Collectors.toList());
+            courses = courses.stream().filter(course -> !conflict(getPersonAllEvents(student), course)).collect(Collectors.toList());
         }
         if(m.get("filterAvailable")!=null&&m.get("filterAvailable").toString().equals("true")){
             courses = courses.stream().filter(Course::isAvailable).collect(Collectors.toList());
@@ -193,6 +198,11 @@ public class CourseController {
         // 保存 persons 的更改
         personRepository.saveAll(persons);
 
+        if(lessonsMap==null){
+            courseRepository.save(course);
+            return new DataResponse(0,null,"更新成功");
+        }
+
         List<String> lessonIds = lessonsMap.stream().map(map -> (String) map.get("eventId")).toList();
         List<Lesson> lessons = lessonRepository.findAllById(lessonIds);
         //删掉不在lessons中的lesson
@@ -285,7 +295,7 @@ public class CourseController {
         if(course.getWillingStudents().contains(person)){
             return new DataResponse(-1,null,"已申请，无需重复选课");
         }
-        if(conflict(new ArrayList<>(courseRepository.findWantedCoursesByPersonId(person.getPersonId())),course)){
+        if(conflict(new ArrayList<>(getPersonAllEvents(person)),course)){
             return new DataResponse(-1,null,"课程时间冲突");
         }
         course.getWillingStudents().add(person);
@@ -303,30 +313,7 @@ public class CourseController {
         return new DataResponse(0,courses,null);
     }
 
-    private boolean conflict(List<Course> courses, Course course){
-        for (Course c : courses) {
-            for (Lesson l1 : c.getLessons()) {
-                for (Lesson l2 : course.getLessons()) {
-                    if (isConflict(l1, l2)) {
-                        return true;
-                    }
-                }
-            }
-        }
-        return false;
-    }
 
-    private boolean isConflict(Lesson lesson1, Lesson lesson2) {
-        // Check if the date ranges overlap
-        boolean dateOverlap = !lesson1.getStartDate().isAfter(lesson2.getEndDate())
-                && !lesson1.getEndDate().isBefore(lesson2.getStartDate());
-
-        // Check if the time ranges overlap
-        boolean timeOverlap = !lesson1.getStartTime().isAfter(lesson2.getEndTime())
-                && !lesson1.getEndTime().isBefore(lesson2.getStartTime());
-
-        return dateOverlap && timeOverlap;
-    }
     @PostMapping("/uploadReference")
     public DataResponse uploadReference(@RequestBody byte[] barr,
                                         @RequestParam(name = "fileName") String fileName,
@@ -348,5 +335,52 @@ public class CourseController {
             return new DataResponse(-1,null,"请先上传文件！");
         }
         return FileUtil.downloadFile("pdf",course.getReference());
+    }
+
+    /*private boolean conflict(List<Course> courses, Course course){
+        for (Course c : courses) {
+            for (Lesson l1 : c.getLessons()) {
+                for (Lesson l2 : course.getLessons()) {
+                    if (isConflict(l1, l2)) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }*/
+
+    private List<Event> getPersonAllEvents(Person p){
+        List<Course> courses = courseRepository.findCoursesByPersonId(p.getPersonId());
+        courses.addAll(courseRepository.findWantedCoursesByPersonId(p.getPersonId()));
+        List<Event> events = new ArrayList<>();
+        for (Course course : courses) {
+            events.addAll(course.getLessons());
+        }
+        events.addAll(p.getEvents());
+        return events;
+    }
+
+    private boolean conflict(List<Event> events, Course course){
+        for (Lesson l : course.getLessons()) {
+            for (Event e : events) {
+                if (isConflict(l, e)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private boolean isConflict(Event event1, Event event2) {
+        // Check if the date ranges overlap
+        boolean dateOverlap = !event1.getStartDate().isAfter(event2.getEndDate())
+                && !event1.getEndDate().isBefore(event2.getStartDate());
+
+        // Check if the time ranges overlap
+        boolean timeOverlap = !event1.getStartTime().isAfter(event2.getEndTime())
+                && !event1.getEndTime().isBefore(event2.getStartTime());
+
+        return dateOverlap && timeOverlap;
     }
 }
