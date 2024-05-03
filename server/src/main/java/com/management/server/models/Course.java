@@ -41,16 +41,16 @@ public class Course{
 
     private Double absenceWeight;//期末成绩权重 教师有权限
 
-    private String type;//课程类型 0 Required 1 Optional 2 Selective
-
-    /*private Double beginWeek;//开始周次 教师有权限
-
-    private Double endWeek;//结束周次 教师有权限*/ //改为lesson的属性
+    private String type;//课程类型 0 Required 1 Optional 2 Selective 代码代替似乎意义不大，后续考虑修改
 
     private boolean available;//是否可选
 
-    @Transient//@Transint 注解表示该属性并非一个到数据库表的字段的映射，ORM框架将忽略该属性。
+    @Transient//@Transient 注解表示该属性并非一个到数据库表的字段的映射，ORM框架将忽略该属性。
     private Boolean chosen;//是否被选中，由controller根据具体人进行判断
+
+    //考虑添加一个学期属性，用于区分不同学期的课程，方便在简历中显示各学期均分
+    //2023-2024学年第一学期
+    //private String semester;
 
 
     @OneToMany(fetch = FetchType.LAZY,cascade = {CascadeType.ALL},orphanRemoval = true)
