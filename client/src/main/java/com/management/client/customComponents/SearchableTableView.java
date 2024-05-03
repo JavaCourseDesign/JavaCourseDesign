@@ -1,14 +1,14 @@
 package com.management.client.customComponents;
 
+import com.jfoenix.controls.JFXTextField;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import com.jfoenix.controls.JFXTextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import org.controlsfx.control.tableview2.FilteredTableView;
 
 import java.util.List;
 import java.util.Map;
@@ -16,7 +16,7 @@ import java.util.function.Consumer;
 
 public class SearchableTableView extends VBox {
     private JFXTextField searchField = new JFXTextField();
-    private TableView<Map> tableView = new TableView<>();
+    private FilteredTableView<Map> tableView = new FilteredTableView<>();
     private ObservableList<Map> data;
     private List<String> searchableFields;
     private Consumer<Map<String, Object>> onItemClick; // Updated to use Map
@@ -75,6 +75,11 @@ public class SearchableTableView extends VBox {
         tableView.prefWidthProperty().bind(this.widthProperty());
 
         searchFieldContainer.setSpacing(10);
+
+        //controlsFx的语句，意义暂不明
+        FilteredTableView.configureForFiltering(tableView,sortedData);
+        tableView.filter();
+
         this.getChildren().addAll(searchFieldContainer, tableView);
     }
 
