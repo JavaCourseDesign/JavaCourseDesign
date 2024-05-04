@@ -22,12 +22,13 @@ public class StudentAbsenceManagementTab extends Tab {
     private SplitPane splitPane=new SplitPane();
     private SearchableTableView absenceTable;
     private VBox controlPanel = new VBox();
-    private SearchableListView studentListView=new SearchableListView(FXCollections.observableArrayList((ArrayList) request("/getAllStudentsByTeacherCourses",null).getData()), List.of("name","studentId"));
+    private SearchableListView studentListView;
     private ObservableList<Map> observableList= FXCollections.observableArrayList();
     private WeekTimeTable lessonView;
     Map course=new HashMap();
     public StudentAbsenceManagementTab(Map c) {
         course.put("courseId",c.get("courseId"));
+        studentListView=new SearchableListView(FXCollections.observableArrayList((ArrayList) request("/getAllStudentsByCourse",c).getData()), List.of("name","studentId"));
         splitPane.setMinWidth(1000);
         this.setText("学生缺勤管理");
         this.setContent(splitPane);

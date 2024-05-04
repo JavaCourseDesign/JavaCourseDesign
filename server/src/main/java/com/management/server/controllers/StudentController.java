@@ -27,9 +27,8 @@ import java.nio.file.Paths;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
-import static com.management.client.util.NativePlaceUtil.getNativePlace;
+import static com.management.server.util.NativePlaceUtil.getNativePlace;
 
-import static com.management.client.util.NativePlaceUtil.getNativePlace;
 
 @RestController
 public class StudentController {
@@ -56,6 +55,8 @@ public class StudentController {
     private FeeRepository feeRepository;
     @Autowired
     private EventRepository eventRepository;
+    @Autowired
+    private ScoreRepository scoreRepository;
     @PostMapping("/getStudent")
     @PreAuthorize("hasRole('STUDENT')")
     public DataResponse getStudent()
@@ -103,6 +104,20 @@ public class StudentController {
                 {
                     studentList.add((Student) p);
                 }
+            }
+        }
+        return new DataResponse(0,studentList,null);
+    }
+    @PostMapping("/getAllStudentsByCourse")
+    public DataResponse getAllStudentsByCourse(@RequestBody Map m)
+    {
+        Course course=courseRepository.findByCourseId((String) m.get("courseId"));
+        List<Student> studentList=new ArrayList<>();
+        for(Person p:course.getPersons())
+        {
+            if(p instanceof Student)
+            {
+                studentList.add((Student) p);
             }
         }
         return new DataResponse(0,studentList,null);
@@ -212,6 +227,16 @@ public class StudentController {
         m.remove("introduce");
         List<Fee> feeList=feeRepository.findByPerson(studentRepository.findByStudentId(CommonMethod.getUsername()));
         m.put("feeList",feeList);
+        List<Score> scoreList=scoreRepository.findByStudentStudentId(CommonMethod.getUsername());
+        List<Map> scoreMapList=new ArrayList<>();
+        for(Score s:scoreList)
+        {
+            Map scoreMap=new HashMap();
+            scoreMap.put("courseName",s.getCourse().getName());
+            scoreMap.put("mark",s.getMark());
+            scoreMapList.add(scoreMap);
+        }
+        m.put("scoreList",scoreMapList);
         return new DataResponse(0,m,null);
     }
     @PostMapping("/getStudentsByHonor")
