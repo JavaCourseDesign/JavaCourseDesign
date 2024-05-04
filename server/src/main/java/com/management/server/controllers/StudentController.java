@@ -237,6 +237,7 @@ public class StudentController {
             scoreMapList.add(scoreMap);
         }
         m.put("scoreList",scoreMapList);
+        m.put("markList",getStudentMarkList(scoreList));
         return new DataResponse(0,m,null);
     }
     @PostMapping("/getStudentsByHonor")
@@ -387,6 +388,35 @@ public class StudentController {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy年MM月dd日");
         s.setBirthday(IdcardUtil.getBirthDate(id).toLocalDateTime().format(formatter));
         return true;
+    }
+    public List getStudentMarkList(List<Score> sList){
+        String title[]={"优","良","中","及格","不及格"};
+        int count[]= new int[5];
+        List list = new ArrayList();
+        if(sList == null || sList.size() == 0)
+            return list;
+        Map m;
+        Course c;
+        for(Score s:sList){
+            c = s.getCourse();
+            if(s.getMark() >= 90)
+                count[0]++;
+            if(s.getMark() >= 80)
+                count[1]++;
+            if(s.getMark() >= 70)
+                count[2]++;
+            if(s.getMark() >= 60)
+                count[3]++;
+            else
+                count[4]++;
+        }
+        for(int i = 0; i < 5;i++) {
+            m = new HashMap();
+            m.put("title", title[i]);
+            m.put("value", count[i]);
+            list.add(m);
+        }
+        return list;
     }
 
 }

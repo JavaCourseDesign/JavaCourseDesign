@@ -120,6 +120,14 @@ public class StudentPortraitPage {
                 FXCollections.<XYChart.Series<String, Number>>observableArrayList();
         scoreData.add(seriesScore);
         scoreBarChart.setData(scoreData);
+
+
+        ObservableList<PieChart.Data> chartData = FXCollections.observableArrayList();
+        List<Map>markList = (List<Map>)m.get("markList");
+        for(Map map:markList) {
+            chartData.add(new PieChart.Data(map.get("title").toString(),Double.parseDouble(map.get("value").toString())));
+        }
+        pieChart.setData(chartData);
     }
     @FXML
     protected void setPhoto(){
