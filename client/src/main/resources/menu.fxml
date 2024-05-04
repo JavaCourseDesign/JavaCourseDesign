@@ -1,30 +1,25 @@
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.control.TreeView?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.text.Text?>
-<?import javafx.scene.layout.Pane?>
-<?import javafx.scene.layout.StackPane?>
-<?import com.jfoenix.controls.JFXTreeView?>
-<?import javafx.scene.control.Button?>
-<BorderPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml">
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1">
     <top>
-        <AnchorPane BorderPane.alignment="CENTER" style="-fx-background-color: green">
-            <ImageView fitHeight="75.0" pickOnBounds="true"
-                       preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
-                       AnchorPane.topAnchor="0.0">
-                <Image url="@images/LOGO.PNG"/>
+        <AnchorPane style="-fx-background-color: green" BorderPane.alignment="CENTER">
+            <ImageView fitHeight="70.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+                <Image url="@images/LOGO.PNG" />
             </ImageView>
-            <ImageView pickOnBounds="true" preserveRatio="true"
-                       AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"/>
+            <ImageView pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+         <Button fx:id="modifyPasswordButton"  layoutX="200.0" mnemonicParsing="false" prefHeight="70.0" prefWidth="104.0" text="修改密码" onAction="#modifyPassword" />
+         <Button fx:id="logOutButton" layoutX="400.0" mnemonicParsing="false" prefHeight="70.0" prefWidth="104.0" text="退出登录" onAction="#logOut" />
+         <Button fx:id="refreshButton" layoutX="600.0" mnemonicParsing="false" prefHeight="70.0" prefWidth="104.0" text="刷新" onAction="#refresh"/>
         </AnchorPane>
     </top>
     <left>
-        <VBox BorderPane.alignment="CENTER" style="-fx-background-color: #3737da" alignment="CENTER">
+        <VBox alignment="CENTER" style="-fx-background-color: #3737da" BorderPane.alignment="CENTER">
             <!--<ImageView fitHeight="51.0" fitWidth="134.0" pickOnBounds="true" preserveRatio="true"/>-->
             <!--<Label fx:id="roleLabel" style="-fx-text-fill: white"/>-->
             <StackPane>
@@ -34,7 +29,7 @@
                 <Text fx:id="roleLabel" />
             </StackPane>
 
-            <JFXTreeView fx:id="leftMenu" VBox.vgrow="ALWAYS" prefWidth="150"/>
+            <JFXTreeView fx:id="leftMenu" prefWidth="150" VBox.vgrow="ALWAYS" />
         </VBox>
     </left>
 </BorderPane>

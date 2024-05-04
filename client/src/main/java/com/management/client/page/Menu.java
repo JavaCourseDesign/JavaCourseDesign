@@ -1,5 +1,6 @@
 package com.management.client.page;
 
+import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTreeView;
 import com.management.client.ClientApplication;
 import com.management.client.page.admin.*;
@@ -9,14 +10,21 @@ import com.management.client.page.teacher.TeacherPersonalInfoPage;
 import com.management.client.request.DataResponse;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.TreeItem;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 import org.kordamp.ikonli.javafx.FontIcon;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.MouseEvent;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import static com.management.client.util.HttpClientUtil.request;
+import static com.management.client.util.HttpClientUtil.showAlert;
 import static org.kordamp.ikonli.fontawesome.FontAwesome.*;
 import static org.kordamp.ikonli.materialdesign2.MaterialDesignA.*;
 import static org.kordamp.ikonli.materialdesign2.MaterialDesignB.BOOK_OPEN_PAGE_VARIANT;
@@ -36,6 +44,12 @@ public class Menu extends AnchorPane {
     private JFXTreeView<String> leftMenu;
     @FXML
     private Text roleLabel;
+    @FXML
+    private Button modifyPasswordButton;
+    @FXML
+    private Button logOutButton;
+    @FXML
+    private Button refreshButton;
 
     private TreeItem<String> root = new TreeItem<>("菜单");
 
@@ -67,15 +81,78 @@ public class Menu extends AnchorPane {
             AnchorPane.setLeftAnchor(borderPane, 0.0);
             AnchorPane.setRightAnchor(borderPane, 0.0);
             this.getChildren().add(borderPane);
-
             //this.getStylesheets().add("dark-theme.css");
 
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        modifyPasswordButton.setStyle("-fx-background-color:#2196F3;-fx-text-fill: white;");
+        logOutButton.setStyle("-fx-background-color: #2196F3;-fx-text-fill: white;");
+        refreshButton.setStyle("-fx-background-color: #2196F3;-fx-text-fill: white;");
         initializeLeftMenu();
         initializeIcons();
     }
+    @FXML
+    public void modifyPassword()
+    {
+        Stage modifyPasswordStage=new Stage();
+        GridPane gridPane=new GridPane();
+        gridPane.getStylesheets().add("dark-theme.css");
+        gridPane.setAlignment(javafx.geometry.Pos.CENTER);
+        TextField oldPassword = new TextField();
+        TextField newPassword = new TextField();
+        TextField confirmPassword = new TextField();
+        JFXButton confirmButton = new JFXButton("确认");
+        JFXButton cancelButton = new JFXButton("取消");
+        confirmButton.setOnAction(event1 -> {
+            if(oldPassword.getText().equals("")||newPassword.getText().equals("")||confirmPassword.getText().equals(""))
+            {
+                Alert alert = new Alert(Alert.AlertType.ERROR, "密码不能为空");
+                alert.showAndWait();
+                return;
+            }
+            if (!newPassword.getText().equals(confirmPassword.getText())) {
+                Alert alert = new Alert(Alert.AlertType.ERROR, "两次输入的密码不一致");
+                alert.showAndWait();
+                return;
+            }
+            if (oldPassword.getText().equals(newPassword.getText())) {
+                Alert alert = new Alert(Alert.AlertType.ERROR, "新密码不能与旧密码相同");
+                alert.showAndWait();
+                return;
+            }
+            Map<String, String> map = new HashMap<>();
+            map.put("oldPassword", oldPassword.getText());
+            map.put("newPassword", newPassword.getText());
+            DataResponse response = request("/modifyPassword", map);
+            if (response.getCode() == 0) {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION, response.getMsg());
+                modifyPasswordStage.close();
+            }
+            else
+            {
+                Alert alert = new Alert(Alert.AlertType.ERROR, response.getMsg());
+                alert.showAndWait();
+            }
+        });
+        cancelButton.setOnAction(event1 -> modifyPasswordStage.close());
+        gridPane.addColumn(0,new Label("旧密码"),new Label("新密码"),new Label("确认密码"),confirmButton);
+        gridPane.addColumn(1,oldPassword,newPassword,confirmPassword,cancelButton);
+        Scene scene=new Scene(gridPane, 300, 200);
+        modifyPasswordStage.setScene(scene);
+        modifyPasswordStage.show();
+    }
+    @FXML
+    public void logOut()
+    {
+        Stage stage = (Stage) logOutButton.getScene().getWindow();
+        stage.close();
+        Stage loginStage = new Stage();
+        Scene scene = new Scene(new LoginPage(), 300, 400);
+        loginStage.setScene(scene);
+        loginStage.show();
+    }
+
 
     public void initializeLeftMenu()
     {
@@ -175,9 +252,7 @@ public class Menu extends AnchorPane {
 
     private void initializeIcons()
     {
-
         //leftMenu.setStyle("-fx-background-color: red;-fx-font-size: 15px;");
-
         root.setGraphic(new FontIcon(MENU));
         //tchCrsItm.setGraphic(new ImageView("/icons/teacher.png"));
 
@@ -198,6 +273,5 @@ public class Menu extends AnchorPane {
         stuDlaItm.setGraphic(new FontIcon(RUN));
         dlaMngItm.setGraphic(new FontIcon(RUN));
         hnrMngItm.setGraphic(new FontIcon(MEDAL));
-
     }
 }
