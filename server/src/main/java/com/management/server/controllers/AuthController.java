@@ -90,4 +90,20 @@ public class AuthController {
     public DataResponse getRole() {
         return new DataResponse(0, null, CommonMethod.getUserType());
     }
+    @PostMapping("/modifyPassword")
+    public DataResponse modifyPassword(@RequestBody Map<String,String> map) {
+        User user = userRepository.findByUsername(CommonMethod.getUsername());
+        if (user == null) {
+            return new DataResponse(-1, null, "用户不存在");
+        }
+        if(passwordEncoder.matches(map.get("oldPassword"),user.getPassword()))
+        {
+            user.setPassword(passwordEncoder.encode(map.get("newPassword")));
+            userRepository.save(user);
+            return new DataResponse(0, null, "修改成功");
+        }else
+        {
+            return new DataResponse(-1, null, "原密码错误");
+        }
+    }
 }

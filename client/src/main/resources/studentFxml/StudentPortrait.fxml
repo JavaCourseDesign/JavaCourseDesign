@@ -64,7 +64,7 @@
             <Font name="System Bold" size="18.0" />
          </font>
       </Text>
-      <BarChart fx:id="barChart" layoutX="19.0" layoutY="449.0" prefHeight="98.0" prefWidth="466.0" style="-fx-bar-fill: #B1EE31;">
+      <BarChart fx:id="feeBarChart" layoutX="19.0" layoutY="449.0" prefHeight="98.0" prefWidth="466.0" style="-fx-bar-fill: #B1EE31;">
          <xAxis>
             <CategoryAxis label="日期" side="BOTTOM" />
          </xAxis>
@@ -88,14 +88,14 @@
             <Font size="11.0" />
          </font>
       </Text>
-      <AreaChart fx:id="areaChart" layoutX="48.0" layoutY="579.0" prefHeight="98.0" prefWidth="451.0">
+      <BarChart fx:id="scoreBarChart" layoutX="19.0" layoutY="579.0" prefHeight="98.0" prefWidth="451.0" style="-fx-bar-fill: #B1EE31;">
          <xAxis>
-            <CategoryAxis side="BOTTOM" />
+            <CategoryAxis label="课程" side="BOTTOM" />
          </xAxis>
          <yAxis>
-            <NumberAxis side="LEFT" />
+            <NumberAxis label="成绩" side="LEFT" />
          </yAxis>
-      </AreaChart>
+      </BarChart>
       <Text fill="#464444" layoutX="286.0" layoutY="304.0" strokeType="OUTSIDE" strokeWidth="0.0" text="成绩分布" wrappingWidth="131.0">
          <font>
             <Font name="System Bold" size="18.0" />
@@ -106,7 +106,7 @@
             <Font name="System Bold" size="18.0" />
          </font>
       </Text>
-      <Text fill="#464444" layoutX="81.0" layoutY="586.0" strokeType="OUTSIDE" strokeWidth="0.0" text="我的排名" wrappingWidth="131.0">
+      <Text fill="#464444" layoutX="81.0" layoutY="586.0" strokeType="OUTSIDE" strokeWidth="0.0" text="我的成绩" wrappingWidth="131.0">
          <font>
             <Font name="System Bold" size="18.0" />
          </font>

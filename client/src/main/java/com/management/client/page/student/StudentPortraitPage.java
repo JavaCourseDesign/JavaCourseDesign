@@ -41,11 +41,11 @@ public class StudentPortraitPage {
     private AnchorPane anchorPane;
 
     @FXML
-    private BarChart<String,Number> barChart;
+    private BarChart<String,Number> feeBarChart;
     @FXML
     private PieChart pieChart;
     @FXML
-    private AreaChart<String,Number> areaChart;
+    private BarChart<String,Number> scoreBarChart;
     @FXML
     private Text nameText;
     @FXML
@@ -106,7 +106,28 @@ public class StudentPortraitPage {
         ObservableList<XYChart.Series<String, Number>> barData =
                 FXCollections.<XYChart.Series<String, Number>>observableArrayList();
         barData.add(seriesFee);
-        barChart.setData(barData);
+        feeBarChart.setData(barData);
+
+        List<Map> scoreList = (List<Map>) m.get("scoreList");
+        System.out.println(scoreList);
+        XYChart.Series<String, Number> seriesScore = new XYChart.Series<>();
+        seriesScore.setName("成绩");
+        for (Map map : scoreList) {
+            if(map.get("mark")!=null)
+            seriesScore.getData().add(new XYChart.Data<>(map.get("courseName").toString(),Double.parseDouble( map.get("mark").toString())));
+        }
+        ObservableList<XYChart.Series<String,Number>> scoreData =
+                FXCollections.<XYChart.Series<String, Number>>observableArrayList();
+        scoreData.add(seriesScore);
+        scoreBarChart.setData(scoreData);
+
+
+        ObservableList<PieChart.Data> chartData = FXCollections.observableArrayList();
+        List<Map>markList = (List<Map>)m.get("markList");
+        for(Map map:markList) {
+            chartData.add(new PieChart.Data(map.get("title").toString(),Double.parseDouble(map.get("value").toString())));
+        }
+        pieChart.setData(chartData);
     }
     @FXML
     protected void setPhoto(){

@@ -29,6 +29,7 @@ import java.util.*;
 
 import static com.management.server.util.NativePlaceUtil.getNativePlace;
 
+
 @RestController
 public class StudentController {
     @Autowired
@@ -54,6 +55,8 @@ public class StudentController {
     private FeeRepository feeRepository;
     @Autowired
     private EventRepository eventRepository;
+    @Autowired
+    private ScoreRepository scoreRepository;
     @PostMapping("/getStudent")
     @PreAuthorize("hasRole('STUDENT')")
     public DataResponse getStudent()
@@ -102,6 +105,20 @@ public class StudentController {
                 {
                     studentList.add((Student) p);
                 }
+            }
+        }
+        return new DataResponse(0,studentList,null);
+    }
+    @PostMapping("/getAllStudentsByCourse")
+    public DataResponse getAllStudentsByCourse(@RequestBody Map m)
+    {
+        Course course=courseRepository.findByCourseId((String) m.get("courseId"));
+        List<Student> studentList=new ArrayList<>();
+        for(Person p:course.getPersons())
+        {
+            if(p instanceof Student)
+            {
+                studentList.add((Student) p);
             }
         }
         return new DataResponse(0,studentList,null);
@@ -211,6 +228,17 @@ public class StudentController {
         m.remove("introduce");
         List<Fee> feeList=feeRepository.findByPerson(studentRepository.findByStudentId(CommonMethod.getUsername()));
         m.put("feeList",feeList);
+        List<Score> scoreList=scoreRepository.findByStudentStudentId(CommonMethod.getUsername());
+        List<Map> scoreMapList=new ArrayList<>();
+        for(Score s:scoreList)
+        {
+            Map scoreMap=new HashMap();
+            scoreMap.put("courseName",s.getCourse().getName());
+            scoreMap.put("mark",s.getMark());
+            scoreMapList.add(scoreMap);
+        }
+        m.put("scoreList",scoreMapList);
+        m.put("markList",getStudentMarkList(scoreList));
         return new DataResponse(0,m,null);
     }
     @PostMapping("/getStudentsByHonor")
@@ -361,6 +389,35 @@ public class StudentController {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy年MM月dd日");
         s.setBirthday(IdcardUtil.getBirthDate(id).toLocalDateTime().format(formatter));
         return true;
+    }
+    public List getStudentMarkList(List<Score> sList){
+        String title[]={"优","良","中","及格","不及格"};
+        int count[]= new int[5];
+        List list = new ArrayList();
+        if(sList == null || sList.size() == 0)
+            return list;
+        Map m;
+        Course c;
+        for(Score s:sList){
+            c = s.getCourse();
+            if(s.getMark() >= 90)
+                count[0]++;
+            if(s.getMark() >= 80)
+                count[1]++;
+            if(s.getMark() >= 70)
+                count[2]++;
+            if(s.getMark() >= 60)
+                count[3]++;
+            else
+                count[4]++;
+        }
+        for(int i = 0; i < 5;i++) {
+            m = new HashMap();
+            m.put("title", title[i]);
+            m.put("value", count[i]);
+            list.add(m);
+        }
+        return list;
     }
 
 }
