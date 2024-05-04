@@ -222,7 +222,8 @@ public class ScoreController {
                 else unMarked++;
             }
             score.setHomework("A:"+homeworkA+" B:"+homeworkB+" C:"+homeworkC+" D:"+homeworkD+" E:"+homeworkE+" 未批改:"+unMarked+" 未交:"+unHanded);
-            score.setHomeworkMark(100*homeworkMark/(5*homeworks.size()));
+            if(!homeworks.isEmpty()) score.setHomeworkMark(100*homeworkMark/(5*homeworks.size()));
+            else score.setHomeworkMark(100.0);
         }
 
         scoreRepository.saveAll(scores);
