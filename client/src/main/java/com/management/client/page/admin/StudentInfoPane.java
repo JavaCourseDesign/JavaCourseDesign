@@ -2,6 +2,7 @@ package com.management.client.page.admin;
 
 import com.management.client.ClientApplication;
 import com.management.client.request.DataResponse;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -66,13 +67,13 @@ public class StudentInfoPane{
     @FXML
     private TableView honorTable;
     @FXML
-    private TableColumn awardDateColumn;
+    private TableColumn<Map, String> awardDateColumn;
     @FXML
-    private TableColumn nameColumn;
+    private TableColumn<Map, String> nameColumn;
     @FXML
-    private TableColumn departmentColumn;
+    private TableColumn<Map, String> departmentColumn;
     @FXML
-    private TableColumn eventColumn;
+    private TableColumn<Map, String> eventColumn;
 
 
 
@@ -179,7 +180,13 @@ public class StudentInfoPane{
         awardDateColumn.setCellValueFactory(new MapValueFactory<>("awardDate"));
         nameColumn.setCellValueFactory(new MapValueFactory<>("name"));
         departmentColumn.setCellValueFactory(new MapValueFactory<>("department"));
-        eventColumn.setCellValueFactory(new MapValueFactory<>("event"));
+        eventColumn.setCellValueFactory(data->
+        {
+            if(data.getValue().isEmpty()) return new SimpleStringProperty("");
+            Map<String,Object> event=(Map<String,Object>) data.getValue().get("event");
+            String name=(String) event.get("name");
+            return new SimpleStringProperty(name);
+        });
 
 
         parent.displayStudents();
