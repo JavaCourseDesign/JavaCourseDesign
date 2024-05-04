@@ -10,9 +10,6 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.MapValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
-
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -65,6 +62,18 @@ public class StudentInfoPane{
     private TableColumn familyAge;
     @FXML
     private TableColumn familyPhone;
+
+    @FXML
+    private TableView honorTable;
+    @FXML
+    private TableColumn awardDateColumn;
+    @FXML
+    private TableColumn nameColumn;
+    @FXML
+    private TableColumn departmentColumn;
+    @FXML
+    private TableColumn eventColumn;
+
 
 
 
@@ -160,6 +169,18 @@ public class StudentInfoPane{
         familyName.setCellValueFactory(new MapValueFactory<>("name"));
         familyAge.setCellValueFactory(new MapValueFactory<>("birthday"));
         familyPhone.setCellValueFactory(new MapValueFactory<>("phone"));
+
+        ObservableList<Map> honorItems = FXCollections.observableArrayList();
+        List<Map> honorList = (List<Map>) student.get("honors");
+        if (student.get("honors") != null) {
+            honorItems = FXCollections.observableArrayList(honorList);
+        }
+        honorTable.setItems(honorItems);
+        awardDateColumn.setCellValueFactory(new MapValueFactory<>("awardDate"));
+        nameColumn.setCellValueFactory(new MapValueFactory<>("name"));
+        departmentColumn.setCellValueFactory(new MapValueFactory<>("department"));
+        eventColumn.setCellValueFactory(new MapValueFactory<>("event"));
+
 
         parent.displayStudents();
     }
