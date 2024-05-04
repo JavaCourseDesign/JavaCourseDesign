@@ -1,4 +1,4 @@
-package com.management.client.util;
+package com.management.server.util;
 
 
 public class NativePlaceUtil {

@@ -1,6 +1,7 @@
 package com.management.client.page.teacher;
 
 import com.management.client.customComponents.SearchableTableView;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
@@ -47,7 +48,8 @@ public class ScoreManagementTab extends Tab {//成绩录入界面
         TableColumn<Map, String> homeworkMarkColumn = new TableColumn<>("作业成绩");
         TableColumn<Map, String> absenceColumn = new TableColumn<>("出勤成绩");
         TableColumn<Map, String> finalMarkColumn = new TableColumn<>("期末成绩");
-        TableColumn<Map, String> markColumn = new TableColumn<>("总成绩");
+        TableColumn<Map, String> markColumn = new TableColumn<>("单科总成绩");
+        TableColumn<Map, String> gradePointColumn = new TableColumn<>("绩点");
 
         // Set cell value factories
         studentIdColumn.setCellValueFactory(new MapValueFactory<>("student"));
@@ -56,9 +58,17 @@ public class ScoreManagementTab extends Tab {//成绩录入界面
         absenceColumn.setCellValueFactory(new MapValueFactory<>("absenceMark"));
         finalMarkColumn.setCellValueFactory(new MapValueFactory<>("finalMark"));
         markColumn.setCellValueFactory(new MapValueFactory<>("mark"));
+        //绩点通过成绩计算得到
+        gradePointColumn.setCellValueFactory(data -> {
+            Map<String, Object> row = data.getValue();
+            if(row.get("mark")==null) return new SimpleStringProperty("");
+            double mark = Double.parseDouble(row.get("mark").toString());
+            double gradePoint = mark<60?0:1+(mark-60)/10;
+            return new SimpleStringProperty(gradePoint+"");
+        });
 
         // Add columns to table
-        List<TableColumn<Map,?>> columns= List.of(studentIdColumn,homeworkMarkColumn,absenceColumn,finalMarkColumn,markColumn);
+        List<TableColumn<Map,?>> columns= List.of(studentIdColumn,homeworkMarkColumn,absenceColumn,finalMarkColumn,markColumn,gradePointColumn);
         scoreTable= new SearchableTableView(observableList,List.of("studentId"),columns);
 
         splitPane.getItems().add(scoreTable);

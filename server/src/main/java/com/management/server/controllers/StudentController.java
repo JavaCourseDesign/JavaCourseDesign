@@ -27,9 +27,7 @@ import java.nio.file.Paths;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
-import static com.management.client.util.NativePlaceUtil.getNativePlace;
-
-import static com.management.client.util.NativePlaceUtil.getNativePlace;
+import static com.management.server.util.NativePlaceUtil.getNativePlace;
 
 @RestController
 public class StudentController {
