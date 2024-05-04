@@ -106,70 +106,8 @@ public class LoginPage extends GridPane {
 
     private void changeScene() {
         Menu menu = new Menu();
-        MenuBar menuBar = new MenuBar();
-        javafx.scene.control.Menu menu1 = new javafx.scene.control.Menu("按钮");
-        MenuItem menuItem1 = new MenuItem("修改密码");
-        MenuItem menuItem2 = new MenuItem("退出登录");
-        menu1.getItems().addAll(menuItem1, menuItem2);
-        menuItem1.setOnAction(event -> {
-            Stage modifyPasswordStage=new Stage();
-            GridPane gridPane=new GridPane();
-            gridPane.getStylesheets().add("dark-theme.css");
-            gridPane.setAlignment(javafx.geometry.Pos.CENTER);
-            TextField oldPassword = new TextField();
-            TextField newPassword = new TextField();
-            TextField confirmPassword = new TextField();
-            JFXButton confirmButton = new JFXButton("确认");
-            JFXButton cancelButton = new JFXButton("取消");
-            confirmButton.setOnAction(event1 -> {
-                if (!newPassword.getText().equals(confirmPassword.getText())) {
-                    showAlert("两次输入的密码不一致", Alert.AlertType.ERROR);
-                    return;
-                }
-                if(oldPassword.getText().equals(newPassword.getText()))
-                {
-                    showAlert("新密码不能与旧密码相同", Alert.AlertType.ERROR);
-                    return;
-                }
-                Map<String, String> map = new HashMap<>();
-                map.put("oldPassword", oldPassword.getText());
-                map.put("newPassword", newPassword.getText());
-                DataResponse response = request("/modifyPassword", map);
-                showAlert(response.getMsg(), response.getCode() == 0 ? Alert.AlertType.INFORMATION : Alert.AlertType.ERROR);
-                if (response.getCode() == 0) {
-                    modifyPasswordStage.close();
-                }
-            });
-            cancelButton.setOnAction(event1 -> modifyPasswordStage.close());
-            gridPane.addColumn(0,new Label("旧密码"),new Label("新密码"),new Label("确认密码"),confirmButton);
-            gridPane.addColumn(1,oldPassword,newPassword,confirmPassword,cancelButton);
-            Scene scene=new Scene(gridPane, 300, 200);
-            modifyPasswordStage.setScene(scene);
-            modifyPasswordStage.show();
-        });
-        menuItem2.setOnAction(e->
-                {
-                    Stage stage = (Stage) menu.getParent().getScene().getWindow();
-                    stage.close();
-                    Stage newStage = new Stage();
-                    Scene scene = new Scene(new LoginPage(), 300, 400);
-                    newStage.setScene(scene);
-                    newStage.show();
-
-
-                    /*Stage stage = (Stage) menu.getParent().getScene().getWindow();
-                    Scene scene = new Scene(new LoginPage(), 300, 400);
-                    stage.setScene(scene);
-                    stage.show();*/
-                    //此方案loginpage的大小无法调整
-                }
-        );
-        menuBar.getMenus().addAll(menu1);
         Stage stage = (Stage) this.getScene().getWindow();
-        VBox vBox=new VBox();
-        vBox.getChildren().addAll(menuBar,menu);
-        VBox.setVgrow(menu, Priority.ALWAYS);
-        Scene scene = new Scene(vBox, 1400, 800);
+        Scene scene = new Scene(menu, 1400, 800);
         stage.setScene(scene);
         stage.setMaximized(true);
         stage.show();
