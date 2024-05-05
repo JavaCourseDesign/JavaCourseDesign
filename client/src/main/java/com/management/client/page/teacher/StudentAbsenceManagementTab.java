@@ -12,6 +12,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.MapValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import org.controlsfx.control.tableview2.FilteredTableColumn;
 
 import java.util.*;
 
@@ -167,13 +168,13 @@ public class StudentAbsenceManagementTab extends Tab {
         displayAbsences();
     }
     private void initializeTable() {
-        TableColumn<Map,String> studentColumn= new TableColumn<>("学生");
-        TableColumn<Map,String> studentIdColumn= new TableColumn<>("学生学号");
-        TableColumn<Map,String> offReasonColumn= new TableColumn<>("请假原因");
-        TableColumn<Map,String> lessonColumn= new TableColumn<>("请假课程");
-        TableColumn<Map,String> timeColumn= new TableColumn<>("请假时间");
-        TableColumn<Map,String> destinationColumn= new TableColumn<>("请假去向");
-        TableColumn<Map,String> statusColumn= new TableColumn<>("状态");
+        FilteredTableColumn<Map,String> studentColumn= new FilteredTableColumn<>("学生");
+        FilteredTableColumn<Map,String> studentIdColumn= new FilteredTableColumn<>("学生学号");
+        FilteredTableColumn<Map,String> offReasonColumn= new FilteredTableColumn<>("请假原因");
+        FilteredTableColumn<Map,String> lessonColumn= new FilteredTableColumn<>("请假课程");
+        FilteredTableColumn<Map,String> timeColumn= new FilteredTableColumn<>("请假时间");
+        FilteredTableColumn<Map,String> destinationColumn= new FilteredTableColumn<>("请假去向");
+        FilteredTableColumn<Map,String> statusColumn= new FilteredTableColumn<>("状态");
         studentColumn.setCellValueFactory(new MapValueFactory<>("studentName"));
         studentIdColumn.setCellValueFactory(new MapValueFactory<>("studentId"));
         lessonColumn.setCellValueFactory(new MapValueFactory<>("lessonName"));
@@ -198,7 +199,7 @@ public class StudentAbsenceManagementTab extends Tab {
             else
                 return new SimpleStringProperty("未通过");
         });
-        List<TableColumn<Map, ?>> columns = new ArrayList<>();
+        List<FilteredTableColumn<Map, ?>> columns = new ArrayList<>();
         columns.add(studentColumn);
         columns.add(lessonColumn);
         columns.add(studentIdColumn);

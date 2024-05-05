@@ -12,26 +12,26 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.*;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.kordamp.ikonli.javafx.FontIcon;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
 import static com.management.client.util.HttpClientUtil.request;
-import static com.management.client.util.HttpClientUtil.showAlert;
-import static org.kordamp.ikonli.fontawesome.FontAwesome.*;
+import static org.kordamp.ikonli.fontawesome.FontAwesome.ID_CARD;
 import static org.kordamp.ikonli.materialdesign2.MaterialDesignA.*;
 import static org.kordamp.ikonli.materialdesign2.MaterialDesignB.BOOK_OPEN_PAGE_VARIANT;
 import static org.kordamp.ikonli.materialdesign2.MaterialDesignB.BOOK_PLUS_MULTIPLE;
 import static org.kordamp.ikonli.materialdesign2.MaterialDesignF.FILE_DOCUMENT;
 import static org.kordamp.ikonli.materialdesign2.MaterialDesignL.LIGHTBULB_ON_OUTLINE;
-import static org.kordamp.ikonli.materialdesign2.MaterialDesignM.*;
+import static org.kordamp.ikonli.materialdesign2.MaterialDesignM.MEDAL;
+import static org.kordamp.ikonli.materialdesign2.MaterialDesignM.MENU;
 import static org.kordamp.ikonli.materialdesign2.MaterialDesignR.RUN;
 import static org.kordamp.ikonli.materialdesign2.MaterialDesignS.SCHOOL;
 
@@ -92,6 +92,13 @@ public class Menu extends AnchorPane {
         initializeLeftMenu();
         initializeIcons();
     }
+
+    @FXML
+    public void refresh()
+    {
+
+    }
+
     @FXML
     public void modifyPassword()
     {

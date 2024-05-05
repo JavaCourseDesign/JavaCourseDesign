@@ -7,7 +7,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
-import javafx.scene.control.TableColumn;
+import org.controlsfx.control.tableview2.FilteredTableColumn;
 import javafx.scene.control.cell.MapValueFactory;
 
 
@@ -46,10 +46,10 @@ class HonorTab extends Tab {
     }
     private void initializeTable()
     {
-        TableColumn<Map, String> nameColumn = new TableColumn<>("荣誉名称");
-        TableColumn<Map, String> timeColumn = new TableColumn<>("获得时间");
-        TableColumn<Map, String> departmentColumn = new TableColumn<>("颁奖部门");
-        TableColumn<Map, String> eventColumn = new TableColumn<>("获奖事件");
+        FilteredTableColumn<Map, String> nameColumn = new FilteredTableColumn<>("荣誉名称");
+        FilteredTableColumn<Map, String> timeColumn = new FilteredTableColumn<>("获得时间");
+        FilteredTableColumn<Map, String> departmentColumn = new FilteredTableColumn<>("颁奖部门");
+        FilteredTableColumn<Map, String> eventColumn = new FilteredTableColumn<>("获奖事件");
         eventColumn.setCellValueFactory(data->{
             if(data.getValue()!=null)
             {
@@ -63,7 +63,7 @@ class HonorTab extends Tab {
         timeColumn.setCellValueFactory(new MapValueFactory<>("awardDate"));
         departmentColumn.setCellValueFactory(new MapValueFactory<>("department"));
 
-        List<TableColumn<Map, ?>> columns = new ArrayList<>();
+        List<FilteredTableColumn<Map, ?>> columns = new ArrayList<>();
         columns.add(nameColumn);
         columns.add(timeColumn);
         columns.add(departmentColumn);
@@ -91,15 +91,15 @@ class FeeTab extends Tab{
     }
 
     private void initializeTable() {
-        TableColumn<Map,String> moneyColumn= new TableColumn<>("消费金额");
-        TableColumn<Map,String> timeColumn= new TableColumn<>("消费时间");
-        TableColumn<Map,String> goodsColumn= new TableColumn<>("商品");
-        TableColumn<Map,String> placeColumn= new TableColumn<>("消费地点");
+        FilteredTableColumn<Map,String> moneyColumn= new FilteredTableColumn<>("消费金额");
+        FilteredTableColumn<Map,String> timeColumn= new FilteredTableColumn<>("消费时间");
+        FilteredTableColumn<Map,String> goodsColumn= new FilteredTableColumn<>("商品");
+        FilteredTableColumn<Map,String> placeColumn= new FilteredTableColumn<>("消费地点");
         moneyColumn.setCellValueFactory(new MapValueFactory<>("money"));
         timeColumn.setCellValueFactory(new MapValueFactory<>("time"));
         goodsColumn.setCellValueFactory(new MapValueFactory<>("goods"));
         placeColumn.setCellValueFactory(new MapValueFactory<>("place"));
-        List<TableColumn<Map, ?>> columns = new ArrayList<>();
+        List<FilteredTableColumn<Map, ?>> columns = new ArrayList<>();
         columns.add(moneyColumn);
         columns.add(timeColumn);
         columns.add(goodsColumn);

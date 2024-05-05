@@ -7,6 +7,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.MapValueFactory;
 import javafx.scene.layout.VBox;
+import org.controlsfx.control.tableview2.FilteredTableColumn;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -43,13 +44,13 @@ public class ScoreManagementTab extends Tab {//成绩录入界面
     }
     public void initializeTable() {
         // Create columns
-        TableColumn<Map, String> studentIdColumn = new TableColumn<>("学号");
-        //TableColumn<Map, String> courseIdColumn = new TableColumn<>("课程号");
-        TableColumn<Map, String> homeworkMarkColumn = new TableColumn<>("作业成绩");
-        TableColumn<Map, String> absenceColumn = new TableColumn<>("出勤成绩");
-        TableColumn<Map, String> finalMarkColumn = new TableColumn<>("期末成绩");
-        TableColumn<Map, String> markColumn = new TableColumn<>("单科总成绩");
-        TableColumn<Map, String> gradePointColumn = new TableColumn<>("绩点");
+        FilteredTableColumn<Map, String> studentIdColumn = new FilteredTableColumn<>("学号");
+        //FilteredTableColumn<Map, String> courseIdColumn = new FilteredTableColumn<>("课程号");
+        FilteredTableColumn<Map, String> homeworkMarkColumn = new FilteredTableColumn<>("作业成绩");
+        FilteredTableColumn<Map, String> absenceColumn = new FilteredTableColumn<>("出勤成绩");
+        FilteredTableColumn<Map, String> finalMarkColumn = new FilteredTableColumn<>("期末成绩");
+        FilteredTableColumn<Map, String> markColumn = new FilteredTableColumn<>("单科总成绩");
+        FilteredTableColumn<Map, String> gradePointColumn = new FilteredTableColumn<>("绩点");
 
         // Set cell value factories
         studentIdColumn.setCellValueFactory(new MapValueFactory<>("student"));
@@ -68,7 +69,7 @@ public class ScoreManagementTab extends Tab {//成绩录入界面
         });
 
         // Add columns to table
-        List<TableColumn<Map,?>> columns= List.of(studentIdColumn,homeworkMarkColumn,absenceColumn,finalMarkColumn,markColumn,gradePointColumn);
+        List<FilteredTableColumn<Map,?>> columns= List.of(studentIdColumn,homeworkMarkColumn,absenceColumn,finalMarkColumn,markColumn,gradePointColumn);
         scoreTable= new SearchableTableView(observableList,List.of("studentId"),columns);
 
         splitPane.getItems().add(scoreTable);

@@ -13,6 +13,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.MapValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import org.controlsfx.control.tableview2.FilteredTableColumn;
 
 
 import java.util.*;
@@ -96,16 +97,16 @@ public class CourseManagementPage extends SplitPane {
     }
 
     private void initializeTable() {
-        TableColumn<Map, String> courseIdColumn = new TableColumn<>("课程号");
-        TableColumn<Map, String> courseNameColumn = new TableColumn<>("课程名");
-        TableColumn<Map, String> courseCreditColumn = new TableColumn<>("学分");
-        TableColumn<Map, String> courseTypeColumn = new TableColumn<>("类型");
-        TableColumn<Map, String> courseReferenceColumn = new TableColumn<>("参考资料");
-        TableColumn<Map, String> courseCapacityColumn = new TableColumn<>("课容量");
-        TableColumn<Map, String> preCourseColumn = new TableColumn<>("先修课程");
-        TableColumn<Map, String> teacherColumn = new TableColumn<>("教师");
-        TableColumn<Map, String> studentColumn = new TableColumn<>("学生数");
-        TableColumn<Map, String> availableColumn = new TableColumn<>("是否开放选课");
+        FilteredTableColumn<Map, String> courseIdColumn = new FilteredTableColumn<>("课程号");
+        FilteredTableColumn<Map, String> courseNameColumn = new FilteredTableColumn<>("课程名");
+        FilteredTableColumn<Map, String> courseCreditColumn = new FilteredTableColumn<>("学分");
+        FilteredTableColumn<Map, String> courseTypeColumn = new FilteredTableColumn<>("类型");
+        FilteredTableColumn<Map, String> courseReferenceColumn = new FilteredTableColumn<>("参考资料");
+        FilteredTableColumn<Map, String> courseCapacityColumn = new FilteredTableColumn<>("课容量");
+        FilteredTableColumn<Map, String> preCourseColumn = new FilteredTableColumn<>("先修课程");
+        FilteredTableColumn<Map, String> teacherColumn = new FilteredTableColumn<>("教师");
+        FilteredTableColumn<Map, String> studentColumn = new FilteredTableColumn<>("学生数");
+        FilteredTableColumn<Map, String> availableColumn = new FilteredTableColumn<>("是否开放选课");
 
         courseIdColumn.setCellValueFactory(new MapValueFactory<>("courseId"));
         courseNameColumn.setCellValueFactory(new MapValueFactory<>("name"));
@@ -168,7 +169,7 @@ public class CourseManagementPage extends SplitPane {
         });
 
 
-        List<TableColumn<Map,?>> columns = new ArrayList<>();
+        List<FilteredTableColumn<Map,?>> columns = new ArrayList<>();
         columns.addAll(List.of(courseIdColumn, courseNameColumn, courseCreditColumn,courseTypeColumn ,courseReferenceColumn, courseCapacityColumn,preCourseColumn ,teacherColumn, studentColumn, availableColumn));
         courseTable=new SearchableTableView(observableList, List.of("courseId","name","persons"), columns);
 

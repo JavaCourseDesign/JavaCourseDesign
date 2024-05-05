@@ -6,7 +6,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
+import org.controlsfx.control.tableview2.FilteredTableColumn;
 import javafx.scene.control.cell.MapValueFactory;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
@@ -104,18 +104,18 @@ public class StudentHomeworkPage extends VBox{
     }
 
     private void initializeTable() {
-        TableColumn<Map,String> courseNameColumn= new TableColumn<>("课程名称");
-        TableColumn<Map,String> homeworkContentColumn= new TableColumn<>("作业内容");
-        TableColumn<Map,String> deadlineColumn= new TableColumn<>("截止时间");
-        TableColumn<Map,String> submitTimeColumn= new TableColumn<>("提交时间");
-        TableColumn<Map,String> gradeColumn= new TableColumn<>("成绩");
+        FilteredTableColumn<Map,String> courseNameColumn= new FilteredTableColumn<>("课程名称");
+        FilteredTableColumn<Map,String> homeworkContentColumn= new FilteredTableColumn<>("作业内容");
+        FilteredTableColumn<Map,String> deadlineColumn= new FilteredTableColumn<>("截止时间");
+        FilteredTableColumn<Map,String> submitTimeColumn= new FilteredTableColumn<>("提交时间");
+        FilteredTableColumn<Map,String> gradeColumn= new FilteredTableColumn<>("成绩");
 
         courseNameColumn.setCellValueFactory(new MapValueFactory<>("courseName"));
         homeworkContentColumn.setCellValueFactory(new MapValueFactory<>("homeworkContent"));
         deadlineColumn.setCellValueFactory(new MapValueFactory<>("deadline"));
         submitTimeColumn.setCellValueFactory(new MapValueFactory<>("submitTime"));
         gradeColumn.setCellValueFactory(new MapValueFactory<>("grade"));
-        List<TableColumn<Map, ?>> columns = new ArrayList<>();
+        List<FilteredTableColumn<Map, ?>> columns = new ArrayList<>();
         columns.add(courseNameColumn);
         columns.add(homeworkContentColumn);
         columns.add(deadlineColumn);

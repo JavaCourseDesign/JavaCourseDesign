@@ -12,6 +12,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.MapValueFactory;
 import javafx.scene.layout.*;
 import javafx.stage.FileChooser;
+import org.controlsfx.control.tableview2.FilteredTableColumn;
 
 import java.io.File;
 import java.util.*;
@@ -198,13 +199,13 @@ class StudentAbsenceManagementTab extends Tab {
     }
 
     private void initializeTable() {
-        TableColumn<Map,String> studentColumn= new TableColumn<>("学生");
-        TableColumn<Map,String> studentIdColumn= new TableColumn<>("学生学号");
-        TableColumn<Map,String> eventColumn= new TableColumn<>("请假事件");
-        TableColumn<Map,String> offReasonColumn= new TableColumn<>("请假原因");
-        TableColumn<Map,String> timeColumn= new TableColumn<>("请假时间");
-        TableColumn<Map,String> destinationColumn= new TableColumn<>("请假去向");
-        TableColumn<Map,String> statusColumn= new TableColumn<>("状态");
+        FilteredTableColumn<Map,String> studentColumn= new FilteredTableColumn<>("学生");
+        FilteredTableColumn<Map,String> studentIdColumn= new FilteredTableColumn<>("学生学号");
+        FilteredTableColumn<Map,String> eventColumn= new FilteredTableColumn<>("请假事件");
+        FilteredTableColumn<Map,String> offReasonColumn= new FilteredTableColumn<>("请假原因");
+        FilteredTableColumn<Map,String> timeColumn= new FilteredTableColumn<>("请假时间");
+        FilteredTableColumn<Map,String> destinationColumn= new FilteredTableColumn<>("请假去向");
+        FilteredTableColumn<Map,String> statusColumn= new FilteredTableColumn<>("状态");
         studentColumn.setCellValueFactory(new MapValueFactory<>("studentName"));
         studentIdColumn.setCellValueFactory(new MapValueFactory<>("studentId"));
         offReasonColumn.setCellValueFactory(new MapValueFactory<>("offReason"));
@@ -229,7 +230,7 @@ class StudentAbsenceManagementTab extends Tab {
             else
                 return new SimpleStringProperty("未通过");
         });
-        List<TableColumn<Map, ?>> columns = new ArrayList<>();
+        List<FilteredTableColumn<Map, ?>> columns = new ArrayList<>();
         columns.add(studentColumn);
         columns.add(studentIdColumn);
         columns.add(eventColumn);
@@ -345,12 +346,12 @@ class StudentFeeManagementTab extends Tab{
         feeTable.setData(observableList);
     }
     private void initializeTable() {
-        TableColumn<Map,String> studentNameColumn= new TableColumn<>("学生姓名");
-        TableColumn<Map,String> studentIdColumn= new TableColumn<>("学生学号");
-        TableColumn<Map,String> moneyColumn= new TableColumn<>("消费金额");
-        TableColumn<Map,String> timeColumn= new TableColumn<>("消费时间");
-        TableColumn<Map,String> goodsColumn= new TableColumn<>("商品");
-        TableColumn<Map,String> placeColumn= new TableColumn<>("消费地点");
+        FilteredTableColumn<Map,String> studentNameColumn= new FilteredTableColumn<>("学生姓名");
+        FilteredTableColumn<Map,String> studentIdColumn= new FilteredTableColumn<>("学生学号");
+        FilteredTableColumn<Map,String> moneyColumn= new FilteredTableColumn<>("消费金额");
+        FilteredTableColumn<Map,String> timeColumn= new FilteredTableColumn<>("消费时间");
+        FilteredTableColumn<Map,String> goodsColumn= new FilteredTableColumn<>("商品");
+        FilteredTableColumn<Map,String> placeColumn= new FilteredTableColumn<>("消费地点");
 
         studentNameColumn.setCellValueFactory(new MapValueFactory<>("name"));
         studentIdColumn.setCellValueFactory(new MapValueFactory<>("studentId"));
@@ -358,7 +359,7 @@ class StudentFeeManagementTab extends Tab{
         timeColumn.setCellValueFactory(new MapValueFactory<>("time"));
         goodsColumn.setCellValueFactory(new MapValueFactory<>("goods"));
         placeColumn.setCellValueFactory(new MapValueFactory<>("place"));
-        List<TableColumn<Map, ?>> columns = new ArrayList<>();
+        List<FilteredTableColumn<Map, ?>> columns = new ArrayList<>();
         columns.add(studentNameColumn);
         columns.add(studentIdColumn);
         columns.add(moneyColumn);

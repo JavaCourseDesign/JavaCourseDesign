@@ -7,6 +7,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.MapValueFactory;
 import javafx.scene.layout.VBox;
+import org.controlsfx.control.tableview2.FilteredTableColumn;
 
 import java.util.*;
 
@@ -43,17 +44,17 @@ public class TeacherManagementPage extends SplitPane {
 
     private void initializeTable() {
 
-        TableColumn<Map, String> teacherIdColumn = new TableColumn<>("教师号");
-        TableColumn<Map, String> teacherNameColumn = new TableColumn<>("姓名");
-        TableColumn<Map, String> teacherGenderColumn = new TableColumn<>("性别");
-        TableColumn<Map, String> teacherTitleColumn = new TableColumn<>("职称");
+        FilteredTableColumn<Map, String> teacherIdColumn = new FilteredTableColumn<>("教师号");
+        FilteredTableColumn<Map, String> teacherNameColumn = new FilteredTableColumn<>("姓名");
+        FilteredTableColumn<Map, String> teacherGenderColumn = new FilteredTableColumn<>("性别");
+        FilteredTableColumn<Map, String> teacherTitleColumn = new FilteredTableColumn<>("职称");
 
         teacherIdColumn.setCellValueFactory(new MapValueFactory<>("teacherId"));
         teacherNameColumn.setCellValueFactory(new MapValueFactory<>("name"));
         teacherGenderColumn.setCellValueFactory(new MapValueFactory<>("gender"));
         teacherTitleColumn.setCellValueFactory(new MapValueFactory<>("title"));
 
-        List<TableColumn<Map, ?>> columns = new ArrayList<>();
+        List<FilteredTableColumn<Map, ?>> columns = new ArrayList<>();
         columns.addAll(List.of(teacherIdColumn, teacherNameColumn, teacherGenderColumn, teacherTitleColumn));
 
         teacherTable = new SearchableTableView(observableList, List.of("teacherId","name"), columns);

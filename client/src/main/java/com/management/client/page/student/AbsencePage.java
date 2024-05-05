@@ -11,6 +11,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.MapValueFactory;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import org.controlsfx.control.tableview2.FilteredTableColumn;
 
 import java.util.*;
 
@@ -75,11 +76,11 @@ public class AbsencePage extends SplitPane {
     }
 
     private void initializeTable() {
-        TableColumn<Map, String> offReasonColumn = new TableColumn<>("请假原因");
-        TableColumn<Map, String> eventColumn = new TableColumn<>("请假事件");
-        TableColumn<Map, String> timeColumn = new TableColumn<>("请假时间");
-        TableColumn<Map, String> destinationColumn = new TableColumn<>("请假去向");
-        TableColumn<Map, String> statusColumn = new TableColumn<>("状态");
+        FilteredTableColumn<Map, String> offReasonColumn = new FilteredTableColumn<>("请假原因");
+        FilteredTableColumn<Map, String> eventColumn = new FilteredTableColumn<>("请假事件");
+        FilteredTableColumn<Map, String> timeColumn = new FilteredTableColumn<>("请假时间");
+        FilteredTableColumn<Map, String> destinationColumn = new FilteredTableColumn<>("请假去向");
+        FilteredTableColumn<Map, String> statusColumn = new FilteredTableColumn<>("状态");
         offReasonColumn.setCellValueFactory(new MapValueFactory<>("offReason"));
         eventColumn.setCellValueFactory(data -> {
             System.out.println(data.getValue());
@@ -109,7 +110,7 @@ public class AbsencePage extends SplitPane {
             else
                 return new SimpleStringProperty("未通过");
         });
-        List<TableColumn<Map, ?>> columns = new ArrayList<>();
+        List<FilteredTableColumn<Map, ?>> columns = new ArrayList<>();
         columns.add(offReasonColumn);
         columns.add(eventColumn);
         columns.add(timeColumn);
