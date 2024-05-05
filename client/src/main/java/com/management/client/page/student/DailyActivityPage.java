@@ -4,7 +4,7 @@ import com.management.client.customComponents.SearchableTableView;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.SplitPane;
-import javafx.scene.control.TableColumn;
+import org.controlsfx.control.tableview2.FilteredTableColumn;
 import javafx.scene.control.cell.MapValueFactory;
 
 import java.util.ArrayList;
@@ -30,16 +30,16 @@ public class DailyActivityPage extends SplitPane {
     }
 
     private void initializeTable() {
-        TableColumn<Map, String> nameColumn = new TableColumn<>("活动名称");
-        TableColumn<Map, String> typeColumn = new TableColumn<>("活动类型");
-        TableColumn<Map, String> timeColumn = new TableColumn<>("活动时间");
-        TableColumn<Map, String> locationColumn = new TableColumn<>("活动地点");
+        FilteredTableColumn<Map, String> nameColumn = new FilteredTableColumn<>("活动名称");
+        FilteredTableColumn<Map, String> typeColumn = new FilteredTableColumn<>("活动类型");
+        FilteredTableColumn<Map, String> timeColumn = new FilteredTableColumn<>("活动时间");
+        FilteredTableColumn<Map, String> locationColumn = new FilteredTableColumn<>("活动地点");
         nameColumn.setCellValueFactory(new MapValueFactory<>("name"));
         typeColumn.setCellValueFactory(new MapValueFactory<>("type"));
         timeColumn.setCellValueFactory(new MapValueFactory<>("startDate"));
         locationColumn.setCellValueFactory(new MapValueFactory<>("location"));
 
-        List<TableColumn<Map, ?>> columns = new ArrayList<>();
+        List<FilteredTableColumn<Map, ?>> columns = new ArrayList<>();
         columns.add(nameColumn);
         columns.add(typeColumn);
         columns.add(timeColumn);

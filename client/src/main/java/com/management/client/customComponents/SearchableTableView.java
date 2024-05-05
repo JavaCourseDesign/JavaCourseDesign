@@ -1,14 +1,20 @@
 package com.management.client.customComponents;
 
 import com.jfoenix.controls.JFXTextField;
+import impl.org.controlsfx.tableview2.filter.parser.string.StringParser;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.scene.control.SelectionMode;
-import javafx.scene.control.TableColumn;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.util.StringConverter;
+import org.controlsfx.control.tableview2.FilteredTableColumn;
 import org.controlsfx.control.tableview2.FilteredTableView;
+import org.controlsfx.control.tableview2.filter.parser.Parser;
+import org.controlsfx.control.tableview2.filter.popupfilter.PopupFilter;
 
 import java.util.List;
 import java.util.Map;
@@ -24,15 +30,23 @@ public class SearchableTableView extends VBox {
     private HBox searchFieldContainer = new HBox(searchField,filterPanel);
 
 
-    public SearchableTableView(ObservableList<Map> data, List<String> searchableFields, List<TableColumn<Map, ?>> columns) {
+    public SearchableTableView(ObservableList<Map> data, List<String> searchableFields, List<FilteredTableColumn<Map,?>> columns) {
         this.data = data;
         this.searchableFields = searchableFields;
         setupTableView(columns);
         setupSearchField();
     }
 
-    private void setupTableView(List<TableColumn<Map, ?>> columns) {
+    private void setupTableView(List<FilteredTableColumn<Map,?>> columns) {
         tableView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+
+        for (FilteredTableColumn<Map,?> column : columns) {
+            PopupFilter<Map, ?> popupFilter = new PopupContainsFilter<>(column);
+            column.setOnFilterAction(event -> {
+                popupFilter.showPopup();
+            });
+        }
+
         tableView.getColumns().addAll(columns);
 
         FilteredList<Map> filteredData = new FilteredList<>(data, p -> true);
@@ -119,5 +133,61 @@ public class SearchableTableView extends VBox {
     public void setFilterPanel(HBox filterPanel) {
         this.filterPanel = filterPanel;
         searchFieldContainer.getChildren().set(1,filterPanel);
+    }
+}
+
+class PopupContainsFilter<S, T> extends PopupFilter<S, T> {
+
+    private final StringParser<T> stringParser;
+
+    public PopupContainsFilter(FilteredTableColumn<S, T> tableColumn) {
+        super(tableColumn);
+        stringParser = new StringParser<>(false, getConverter());
+
+        tableColumn.widthProperty().addListener((obs, oldWidth, newWidth) -> {
+            // Set the width of the popup to be the same as the width of the tableColumn
+            setWidth(newWidth.doubleValue());
+        });
+
+        text.addListener((obs, ov, nv) -> {
+            if (nv == null || nv.isEmpty()) {
+                tableColumn.setPredicate(null);
+            } else {
+                tableColumn.setPredicate(item -> item != null && item.toString().contains(nv));
+            }
+        });
+    }
+
+    @Override
+    public List<String> getOperations() {
+        return List.of();
+    }
+
+    @Override
+    public Parser<T> getParser() {
+        return stringParser;
+    }
+
+    // --- string converter
+    private final ObjectProperty<StringConverter<T>> converter = new SimpleObjectProperty<StringConverter<T>>(this, "converter", defaultStringConverter()) {
+        @Override
+        protected void invalidated() {
+            stringParser.setConverter(get());
+        }
+    };
+    public final ObjectProperty<StringConverter<T>> converterProperty() { return converter; }
+    public final void setConverter(StringConverter<T> value) { converterProperty().set(value); }
+    public final StringConverter<T> getConverter() { return converterProperty().get(); }
+
+    private static <T> StringConverter<T> defaultStringConverter() {
+        return new StringConverter<T>() {
+            @Override public String toString(T t) {
+                return t == null ? null : t.toString();
+            }
+
+            @Override public T fromString(String string) {
+                return (T) string;
+            }
+        };
     }
 }

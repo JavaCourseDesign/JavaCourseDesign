@@ -5,7 +5,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.TabPane;
-import javafx.scene.control.TableColumn;
+import org.controlsfx.control.tableview2.FilteredTableColumn;
 import javafx.scene.control.cell.MapValueFactory;
 
 import java.util.ArrayList;
@@ -31,13 +31,13 @@ public class StudentCourseMenuPage extends SplitPane {
     }
 
     private void initializeTable() {
-        TableColumn<Map, String> courseIdColumn = new TableColumn<>("课程号");
-        TableColumn<Map, String> courseNameColumn = new TableColumn<>("课程名");
+        FilteredTableColumn<Map, String> courseIdColumn = new FilteredTableColumn<>("课程号");
+        FilteredTableColumn<Map, String> courseNameColumn = new FilteredTableColumn<>("课程名");
 
         courseIdColumn.setCellValueFactory(new MapValueFactory<>("courseId"));
         courseNameColumn.setCellValueFactory(new MapValueFactory<>("name"));
 
-        List<TableColumn<Map,?>> columns = new ArrayList<>();
+        List<FilteredTableColumn<Map,?>> columns = new ArrayList<>();
         columns.addAll(List.of(courseIdColumn, courseNameColumn));
         courseTable=new SearchableTableView(observableList, List.of("courseId","name"), columns);
 

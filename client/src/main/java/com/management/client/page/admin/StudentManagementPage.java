@@ -1,17 +1,19 @@
 package com.management.client.page.admin;
 
 import com.management.client.customComponents.SearchableTableView;
-import com.management.client.request.DataResponse;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.control.*;
+import javafx.scene.control.SplitPane;
 import javafx.scene.control.cell.MapValueFactory;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+import org.controlsfx.control.tableview2.FilteredTableColumn;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
-import static com.management.client.util.HttpClientUtil.*;
+import static com.management.client.util.HttpClientUtil.request;
 
 public class StudentManagementPage extends SplitPane {
     private SearchableTableView studentTable;
@@ -64,17 +66,17 @@ public class StudentManagementPage extends SplitPane {
 
     private void initializeTable() {
         // Create columns
-        TableColumn<Map, String> studentNameColumn = new TableColumn<>("姓名");
-        TableColumn<Map, String> idCardNumColumn = new TableColumn<>("身份证号");
-        TableColumn<Map, String> studentGenderColumn = new TableColumn<>("性别");
-        TableColumn<Map, String> studentBirthdayColumn = new TableColumn<>("生日");
-        TableColumn<Map, String> studentHomeTownColumn = new TableColumn<>("籍贯");
-        TableColumn<Map, String> studentIdColumn = new TableColumn<>("学号");
-        TableColumn<Map, String> studentDeptColumn = new TableColumn<>("系别");
-        TableColumn<Map, String> studentSocialColumn = new TableColumn<>("政治面貌");
-        TableColumn<Map, String> studentMajorColumn = new TableColumn<>("专业");
-        TableColumn<Map, String> studentHighSchoolColumn = new TableColumn<>("毕业高中");
-        TableColumn<Map, String> studentAddressColumn = new TableColumn<>("地址");
+        FilteredTableColumn<Map, String> studentNameColumn = new FilteredTableColumn<>("姓名");
+        FilteredTableColumn<Map, String> idCardNumColumn = new FilteredTableColumn<>("身份证号");
+        FilteredTableColumn<Map, String> studentGenderColumn = new FilteredTableColumn<>("性别");
+        FilteredTableColumn<Map, String> studentBirthdayColumn = new FilteredTableColumn<>("生日");
+        FilteredTableColumn<Map, String> studentHomeTownColumn = new FilteredTableColumn<>("籍贯");
+        FilteredTableColumn<Map, String> studentIdColumn = new FilteredTableColumn<>("学号");
+        FilteredTableColumn<Map, String> studentDeptColumn = new FilteredTableColumn<>("系别");
+        FilteredTableColumn<Map, String> studentSocialColumn = new FilteredTableColumn<>("政治面貌");
+        FilteredTableColumn<Map, String> studentMajorColumn = new FilteredTableColumn<>("专业");
+        FilteredTableColumn<Map, String> studentHighSchoolColumn = new FilteredTableColumn<>("毕业高中");
+        FilteredTableColumn<Map, String> studentAddressColumn = new FilteredTableColumn<>("地址");
 
 
         // Set cell value factories
@@ -90,9 +92,35 @@ public class StudentManagementPage extends SplitPane {
         studentHighSchoolColumn.setCellValueFactory(new MapValueFactory<>("highSchool"));
         studentAddressColumn.setCellValueFactory(new MapValueFactory<>("address"));
 
+        /*PopupFilter<Map,String> studentNameFilter = new PopupContainsFilter<>(studentNameColumn);
+        PopupFilter<Map,String> idCardNumFilter = new PopupContainsFilter<>(idCardNumColumn);
+        PopupFilter<Map,String> studentGenderFilter = new PopupContainsFilter<>(studentGenderColumn);
+        PopupFilter<Map,String> studentBirthdayFilter = new PopupContainsFilter<>(studentBirthdayColumn);
+        PopupFilter<Map,String> studentHomeTownFilter = new PopupContainsFilter<>(studentHomeTownColumn);
+        PopupFilter<Map,String> studentIdFilter = new PopupContainsFilter<>(studentIdColumn);
+        PopupFilter<Map,String> studentDeptFilter = new PopupContainsFilter<>(studentDeptColumn);
+        PopupFilter<Map,String> studentSocialFilter = new PopupContainsFilter<>(studentSocialColumn);
+        PopupFilter<Map,String> studentMajorFilter = new PopupContainsFilter<>(studentMajorColumn);
+        PopupFilter<Map,String> studentHighSchoolFilter = new PopupContainsFilter<>(studentHighSchoolColumn);
+        PopupFilter<Map,String> studentAddressFilter = new PopupContainsFilter<>(studentAddressColumn);
+
+
+
+        studentNameColumn.setOnFilterAction(e -> studentNameFilter.showPopup());
+        idCardNumColumn.setOnFilterAction(e -> idCardNumFilter.showPopup());
+        studentGenderColumn.setOnFilterAction(e -> studentGenderFilter.showPopup());
+        studentBirthdayColumn.setOnFilterAction(e -> studentBirthdayFilter.showPopup());
+        studentHomeTownColumn.setOnFilterAction(e -> studentHomeTownFilter.showPopup());
+        studentIdColumn.setOnFilterAction(e -> studentIdFilter.showPopup());
+        studentDeptColumn.setOnFilterAction(e -> studentDeptFilter.showPopup());
+        studentSocialColumn.setOnFilterAction(e -> studentSocialFilter.showPopup());
+        studentMajorColumn.setOnFilterAction(e -> studentMajorFilter.showPopup());
+        studentHighSchoolColumn.setOnFilterAction(e -> studentHighSchoolFilter.showPopup());
+        studentAddressColumn.setOnFilterAction(e -> studentAddressFilter.showPopup());*/
+
 
         // Create a list of columns
-        List<TableColumn<Map, ?>> columns = new ArrayList<>(List.of(studentNameColumn, idCardNumColumn, studentGenderColumn, studentBirthdayColumn, studentHomeTownColumn, studentIdColumn, studentDeptColumn, studentSocialColumn, studentMajorColumn, studentHighSchoolColumn, studentAddressColumn));
+        List<FilteredTableColumn<Map, ?>> columns = new ArrayList<>(List.of(studentNameColumn, idCardNumColumn, studentGenderColumn, studentBirthdayColumn, studentHomeTownColumn, studentIdColumn, studentDeptColumn, studentSocialColumn, studentMajorColumn, studentHighSchoolColumn, studentAddressColumn));
         // Initialize the SearchableTableViewForMap
         studentTable = new SearchableTableView(observableList, List.of("studentId","name"), columns);
 
@@ -118,79 +146,5 @@ public class StudentManagementPage extends SplitPane {
         //System.out.println(observableList);
     }
 
-    /*private void addStudent() {
-        Map m=newMapFromFields(new HashMap<>());
-        System.out.println(m);
-        DataResponse r=request("/addStudent",m);
-        displayStudents();
-        if(r.getCode()==-1)
-        {
-            Alert alert=new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("警告");
-            alert.setContentText(r.getMsg());
-            alert.showAndWait();
-        }
-        else
-        {
-            Alert alert=new Alert(Alert.AlertType.INFORMATION);
-            alert.setContentText(r.getMsg());
-            alert.showAndWait();
-        }
-    }
-
-    private void deleteStudent() {
-        Map m = studentTable.getSelectedItem();
-        if(m==null)
-        {
-            Alert alert=new Alert(Alert.AlertType.INFORMATION);
-            alert.setContentText("未选择，无法删除");
-            alert.showAndWait();
-        }
-        else
-        {
-            Alert alert=new Alert(Alert.AlertType.CONFIRMATION, "确定要删除吗？");
-            alert.setTitle("警告");
-            Optional<ButtonType> result=alert.showAndWait();
-            if(result.get()==ButtonType.OK)
-            {
-                DataResponse r=request("/deleteStudent",m);
-
-                displayStudents();
-
-                if(r.getCode()==0)
-                {
-                    Alert alert1=new Alert(Alert.AlertType.INFORMATION);
-                    alert1.setContentText("删除成功");
-                    alert1.showAndWait();
-                }
-            }
-        }
-    }
-
-    private void updateStudent() {
-        Map selected = studentTable.getSelectedItem();
-        if(selected==null)
-        {
-            Alert alert=new Alert(Alert.AlertType.INFORMATION);
-            alert.setContentText("未选择，无法更新");
-            alert.showAndWait();
-            return;
-        }
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "确定要更新吗？");
-        alert.setTitle("警告");
-        Optional<ButtonType> result=alert.showAndWait();
-        if(result.get()==ButtonType.OK)
-        {
-            DataResponse r=request("/updateStudent",newMapFromFields(selected));
-
-            displayStudents();
-
-            if(r.getCode()==0)
-            {
-                Alert alert1=new Alert(Alert.AlertType.INFORMATION);
-                alert1.setContentText("更新成功");
-                alert1.showAndWait();
-            }
-        }
-    }*/
 }
+

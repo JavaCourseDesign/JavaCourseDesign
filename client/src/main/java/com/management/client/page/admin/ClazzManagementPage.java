@@ -8,6 +8,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.MapValueFactory;
 import javafx.scene.layout.VBox;
+import org.controlsfx.control.tableview2.FilteredTableColumn;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -46,12 +47,12 @@ public class ClazzManagementPage extends SplitPane {
     }
 
     private void initializeTable() {
-        TableColumn<Map, String> clazzIdColumn = new TableColumn<>("班级ID");
-        TableColumn<Map, String> clazzNameColumn = new TableColumn<>("班级名");
-        TableColumn<Map, String> clazzMajorColumn = new TableColumn<>("专业");
-        TableColumn<Map, String> clazzGradeColumn = new TableColumn<>("年级");
-        TableColumn<Map, String> clazzStudentsColumn = new TableColumn<>("学生");
-        TableColumn<Map, String> clazzNumberColumn = new TableColumn<>("班级号");
+        FilteredTableColumn<Map, String> clazzIdColumn = new FilteredTableColumn<>("班级ID");
+        FilteredTableColumn<Map, String> clazzNameColumn = new FilteredTableColumn<>("班级名");
+        FilteredTableColumn<Map, String> clazzMajorColumn = new FilteredTableColumn<>("专业");
+        FilteredTableColumn<Map, String> clazzGradeColumn = new FilteredTableColumn<>("年级");
+        FilteredTableColumn<Map, String> clazzStudentsColumn = new FilteredTableColumn<>("学生");
+        FilteredTableColumn<Map, String> clazzNumberColumn = new FilteredTableColumn<>("班级号");
 
         clazzIdColumn.setCellValueFactory(new MapValueFactory<>("clazzId"));
         clazzMajorColumn.setCellValueFactory(new MapValueFactory<>("major"));
@@ -73,7 +74,7 @@ public class ClazzManagementPage extends SplitPane {
             return new SimpleStringProperty(personNames);
         });
 
-        List<TableColumn<Map, ?>> columns = new ArrayList<>();
+        List<FilteredTableColumn<Map, ?>> columns = new ArrayList<>();
         columns.addAll(List.of(clazzIdColumn, clazzMajorColumn, clazzGradeColumn, clazzNumberColumn, clazzNameColumn, clazzStudentsColumn)) ;
 
         clazzTable = new SearchableTableView(observableList, List.of("clazzNumber","name"), columns);

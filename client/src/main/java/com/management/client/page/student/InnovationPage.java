@@ -4,7 +4,7 @@ import com.management.client.customComponents.SearchableTableView;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.SplitPane;
-import javafx.scene.control.TableColumn;
+import org.controlsfx.control.tableview2.FilteredTableColumn;
 import javafx.scene.control.cell.MapValueFactory;
 
 import java.util.ArrayList;
@@ -29,11 +29,11 @@ public class InnovationPage extends SplitPane {
     }
 
     private void initializeTable() {
-        TableColumn<Map, String> nameColumn = new TableColumn<>("项目名称");
-        TableColumn<Map, String> typeColumn = new TableColumn<>("项目类型");
-        TableColumn<Map, String> timeColumn = new TableColumn<>("时间");
-        TableColumn<Map, String> locationColumn = new TableColumn<>("地点");
-        TableColumn<Map, String> performanceColumn = new TableColumn<>("评价");
+        FilteredTableColumn<Map, String> nameColumn = new FilteredTableColumn<>("项目名称");
+        FilteredTableColumn<Map, String> typeColumn = new FilteredTableColumn<>("项目类型");
+        FilteredTableColumn<Map, String> timeColumn = new FilteredTableColumn<>("时间");
+        FilteredTableColumn<Map, String> locationColumn = new FilteredTableColumn<>("地点");
+        FilteredTableColumn<Map, String> performanceColumn = new FilteredTableColumn<>("评价");
         nameColumn.setCellValueFactory(new MapValueFactory<>("name"));
         typeColumn.setCellValueFactory(new MapValueFactory<>("type"));
         timeColumn.setCellValueFactory(new MapValueFactory<>("startDate"));
@@ -41,7 +41,7 @@ public class InnovationPage extends SplitPane {
         performanceColumn.setCellValueFactory(new MapValueFactory<>("performance"));
 
 
-        List<TableColumn<Map, ?>> columns = new ArrayList<>();
+        List<FilteredTableColumn<Map, ?>> columns = new ArrayList<>();
         columns.add(nameColumn);
         columns.add(typeColumn);
         columns.add(timeColumn);

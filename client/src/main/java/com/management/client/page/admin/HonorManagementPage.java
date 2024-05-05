@@ -12,6 +12,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.MapValueFactory;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+import org.controlsfx.control.tableview2.FilteredTableColumn;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -234,10 +235,10 @@ public class HonorManagementPage extends SplitPane {
     }
 
     private void initializeTable(){
-        TableColumn<Map, String> nameColumn = new TableColumn<>("荣誉名称");
-        TableColumn<Map, String> awardDateColumn = new TableColumn<>("颁奖时间");
-        TableColumn<Map, String> departmentColumn = new TableColumn<>("颁奖部门");
-        TableColumn<Map, String> eventColumn = new TableColumn<>("获奖事件");
+        FilteredTableColumn<Map, String> nameColumn = new FilteredTableColumn<>("荣誉名称");
+        FilteredTableColumn<Map, String> awardDateColumn = new FilteredTableColumn<>("颁奖时间");
+        FilteredTableColumn<Map, String> departmentColumn = new FilteredTableColumn<>("颁奖部门");
+        FilteredTableColumn<Map, String> eventColumn = new FilteredTableColumn<>("获奖事件");
         nameColumn.setCellValueFactory(new MapValueFactory<>("name"));
         awardDateColumn.setCellValueFactory(new MapValueFactory<>("awardDate"));
         departmentColumn.setCellValueFactory(new MapValueFactory<>("department"));
@@ -248,7 +249,7 @@ public class HonorManagementPage extends SplitPane {
             String name=(String) event.get("name");
             return new SimpleStringProperty(name);
         });
-        List<TableColumn<Map, ?>> columns = new ArrayList<>();
+        List<FilteredTableColumn<Map, ?>> columns = new ArrayList<>();
         columns.add(nameColumn);
         columns.add(awardDateColumn);
         columns.add(departmentColumn);
@@ -258,8 +259,8 @@ public class HonorManagementPage extends SplitPane {
     }
     private void initializeStudentTable()
     {
-        TableColumn<Map, String> nameColumn = new TableColumn<>("学生姓名");
-        TableColumn<Map, String> studentIdColumn = new TableColumn<>("学号");
+        FilteredTableColumn<Map, String> nameColumn = new FilteredTableColumn<>("学生姓名");
+        FilteredTableColumn<Map, String> studentIdColumn = new FilteredTableColumn<>("学号");
         nameColumn.setCellValueFactory(new MapValueFactory<>("name"));
         studentIdColumn.setCellValueFactory(new MapValueFactory<>("studentId"));
         studentTable.getColumns().addAll(nameColumn,studentIdColumn);

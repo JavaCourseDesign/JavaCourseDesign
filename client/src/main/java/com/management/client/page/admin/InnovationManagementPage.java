@@ -11,8 +11,8 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.MapValueFactory;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+import org.controlsfx.control.tableview2.FilteredTableColumn;
 
-import java.time.LocalDate;
 import java.util.*;
 
 import static com.management.client.util.HttpClientUtil.request;
@@ -222,9 +222,9 @@ public class InnovationManagementPage extends SplitPane {
     }
     private void initializeStudentTable()
     {
-        TableColumn<Map, String> nameColumn = new TableColumn<>("学生姓名");
-        TableColumn<Map, String> studentIdColumn = new TableColumn<>("学号");
-        TableColumn<Map,String> performanceColumn=new TableColumn<>("评价");
+        FilteredTableColumn<Map, String> nameColumn = new FilteredTableColumn<>("学生姓名");
+        FilteredTableColumn<Map, String> studentIdColumn = new FilteredTableColumn<>("学号");
+        FilteredTableColumn<Map,String> performanceColumn=new FilteredTableColumn<>("评价");
         nameColumn.setCellValueFactory(new MapValueFactory<>("name"));
         studentIdColumn.setCellValueFactory(new MapValueFactory<>("studentId"));
         performanceColumn.setCellValueFactory(new MapValueFactory<>("performance"));
@@ -233,10 +233,10 @@ public class InnovationManagementPage extends SplitPane {
 
     private void initializeTable()
     {
-        TableColumn<Map, String> nameColumn = new TableColumn<>("项目名称");
-        TableColumn<Map, String> typeColumn = new TableColumn<>("项目类型");
-        TableColumn<Map, String> timeColumn = new TableColumn<>("时间");
-        TableColumn<Map, String> locationColumn = new TableColumn<>("地点");
+        FilteredTableColumn<Map, String> nameColumn = new FilteredTableColumn<>("项目名称");
+        FilteredTableColumn<Map, String> typeColumn = new FilteredTableColumn<>("项目类型");
+        FilteredTableColumn<Map, String> timeColumn = new FilteredTableColumn<>("时间");
+        FilteredTableColumn<Map, String> locationColumn = new FilteredTableColumn<>("地点");
         nameColumn.setCellValueFactory(new MapValueFactory<>("name"));
         typeColumn.setCellValueFactory(new MapValueFactory<>("type"));
         timeColumn.setCellValueFactory(data ->
@@ -250,7 +250,7 @@ public class InnovationManagementPage extends SplitPane {
         locationColumn.setCellValueFactory(new MapValueFactory<>("location"));
 
         //搜索使用
-        List<TableColumn<Map, ?>> columns = new ArrayList<>();
+        List<FilteredTableColumn<Map, ?>> columns = new ArrayList<>();
         columns.add(nameColumn);
         columns.add(typeColumn);
         columns.add(timeColumn);
