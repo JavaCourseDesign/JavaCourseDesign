@@ -1,19 +1,13 @@
 package com.management.client.page.admin;
 
 import com.management.client.customComponents.SearchableTableView;
-import impl.org.controlsfx.tableview2.filter.parser.string.StringParser;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.cell.MapValueFactory;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
-import javafx.util.StringConverter;
 import org.controlsfx.control.tableview2.FilteredTableColumn;
-import org.controlsfx.control.tableview2.filter.parser.Parser;
-import org.controlsfx.control.tableview2.filter.popupfilter.PopupFilter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -98,7 +92,7 @@ public class StudentManagementPage extends SplitPane {
         studentHighSchoolColumn.setCellValueFactory(new MapValueFactory<>("highSchool"));
         studentAddressColumn.setCellValueFactory(new MapValueFactory<>("address"));
 
-        PopupFilter<Map,String> studentNameFilter = new PopupContainsFilter<>(studentNameColumn);
+        /*PopupFilter<Map,String> studentNameFilter = new PopupContainsFilter<>(studentNameColumn);
         PopupFilter<Map,String> idCardNumFilter = new PopupContainsFilter<>(idCardNumColumn);
         PopupFilter<Map,String> studentGenderFilter = new PopupContainsFilter<>(studentGenderColumn);
         PopupFilter<Map,String> studentBirthdayFilter = new PopupContainsFilter<>(studentBirthdayColumn);
@@ -122,7 +116,7 @@ public class StudentManagementPage extends SplitPane {
         studentSocialColumn.setOnFilterAction(e -> studentSocialFilter.showPopup());
         studentMajorColumn.setOnFilterAction(e -> studentMajorFilter.showPopup());
         studentHighSchoolColumn.setOnFilterAction(e -> studentHighSchoolFilter.showPopup());
-        studentAddressColumn.setOnFilterAction(e -> studentAddressFilter.showPopup());
+        studentAddressColumn.setOnFilterAction(e -> studentAddressFilter.showPopup());*/
 
 
         // Create a list of columns
@@ -154,58 +148,3 @@ public class StudentManagementPage extends SplitPane {
 
 }
 
-class PopupContainsFilter<S, T> extends PopupFilter<S, T> {
-
-    private final StringParser<T> stringParser;
-
-    public PopupContainsFilter(FilteredTableColumn<S, T> tableColumn) {
-        super(tableColumn);
-        stringParser = new StringParser<>(false, getConverter());
-
-        tableColumn.widthProperty().addListener((obs, oldWidth, newWidth) -> {
-            // Set the width of the popup to be the same as the width of the tableColumn
-            setWidth(newWidth.doubleValue());
-        });
-
-        text.addListener((obs, ov, nv) -> {
-            if (nv == null || nv.isEmpty()) {
-                tableColumn.setPredicate(null);
-            } else {
-                tableColumn.setPredicate(item -> item != null && item.toString().contains(nv));
-            }
-        });
-    }
-
-    @Override
-    public List<String> getOperations() {
-        return List.of();
-    }
-
-    @Override
-    public Parser<T> getParser() {
-        return stringParser;
-    }
-
-    // --- string converter
-    private final ObjectProperty<StringConverter<T>> converter = new SimpleObjectProperty<StringConverter<T>>(this, "converter", defaultStringConverter()) {
-        @Override
-        protected void invalidated() {
-            stringParser.setConverter(get());
-        }
-    };
-    public final ObjectProperty<StringConverter<T>> converterProperty() { return converter; }
-    public final void setConverter(StringConverter<T> value) { converterProperty().set(value); }
-    public final StringConverter<T> getConverter() { return converterProperty().get(); }
-
-    private static <T> StringConverter<T> defaultStringConverter() {
-        return new StringConverter<T>() {
-            @Override public String toString(T t) {
-                return t == null ? null : t.toString();
-            }
-
-            @Override public T fromString(String string) {
-                return (T) string;
-            }
-        };
-    }
-}

@@ -32,6 +32,7 @@ import static org.kordamp.ikonli.materialdesign2.MaterialDesignF.FILE_DOCUMENT;
 import static org.kordamp.ikonli.materialdesign2.MaterialDesignL.LIGHTBULB_ON_OUTLINE;
 import static org.kordamp.ikonli.materialdesign2.MaterialDesignM.MEDAL;
 import static org.kordamp.ikonli.materialdesign2.MaterialDesignM.MENU;
+import static org.kordamp.ikonli.materialdesign2.MaterialDesignR.REFRESH;
 import static org.kordamp.ikonli.materialdesign2.MaterialDesignR.RUN;
 import static org.kordamp.ikonli.materialdesign2.MaterialDesignS.SCHOOL;
 
@@ -43,11 +44,13 @@ public class Menu extends AnchorPane {
     @FXML
     private JFXTreeView<String> leftMenu;
     @FXML
+    private MenuButton userMenu;
+    @FXML
     private Text roleLabel;
     @FXML
-    private Button modifyPasswordButton;
+    private MenuItem modifyPasswordMenuItem;
     @FXML
-    private Button logOutButton;
+    private MenuItem logOutMenuItem;
     @FXML
     private Button refreshButton;
 
@@ -86,9 +89,9 @@ public class Menu extends AnchorPane {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        modifyPasswordButton.setStyle("-fx-background-color:#2196F3;-fx-text-fill: white;");
-        logOutButton.setStyle("-fx-background-color: #2196F3;-fx-text-fill: white;");
-        refreshButton.setStyle("-fx-background-color: #2196F3;-fx-text-fill: white;");
+        /*modifyPasswordMenuItem.setStyle("-fx-background-color:#2196F3;-fx-text-fill: white;");
+        logOutMenuItem.setStyle("-fx-background-color: #2196F3;-fx-text-fill: white;");
+        refreshButton.setStyle("-fx-background-color: #2196F3;-fx-text-fill: white;");*/
         initializeLeftMenu();
         initializeIcons();
     }
@@ -104,7 +107,7 @@ public class Menu extends AnchorPane {
     {
         Stage modifyPasswordStage=new Stage();
         GridPane gridPane=new GridPane();
-        gridPane.getStylesheets().add("dark-theme.css");
+        //gridPane.getStylesheets().add("dark-theme.css");
         gridPane.setAlignment(javafx.geometry.Pos.CENTER);
         TextField oldPassword = new TextField();
         TextField newPassword = new TextField();
@@ -152,7 +155,7 @@ public class Menu extends AnchorPane {
     @FXML
     public void logOut()
     {
-        Stage stage = (Stage) logOutButton.getScene().getWindow();
+        Stage stage = (Stage) refreshButton.getScene().getWindow();
         stage.close();
         Stage loginStage = new Stage();
         Scene scene = new Scene(new LoginPage(), 300, 400);
@@ -280,5 +283,14 @@ public class Menu extends AnchorPane {
         stuDlaItm.setGraphic(new FontIcon(RUN));
         dlaMngItm.setGraphic(new FontIcon(RUN));
         hnrMngItm.setGraphic(new FontIcon(MEDAL));
+
+        FontIcon acc=new FontIcon(ACCOUNT);
+        acc.setIconSize(25);
+        userMenu.setGraphic(acc);
+        //userMenu.setStyle("-fx-background-color: transparent");
+
+        FontIcon ref=new FontIcon(REFRESH);
+        ref.setIconSize(25);
+        refreshButton.setGraphic(ref);
     }
 }

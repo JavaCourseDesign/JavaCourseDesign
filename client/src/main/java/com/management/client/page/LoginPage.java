@@ -1,22 +1,19 @@
 package com.management.client.page;
 
+import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXPasswordField;
+import com.jfoenix.controls.JFXTextField;
 import com.management.client.request.DataResponse;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
-import javafx.scene.image.ImageView;
+import javafx.scene.control.Alert;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-
-import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXTextField;
-import com.jfoenix.controls.JFXPasswordField;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.management.client.util.HttpClientUtil.*;
+import static com.management.client.util.HttpClientUtil.login;
+import static com.management.client.util.HttpClientUtil.sendAndReceiveDataResponse;
 
 public class LoginPage extends GridPane {
     public static String username;//不知道这样合不合适
