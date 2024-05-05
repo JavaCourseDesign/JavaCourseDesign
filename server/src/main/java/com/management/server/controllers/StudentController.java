@@ -80,6 +80,7 @@ public class StudentController {
         Map student = BeanUtil.beanToMap(s) ;
         student.put("families",s.getFamilies());
         student.put("clazzName", clazzRepository.findClazzByStudent(s)+"班");
+        student.put("honor",s.getHonors());
         //文件不存在时可能出现问题，可以把方法的返回字符串调成一个固定图片
         if(s.getPhoto()!=null&&!Objects.equals(s.getPhoto(), "请先上传文件！"))
         {
