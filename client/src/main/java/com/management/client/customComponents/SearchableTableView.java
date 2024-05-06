@@ -41,6 +41,7 @@ public class SearchableTableView extends VBox {
         tableView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
         for (FilteredTableColumn<Map,?> column : columns) {
+            column.setResizable(true);
             PopupFilter<Map, ?> popupFilter = new PopupContainsFilter<>(column);
             column.setOnFilterAction(event -> {
                 popupFilter.showPopup();
@@ -48,6 +49,8 @@ public class SearchableTableView extends VBox {
         }
 
         tableView.getColumns().addAll(columns);
+        //tableView.setPadding(new javafx.geometry.Insets(10));
+        tableView.setColumnResizePolicy(FilteredTableView.UNCONSTRAINED_RESIZE_POLICY);
 
         FilteredList<Map> filteredData = new FilteredList<>(data, p -> true);
 

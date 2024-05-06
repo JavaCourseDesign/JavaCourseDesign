@@ -37,7 +37,7 @@ public class LoginPage extends GridPane {
 
         //测试用
         nameField.setText("向辉");
-        usernameField.setText("admin");
+        usernameField.setText("201921000");
         passwordField.setText("admin");
     }
 
