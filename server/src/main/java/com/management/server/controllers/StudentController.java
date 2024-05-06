@@ -239,7 +239,24 @@ public class StudentController {
         }
         m.put("scoreList",scoreMapList);
         m.put("markList",getStudentMarkList(scoreList));
+        m.put("gpa",gpa(CommonMethod.getUsername()));
         return new DataResponse(0,m,null);
+    }
+    public String gpa(String num) {
+        double credit = 0;
+        double mark = 0;
+        double gpa = 0;
+        List<Score> scoreList = scoreRepository.findByStudentStudentId(num);
+        for (Score item : scoreList) {
+            Double c = (Double) item.getCourse().getCredit();
+            Double m = item.getMark();
+            if ((m*1.0/ 10 - 5) > 0) {
+                mark += (m*1.0 / 10 - 5) * c;
+            }
+            credit += c;
+        }
+        gpa = mark / credit;
+        return String.valueOf(gpa);
     }
     @PostMapping("/getStudentsByHonor")
     public DataResponse getStudentsByHonor(@RequestBody Map m)

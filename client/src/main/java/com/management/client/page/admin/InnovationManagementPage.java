@@ -9,8 +9,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.MapValueFactory;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import org.controlsfx.control.tableview2.FilteredTableColumn;
 
 import java.util.*;
@@ -20,15 +19,16 @@ import static com.management.client.util.HttpClientUtil.request;
 public class InnovationManagementPage extends SplitPane {
     private SearchableTableView innovationTable;
     private TableView studentTable=new TableView();
-    private VBox   controlPanel = new VBox();
+    private VBox  controlPanel = new VBox();
     private GridPane gridPane = new GridPane();
     private ObservableList<Map> observableList = FXCollections.observableArrayList();
     private ObservableList<Map> studentObservableList = FXCollections.observableArrayList();
-    private SearchableListView studentListView= new SearchableListView(FXCollections.observableArrayList((ArrayList) request("/getAllStudents", null).getData()), List.of("name", "studentId"));
+    private SearchableListView studentListView;
 
-    private Button addButton = new Button("Add");
-    private Button deleteButton = new Button("Delete");
-    private Button updateButton = new Button("Update");
+    private Button addButton = new Button("增加");
+    private Button deleteButton = new Button("删除");
+    private Button updateButton = new Button("更新");
+    private HBox buttonBox=new HBox();
 
     private TextField nameField = new TextField("创新比赛");
     //private TextField typeField = new TextField("社会实践");
@@ -38,9 +38,11 @@ public class InnovationManagementPage extends SplitPane {
     private WeekTimeTable eventPicker=new WeekTimeTable();
     private TextField locationField = new TextField("软件学院");
     //private TextField performanceField = new TextField("good");
-
+    private ObservableList<Map<String,Object>> allStudentsList=FXCollections.observableArrayList((ArrayList) request("/getAllStudents", null).getData());
     public InnovationManagementPage() {
         this.setWidth(1000);
+        studentListView=new SearchableListView(allStudentsList, List.of("name","studentId"));
+        controlPanel.setPrefWidth(600);
         initializeTable();
         initializeStudentTable();
         initializeControlPanel();
@@ -84,7 +86,13 @@ public class InnovationManagementPage extends SplitPane {
                 eventPicker,
                 locationField
         );
-        gridPane.addRow(6, addButton, deleteButton, updateButton);
+       gridPane.getColumnConstraints().addAll(
+               new ColumnConstraints(100),
+               new ColumnConstraints(500)
+       );
+       //gridPane.getColumnConstraints().get(1).setHgrow(Priority.ALWAYS);
+        buttonBox.setSpacing(20);
+        buttonBox.getChildren().addAll(addButton,deleteButton,updateButton);
         addButton.setOnAction(event -> addInnovation());
         deleteButton.setOnAction(event ->deleteInnovation());
         updateButton.setOnAction(event -> updateInnovation());
@@ -111,6 +119,7 @@ public class InnovationManagementPage extends SplitPane {
         });
 
         controlPanel.getChildren().add(gridPane);
+        controlPanel.getChildren().add(buttonBox);
         studentTable.setVisible(false);
         controlPanel.getChildren().add(studentTable);
         this.getItems().add(controlPanel);
@@ -118,9 +127,20 @@ public class InnovationManagementPage extends SplitPane {
 
     private void displayStudents(Map m) {
         studentObservableList.clear();
-        ArrayList<Map> studentlist=(ArrayList<Map>) request("/getStudentsInfoByInnovation",m).getData();
-        studentListView.setSelectedItems(studentlist);
-        studentObservableList.addAll(FXCollections.observableArrayList(studentlist));
+        ArrayList<Map> studentList=(ArrayList<Map>) request("/getStudentsInfoByInnovation",m).getData();
+        studentObservableList.addAll(FXCollections.observableArrayList(studentList));
+        ArrayList<Map> newList=new ArrayList<>();
+        for(Map student:allStudentsList)
+        {
+            for(Map s:studentList)
+            {
+                if(student.get("studentId").equals(s.get("studentId")))
+                {
+                   newList.add(student);
+                }
+            }
+        }
+        studentListView.setSelectedItems(newList);
         studentTable.setItems(studentObservableList);
     }
 

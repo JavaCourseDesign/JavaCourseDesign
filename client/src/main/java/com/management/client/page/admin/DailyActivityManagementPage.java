@@ -9,7 +9,9 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.MapValueFactory;
+import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import org.controlsfx.control.tableview2.FilteredTableColumn;
 
@@ -24,20 +26,22 @@ public class DailyActivityManagementPage extends SplitPane {
     private GridPane gridPane = new GridPane();
     private ObservableList<Map> observableList = FXCollections.observableArrayList();
     private ObservableList<Map> studentObservableList = FXCollections.observableArrayList();
-    private SearchableListView studentListView= new SearchableListView(FXCollections.observableArrayList((ArrayList) request("/getAllStudents", null).getData()), List.of("name", "studentId"));
+    private SearchableListView studentListView;
 
-    private Button addButton = new Button("Add");
-    private Button deleteButton = new Button("Delete");
-    private Button updateButton = new Button("Update");
-
+    private Button addButton = new Button("增加");
+    private Button deleteButton = new Button("删除");
+    private Button updateButton = new Button("更新");
+    private HBox buttonBox=new HBox();
     private TextField nameField = new TextField("体育活动");
     private ComboBox<String> typeField = new ComboBox<>(FXCollections.observableArrayList(
             "体育活动","外出旅游","文艺演出","聚会"
     ));
     private WeekTimeTable eventPicker=new WeekTimeTable();
     private TextField locationField = new TextField("软件学院");
+    private ObservableList<Map<String,Object>> allStudentsList=FXCollections.observableArrayList((ArrayList) request("/getAllStudents", null).getData());
     public DailyActivityManagementPage() {
         this.setWidth(1000);
+        studentListView=new SearchableListView(allStudentsList, List.of("name","studentId"));
         initializeTable();
         initializeStudentTable();
         initializeControlPanel();
@@ -171,7 +175,13 @@ public class DailyActivityManagementPage extends SplitPane {
                 eventPicker,
                 locationField
         );
-        gridPane.addRow(6, addButton, deleteButton, updateButton);
+        gridPane.getColumnConstraints().addAll(
+                new ColumnConstraints(100),
+                new ColumnConstraints(500)
+        );
+        //gridPane.getColumnConstraints().get(1).setHgrow(Priority.ALWAYS);
+        buttonBox.setSpacing(20);
+        buttonBox.getChildren().addAll(addButton,deleteButton,updateButton);
         addButton.setOnAction(event -> addDailyActivity());
         deleteButton.setOnAction(event ->deleteDailyActivity());
         updateButton.setOnAction(event -> updateDailyActivity());
@@ -196,15 +206,27 @@ public class DailyActivityManagementPage extends SplitPane {
             studentTable.setVisible(true);
         });
         controlPanel.getChildren().add(gridPane);
+        controlPanel.getChildren().add(buttonBox);
         studentTable.setVisible(false);
         controlPanel.getChildren().add(studentTable);
         this.getItems().add(controlPanel);
     }
     private void displayStudents(Map m) {
         studentObservableList.clear();
-        ArrayList<Map> studentlist=(ArrayList<Map>) request("/getStudentsInfoByDailyActivity",m).getData();
-        studentListView.setSelectedItems(studentlist);
-        studentObservableList.addAll(FXCollections.observableArrayList(studentlist));
+        ArrayList<Map> studentList=(ArrayList<Map>) request("/getStudentsInfoByDailyActivity",m).getData();
+        studentObservableList.addAll(FXCollections.observableArrayList(studentList));
+        ArrayList<Map> newList=new ArrayList<>();
+        for(Map student:allStudentsList)
+        {
+            for(Map s:studentList)
+            {
+                if(student.get("studentId").equals(s.get("studentId")))
+                {
+                    newList.add(student);
+                }
+            }
+        }
+        studentListView.setSelectedItems(newList);
         studentTable.setItems(studentObservableList);
     }
     private void initializeStudentTable()

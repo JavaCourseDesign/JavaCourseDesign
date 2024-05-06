@@ -51,4 +51,5 @@ public class Event{
     @JsonIgnore
     private Set<Person> persons;
 
+
 }

@@ -72,12 +72,7 @@ public class CourseManagementPage extends SplitPane {
         personsToBeAdded.addAll(studentsToBeAdded);
 
         m.put("persons", personsToBeAdded);
-        m.put("type", switch (typeField.getSelectionModel().getSelectedItem()) {
-            case "必选" -> "0";
-            case "任选" -> "1";
-            case "限选" -> "2";
-            default -> "0";
-        });
+        m.put("type", typeField.getValue());
 
         //mark
         //selectionGrid.course=m;//把一部分course的信息给予lesson，注意顺序！
@@ -108,7 +103,14 @@ public class CourseManagementPage extends SplitPane {
         FilteredTableColumn<Map, String> studentColumn = new FilteredTableColumn<>("学生数");
         FilteredTableColumn<Map, String> availableColumn = new FilteredTableColumn<>("是否开放选课");
 
-        courseIdColumn.setCellValueFactory(new MapValueFactory<>("courseId"));
+        courseIdColumn.setCellValueFactory(data-> {
+            String courseId = (String) data.getValue().get("courseId");
+            if(courseId==null)
+            {
+                return new SimpleStringProperty("");
+            }
+            return new SimpleStringProperty("sdu"+String.format("%06d",Integer.parseInt(courseId)));
+        });
         courseNameColumn.setCellValueFactory(new MapValueFactory<>("name"));
         courseCreditColumn.setCellValueFactory(new MapValueFactory<>("credit"));
         courseReferenceColumn.setCellValueFactory(new MapValueFactory<>("reference"));
@@ -125,19 +127,7 @@ public class CourseManagementPage extends SplitPane {
         });*/
 
         //teacherColumn.setCellValueFactory(new MapValueFactory<>("teacher"));
-        courseTypeColumn.setCellValueFactory(data -> {
-            String type = (String) data.getValue().get("type");
-            if (type == null) {
-                return new SimpleStringProperty("");
-            } else {
-                return new SimpleStringProperty(switch (type) {
-                    case "0" -> "必选";
-                    case "1" -> "任选";
-                    case "2" -> "限选";
-                    default -> "";
-                });
-            }
-        });
+        courseTypeColumn.setCellValueFactory(new MapValueFactory<>("type"));
 
         teacherColumn.setCellValueFactory(data -> {
             List<Map<String, Object>> persons = (List<Map<String, Object>>) data.getValue().get("persons");

@@ -1,8 +1,10 @@
 package com.management.server.controllers;
 
+import cn.hutool.core.bean.BeanUtil;
 import com.management.server.models.*;
 import com.management.server.payload.response.DataResponse;
 import com.management.server.repositories.*;
+import com.management.server.util.CommonMethod;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -244,8 +246,17 @@ public class ScoreController {
 
     @PostMapping("/getStudentScores")
     //@PreAuthorize("hasRole('ADMIN') or hasRole('TEACHER')")
-    public DataResponse getStudentScores(@RequestBody Map m){
-        return new DataResponse(0,scoreRepository.findByStudentStudentId((String) m.get("studentId")),null);
+    public DataResponse getStudentScores(){
+       List<Score> scoreList= scoreRepository.findByStudentStudentId(CommonMethod.getUsername());
+       List<Map> scoreMapList = new ArrayList<>();
+       for(Score score:scoreList)
+       {
+           Map scoreMap = BeanUtil.beanToMap(score);
+           scoreMap.put("course",score.getCourse());
+           scoreMap.put("hours",score.getCourse().getLessons().size()*2);
+           scoreMapList.add(scoreMap);
+       }
+        return new DataResponse(0,scoreMapList,null);
     }
 
     @PostMapping("/getAllScore")

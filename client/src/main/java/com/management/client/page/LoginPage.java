@@ -6,6 +6,7 @@ import com.jfoenix.controls.JFXTextField;
 import com.management.client.request.DataResponse;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
@@ -18,6 +19,9 @@ import static com.management.client.util.HttpClientUtil.sendAndReceiveDataRespon
 public class LoginPage extends GridPane {
     public static String username;//不知道这样合不合适
     private JFXTextField nameField = new JFXTextField();
+    private Label namelabel = new Label("姓名");
+    private Label usernamelabel = new Label("学工号");
+    private Label passwordlabel = new Label("密码");
     private JFXTextField usernameField = new JFXTextField();
     private JFXPasswordField passwordField = new JFXPasswordField();
     private JFXButton loginButton = new JFXButton("登录");
@@ -44,10 +48,9 @@ public class LoginPage extends GridPane {
     private void setupUI() {
         this.setAlignment(javafx.geometry.Pos.CENTER);
         this.setVgap(10);
-        this.add(usernameField, 0, 0);
-        this.add(passwordField, 0, 1);
-        this.add(loginButton, 0, 2);
-        this.add(switchToRegisterButton, 1, 2);
+       this.addColumn(0, usernamelabel,passwordlabel);
+        this.addColumn(1, usernameField,passwordField);
+        this.addRow(2, loginButton,switchToRegisterButton);
         switchToLoginButton.setVisible(false); // Initially hide switch to login button
         registerButton.setVisible(false); // Initially hide register button
         nameField.setVisible(false); // Initially hide name field
@@ -83,11 +86,9 @@ public class LoginPage extends GridPane {
 
     private void switchToRegister() {
         this.getChildren().clear();
-        this.add(nameField, 0, 0);
-        this.add(usernameField, 0, 1);
-        this.add(passwordField, 0, 2);
-        this.add(registerButton, 0, 3);
-        this.add(switchToLoginButton, 1, 3);
+        this.addColumn(0, namelabel,usernamelabel,passwordlabel);
+        this.addColumn(1, nameField,usernameField,passwordField);
+        this.addRow(3, registerButton,switchToLoginButton);
         nameField.setVisible(true);
         registerButton.setVisible(true);
         switchToLoginButton.setVisible(true);
@@ -95,10 +96,9 @@ public class LoginPage extends GridPane {
 
     private void switchToLogin() {
         this.getChildren().clear();
-        this.add(usernameField, 0, 0);
-        this.add(passwordField, 0, 1);
-        this.add(loginButton, 0, 2);
-        this.add(switchToRegisterButton, 1, 2);
+        this.addColumn(0, usernamelabel,passwordlabel);
+        this.addColumn(1, usernameField,passwordField);
+        this.addRow(2, loginButton,switchToRegisterButton);
     }
 
     private void changeScene() {

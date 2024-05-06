@@ -1,6 +1,7 @@
 package com.management.client.page;
 
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTreeView;
 import com.management.client.ClientApplication;
 import com.management.client.page.admin.*;
@@ -76,6 +77,7 @@ public class Menu extends AnchorPane {
     private TreeItem<String> stuAbsItm = new TreeItem<>("学生请假");
     private TreeItem<String> stuInoItm = new TreeItem<>("创新实践");
     private TreeItem<String> stuDlaItm = new TreeItem<>("日常活动");
+    private TreeItem<String> stuScoItm = new TreeItem<>("成绩查询");
 
     public Menu(){
         //this.setStyle("-fx-background-color: red;");
@@ -114,8 +116,8 @@ public class Menu extends AnchorPane {
         //gridPane.getStylesheets().add("dark-theme.css");
         gridPane.setAlignment(javafx.geometry.Pos.CENTER);
         TextField oldPassword = new TextField();
-        TextField newPassword = new TextField();
-        TextField confirmPassword = new TextField();
+        JFXPasswordField newPassword = new JFXPasswordField();
+        JFXPasswordField confirmPassword = new JFXPasswordField();
         JFXButton confirmButton = new JFXButton("确认");
         JFXButton cancelButton = new JFXButton("取消");
         confirmButton.setOnAction(event1 -> {
@@ -141,6 +143,7 @@ public class Menu extends AnchorPane {
             DataResponse response = request("/modifyPassword", map);
             if (response.getCode() == 0) {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION, response.getMsg());
+                alert.showAndWait();
                 modifyPasswordStage.close();
             }
             else
@@ -183,7 +186,7 @@ public class Menu extends AnchorPane {
                 break;
             case "ROLE_STUDENT":
                 roleLabel.setText("学生菜单");
-                leftMenu.getRoot().getChildren().addAll(stuHmpItm,stuCrsItm,crsAppItm,stuPerItm,stuAbsItm,stuInoItm,stuDlaItm);
+                leftMenu.getRoot().getChildren().addAll(stuHmpItm,stuCrsItm,crsAppItm,stuPerItm,stuAbsItm,stuInoItm,stuDlaItm,stuScoItm);
                 break;
             case "ROLE_TEACHER":
                 roleLabel.setText("教师菜单");
@@ -262,6 +265,10 @@ public class Menu extends AnchorPane {
             else if(newValue == stuHmpItm)
             {
                 borderPane.setCenter(new StudentHomePage());
+            }
+            else if(newValue == stuScoItm)
+            {
+                borderPane.setCenter(new StudentScorePage());
             }
         });
 

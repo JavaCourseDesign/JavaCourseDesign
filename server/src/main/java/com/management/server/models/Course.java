@@ -42,7 +42,7 @@ public class Course{
     private Double absenceWeight;//期末成绩权重 教师有权限
 
     private String type;//课程类型 0 Required 1 Optional 2 Selective 代码代替似乎意义不大，后续考虑修改
-
+    private String property;
     private boolean available;//是否可选
 
     @Transient//@Transient 注解表示该属性并非一个到数据库表的字段的映射，ORM框架将忽略该属性。

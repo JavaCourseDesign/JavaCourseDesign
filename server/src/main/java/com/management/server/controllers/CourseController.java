@@ -82,7 +82,8 @@ public class CourseController {
     @PostMapping("/getStudentCourses")
     public DataResponse getStudentCourses(){
         String studentId=studentRepository.findByStudentId(CommonMethod.getUsername()).getPersonId();
-        return new DataResponse(0,courseRepository.findCoursesByPersonId(studentId),null);
+        List<Course> courseList=courseRepository.findCoursesByPersonId(studentId);
+        return new DataResponse(0,courseList,null);
     }
 
     @PostMapping("/getTeacherCourses")
