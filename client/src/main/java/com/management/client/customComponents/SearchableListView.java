@@ -81,6 +81,7 @@ public class SearchableListView extends HBox {
 
     private void handleItemClick() {
         Map<String, Object> selectedItem = listView.getSelectionModel().getSelectedItem();
+        //List<String> ids=selectedItems.stream().map(item->item.get("id").toString()).toList(); 要这么写的话必须要求后端主键全部用id命名
         if (selectedItem != null) {
             if(selectedItems.contains(selectedItem)){
                 selectedItems.remove(selectedItem);

@@ -29,6 +29,7 @@ import static org.kordamp.ikonli.materialdesign2.MaterialDesignA.*;
 import static org.kordamp.ikonli.materialdesign2.MaterialDesignB.BOOK_OPEN_PAGE_VARIANT;
 import static org.kordamp.ikonli.materialdesign2.MaterialDesignB.BOOK_PLUS_MULTIPLE;
 import static org.kordamp.ikonli.materialdesign2.MaterialDesignF.FILE_DOCUMENT;
+import static org.kordamp.ikonli.materialdesign2.MaterialDesignH.HOME;
 import static org.kordamp.ikonli.materialdesign2.MaterialDesignL.LIGHTBULB_ON_OUTLINE;
 import static org.kordamp.ikonli.materialdesign2.MaterialDesignM.MEDAL;
 import static org.kordamp.ikonli.materialdesign2.MaterialDesignM.MENU;
@@ -64,10 +65,13 @@ public class Menu extends AnchorPane {
     private TreeItem<String> dlaMngItm = new TreeItem<>("日常活动管理");
     private TreeItem<String> hnrMngItm = new TreeItem<>("荣誉管理");
     private TreeItem<String> logMngItm = new TreeItem<>("日志管理");
-    private TreeItem<String> crsAppItm = new TreeItem<>("课程申请");
-    private TreeItem<String> stuPerItm = new TreeItem<>("个人信息");
+
     private TreeItem<String> tchPerItm = new TreeItem<>("个人信息");
     private TreeItem<String> tchCrsItm = new TreeItem<>("课程信息");
+
+    private TreeItem<String> stuHmpItm = new TreeItem<>("主界面");
+    private TreeItem<String> crsAppItm = new TreeItem<>("课程申请");
+    private TreeItem<String> stuPerItm = new TreeItem<>("个人信息");
     private TreeItem<String> stuCrsItm = new TreeItem<>("课程信息");
     private TreeItem<String> stuAbsItm = new TreeItem<>("学生请假");
     private TreeItem<String> stuInoItm = new TreeItem<>("创新实践");
@@ -179,7 +183,7 @@ public class Menu extends AnchorPane {
                 break;
             case "ROLE_STUDENT":
                 roleLabel.setText("学生菜单");
-                leftMenu.getRoot().getChildren().addAll(stuCrsItm,crsAppItm,stuPerItm,stuAbsItm,stuInoItm,stuDlaItm);
+                leftMenu.getRoot().getChildren().addAll(stuHmpItm,stuCrsItm,crsAppItm,stuPerItm,stuAbsItm,stuInoItm,stuDlaItm);
                 break;
             case "ROLE_TEACHER":
                 roleLabel.setText("教师菜单");
@@ -255,6 +259,10 @@ public class Menu extends AnchorPane {
             {
                 borderPane.setCenter(new DailyActivityPage());
             }
+            else if(newValue == stuHmpItm)
+            {
+                borderPane.setCenter(new StudentHomePage());
+            }
         });
 
 
@@ -267,6 +275,8 @@ public class Menu extends AnchorPane {
         //tchCrsItm.setGraphic(new ImageView("/icons/teacher.png"));
 
         tchCrsItm.setGraphic(new FontIcon("mdi2b-book-open-page-variant"));
+
+        stuHmpItm.setGraphic(new FontIcon(HOME));
 
         tchPerItm.setGraphic(new FontIcon(ID_CARD));
         stuPerItm.setGraphic(new FontIcon(ID_CARD));

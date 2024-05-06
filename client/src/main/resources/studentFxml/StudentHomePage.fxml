@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import com.calendarfx.view.page.WeekPage?>
+<?import com.calendarfx.view.CalendarView?>
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml">
+    <HBox >
+        <TitledPane text="1" >
+            <CalendarView  fx:id="calendarView"/>
+        </TitledPane>
+        <VBox >
+            <TitledPane text="2">
+                <AnchorPane />
+            </TitledPane>
+            <TitledPane text="3">
+                <AnchorPane />
+            </TitledPane>
+        </VBox>
+    </HBox>
+    <TitledPane text="4">
+        <AnchorPane />
+    </TitledPane>
+</VBox>
