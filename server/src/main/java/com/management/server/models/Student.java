@@ -28,6 +28,7 @@ public class Student extends Person{
     private String highSchool;
 
     @OneToMany(fetch = FetchType.LAZY,cascade = {CascadeType.ALL},orphanRemoval = true)
+    @JoinColumn(name = "student_id")
     @JsonIgnore
     private List<Family> families;
 

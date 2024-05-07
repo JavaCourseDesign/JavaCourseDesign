@@ -1,17 +1,15 @@
 package com.management.server.models;
 
 
-import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
 
-import java.security.DomainLoadStoreParameter;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -93,6 +91,27 @@ public abstract class Person {
             events.addAll(course.getLessons());
         }
         return events;
+    }
+
+    public List<Innovation> getInnovations() {
+        List<Innovation> innovations = new ArrayList<>();
+        for (Event event : events) {
+            if(event instanceof Innovation)
+                innovations.add((Innovation) event);
+        }
+        return innovations;
+    }
+
+    public Integer getAge() {
+        if(this.birthday == null)
+            return null;
+        //获取当前年份
+        LocalDate now = LocalDate.now();
+        int year = now.getYear();
+        //获取出生年份
+        String birthYearStr = this.birthday.substring(0,4);
+        int birthYear = Integer.parseInt(birthYearStr);
+        return year - birthYear;
     }
 
 }

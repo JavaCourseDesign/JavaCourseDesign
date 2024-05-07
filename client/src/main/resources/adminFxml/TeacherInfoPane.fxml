@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<TabPane xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" tabClosingPolicy="UNAVAILABLE">
+    <Tab text="基本信息" >
+        <VBox>
+            <TitledPane animated="false" text="基本信息" collapsible="false">
+                <HBox>
+                    <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" fx:id="photoArea" />
+                    <AnchorPane>
+                        <GridPane>
+                            <columnConstraints>
+                                <ColumnConstraints hgrow="SOMETIMES"/>
+                                <ColumnConstraints hgrow="SOMETIMES"/>
+                            </columnConstraints>
+                            <rowConstraints>
+                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            </rowConstraints>
+                            <Label GridPane.rowIndex="0" text="姓名" />
+                            <Label GridPane.rowIndex="1" text="工号" />
+                            <Label GridPane.rowIndex="2" text="身份证号" />
+                            <Label GridPane.rowIndex="3" text="性别" />
+                            <Label GridPane.rowIndex="4" text="生日" />
+                            <Label GridPane.rowIndex="5" text="籍贯" />
+                            <Label GridPane.rowIndex="6" text="学院" />
+                            <Label GridPane.rowIndex="7" text="学位" />
+                            <Label GridPane.rowIndex="8" text="班级" />
+                            <Label GridPane.rowIndex="9" text="政治面貌" />
+                            <Label GridPane.rowIndex="10" text="职称" />
+
+                            <TextField GridPane.columnIndex="1" GridPane.rowIndex="0" fx:id="name" />
+                            <TextField GridPane.columnIndex="1" GridPane.rowIndex="1" fx:id="teacherId" />
+                            <TextField GridPane.columnIndex="1" GridPane.rowIndex="2" fx:id="idCardNum" />
+                            <Label GridPane.columnIndex="1" GridPane.rowIndex="3" fx:id="gender" />
+                            <Label GridPane.columnIndex="1" GridPane.rowIndex="4" fx:id="birthday" />
+                            <Label GridPane.columnIndex="1" GridPane.rowIndex="5" fx:id="homeTown" />
+                            <TextField GridPane.columnIndex="1" GridPane.rowIndex="6" fx:id="dept" />
+                            <TextField GridPane.columnIndex="1" GridPane.rowIndex="7" fx:id="degree" />
+                            <Label GridPane.columnIndex="1" GridPane.rowIndex="8" fx:id="clazz" /> <!--待修改-->
+                            <TextField GridPane.columnIndex="1" GridPane.rowIndex="9" fx:id="social" />
+                            <TextField GridPane.columnIndex="1" GridPane.rowIndex="10" fx:id="title" />
+                        </GridPane>
+                    </AnchorPane>
+                </HBox>
+            </TitledPane>
+            <!--<TitledPane animated="false" text="家庭信息" collapsible="false">
+                <AnchorPane>
+                    <TableView editable="true" fx:id="family" maxHeight="100">
+                        <columns>
+                            <TableColumn text="关系" fx:id="familyRelationship"/>
+                            <TableColumn text="姓名" fx:id="familyName"/>
+                            <TableColumn text="生日" fx:id="familyAge"/>
+                            <TableColumn text="电话" fx:id="familyPhone"/>
+                        </columns>
+                    </TableView>
+                </AnchorPane>
+            </TitledPane>-->
+            <TitledPane animated="false" text="联系方式" collapsible="false">
+                <AnchorPane>
+                    <GridPane>
+                        <columnConstraints>
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        </columnConstraints>
+                        <rowConstraints>
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        </rowConstraints>
+                        <Label GridPane.rowIndex="0" text="电话" />
+                        <Label GridPane.rowIndex="1" text="邮箱" />
+                        <Label GridPane.rowIndex="2" text="其他" />
+
+                        <Label GridPane.columnIndex="1" GridPane.rowIndex="0" fx:id="phone"/>
+                        <Label GridPane.columnIndex="1" GridPane.rowIndex="1" fx:id="email"/>
+                        <Label GridPane.columnIndex="1" GridPane.rowIndex="2" fx:id="other"/>
+                    </GridPane>
+                </AnchorPane>
+            </TitledPane>
+            <TitledPane animated="false" text="操作" collapsible="false">
+                <HBox>
+                    <Button fx:id="save" text="保存" onAction="#save"/>
+                    <Button fx:id="delete" text="删除" onAction="#delete"/>
+                </HBox>
+            </TitledPane>
+        </VBox>
+    </Tab>
+    <Tab text="荣誉信息" fx:id="honorInfo">
+        <TableView fx:id="honorTable">
+            <columns>
+                <TableColumn text="荣誉日期" fx:id="awardDateColumn"/>
+                <TableColumn text="荣誉名称" fx:id="nameColumn"/>
+                <TableColumn text="颁发部门" fx:id="departmentColumn"/>
+                <TableColumn text="获奖事件" fx:id="eventColumn"/>
+            </columns>
+        </TableView>
+    </Tab>
+    <!--<Tab text="消费信息" fx:id="feeInfo">
+        <TableView fx:id="feeTable">
+            <columns>
+                <TableColumn text="消费日期" fx:id="timeColumn"/>
+                <TableColumn text="消费金额" fx:id="moneyColumn"/>
+                <TableColumn text="消费商品" fx:id="goodsColumn"/>
+                <TableColumn text="消费地点" fx:id="placeColumn"/>
+            </columns>
+        </TableView>
+    </Tab>-->
+    <!--<Tab text="日常活动" fx:id="dailyInfo">
+
+    </Tab>
+    <Tab text="创新实践" fx:id="innoInfo">
+
+    </Tab>-->
+</TabPane>

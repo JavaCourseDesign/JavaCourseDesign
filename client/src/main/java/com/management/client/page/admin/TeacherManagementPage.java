@@ -1,24 +1,26 @@
 package com.management.client.page.admin;
 
 import com.management.client.customComponents.SearchableTableView;
-import com.management.client.request.DataResponse;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.control.*;
+import javafx.scene.control.SplitPane;
 import javafx.scene.control.cell.MapValueFactory;
 import javafx.scene.layout.VBox;
 import org.controlsfx.control.tableview2.FilteredTableColumn;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
-import static com.management.client.util.HttpClientUtil.*;
+import static com.management.client.util.HttpClientUtil.request;
 
 public class TeacherManagementPage extends SplitPane {
     private SearchableTableView teacherTable;
     private VBox controlPanel = new VBox();
     private ObservableList<Map> observableList = FXCollections.observableArrayList();
 
-    private Button addButton = new Button("Add");
+    private TeacherInfoPane teacherInfoPane=new TeacherInfoPane(this);
+    /*private Button addButton = new Button("Add");
     private Button deleteButton = new Button("Delete");
     private Button updateButton = new Button("Update");
 
@@ -33,10 +35,10 @@ public class TeacherManagementPage extends SplitPane {
         m.put("gender", genderField.getText());
         m.put("title", titleField.getText());
         return m;
-    }
+    }*/
 
     public TeacherManagementPage() {
-        this.setWidth(1000);
+        this.setDividerPosition(0, 0.7);
         initializeTable();
         initializeControlPanel();
         displayTeachers();
@@ -44,46 +46,80 @@ public class TeacherManagementPage extends SplitPane {
 
     private void initializeTable() {
 
-        FilteredTableColumn<Map, String> teacherIdColumn = new FilteredTableColumn<>("教师号");
+        // Create columns
         FilteredTableColumn<Map, String> teacherNameColumn = new FilteredTableColumn<>("姓名");
+        FilteredTableColumn<Map, String> idCardNumColumn = new FilteredTableColumn<>("身份证号");
         FilteredTableColumn<Map, String> teacherGenderColumn = new FilteredTableColumn<>("性别");
-        FilteredTableColumn<Map, String> teacherTitleColumn = new FilteredTableColumn<>("职称");
+        FilteredTableColumn<Map, String> teacherBirthdayColumn = new FilteredTableColumn<>("生日");
+        FilteredTableColumn<Map, String> teacherHomeTownColumn = new FilteredTableColumn<>("籍贯");
+        FilteredTableColumn<Map, String> teacherIdColumn = new FilteredTableColumn<>("工号");
+        FilteredTableColumn<Map, String> teacherDeptColumn = new FilteredTableColumn<>("系别");
+        FilteredTableColumn<Map, String> teacherSocialColumn = new FilteredTableColumn<>("政治面貌");
+        FilteredTableColumn<Map, String> teacherDegreeColumn = new FilteredTableColumn<>("学位");
+        FilteredTableColumn<Map, String> teacherTitleColumn = new FilteredTableColumn<>("毕业高中");
+        FilteredTableColumn<Map, String> teacherAddressColumn = new FilteredTableColumn<>("地址");
 
-        teacherIdColumn.setCellValueFactory(new MapValueFactory<>("teacherId"));
+
+        // Set cell value factories
         teacherNameColumn.setCellValueFactory(new MapValueFactory<>("name"));
+        idCardNumColumn.setCellValueFactory(new MapValueFactory<>("idCardNum"));
         teacherGenderColumn.setCellValueFactory(new MapValueFactory<>("gender"));
+        teacherBirthdayColumn.setCellValueFactory(new MapValueFactory<>("birthday"));
+        teacherHomeTownColumn.setCellValueFactory(new MapValueFactory<>("homeTown"));
+        teacherIdColumn.setCellValueFactory(new MapValueFactory<>("teacherId"));
+        teacherDeptColumn.setCellValueFactory(new MapValueFactory<>("dept"));
+        teacherSocialColumn.setCellValueFactory(new MapValueFactory<>("social"));
+        teacherDegreeColumn.setCellValueFactory(new MapValueFactory<>("degree"));
         teacherTitleColumn.setCellValueFactory(new MapValueFactory<>("title"));
+        teacherAddressColumn.setCellValueFactory(new MapValueFactory<>("address"));
 
-        List<FilteredTableColumn<Map, ?>> columns = new ArrayList<>();
-        columns.addAll(List.of(teacherIdColumn, teacherNameColumn, teacherGenderColumn, teacherTitleColumn));
+        /*PopupFilter<Map,String> teacherNameFilter = new PopupContainsFilter<>(teacherNameColumn);
+        PopupFilter<Map,String> idCardNumFilter = new PopupContainsFilter<>(idCardNumColumn);
+        PopupFilter<Map,String> teacherGenderFilter = new PopupContainsFilter<>(teacherGenderColumn);
+        PopupFilter<Map,String> teacherBirthdayFilter = new PopupContainsFilter<>(teacherBirthdayColumn);
+        PopupFilter<Map,String> teacherHomeTownFilter = new PopupContainsFilter<>(teacherHomeTownColumn);
+        PopupFilter<Map,String> teacherIdFilter = new PopupContainsFilter<>(teacherIdColumn);
+        PopupFilter<Map,String> teacherDeptFilter = new PopupContainsFilter<>(teacherDeptColumn);
+        PopupFilter<Map,String> teacherSocialFilter = new PopupContainsFilter<>(teacherSocialColumn);
+        PopupFilter<Map,String> teacherMajorFilter = new PopupContainsFilter<>(teacherMajorColumn);
+        PopupFilter<Map,String> teacherHighSchoolFilter = new PopupContainsFilter<>(teacherHighSchoolColumn);
+        PopupFilter<Map,String> teacherAddressFilter = new PopupContainsFilter<>(teacherAddressColumn);
 
+
+
+        teacherNameColumn.setOnFilterAction(e -> teacherNameFilter.showPopup());
+        idCardNumColumn.setOnFilterAction(e -> idCardNumFilter.showPopup());
+        teacherGenderColumn.setOnFilterAction(e -> teacherGenderFilter.showPopup());
+        teacherBirthdayColumn.setOnFilterAction(e -> teacherBirthdayFilter.showPopup());
+        teacherHomeTownColumn.setOnFilterAction(e -> teacherHomeTownFilter.showPopup());
+        teacherIdColumn.setOnFilterAction(e -> teacherIdFilter.showPopup());
+        teacherDeptColumn.setOnFilterAction(e -> teacherDeptFilter.showPopup());
+        teacherSocialColumn.setOnFilterAction(e -> teacherSocialFilter.showPopup());
+        teacherMajorColumn.setOnFilterAction(e -> teacherMajorFilter.showPopup());
+        teacherHighSchoolColumn.setOnFilterAction(e -> teacherHighSchoolFilter.showPopup());
+        teacherAddressColumn.setOnFilterAction(e -> teacherAddressFilter.showPopup());*/
+
+
+        // Create a list of columns
+        List<FilteredTableColumn<Map, ?>> columns = new ArrayList<>(List.of(teacherNameColumn, idCardNumColumn, teacherGenderColumn, teacherBirthdayColumn, teacherHomeTownColumn, teacherIdColumn, teacherDeptColumn, teacherSocialColumn, teacherDegreeColumn, teacherTitleColumn, teacherAddressColumn));
+        // Initialize the SearchableTableViewForMap
         teacherTable = new SearchableTableView(observableList, List.of("teacherId","name"), columns);
+
+
         this.getItems().add(teacherTable);
     }
 
     private void initializeControlPanel() {
-        controlPanel.setMinWidth(200);
-        controlPanel.setSpacing(10);
-
-        controlPanel.getChildren().addAll(teacherIdField, nameField, genderField, titleField, addButton, deleteButton, updateButton);
-
-        addButton.setOnAction(event -> addTeacher());
-        deleteButton.setOnAction(event -> deleteTeacher());
-        updateButton.setOnAction(event -> updateTeacher());
-
         teacherTable.setOnItemClick(teacher -> {
             if(teacher!=null)
             {
-                teacherIdField.setText((String) teacher.get("teacherId"));
-                nameField.setText((String) teacher.get("name"));
-                genderField.setText((String) teacher.get("gender"));
-                titleField.setText((String) teacher.get("title"));
+                teacherInfoPane.setTeacher(teacher);
             }
         });
-        this.getItems().add(controlPanel);
+        this.getItems().add(teacherInfoPane.getRoot());
     }
 
-    private void displayTeachers(){
+    public void displayTeachers(){
         observableList.clear();
         observableList.addAll(FXCollections.observableArrayList((ArrayList) request("/getAllTeachers", null).getData()));
         teacherTable.setData(observableList);
@@ -92,7 +128,7 @@ public class TeacherManagementPage extends SplitPane {
 
     }
 
-    private void addTeacher() {
+    /*private void addTeacher() {
         Map m=newMapFromFields(new HashMap<>());
 
         System.out.println(m);
@@ -172,5 +208,5 @@ public class TeacherManagementPage extends SplitPane {
                 alert1.showAndWait();
             }
         }
-    }
+    }*/
 }

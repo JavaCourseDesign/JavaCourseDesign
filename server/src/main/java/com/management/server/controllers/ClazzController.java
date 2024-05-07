@@ -24,6 +24,34 @@ public class ClazzController {
     private StudentRepository studentRepository;
     @PostMapping("/getAllClazz")
     public DataResponse getAllClazz(){
+        List<Clazz> clazzes = clazzRepository.findAll();
+        List<Map> clazzesMap = new ArrayList<>();
+        for (Clazz clazz : clazzes) {
+            Map<String, Object> clazzMap = BeanUtil.beanToMap(clazz);
+            clazzMap.put("studentCount", clazz.getStudents().size());
+            clazzMap.put("maleCount", clazz.getStudents().stream().filter(student -> student.getGender().equals("男")).count());
+            clazzMap.put("femaleCount", clazz.getStudents().stream().filter(student -> student.getGender().equals("女")).count());
+            clazzMap.put("CPCCount", clazz.getStudents().stream().filter(student -> student.getSocial().equals("共产党员")).count());
+            clazzMap.put("CYLCount", clazz.getStudents().stream().filter(student -> student.getSocial().equals("共青团员")).count());
+            clazzMap.put("under18Count", clazz.getStudents().stream().filter(student -> student.getAge() < 18).count());
+            clazzMap.put("over18Count", clazz.getStudents().stream().filter(student -> student.getAge() >= 18).count());
+            int innoCount = 0;
+            for (Student student : clazz.getStudents()) {
+                innoCount+=student.getInnovations().size();
+            }
+            clazzMap.put("innoCount", innoCount);
+            int honorCount = 0;
+            for (Student student : clazz.getStudents()) {
+                honorCount+=student.getHonors().size();
+            }
+            clazzMap.put("honorCount", honorCount);
+            /*double avgScore = 0;
+            for (Student student : clazz.getStudents()) {
+                avgScore+=student.getScore();
+            }*/
+            clazzesMap.add(clazzMap);
+        }
+
         return new DataResponse(0, clazzRepository.findAll(),null);
     }
 

@@ -39,6 +39,7 @@ public class SearchableTableView extends VBox {
 
     private void setupTableView(List<FilteredTableColumn<Map,?>> columns) {
         tableView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        tableView.setTableMenuButtonVisible(true);
 
         for (FilteredTableColumn<Map,?> column : columns) {
             column.setResizable(true);

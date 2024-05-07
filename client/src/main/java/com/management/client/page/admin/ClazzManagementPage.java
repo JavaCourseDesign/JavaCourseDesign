@@ -24,14 +24,12 @@ public class ClazzManagementPage extends SplitPane {
     private Button deleteButton = new Button("Delete");
     private Button updateButton = new Button("Update");
 
-    private TextField clazzIdField = new TextField();
     private TextField clazzMajorField = new TextField();
     private TextField clazzGradeField = new TextField();
     private TextField clazzNameField = new TextField();
     private TextField clazzNumberField = new TextField();
 
     private Map newMapFromFields(Map m) {
-        m.put("clazzId", clazzIdField.getText());
         m.put("name", clazzNameField.getText());
         m.put("major", clazzMajorField.getText());
         m.put("grade", clazzGradeField.getText());
@@ -47,14 +45,12 @@ public class ClazzManagementPage extends SplitPane {
     }
 
     private void initializeTable() {
-        FilteredTableColumn<Map, String> clazzIdColumn = new FilteredTableColumn<>("班级ID");
         FilteredTableColumn<Map, String> clazzNameColumn = new FilteredTableColumn<>("班级名");
         FilteredTableColumn<Map, String> clazzMajorColumn = new FilteredTableColumn<>("专业");
         FilteredTableColumn<Map, String> clazzGradeColumn = new FilteredTableColumn<>("年级");
         FilteredTableColumn<Map, String> clazzStudentsColumn = new FilteredTableColumn<>("学生");
         FilteredTableColumn<Map, String> clazzNumberColumn = new FilteredTableColumn<>("班级号");
 
-        clazzIdColumn.setCellValueFactory(new MapValueFactory<>("clazzId"));
         clazzMajorColumn.setCellValueFactory(new MapValueFactory<>("major"));
         clazzGradeColumn.setCellValueFactory(new MapValueFactory<>("grade"));
         clazzNameColumn.setCellValueFactory(new MapValueFactory<>("name"));
@@ -75,7 +71,7 @@ public class ClazzManagementPage extends SplitPane {
         });
 
         List<FilteredTableColumn<Map, ?>> columns = new ArrayList<>();
-        columns.addAll(List.of(clazzIdColumn, clazzMajorColumn, clazzGradeColumn, clazzNumberColumn, clazzNameColumn, clazzStudentsColumn)) ;
+        columns.addAll(List.of(clazzMajorColumn, clazzGradeColumn, clazzNumberColumn, clazzNameColumn, clazzStudentsColumn)) ;
 
         clazzTable = new SearchableTableView(observableList, List.of("clazzNumber","name"), columns);
 
@@ -86,7 +82,7 @@ public class ClazzManagementPage extends SplitPane {
         controlPanel.setMinWidth(200);
         controlPanel.setSpacing(10);
 
-        controlPanel.getChildren().addAll(clazzIdField, clazzNameField, clazzMajorField, clazzGradeField, clazzNumberField , addButton, deleteButton, updateButton);
+        controlPanel.getChildren().addAll(clazzNameField, clazzMajorField, clazzGradeField, clazzNumberField , addButton, deleteButton, updateButton);
 
         addButton.setOnAction(event -> addClazz());
         deleteButton.setOnAction(event -> deleteClazz());
@@ -95,7 +91,6 @@ public class ClazzManagementPage extends SplitPane {
         clazzTable.setOnItemClick(clazz -> {
             if(clazz!=null)
             {
-                clazzIdField.setText((String) clazz.get("clazzId"));
                 clazzNameField.setText((String) clazz.get("name"));
                 clazzMajorField.setText((String) clazz.get("major"));
                 clazzGradeField.setText((String) clazz.get("grade"));

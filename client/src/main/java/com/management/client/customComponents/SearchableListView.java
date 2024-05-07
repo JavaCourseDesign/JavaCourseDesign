@@ -43,7 +43,7 @@ public class SearchableListView extends HBox {
     }
 
     private void setupSearchField() {
-        searchField.setPromptText("Search here!");
+        searchField.setPromptText("搜索");
         searchField.textProperty().addListener((observable, oldValue, newValue) -> filterItems(newValue));
     }
 

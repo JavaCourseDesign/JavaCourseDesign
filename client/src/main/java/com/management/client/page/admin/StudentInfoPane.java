@@ -47,6 +47,8 @@ public class StudentInfoPane{
     @FXML
     private TextField social;
     @FXML
+    private TextField highSchool;
+    @FXML
     private Label phone;
     @FXML
     private Label email;
@@ -110,6 +112,7 @@ public class StudentInfoPane{
         student.put("major", major.getText());
         //clazz待修改
         student.put("social", social.getText());
+        student.put("highSchool", highSchool.getText());
 
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "确定要更新吗？");
         alert.setTitle("警告");
@@ -156,6 +159,7 @@ public class StudentInfoPane{
         dept.setText(student.get("dept")==null?"":student.get("dept").toString());
         major.setText(student.get("major")==null?"":student.get("major").toString());
         social.setText(student.get("social")==null?"":student.get("social").toString());
+        highSchool.setText(student.get("highSchool")==null?"":student.get("highSchool").toString());
         phone.setText(student.get("phone")==null?"":student.get("phone").toString());
         email.setText(student.get("email")==null?"":student.get("email").toString());
         other.setText(student.get("other")==null?"":student.get("other").toString());
