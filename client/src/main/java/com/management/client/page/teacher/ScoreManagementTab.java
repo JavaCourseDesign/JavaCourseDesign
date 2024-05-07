@@ -83,10 +83,21 @@ public class ScoreManagementTab extends Tab {//成绩录入界面
 
         saveButton.setOnMouseClicked(e -> {
             Map score = scoreTable.getSelectedItem();
-            score.put("finalMark", finalMarkField.getText());
+
+            double finalMarkValue;
+            try {
+                finalMarkValue = Double.parseDouble(finalMarkField.getText());
+            } catch (NumberFormatException exception) {
+                finalMarkValue = 0;
+            }
+            finalMarkValue = Math.max(0, finalMarkValue);
+            finalMarkValue = Math.min(100, finalMarkValue);
+
+            score.put("finalMark", finalMarkValue+"");
             request("/uploadFinalScore", score);
             displayScores();
         });
+
         controlPanel.getChildren().addAll(homeworkWeightField,absenceWeightField,fillButton,finalMarkField,saveButton);
         splitPane.getItems().add(controlPanel);
     }

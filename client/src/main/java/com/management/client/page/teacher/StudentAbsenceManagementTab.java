@@ -35,6 +35,7 @@ public class StudentAbsenceManagementTab extends Tab {
         this.setContent(splitPane);
         lessonView=new WeekTimeTable();
         lessonView.setEvents((List<Map<String, Object>>) request("/getLessonsByCourse",course).getData());
+        lessonView.getCalendars().get(0).setReadOnly(true);
         initializeTable();
         initializeControlPanel();
         displayAbsences();

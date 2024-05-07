@@ -8,22 +8,51 @@
 
 <?import com.calendarfx.view.page.WeekPage?>
 <?import com.calendarfx.view.CalendarView?>
-<VBox xmlns="http://javafx.com/javafx"
-      xmlns:fx="http://javafx.com/fxml">
-    <HBox >
-        <TitledPane text="1" >
-            <CalendarView  fx:id="calendarView"/>
+<?import org.controlsfx.control.tableview2.FilteredTableColumn?>
+<?import org.controlsfx.control.tableview2.FilteredTableView?>
+<SplitPane xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml" orientation="VERTICAL" dividerPositions="0.9">
+    <SplitPane orientation="HORIZONTAL" dividerPositions="0.8">
+        <TitledPane text="日历" >
+            <CalendarView fx:id="calendarView"/>
         </TitledPane>
-        <VBox >
-            <TitledPane text="2">
-                <AnchorPane />
+        <TitledPane text="事件详情" >
+            <GridPane>
+                <columnConstraints>
+                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                </columnConstraints>
+                <Label text="事件名称" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                <TextField fx:id="eventNameField" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+                <Label text="开始时间" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                <TextField fx:id="startTimeField" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                <Label text="结束时间" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                <TextField fx:id="endTimeField" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                <Label text="地点" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+                <TextField fx:id="locationField" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+                <Label text="备注" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
+                <TextArea fx:id="noteArea" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+                <Button text="保存" GridPane.columnIndex="0" GridPane.rowIndex="5"/>
+                <Button text="删除" GridPane.columnIndex="1" GridPane.rowIndex="5"/>
+            </GridPane>
+        </TitledPane>
+        <SplitPane HBox.hgrow="ALWAYS" orientation="VERTICAL">
+            <TitledPane text="通知" HBox.hgrow="ALWAYS">
+                <AnchorPane prefHeight="300"/>
             </TitledPane>
-            <TitledPane text="3">
-                <AnchorPane />
+            <TitledPane text="待办">
+                <TableView fx:id="toDoTable">
+                    <columns>
+                        <TableColumn fx:id="courseNameColumn" text="课程名称"/>
+                        <TableColumn fx:id="homeworkContentColumn" text="作业内容"/>
+                        <TableColumn fx:id="deadlineColumn" text="截止时间"/>
+                        <TableColumn fx:id="submitColumn" />
+                    </columns>
+                </TableView>
             </TitledPane>
-        </VBox>
-    </HBox>
+        </SplitPane>
+    </SplitPane>
     <TitledPane text="4">
-        <AnchorPane />
+        <AnchorPane prefHeight="300"/>
     </TitledPane>
-</VBox>
+</SplitPane>

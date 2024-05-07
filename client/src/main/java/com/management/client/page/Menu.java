@@ -183,6 +183,7 @@ public class Menu extends AnchorPane {
                 break;
             case "ROLE_STUDENT":
                 roleLabel.setText("学生菜单");
+                borderPane.setCenter(new StudentHomePage());
                 leftMenu.getRoot().getChildren().addAll(stuHmpItm,stuCrsItm,crsAppItm,stuPerItm,stuAbsItm,stuInoItm,stuDlaItm);
                 break;
             case "ROLE_TEACHER":

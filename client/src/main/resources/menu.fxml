@@ -27,13 +27,13 @@
             <!--<ImageView fitHeight="51.0" fitWidth="134.0" pickOnBounds="true" preserveRatio="true"/>-->
             <!--<Label fx:id="roleLabel" style="-fx-text-fill: white"/>-->
             <StackPane>
-                <ImageView fitHeight="51.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="false">
+                <ImageView fitHeight="55.0" fitWidth="175.0" pickOnBounds="true" preserveRatio="false">
                     <Image url="@images/mesh-1430107_1920.png"/>
                 </ImageView>
                 <Text fx:id="roleLabel"/>
             </StackPane>
 
-            <JFXTreeView fx:id="leftMenu" prefWidth="150" VBox.vgrow="ALWAYS"/>
+            <JFXTreeView fx:id="leftMenu" prefWidth="175" VBox.vgrow="ALWAYS"/>
         </VBox>
     </left>
 </BorderPane>
