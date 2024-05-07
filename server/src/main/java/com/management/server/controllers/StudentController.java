@@ -126,7 +126,74 @@ public class StudentController {
     @PostMapping("/getAllStudents")
     public DataResponse getAllStudents()
     {
-        return new DataResponse(0,studentRepository.findAll(),null);
+        ArrayList<Map> studentList = new ArrayList<>();
+        List<Student> students = studentRepository.findAll();
+        Student sts= studentRepository.findByStudentId("201921001");
+        System.out.println(sts);
+        System.out.println(sts.getScores());
+        System.out.println(sts.getScores().size());
+        for(Student s:students)
+        {
+            Map student = new HashMap();
+            student.put("name",s.getName());
+            student.put("idCardNum",s.getIdCardNum());
+            student.put("gender",s.getGender());
+            student.put("birthday",s.getBirthday());
+            student.put("studentId",s.getStudentId());
+            student.put("dept",s.getDept());
+            student.put("homeTown",s.getHomeTown());
+            student.put("social",s.getSocial());
+            student.put("major",s.getMajor());
+            student.put("highSchool",s.getHighSchool());
+            student.put("address",s.getAddress());
+            student.put("familyMemberCount",s.getFamilies().size());
+            int innovationCount=0;
+            for( Event e:s.getEvents())
+            {
+                if(e instanceof Innovation)
+                {
+                    innovationCount++;
+                }
+            }
+            student.put("innovationCount",innovationCount);
+            student.put("honorCount",s.getHonors().size());
+            student.put("courseCount",s.getCourses().size());
+            double max=0;
+            double min=100;
+            double avg=0;
+            int cnt = s.getScores().size();
+            if(cnt==0)
+            {
+                max=0;
+                min=0;
+                avg=0;
+            }
+            {
+                for(Score score:s.getScores())
+                {
+                    if(score.getMark()!=null)
+                    {
+                        if(score.getMark()>max)
+                        {
+                            max=score.getMark();
+                        }
+                        if(score.getMark()<min)
+                        {
+                            min=score.getMark();
+                        }
+                        avg+=score.getMark();
+                    }
+                }
+                avg/=cnt;
+            }
+            student.put("maxMark",max);
+            student.put("minMark",min);
+            student.put("avgMark",avg);
+            student.put("gpa",gpa(s.getStudentId()));
+            studentList.add(student);
+        }
+        //System.out.println(studentList);
+        return new DataResponse(0,studentList,null);
     }
 
     @PostMapping("/addStudent")
@@ -250,10 +317,13 @@ public class StudentController {
         for (Score item : scoreList) {
             Double c = (Double) item.getCourse().getCredit();
             Double m = item.getMark();
-            if ((m*1.0/ 10 - 5) > 0) {
-                mark += (m*1.0 / 10 - 5) * c;
+            if(m!=null)
+            {
+                if ((m*1.0/ 10 - 5) > 0) {
+                    mark += (m*1.0 / 10 - 5) * c;
+                }
+                credit += c;
             }
-            credit += c;
         }
         gpa = mark / credit;
         return String.valueOf(gpa);

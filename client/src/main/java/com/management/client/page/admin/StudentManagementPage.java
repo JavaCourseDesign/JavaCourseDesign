@@ -77,8 +77,14 @@ public class StudentManagementPage extends SplitPane {
         FilteredTableColumn<Map, String> studentMajorColumn = new FilteredTableColumn<>("专业");
         FilteredTableColumn<Map, String> studentHighSchoolColumn = new FilteredTableColumn<>("毕业高中");
         FilteredTableColumn<Map, String> studentAddressColumn = new FilteredTableColumn<>("地址");
-
-
+        FilteredTableColumn<Map,String>  familyMemberCountColumn=new FilteredTableColumn<>("家庭成员数");
+        FilteredTableColumn<Map,String>  innovationCountColumn=new FilteredTableColumn<>("创新实践数");
+        FilteredTableColumn<Map,String>  honorCountColumn=new FilteredTableColumn<>("荣誉数");
+        FilteredTableColumn<Map,String>  courseCountColumn=new FilteredTableColumn<>("课程数");
+        FilteredTableColumn<Map,String>  maxMarkColumn=new FilteredTableColumn<>("最高成绩");
+        FilteredTableColumn<Map,String>  minMarkColumn=new FilteredTableColumn<>("最低成绩");
+        FilteredTableColumn<Map,String>  avgMarkColumn=new FilteredTableColumn<>("平均成绩");
+        FilteredTableColumn<Map,String>  gpaColumn=new FilteredTableColumn<>("平均学分绩点");
         // Set cell value factories
         studentNameColumn.setCellValueFactory(new MapValueFactory<>("name"));
         idCardNumColumn.setCellValueFactory(new MapValueFactory<>("idCardNum"));
@@ -91,6 +97,15 @@ public class StudentManagementPage extends SplitPane {
         studentMajorColumn.setCellValueFactory(new MapValueFactory<>("major"));
         studentHighSchoolColumn.setCellValueFactory(new MapValueFactory<>("highSchool"));
         studentAddressColumn.setCellValueFactory(new MapValueFactory<>("address"));
+        familyMemberCountColumn.setCellValueFactory(new MapValueFactory<>("familyMemberCount"));
+        innovationCountColumn.setCellValueFactory(new MapValueFactory<>("innovationCount"));
+        honorCountColumn.setCellValueFactory(new MapValueFactory<>("honorCount"));
+        courseCountColumn.setCellValueFactory(new MapValueFactory<>("courseCount"));
+        maxMarkColumn.setCellValueFactory(new MapValueFactory<>("maxMark"));
+        minMarkColumn.setCellValueFactory(new MapValueFactory<>("minMark"));
+        avgMarkColumn.setCellValueFactory(new MapValueFactory<>("avgMark"));
+
+        gpaColumn.setCellValueFactory(new MapValueFactory<>("gpa"));
 
         /*PopupFilter<Map,String> studentNameFilter = new PopupContainsFilter<>(studentNameColumn);
         PopupFilter<Map,String> idCardNumFilter = new PopupContainsFilter<>(idCardNumColumn);
@@ -120,7 +135,7 @@ public class StudentManagementPage extends SplitPane {
 
 
         // Create a list of columns
-        List<FilteredTableColumn<Map, ?>> columns = new ArrayList<>(List.of(studentNameColumn, idCardNumColumn, studentGenderColumn, studentBirthdayColumn, studentHomeTownColumn, studentIdColumn, studentDeptColumn, studentSocialColumn, studentMajorColumn, studentHighSchoolColumn, studentAddressColumn));
+        List<FilteredTableColumn<Map, ?>> columns = new ArrayList<>(List.of(studentNameColumn, idCardNumColumn, studentGenderColumn, studentBirthdayColumn, studentHomeTownColumn, studentIdColumn, studentDeptColumn, studentSocialColumn, studentMajorColumn, studentHighSchoolColumn, studentAddressColumn,familyMemberCountColumn,innovationCountColumn,honorCountColumn,courseCountColumn,maxMarkColumn,minMarkColumn,avgMarkColumn,gpaColumn));
         // Initialize the SearchableTableViewForMap
         studentTable = new SearchableTableView(observableList, List.of("studentId","name"), columns);
 
@@ -143,6 +158,7 @@ public class StudentManagementPage extends SplitPane {
         observableList.clear();
         observableList.addAll(FXCollections.observableArrayList((ArrayList) request("/getAllStudents", null).getData()));
         studentTable.setData(observableList);
+        System.out.println(observableList);
         //System.out.println(observableList);
     }
 
