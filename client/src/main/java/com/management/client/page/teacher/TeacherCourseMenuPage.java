@@ -2,6 +2,7 @@ package com.management.client.page.teacher;
 
 import com.management.client.customComponents.SearchableTableView;
 
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.SplitPane;
@@ -37,7 +38,14 @@ public class TeacherCourseMenuPage extends SplitPane {
         FilteredTableColumn<Map, String> teacherColumn = new FilteredTableColumn<>("教师");
         FilteredTableColumn<Map, String> studentColumn = new FilteredTableColumn<>("学生数");*/
 
-        courseIdColumn.setCellValueFactory(new MapValueFactory<>("courseId"));
+        courseIdColumn.setCellValueFactory(data-> {
+            String courseId = (String) data.getValue().get("courseId");
+            if(courseId==null)
+            {
+                return new SimpleStringProperty("");
+            }
+            return new SimpleStringProperty("sdu"+String.format("%06d",Integer.parseInt(courseId)));
+        });
         courseNameColumn.setCellValueFactory(new MapValueFactory<>("name"));
         /*courseCreditColumn.setCellValueFactory(new MapValueFactory<>("credit"));
         courseReferenceColumn.setCellValueFactory(new MapValueFactory<>("reference"));

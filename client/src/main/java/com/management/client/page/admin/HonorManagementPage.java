@@ -10,7 +10,9 @@ import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.MapValueFactory;
+import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import org.controlsfx.control.tableview2.FilteredTableColumn;
 
@@ -31,9 +33,10 @@ public class HonorManagementPage extends SplitPane {
     private SearchableListView studentListView= new SearchableListView(FXCollections.observableArrayList(List.of()), List.of());
     private WeekTimeTable eventView=new WeekTimeTable();
     private Button displayButton=new Button("学生(点击以查看):");
-    private Button addButton = new Button("Add");
-    private Button deleteButton = new Button("Delete");
-    private Button updateButton = new Button("Update");
+    private Button addButton = new Button("增加");
+    private Button deleteButton = new Button("删除");
+    private Button updateButton = new Button("更新");
+    private HBox buttonBox=new HBox();
     private DatePicker awardDatePicker=new DatePicker();
     private TextField nameField = new TextField("优秀团员");
     private TextField departmentField = new TextField("软院团支部");
@@ -80,7 +83,14 @@ public class HonorManagementPage extends SplitPane {
                 departmentField,
                 awardDatePicker
         );
-        gridPane.addRow(6, addButton, deleteButton, updateButton);
+        gridPane.getColumnConstraints().addAll(
+                new ColumnConstraints(130),
+                new ColumnConstraints(500)
+        );
+        //gridPane.getColumnConstraints().get(1).setHgrow(Priority.ALWAYS);
+        buttonBox.setSpacing(20);
+        buttonBox.getChildren().addAll(addButton,deleteButton,updateButton);
+
         addButton.setOnAction(event -> addHonor());
         deleteButton.setOnAction(event ->deleteHonors());
         updateButton.setOnAction(event -> updateHonor());
@@ -124,6 +134,7 @@ public class HonorManagementPage extends SplitPane {
             studentTable.setVisible(true);
         });
         controlPanel.getChildren().add(gridPane);
+        controlPanel.getChildren().add(buttonBox);
         studentTable.setVisible(false);
         controlPanel.getChildren().add(studentTable);
         this.getItems().add(controlPanel);

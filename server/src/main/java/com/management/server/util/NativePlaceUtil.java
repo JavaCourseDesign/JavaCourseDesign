@@ -1507,6 +1507,8 @@ public class NativePlaceUtil {
             case 361129 -> "万年县";
             case 361130 -> "婺源县";
             case 361181 -> "德兴市";
+            case 3624->"吉安市";
+            case 362422 -> "吉水县";
             case 37 -> "山东省";
             case 3701 -> "济南市";
             case 370101 -> "市辖区";

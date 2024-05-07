@@ -25,6 +25,7 @@ import javafx.stage.FileChooser;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.text.DecimalFormat;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
@@ -82,6 +83,9 @@ public class StudentPortraitPage {
         competitionText.setText("曾参与"+m.get("competitionName1")+",荣获"+m.get("competitionPerformance1") );
         paperText.setText("曾在刊物"+m.get("paperPlace1")+"上发表过《"+m.get("paperName1")+"》");
         projectText.setText("曾参加"+m.get("projectName1")+"项目,项目评价为"+m.get("projectPerformance1"));
+        DecimalFormat df = new DecimalFormat("#.##");
+        String gpa=df.format(Double.parseDouble(m.get("gpa").toString()));
+        gpaText.setText("平均学分绩点为"+gpa);
         Map<String, Double> timeMoneyMap = new HashMap<>();
         List<Map> feeList= (List<Map>) m.get("feeList");
         for (Map map : feeList) {

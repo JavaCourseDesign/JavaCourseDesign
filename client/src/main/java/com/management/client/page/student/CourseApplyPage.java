@@ -80,7 +80,14 @@ public class CourseApplyPage extends SplitPane {
         FilteredTableColumn<Map, String> courseChosenStateColumn = new FilteredTableColumn<>("抽签状态");
         FilteredTableColumn<Map, Void> courseApplyColumn = new FilteredTableColumn<>("选课");
 
-        courseIdColumn.setCellValueFactory(new MapValueFactory<>("courseId"));
+        courseIdColumn.setCellValueFactory(data-> {
+            String courseId = (String) data.getValue().get("courseId");
+            if(courseId==null)
+            {
+                return new SimpleStringProperty("");
+            }
+            return new SimpleStringProperty("sdu"+String.format("%06d",Integer.parseInt(courseId)));
+        });
         courseNameColumn.setCellValueFactory(new MapValueFactory<>("name"));
         courseCreditColumn.setCellValueFactory(new MapValueFactory<>("credit"));
 

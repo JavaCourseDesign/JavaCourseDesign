@@ -52,12 +52,10 @@ public class HttpClientUtil {
         }
 
         if (response.statusCode() == 200) {
-            System.out.println("Login successful");
-            System.out.println("Token:"+response.body());
             jwt.setAccessToken(response.body());
+            if(response.body().isEmpty()) return false;
             return true;
         } else {
-            System.out.println("Login failed");
             return false;
         }
     }
