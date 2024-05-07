@@ -24,7 +24,7 @@ public class ClazzController {
     private StudentRepository studentRepository;
     @PostMapping("/getAllClazz")
     public DataResponse getAllClazz(){
-        List<Clazz> clazzes = clazzRepository.findAll();
+        /*List<Clazz> clazzes = clazzRepository.findAll();
         List<Map> clazzesMap = new ArrayList<>();
         for (Clazz clazz : clazzes) {
             Map<String, Object> clazzMap = BeanUtil.beanToMap(clazz);
@@ -45,12 +45,12 @@ public class ClazzController {
                 honorCount+=student.getHonors().size();
             }
             clazzMap.put("honorCount", honorCount);
-            /*double avgScore = 0;
+            *//*double avgScore = 0;
             for (Student student : clazz.getStudents()) {
                 avgScore+=student.getScore();
-            }*/
+            }*//*
             clazzesMap.add(clazzMap);
-        }
+        }*/
 
         return new DataResponse(0, clazzRepository.findAll(),null);
     }

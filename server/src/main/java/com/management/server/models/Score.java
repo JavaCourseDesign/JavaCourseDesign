@@ -5,9 +5,11 @@ import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Entity
 @Data
+@EqualsAndHashCode(exclude = {"student", "course"})
 public class Score {
     @Id
     @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)

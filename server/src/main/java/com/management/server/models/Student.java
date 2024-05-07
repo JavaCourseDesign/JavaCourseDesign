@@ -9,7 +9,7 @@ import lombok.EqualsAndHashCode;
 import java.util.List;
 
 
-@EqualsAndHashCode(callSuper = true, exclude = {"families"})//设为true时equals和hashcode方法将考虑/包含父类的属性
+@EqualsAndHashCode(callSuper = true, exclude = {"families","scores"})//设为true时equals和hashcode方法将考虑/包含父类的属性
 @Entity
 @Data
 @Table(name="student",uniqueConstraints = {@UniqueConstraint(columnNames = {"student_id"})})
@@ -31,5 +31,10 @@ public class Student extends Person{
     @JoinColumn(name = "student_id")
     @JsonIgnore
     private List<Family> families;
+
+    @OneToMany(fetch = FetchType.LAZY,cascade = {CascadeType.ALL},orphanRemoval = true)
+    @JoinColumn(name = "student_id")
+    @JsonIgnore
+    private List<Score> scores;
 
 }

@@ -241,6 +241,10 @@ public class ScoreController {
                       score.getAbsenceMark()*score.getCourse().getAbsenceWeight() +
                       score.getHomeworkMark()*score.getCourse().getHomeworkWeight());
         scoreRepository.save(score);
+
+        Student s= studentRepository.findByPersonId("2");
+        System.out.println("markcount"+s.getScores().size());
+
         return new DataResponse(0,null,"更新成功");
     }
 

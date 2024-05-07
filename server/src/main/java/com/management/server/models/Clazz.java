@@ -1,6 +1,5 @@
 package com.management.server.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -24,7 +23,7 @@ public class Clazz {
 
     @OneToMany
     @JoinColumn(name = "clazzId")
-    @JsonIgnore
+    //@JsonIgnore
     private List<Student> students;
 
 }
