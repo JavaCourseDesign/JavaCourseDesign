@@ -9,6 +9,10 @@ class Absence
 class AdministrativeClass
 class Course
 class DailyActivity
+class Dormitory
+class EUserType
+class Event
+class Family
 
 List <|-- AbstractList
 Collection <|-- AbstractCollection
