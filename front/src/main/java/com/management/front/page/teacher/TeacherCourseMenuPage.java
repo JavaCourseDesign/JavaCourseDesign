@@ -22,7 +22,8 @@ public class TeacherCourseMenuPage extends SplitPane {
     private SearchableTableView courseTable;
     private TabPane courseTabPane = new TabPane();
     public TeacherCourseMenuPage() {
-        this.setWidth(1000);
+        //this.setWidth(1000);
+        this.setDividerPosition(0, 0.1);
         initializeTable();
         initializeTabPane();
         displayCourses();
@@ -88,6 +89,7 @@ public class TeacherCourseMenuPage extends SplitPane {
     }
 
     private void initializeTabPane() {
+        courseTabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
         this.getItems().add(courseTabPane);
     }
 }

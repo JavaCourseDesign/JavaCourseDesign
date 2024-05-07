@@ -225,7 +225,7 @@ public class StudentController {
             if(innovation.getType().equals("学科竞赛"))
             {
                 cnt1++;
-                map.put("competitionTime"+cnt1,innovation.getTime());
+                map.put("competitionTime"+cnt1,innovation.getStartDate());
                 map.put("competitionName"+cnt1,innovation.getName());
                 map.put("competitionLevel"+cnt1,innovation.getPerformance());
             }
@@ -239,7 +239,7 @@ public class StudentController {
             else if(innovation.getType().equals("社会实践"))
             {
                 cnt3++;
-                map.put("practiceTime"+cnt3,innovation.getTime());
+                map.put("practiceTime"+cnt3,innovation.getStartDate());
                 map.put("practiceName"+cnt3,innovation.getName());
                 map.put("practicePerformance"+cnt3,innovation.getPerformance());
             }

@@ -6,6 +6,9 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.Data;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Set;
 
@@ -19,7 +22,7 @@ import java.util.Set;
 @JsonIgnoreProperties(value = {"persons"})*/
 /*@NamedEntityGraph(name = "Event.persons",
         attributeNodes = @NamedAttributeNode("persons"))*/
-public class Event {
+public class Event{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String eventId;
@@ -27,9 +30,18 @@ public class Event {
     private String name;
 
     //private String time;//12,5,8.30,1.50     第十二周 周五 8:30 一小时五十分钟
-    private String week;//12,13,14,15
-    private String day;//1,2,3,4,5,6,7
-    private String time;//8.30,10.20,14.00,15.50
+    //private String week;//12,13,14,15
+    //private String day;//1,2,3,4,5,6,7
+    //private String time;//8.30,10.20,14.00,15.50
+
+    private LocalDate startDate;
+
+    private LocalDate endDate;
+
+    private LocalTime startTime;
+
+    private LocalTime endTime;
+
     private String duration;//1.50
 
     private String introduction;

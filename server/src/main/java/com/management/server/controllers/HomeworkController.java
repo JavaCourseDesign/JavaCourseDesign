@@ -38,11 +38,15 @@ public class HomeworkController {
     }
     @PostMapping("/addHomework")
     public DataResponse addHomework(@RequestBody Map m){
+        System.out.println("\nmap:"+m);
         List<Person> personList= personRepository.findPersonsByCourseId((String) m.get("courseId"));
+        System.out.println("\npersonList:"+personList);
         for(Person p:personList){
             Student s=studentRepository.findByPersonId(p.getPersonId());
+            System.out.println("\nstudent:"+s);
             if(s!=null){
                 Homework h=BeanUtil.mapToBean(m,Homework.class,true);
+                System.out.println("\nhomework:"+h);
                 h.setCourse(courseRepository.findByCourseId((String) m.get("courseId")));
                 h.setStudent(s);
                 homeworkRepository.save(h);
@@ -66,25 +70,21 @@ public class HomeworkController {
     }
     @PostMapping("/getTeacherHomework")
     @PreAuthorize("hasRole('TEACHER')")
-    public DataResponse getTeacherHomework(){
+    public DataResponse getTeacherHomework(@RequestBody Map m){
         Teacher t=teacherRepository.findByTeacherId(CommonMethod.getUsername());
-        List<Course> courseList=courseRepository.findCoursesByPersonId(t.getPersonId());
-        List<Homework> homeworkList=new ArrayList<>();
-        for(Course c:courseList){
-            List<Person> personList=personRepository.findPersonsByCourseId(c.getCourseId());
-            for(Person p:personList){
-                Student s=studentRepository.findByPersonId(p.getPersonId());
-                if(s!=null){
-                   List<Homework> homeworkList1=homeworkRepository.findHomeworkByStudent(s);
-                    //System.out.println(homeworkList1);
-                   for(Homework h:homeworkList1){
-                       homeworkList.add(h);
-                   }
-                }
-            }
-        }
-        return new DataResponse(0,homeworkList,null);
+        Course c=courseRepository.findByCourseId((String) m.get("courseId"));
+        //if(m.get("courseId")==null) 返回该老师的所有作业
+        if(!c.getPersons().contains(t)) return new DataResponse(1,null,"您不是该课程的教师");
+        return new DataResponse(0,homeworkRepository.findHomeworkByCourse(c),null);
     }
+
+    /*@PostMapping("/getCourseHomework")
+    @PreAuthorize("hasRole('TEACHER')")
+    public DataResponse getCourseHomework(@RequestBody Map m){
+        Course c=courseRepository.findByCourseId((String) m.get("courseId"));
+        return new DataResponse(0,homeworkRepository.findHomeworkByCourse(c),null);
+    }*/
+
     @PostMapping("/uploadHomework")
     @PreAuthorize("hasRole('STUDENT')")
     public DataResponse uploadHomeWork(@RequestBody byte[] barr,
@@ -96,8 +96,7 @@ public class HomeworkController {
             FileUtil.deleteFile("homework",h.getHomeworkFile());
         }
         h.setHomeworkFile(fileName);
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        h.setSubmitTime(formatter.format(LocalDate.now()));
+        h.setSubmitTime(LocalDate.now());
         homeworkRepository.save(h);
         DataResponse r= FileUtil.uploadFile(barr,"homework",fileName);
         return r;

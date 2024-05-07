@@ -31,8 +31,9 @@ public class StudentAbsenceManagementTab extends Tab {
     public StudentAbsenceManagementTab(Map c) {
         course.put("courseId",c.get("courseId"));
         splitPane.setMinWidth(1000);
+        this.setText("学生缺勤管理");
         this.setContent(splitPane);
-        lessonListView=new SearchableListView(FXCollections.observableArrayList((ArrayList) request("/getLessonsByCourseId",course).getData()), List.of("name","time"));
+        lessonListView=new SearchableListView(FXCollections.observableArrayList((ArrayList) request("/getLessonsByCourse",course).getData()), List.of("name","startDate","startTime"));
         initializeTable();
         initializeControlPanel();
         displayAbsences();
@@ -58,7 +59,7 @@ public class StudentAbsenceManagementTab extends Tab {
             if(m.get("event")!=null)
             {
                 Map event=(Map) m.get("event");
-                m.put("time",event.get("time"));
+                m.put("time",event.get("startDate")+" "+event.get("startTime"));
                 m.put("lessonName",event.get("name"));
             }
         }

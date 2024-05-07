@@ -128,6 +128,8 @@ public class CourseApplyPage extends SplitPane {
         filterPanel.getChildren().addAll(filterConflict, filterAvailable, filterChosen);
         courseTable.setFilterPanel(filterPanel);
 
+
+
         this.getItems().add(courseTable);
     }
 
@@ -145,7 +147,7 @@ public class CourseApplyPage extends SplitPane {
             if(course.get("type")!=null&&course.get("type").equals("0")) requiredCredit += course.get("credit") == null ? 0 : (double) course.get("credit");
             if(course.get("type")!=null&&course.get("type").equals("1")) optionalCredit += course.get("credit") == null ? 0 : (double) course.get("credit");
             if(course.get("type")!=null&&course.get("type").equals("2")) selectiveCredit += course.get("credit") == null ? 0 : (double) course.get("credit");
-            List<Map> events = (List<Map>) request("/getLessonsByCourseId", Map.of("courseId", course.get("courseId"))).getData();
+            List<Map> events = (List<Map>) request("/getLessonsByCourse", Map.of("courseId", course.get("courseId"))).getData();
             //if(events==null) continue;
             allEvents.addAll(events);
         }
@@ -155,7 +157,7 @@ public class CourseApplyPage extends SplitPane {
         selectiveCreditCount.setText("选修学分：" + selectiveCredit);
 
 
-        weekTimeTable.setEvents(allEvents);
+        weekTimeTable.setEvents((List)allEvents);
 
         Map filter = new HashMap();
         filter.put("filterConflict", filterConflict.isSelected());

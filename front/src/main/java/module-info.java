@@ -19,6 +19,7 @@ module com.management.front {
     requires org.apache.pdfbox;
     requires javafx.swing;
     requires com.jfoenix;
+    requires com.calendarfx.view;
 
     opens com.management.front to javafx.fxml;
     exports com.management.front;

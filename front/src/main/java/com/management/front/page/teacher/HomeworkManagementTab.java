@@ -43,14 +43,14 @@ public class HomeworkManagementTab extends Tab {
     }
     private Map newMapFromFields(Map m) {
         m.put("homeworkContent", homeworkContentField.getText());
-        m.put("deadline", deadlinePicker.getValue().format(formatter));
+        m.put("deadline", deadlinePicker.getValue()+"");
         m.put("courseId", course.get("courseId"));
         return m;
     }
 
     private void displayHomeworks() {
         observableList.clear();
-        DataResponse r=request("/getTeacherHomework",null);
+        DataResponse r=request("/getTeacherHomework",course);
         ArrayList<Map> list=(ArrayList<Map>)r.getData();
         for(Map m:list)
         {
@@ -123,7 +123,7 @@ public class HomeworkManagementTab extends Tab {
                 button.setOnMouseClicked(event -> {
                     m.put("grade",button.getText());
                     request("/markHomework",m);
-                    controlPanel.getChildren().set(5,new Pane());
+                    controlPanel.getChildren().set(4,new Pane());
                     displayHomeworks();
                     // 关闭 ScrollPane
                 });

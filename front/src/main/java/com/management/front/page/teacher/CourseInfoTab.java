@@ -24,15 +24,14 @@ public class CourseInfoTab extends Tab {
         VBox courseInfoBox = new VBox();
 
         WeekTimeTable weekTimeTable = new WeekTimeTable();
-        weekTimeTable.setEvents((List<Map>) request("/getLessonsByCourseId", course).getData());
-        Pane weekTimeTablePane = new Pane(weekTimeTable);
-        weekTimeTablePane.setMaxWidth(600);
+        weekTimeTable.setEvents((List<Map<String,Object>>) request("/getLessonsByCourse", course).getData());
+
         Label courseIdLabel = new Label("课程号: " + course.get("courseId"));
         Label courseNameLabel = new Label("课程名: " + course.get("name"));
         Label referenceLabel = new Label("参考资料: " + course.get("reference"));
         Label capacityLabel = new Label("课容量: " + course.get("capacity"));
         Label creditLabel = new Label("学分: " + course.get("credit"));
-        String courseType = switch (course.get("type").toString()) {
+        String courseType = switch (course.get("type")+"") {
             case "0" -> "必选";
             case "1" -> "限选";
             case "2" -> "任选";
@@ -49,7 +48,7 @@ public class CourseInfoTab extends Tab {
                 .map(person -> ""+ person.get("name"))
                 .collect(Collectors.joining(", ")));
 
-        courseInfoBox.getChildren().addAll(weekTimeTablePane, courseIdLabel, courseNameLabel, referenceLabel, capacityLabel, creditLabel, typeLabel, preCoursesLabel, teacherLabel, studentLabel);
+        courseInfoBox.getChildren().addAll(weekTimeTable, courseIdLabel, courseNameLabel, referenceLabel, capacityLabel, creditLabel, typeLabel, preCoursesLabel, teacherLabel, studentLabel);
 
         this.setContent(courseInfoBox);
     }

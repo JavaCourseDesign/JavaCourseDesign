@@ -5,6 +5,7 @@ import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXComboBox;
 import com.management.front.customComponents.SearchableListView;
 import com.management.front.customComponents.SearchableTableView;
+import com.management.front.customComponents.WeekTimeTable;
 import com.management.front.request.DataResponse;
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -46,7 +47,8 @@ public class CourseManagementPage extends SplitPane {
     private TextField referenceField = new TextField();
     private TextField capacityField = new TextField();
     private JFXComboBox<String> typeField = new JFXComboBox<>();
-    private SelectionGrid selectionGrid = new SelectionGrid();
+    //private SelectionGrid selectionGrid = new SelectionGrid();
+    private WeekTimeTable weekTimeTable = new WeekTimeTable();
 
     private Map newMapFromFields(Map m) {
         m.put("courseId", courseIdField.getText());
@@ -81,9 +83,11 @@ public class CourseManagementPage extends SplitPane {
             default -> "0";
         });
 
-        selectionGrid.course=m;//把一部分course的信息给予lesson，注意顺序！
+        //mark
+        //selectionGrid.course=m;//把一部分course的信息给予lesson，注意顺序！
         //System.out.println("selectionGrid.course:"+selectionGrid.course);
-        m.put("lessons", selectionGrid.getSelectedLesson());
+        m.put("lessons", weekTimeTable.getEvents());
+        //System.out.println("\nlessons:"+weekTimeTable.getEvents());
 
         return m;
     }
@@ -207,11 +211,13 @@ public class CourseManagementPage extends SplitPane {
                 administrativeClassListView.setSelectedItems(new ArrayList<>());
 
                 //selectionGrid.setSelectedLessons((List<Map>) course.get("lessons"));
-                selectionGrid.setSelectedLessons((List<Map>) request("/getLessonsByCourseId", Map.of("courseId", ""+course.get("courseId"))).getData());
+
+                //mark
+                //selectionGrid.setSelectedLessons((List<Map>) request("/getLessonsByCourse", Map.of("courseId", ""+course.get("courseId"))).getData());
+                weekTimeTable.setEvents((List<Map<String,Object>>) request("/getLessonsByCourse", Map.of("courseId", ""+course.get("courseId"))).getData());
+                weekTimeTable.setCourse(course);
             }
         });
-
-        Pane p=new Pane();
 
         addButton.setOnAction(event -> addCourse());
         deleteButton.setOnAction(event -> deleteCourse());
@@ -221,7 +227,7 @@ public class CourseManagementPage extends SplitPane {
         openButton.setOnAction(event -> openCourses());
         drawLotsButton.setOnAction(event -> drawLots());
 
-        controlPanel.getChildren().addAll(courseIdField, nameField, creditField,typeField ,referenceField, capacityField, preCourseField, teacherListView, administrativeClassListView, selectionGrid, buttons, openButton, drawLotsButton);
+        controlPanel.getChildren().addAll(courseIdField, nameField, creditField,typeField ,referenceField, capacityField, preCourseField, teacherListView, administrativeClassListView, weekTimeTable, buttons, openButton, drawLotsButton);
 
         this.getItems().add(controlPanel);
     }
