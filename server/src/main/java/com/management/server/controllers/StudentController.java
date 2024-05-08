@@ -78,7 +78,11 @@ public class StudentController {
         String personId = (String) m.get("personId");
         Student s = studentRepository.findByPersonId(personId);
         Map student = BeanUtil.beanToMap(s) ;
-        student.put("families",s.getFamilies());
+        List<Family> families = s.getFamilies();
+        if(families!=null)
+        {
+            student.put("families",families);
+        }
         student.put("clazzName", clazzRepository.findClazzByStudent(s)+"班");
         student.put("honor",s.getHonors());
         //文件不存在时可能出现问题，可以把方法的返回字符串调成一个固定图片
@@ -126,12 +130,10 @@ public class StudentController {
     @PostMapping("/getAllStudents")
     public DataResponse getAllStudents()
     {
+        System.out.println("\nmarkStart\n");
         ArrayList<Map> studentList = new ArrayList<>();
         List<Student> students = studentRepository.findAll();
-        Student sts= studentRepository.findByStudentId("201921001");
-        System.out.println(sts);
-        System.out.println(sts.getScores());
-        System.out.println(sts.getScores().size());
+        System.out.println("\nmarkMid\n");
         for(Student s:students)
         {
             Map student = new HashMap();
@@ -161,38 +163,49 @@ public class StudentController {
             double max=0;
             double min=100;
             double avg=0;
-            int cnt = s.getScores().size();
-            if(cnt==0)
+            List<Score> scoreList=s.getScores();
+            System.out.println(scoreList);
+            int cnt = scoreList.size();
+            double creditCnt = 0;
+            double gpa = 0;
+            for(Score score:scoreList)
+            {
+                double credit=score.getCourse().getCredit();
+                if(score.getMark()!=null)
+                {
+                    if(score.getMark()>max)
+                    {
+                        max=score.getMark();
+                    }
+                    if(score.getMark()<min)
+                    {
+                        min=score.getMark();
+                    }
+                    avg+=score.getMark();
+                    gpa+=(score.getMark()<60?0:1+(score.getMark()-60)/10)*credit;
+                }
+                creditCnt+=credit;
+            }
+            if(cnt==0||max<min)
             {
                 max=0;
                 min=0;
                 avg=0;
+                gpa=0;
             }
-            {
-                for(Score score:s.getScores())
-                {
-                    if(score.getMark()!=null)
-                    {
-                        if(score.getMark()>max)
-                        {
-                            max=score.getMark();
-                        }
-                        if(score.getMark()<min)
-                        {
-                            min=score.getMark();
-                        }
-                        avg+=score.getMark();
-                    }
-                }
-                avg/=cnt;
+            else {
+                avg /= cnt;
+                gpa /= creditCnt;
             }
+
             student.put("maxMark",max);
             student.put("minMark",min);
             student.put("avgMark",avg);
-            student.put("gpa",gpa(s.getStudentId()));
+            student.put("gpa",gpa);
             studentList.add(student);
         }
         //System.out.println(studentList);
+        System.out.println("\nmarkEnd\n");
         return new DataResponse(0,studentList,null);
     }
 
@@ -328,6 +341,7 @@ public class StudentController {
         gpa = mark / credit;
         return String.valueOf(gpa);
     }
+
     @PostMapping("/getStudentsByHonor")
     public DataResponse getStudentsByHonor(@RequestBody Map m)
     {

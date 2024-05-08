@@ -94,6 +94,10 @@ public class TestController {//专门用于添加测试数据
             course.setCapacity(1.0*r.nextInt(100));
             course.setCredit(1.0*r.nextInt(6));
             Set<Person> persons=new HashSet<>();
+            if(i==0) {
+                persons.add(students.get(0));
+                persons.add(teachers.get(0));
+            }
             for (int j = 0; j < r.nextInt(30); j++) {
                 persons.add(students.get(r.nextInt(students.size())));
             }

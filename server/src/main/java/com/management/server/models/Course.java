@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.util.List;
 import java.util.Set;
@@ -21,7 +22,6 @@ import java.util.Set;
 /*@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "name")//在递归中第二次出现时用name属性替代本对象避免无限递归
 @JsonIgnoreProperties(value = {"persons"})*/
 @EqualsAndHashCode(exclude = {"lessons","persons","willingStudents","scores","homeworks"})
-
 public class Course{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -56,6 +56,7 @@ public class Course{
     @OneToMany(fetch = FetchType.LAZY,cascade = {CascadeType.ALL},orphanRemoval = true)
     //@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "eventId")
     @JsonIgnore
+    @ToString.Exclude
     private List<Lesson> lessons;//可以通过get0和getSize得到开始结束周次
 
     /*@ManyToMany
@@ -85,22 +86,26 @@ public class Course{
     //@JsonIgnore
     //@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "personId")
     @JsonIgnoreProperties(value = {"courses","events"})
+    @ToString.Exclude
     private Set<Person> persons;
 
     //希望选课的学生
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "willing_student_course")
     @JsonIgnoreProperties(value = {"courses","events"})
+    @ToString.Exclude
     //@JsonIgnore
     private Set<Person> willingStudents;
 
     @OneToMany(cascade = CascadeType.ALL,orphanRemoval = true)
     @JoinColumn(name = "course_id")
     @JsonIgnore
+    @ToString.Exclude
     private List<Score> scores;
 
     @OneToMany
     @JoinColumn(name = "course_id")
     @JsonIgnore
+    @ToString.Exclude
     private List<Homework> homeworks;
 }
