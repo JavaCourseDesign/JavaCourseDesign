@@ -11,6 +11,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.MapValueFactory;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import org.controlsfx.control.tableview2.FilteredTableColumn;
@@ -24,6 +25,7 @@ import static com.management.client.util.HttpClientUtil.*;
 public class CourseManagementPage extends SplitPane {
     private SearchableTableView courseTable;
     private VBox controlPanel = new VBox();
+    private GridPane gridPane = new GridPane();
     private ObservableList<Map> observableList = FXCollections.observableArrayList();
 
     private Button addButton = new Button("添加");
@@ -40,7 +42,7 @@ public class CourseManagementPage extends SplitPane {
     private TextField courseIdField = new TextField();
     private TextField nameField = new TextField();
     private TextField creditField = new TextField();
-    private TextField referenceField = new TextField();
+    private TextField propertyField=new TextField();
     private TextField capacityField = new TextField();
     private JFXComboBox<String> typeField = new JFXComboBox<>();
     //private SelectionGrid selectionGrid = new SelectionGrid();
@@ -50,7 +52,7 @@ public class CourseManagementPage extends SplitPane {
         m.put("courseId", courseIdField.getText());
         m.put("name", nameField.getText());
         m.put("credit", creditField.getText());
-        m.put("reference", referenceField.getText());
+        m.put("property", propertyField.getText());
         m.put("capacity", capacityField.getText());
         m.put("preCourses", preCourseField.getText());
 
@@ -96,13 +98,13 @@ public class CourseManagementPage extends SplitPane {
         FilteredTableColumn<Map, String> courseNameColumn = new FilteredTableColumn<>("课程名");
         FilteredTableColumn<Map, String> courseCreditColumn = new FilteredTableColumn<>("学分");
         FilteredTableColumn<Map, String> courseTypeColumn = new FilteredTableColumn<>("类型");
+        FilteredTableColumn<Map, String> coursePropertyColumn = new FilteredTableColumn<>("课程性质");
         FilteredTableColumn<Map, String> courseReferenceColumn = new FilteredTableColumn<>("参考资料");
         FilteredTableColumn<Map, String> courseCapacityColumn = new FilteredTableColumn<>("课容量");
         FilteredTableColumn<Map, String> preCourseColumn = new FilteredTableColumn<>("先修课程");
         FilteredTableColumn<Map, String> teacherColumn = new FilteredTableColumn<>("教师");
         FilteredTableColumn<Map, String> studentColumn = new FilteredTableColumn<>("学生数");
         FilteredTableColumn<Map, String> availableColumn = new FilteredTableColumn<>("是否开放选课");
-
         courseIdColumn.setCellValueFactory(data-> {
             String courseId = (String) data.getValue().get("courseId");
             if(courseId==null)
@@ -114,8 +116,8 @@ public class CourseManagementPage extends SplitPane {
         courseNameColumn.setCellValueFactory(new MapValueFactory<>("name"));
         courseCreditColumn.setCellValueFactory(new MapValueFactory<>("credit"));
         courseReferenceColumn.setCellValueFactory(new MapValueFactory<>("reference"));
+        //coursePropertyColumn.setCellValueFactory(new MapValueFactory<>("property"));
         courseCapacityColumn.setCellValueFactory(new MapValueFactory<>("capacity"));
-
         preCourseColumn.setCellValueFactory(new MapValueFactory<>("preCourses"));
         /*preCourseColumn.setCellValueFactory(data -> {
             System.out.println("data.getValue:"+data.getValue());
@@ -160,9 +162,8 @@ public class CourseManagementPage extends SplitPane {
 
 
         List<FilteredTableColumn<Map,?>> columns = new ArrayList<>();
-        columns.addAll(List.of(courseIdColumn, courseNameColumn, courseCreditColumn,courseTypeColumn ,courseReferenceColumn, courseCapacityColumn,preCourseColumn ,teacherColumn, studentColumn, availableColumn));
+        columns.addAll(List.of(courseIdColumn, courseNameColumn, courseCreditColumn,courseTypeColumn ,coursePropertyColumn,courseReferenceColumn, courseCapacityColumn,preCourseColumn ,teacherColumn, studentColumn, availableColumn));
         courseTable=new SearchableTableView(observableList, List.of("courseId","name","persons"), columns);
-
         this.getItems().add(courseTable);
     }
 
@@ -178,9 +179,9 @@ public class CourseManagementPage extends SplitPane {
                 courseIdField. setText((String) course.get("courseId"));
                 nameField.     setText((String) course.get("name"));
                 creditField.   setText(course.get("credit")==null?"": "" +course.get("credit"));
-                referenceField.setText((String) course.get("reference"));
                 capacityField. setText(course.get("capacity")==null?"": "" +course.get("capacity"));
                 preCourseField.setText((String) course.get("preCourses"));
+
                 switch (""+course.get("type")) {
                     case "0" -> typeField.getSelectionModel().select(0);
                     case "1" -> typeField.getSelectionModel().select(1);
@@ -227,9 +228,20 @@ public class CourseManagementPage extends SplitPane {
 
         openButton.setOnAction(event -> openCourses());
         drawLotsButton.setOnAction(event -> drawLots());
+        //courseIdField, nameField, creditField,typeField , capacityField, preCourseField, teacherListView, clazzListView
+        gridPane.addColumn(0,
+                new Label("课程号"),
+                new Label("课程名"),
+                new Label("学分"),
+                new Label("课程类型"),
+                new Label("课程性质"),
+                new Label("课容量"),
+                new Label("先修课程"),
+                new Label("教师"),
+                new Label("班级"));
+        gridPane.addColumn(1, courseIdField, nameField, creditField, typeField, propertyField, capacityField, preCourseField, teacherListView, clazzListView);
 
-        controlPanel.getChildren().addAll(courseIdField, nameField, creditField,typeField ,referenceField, capacityField, preCourseField, teacherListView, clazzListView, weekTimeTable, buttons, openButton, drawLotsButton);
-
+        controlPanel.getChildren().addAll(gridPane,weekTimeTable,buttons, openButton, drawLotsButton);
         this.getItems().add(controlPanel);
     }
 

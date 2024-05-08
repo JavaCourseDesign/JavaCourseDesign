@@ -4,8 +4,11 @@ import com.management.client.customComponents.SearchableTableView;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.geometry.Orientation;
+import javafx.scene.control.Label;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.cell.MapValueFactory;
 import org.controlsfx.control.tableview2.FilteredTableColumn;
 
@@ -16,18 +19,36 @@ import java.util.Map;
 import static com.management.client.util.HttpClientUtil.request;
 
 public class StudentScorePage extends SplitPane {
+    private Label label = new Label();
     private SearchableTableView scoreTable;
     private ObservableList<Map> observableList = FXCollections.observableArrayList();
     public StudentScorePage() {
         initializeTable();
         displayScores();
+        gpa();
     }
 
     private void displayScores() {
         observableList.clear();
         observableList.addAll(FXCollections.observableArrayList((ArrayList) request("/getStudentScores", null).getData()));
-        System.out.println(observableList);;
+        //System.out.println(observableList);;
         scoreTable.setData(observableList);
+    }
+    private void gpa()
+    {
+        double totalCredit=0;
+        double totalGradePoint=0;
+        for(Map row:observableList)
+        {
+            if(row.get("mark")==null) continue;
+            double mark = Double.parseDouble(row.get("mark").toString());
+            double gradePoint = mark<60?0:1+(mark-60)/10;
+            Map course= (Map)row.get("course");
+            totalCredit+=Double.parseDouble(course.get("credit").toString());
+            totalGradePoint+=gradePoint*Double.parseDouble(course.get("credit").toString());
+        }
+        label.setText("平均学分绩点为:\n"+totalGradePoint/totalCredit);
+        label.setStyle("-fx-font-size: 20 ; -fx-text-fill: red;");
     }
 
     private void initializeTable() {
@@ -101,9 +122,12 @@ public class StudentScorePage extends SplitPane {
             else if(mark>=60) return new SimpleStringProperty("C");
             else return new SimpleStringProperty("D");
         });
+
         List<FilteredTableColumn<Map,?>> columns= List.of(courseIdColumn,courseNameColumn,homeworkMarkColumn,absenceColumn,finalMarkColumn,markColumn,gradePointColumn,gradeColumn,creditColumn,hourColumn,courseTypeColumn,coursePropertyColumn);
         scoreTable= new SearchableTableView(observableList,List.of(),columns);
+        this.getItems().add(label);
         this.getItems().add(scoreTable);
+        this.setOrientation(Orientation.VERTICAL);
     }
 
 }

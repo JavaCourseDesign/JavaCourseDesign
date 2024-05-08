@@ -267,6 +267,7 @@ public class ScoreController {
         return new DataResponse(0,scoreMapList,null);
     }
 
+
     @PostMapping("/getAllScore")
     //@PreAuthorize("hasRole('ADMIN') or hasRole('TEACHER')")
     public DataResponse getAllScore(){
