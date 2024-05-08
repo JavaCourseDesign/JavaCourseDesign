@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.util.List;
 
@@ -27,14 +28,16 @@ public class Student extends Person{
     @Size(max=20)
     private String highSchool;
 
-    @OneToMany(fetch = FetchType.LAZY,cascade = {CascadeType.ALL},orphanRemoval = true)
+    @OneToMany(fetch = FetchType.EAGER,cascade = {CascadeType.ALL},orphanRemoval = true)
     @JoinColumn(name = "student_id")
     @JsonIgnore
+    @ToString.Exclude
     private List<Family> families;
 
-    @OneToMany(fetch = FetchType.LAZY,cascade = {CascadeType.ALL},orphanRemoval = true)
+    @OneToMany(fetch = FetchType.EAGER,cascade = {CascadeType.ALL},orphanRemoval = true)
     @JoinColumn(name = "student_id")
     @JsonIgnore
+    @ToString.Exclude
     private List<Score> scores;
 
 }

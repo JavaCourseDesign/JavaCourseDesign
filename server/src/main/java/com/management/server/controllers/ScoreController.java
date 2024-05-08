@@ -10,10 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
@@ -165,9 +162,13 @@ public class ScoreController {
 
         List<Event> lessons = new ArrayList<>(course.getLessons());
         List<Person> students=new ArrayList<>();
-        for(Person person:course.getPersons()){
+        Set<Person> persons = course.getPersons();
+        for(Person person:persons){
             if(person instanceof Student) students.add(person);
         }
+
+        System.out.println("lessons:"+lessons);
+        System.out.println("students:"+students);
 
         // 一次性获取所有的缺席记录
         List<Absence> allAbsences = absenceRepository.findAbsencesByEventInAndPersonIn(lessons, students);
@@ -228,6 +229,8 @@ public class ScoreController {
             else score.setHomeworkMark(100.0);
         }
 
+        System.out.println("scores:"+scores);
+
         scoreRepository.saveAll(scores);
         return new DataResponse(0,null,"填充成功");
     }
@@ -242,8 +245,8 @@ public class ScoreController {
                       score.getHomeworkMark()*score.getCourse().getHomeworkWeight());
         scoreRepository.save(score);
 
-        Student s= studentRepository.findByPersonId("2");
-        System.out.println("markcount"+s.getScores().size());
+        //Student s= studentRepository.findByPersonId("2");
+        //System.out.println("markcount"+s.getScores().size());
 
         return new DataResponse(0,null,"更新成功");
     }

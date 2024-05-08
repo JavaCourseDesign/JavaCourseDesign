@@ -68,15 +68,15 @@ public abstract class Person {
     @JsonIgnore
     private Dormitory dormitory;
 
-    @ManyToMany(mappedBy = "persons")
+    @ManyToMany(fetch = FetchType.EAGER,mappedBy = "persons")
     @JsonIgnore
     private Set<Event> events;
 
-    @ManyToMany(mappedBy = "persons")
+    @ManyToMany(fetch = FetchType.EAGER,mappedBy = "persons")
     @JsonIgnore
     private List<Honor> honors;
 
-    @ManyToMany(mappedBy = "persons")
+    @ManyToMany(fetch = FetchType.EAGER,mappedBy = "persons")
     @JsonIgnore
     private List<Course> courses;
 
