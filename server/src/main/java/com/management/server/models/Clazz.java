@@ -21,8 +21,8 @@ public class Clazz {
     /*@OneToOne
     private Teacher headTeacher;*/ //暂时不考虑班主任
 
-    @OneToMany
-    @JoinColumn(name = "clazzId")
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinColumn(name = "clazz_id")
     //@JsonIgnore
     private List<Student> students;
 

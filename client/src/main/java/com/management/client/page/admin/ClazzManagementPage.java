@@ -2,7 +2,6 @@ package com.management.client.page.admin;
 
 import com.management.client.customComponents.SearchableTableView;
 import com.management.client.request.DataResponse;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
@@ -11,7 +10,6 @@ import javafx.scene.layout.VBox;
 import org.controlsfx.control.tableview2.FilteredTableColumn;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static com.management.client.util.HttpClientUtil.request;
 
@@ -48,16 +46,36 @@ public class ClazzManagementPage extends SplitPane {
         FilteredTableColumn<Map, String> clazzNameColumn = new FilteredTableColumn<>("班级名");
         FilteredTableColumn<Map, String> clazzMajorColumn = new FilteredTableColumn<>("专业");
         FilteredTableColumn<Map, String> clazzGradeColumn = new FilteredTableColumn<>("年级");
-        FilteredTableColumn<Map, String> clazzStudentsColumn = new FilteredTableColumn<>("学生");
         FilteredTableColumn<Map, String> clazzNumberColumn = new FilteredTableColumn<>("班级号");
+        //FilteredTableColumn<Map, String> clazzStudentsColumn = new FilteredTableColumn<>("学生");
+        FilteredTableColumn<Map, String> clazzStudentCountColumn = new FilteredTableColumn<>("学生数");
+        FilteredTableColumn<Map, String> clazzMaleCountColumn = new FilteredTableColumn<>("男");
+        FilteredTableColumn<Map, String> clazzFemaleCountColumn = new FilteredTableColumn<>("女");
+        FilteredTableColumn<Map, String> clazzCPCCountColumn = new FilteredTableColumn<>("共产党员");
+        FilteredTableColumn<Map, String> clazzCYLCountColumn = new FilteredTableColumn<>("共青团员");
+        FilteredTableColumn<Map, String> clazzU18CountColumn = new FilteredTableColumn<>("未满18岁");
+        FilteredTableColumn<Map, String> clazzO18CountColumn = new FilteredTableColumn<>("满18岁");
+        FilteredTableColumn<Map, String> clazzInnoCountColumn = new FilteredTableColumn<>("创新实践项目");
+        FilteredTableColumn<Map, String> clazzHonorCountColumn = new FilteredTableColumn<>("荣誉");
+        FilteredTableColumn<Map, String> clazzAvgScoreColumn = new FilteredTableColumn<>("平均分");
 
         clazzMajorColumn.setCellValueFactory(new MapValueFactory<>("major"));
         clazzGradeColumn.setCellValueFactory(new MapValueFactory<>("grade"));
         clazzNameColumn.setCellValueFactory(new MapValueFactory<>("name"));
         clazzNumberColumn.setCellValueFactory(new MapValueFactory<>("clazzNumber"));
+        clazzStudentCountColumn.setCellValueFactory(new MapValueFactory<>("studentCount"));
+        clazzMaleCountColumn.setCellValueFactory(new MapValueFactory<>("maleCount"));
+        clazzFemaleCountColumn.setCellValueFactory(new MapValueFactory<>("femaleCount"));
+        clazzCPCCountColumn.setCellValueFactory(new MapValueFactory<>("CPCCount"));
+        clazzCYLCountColumn.setCellValueFactory(new MapValueFactory<>("CYLCount"));
+        clazzU18CountColumn.setCellValueFactory(new MapValueFactory<>("under18Count"));
+        clazzO18CountColumn.setCellValueFactory(new MapValueFactory<>("over18Count"));
+        clazzInnoCountColumn.setCellValueFactory(new MapValueFactory<>("innoCount"));
+        clazzHonorCountColumn.setCellValueFactory(new MapValueFactory<>("honorCount"));
+        clazzAvgScoreColumn.setCellValueFactory(new MapValueFactory<>("avgScore"));
 
-        clazzStudentsColumn.setCellValueFactory(new MapValueFactory<>("persons"));
-        clazzStudentsColumn.setCellValueFactory(data -> {
+
+        /*clazzStudentsColumn.setCellValueFactory(data -> {
             List<Map<String, Object>> persons = (List<Map<String, Object>>) data.getValue().get("students");
             if(persons==null)
             {
@@ -68,10 +86,24 @@ public class ClazzManagementPage extends SplitPane {
                     .map(person -> (String) person.get("name"))
                     .collect(Collectors.joining(", "));
             return new SimpleStringProperty(personNames);
-        });
+        });*/
 
         List<FilteredTableColumn<Map, ?>> columns = new ArrayList<>();
-        columns.addAll(List.of(clazzMajorColumn, clazzGradeColumn, clazzNumberColumn, clazzNameColumn, clazzStudentsColumn)) ;
+        columns.addAll(List.of(
+                  clazzMajorColumn
+                , clazzGradeColumn
+                , clazzNumberColumn
+                , clazzNameColumn
+                , clazzStudentCountColumn
+                , clazzMaleCountColumn
+                , clazzFemaleCountColumn
+                , clazzCPCCountColumn
+                , clazzCYLCountColumn
+                , clazzU18CountColumn
+                , clazzO18CountColumn
+                , clazzInnoCountColumn
+                , clazzHonorCountColumn
+                , clazzAvgScoreColumn)) ;
 
         clazzTable = new SearchableTableView(observableList, List.of("clazzNumber","name"), columns);
 

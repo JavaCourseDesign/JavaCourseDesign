@@ -29,7 +29,7 @@ public class Student extends Person{
     private String highSchool;
 
     @OneToMany(fetch = FetchType.EAGER,cascade = {CascadeType.ALL},orphanRemoval = true)
-    //@JoinColumn(name = "student_id")
+    @JoinColumn(name = "student_id")
     @JsonIgnore
     @ToString.Exclude
     private List<Family> families;

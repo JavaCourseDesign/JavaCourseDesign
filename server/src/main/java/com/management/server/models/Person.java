@@ -104,7 +104,7 @@ public abstract class Person {
 
     public Integer getAge() {
         if(this.birthday == null)
-            return null;
+            return -1;
         //获取当前年份
         LocalDate now = LocalDate.now();
         int year = now.getYear();

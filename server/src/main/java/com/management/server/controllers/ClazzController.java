@@ -3,6 +3,7 @@ package com.management.server.controllers;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
 import com.management.server.models.Clazz;
+import com.management.server.models.Score;
 import com.management.server.models.Student;
 import com.management.server.payload.response.DataResponse;
 import com.management.server.repositories.ClazzRepository;
@@ -24,7 +25,7 @@ public class ClazzController {
     private StudentRepository studentRepository;
     @PostMapping("/getAllClazz")
     public DataResponse getAllClazz(){
-        /*List<Clazz> clazzes = clazzRepository.findAll();
+        List<Clazz> clazzes = clazzRepository.findAll();
         List<Map> clazzesMap = new ArrayList<>();
         for (Clazz clazz : clazzes) {
             Map<String, Object> clazzMap = BeanUtil.beanToMap(clazz);
@@ -33,7 +34,7 @@ public class ClazzController {
             clazzMap.put("femaleCount", clazz.getStudents().stream().filter(student -> student.getGender().equals("女")).count());
             clazzMap.put("CPCCount", clazz.getStudents().stream().filter(student -> student.getSocial().equals("共产党员")).count());
             clazzMap.put("CYLCount", clazz.getStudents().stream().filter(student -> student.getSocial().equals("共青团员")).count());
-            clazzMap.put("under18Count", clazz.getStudents().stream().filter(student -> student.getAge() < 18).count());
+            clazzMap.put("under18Count", clazz.getStudents().stream().filter(student -> student.getAge()!=-1&&student.getAge() < 18).count());
             clazzMap.put("over18Count", clazz.getStudents().stream().filter(student -> student.getAge() >= 18).count());
             int innoCount = 0;
             for (Student student : clazz.getStudents()) {
@@ -45,14 +46,20 @@ public class ClazzController {
                 honorCount+=student.getHonors().size();
             }
             clazzMap.put("honorCount", honorCount);
-            *//*double avgScore = 0;
+            double avgScore = 0;
             for (Student student : clazz.getStudents()) {
-                avgScore+=student.getScore();
-            }*//*
+                double pslAvgScore = 0;
+                List<Score> scores = student.getScores();
+                for (Score score : scores) {
+                    pslAvgScore+=score.getMark();
+                }
+                avgScore+=pslAvgScore;
+            }
+            clazzMap.put("avgScore", avgScore/clazz.getStudents().size());
             clazzesMap.add(clazzMap);
-        }*/
+        }
 
-        return new DataResponse(0, clazzRepository.findAll(),null);
+        return new DataResponse(0, clazzesMap,null);
     }
 
     @PostMapping("/addClazz")
