@@ -139,7 +139,8 @@ public class ScoreController {
                 if(student instanceof Student) {
                     Score score = new Score();
                     score.setStudent((Student) student);
-                    course.getScores().add(score);
+                    score.setCourse(course);
+                    //course.getScores().add(score); 双向一对多如果通过外键关联，则只能通过多端来维护关系
                     scores.add(score);
                 }
             }
@@ -265,6 +266,7 @@ public class ScoreController {
        }
         return new DataResponse(0,scoreMapList,null);
     }
+
 
     @PostMapping("/getAllScore")
     //@PreAuthorize("hasRole('ADMIN') or hasRole('TEACHER')")
