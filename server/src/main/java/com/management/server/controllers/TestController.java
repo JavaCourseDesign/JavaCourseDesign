@@ -1,5 +1,6 @@
 package com.management.server.controllers;
 
+import cn.hutool.core.util.IdcardUtil;
 import com.management.server.models.*;
 import com.management.server.payload.response.DataResponse;
 import com.management.server.repositories.*;
@@ -8,9 +9,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 
 import static com.management.server.models.EUserType.ROLE_ADMIN;
+import static com.management.server.util.NativePlaceUtil.getNativePlace;
 
 @RestController
 public class TestController {//专门用于添加测试数据
@@ -69,7 +74,8 @@ public class TestController {//专门用于添加测试数据
             student.setSocial("群众");
             student.setHighSchool("南京市第一中学");
             student.setAddress("山东大学宿舍");
-            student.setHomeTown("江苏南京");
+            student.setIdCardNum(generateIdCardNum());
+            completeStudentById(student);
             students.add(student);
             studentRepository.save(student);
         }
@@ -130,8 +136,7 @@ public class TestController {//专门用于添加测试数据
             Clazz clazz =new Clazz();
             clazz.setMajor("软件工程");
             clazz.setGrade("2019");
-            clazz.setClassNumber(i+1+"");
-            clazz.setName("软件工程2019级"+(i+1)+"班");
+            clazz.setClazzNumber(i+1+"");
             List<Student> studentsInClass=new ArrayList<>();
             while (studentsInClass.size()<30){
                 Student student=students.get(r.nextInt(students.size()));
@@ -170,6 +175,59 @@ public class TestController {//专门用于添加测试数据
         String lastName = lastNames[random.nextInt(lastNames.length)];
 
         return firstName + lastName;
+    }
+
+    public String generateIdCardNum() {
+        StringBuilder generater = new StringBuilder();
+        generater.append("110101");
+        generater.append(generateBirthday());
+        generater.append(this.randomCode());
+        generater.append(this.calcTrailingNumber(generater.toString().toCharArray()));
+        return generater.toString();
+    }
+    public String generateBirthday() {
+        long minDay = LocalDate.of(2002, 1, 1).toEpochDay();
+        long maxDay = LocalDate.of(2008, 12, 31).toEpochDay();
+        long randomDay = ThreadLocalRandom.current().nextLong(minDay, maxDay);
+        LocalDate randomBirthDate = LocalDate.ofEpochDay(randomDay);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+        return randomBirthDate.format(formatter);
+    }
+    public char calcTrailingNumber(char[] chars) {
+        if (chars.length < 17) {
+            return ' ';
+        }
+        int[] c = { 7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2 };
+        char[] r = { '1', '0', 'X', '9', '8', '7', '6', '5', '4', '3', '2' };
+        int[] n = new int[17];
+        int result = 0;
+        for (int i = 0; i < n.length; i++) {
+            n[i] = Integer.parseInt(chars[i] + "");
+        }
+        for (int i = 0; i < n.length; i++) {
+            result += c[i] * n[i];
+        }
+        return r[result % 11];
+    }
+    public String randomCode() {
+        int code = (int) (Math.random() * 1000);
+        if (code < 10) {
+            return "00" + code;
+        } else if (code < 100) {
+            return "0" + code;
+        } else {
+            return "" + code;
+        }
+    }
+    private boolean completeStudentById(Student s)
+    {
+        String id = s.getIdCardNum();
+        if(!IdcardUtil.isValidCard(id)) return false;
+        s.setHomeTown(getNativePlace(Integer.parseInt(IdcardUtil.getDistrictCodeByIdCard(id))));
+        s.setGender(IdcardUtil.getGenderByIdCard(id) == 1 ? "男" : "女");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy年MM月dd日");
+        s.setBirthday(IdcardUtil.getBirthDate(id).toLocalDateTime().format(formatter));
+        return true;
     }
 }
 

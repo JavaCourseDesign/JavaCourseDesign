@@ -42,7 +42,6 @@ public class CourseManagementPage extends SplitPane {
     private TextField courseIdField = new TextField();
     private TextField nameField = new TextField();
     private TextField creditField = new TextField();
-    private TextField propertyField=new TextField();
     private TextField capacityField = new TextField();
     private JFXComboBox<String> typeField = new JFXComboBox<>();
     //private SelectionGrid selectionGrid = new SelectionGrid();
@@ -52,7 +51,6 @@ public class CourseManagementPage extends SplitPane {
         m.put("courseId", courseIdField.getText());
         m.put("name", nameField.getText());
         m.put("credit", creditField.getText());
-        m.put("property", propertyField.getText());
         m.put("capacity", capacityField.getText());
         m.put("preCourses", preCourseField.getText());
 
@@ -171,7 +169,7 @@ public class CourseManagementPage extends SplitPane {
         controlPanel.setMinWidth(200);
         controlPanel.setSpacing(10);
 
-        typeField.getItems().addAll("必选", "任选", "限选");
+        typeField.getItems().addAll("专业基础课", "学科基础课", "通识核心课", "通识选修课", "创新实践计划", "专业选修课", "通识必修课" );
 
         courseTable.setOnItemClick(course -> {
             if(course!=null)
@@ -234,12 +232,11 @@ public class CourseManagementPage extends SplitPane {
                 new Label("课程名"),
                 new Label("学分"),
                 new Label("课程类型"),
-                new Label("课程性质"),
                 new Label("课容量"),
                 new Label("先修课程"),
                 new Label("教师"),
                 new Label("班级"));
-        gridPane.addColumn(1, courseIdField, nameField, creditField, typeField, propertyField, capacityField, preCourseField, teacherListView, clazzListView);
+        gridPane.addColumn(1, courseIdField, nameField, creditField, typeField, capacityField, preCourseField, teacherListView, clazzListView);
 
         controlPanel.getChildren().addAll(gridPane,weekTimeTable,buttons, openButton, drawLotsButton);
         this.getItems().add(controlPanel);

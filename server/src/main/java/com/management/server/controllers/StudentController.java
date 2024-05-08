@@ -138,10 +138,12 @@ public class StudentController {
         for(Student s:students)
         {
             Map student = new HashMap();
+            student.put("personId",s.getPersonId());
             student.put("name",s.getName());
             student.put("idCardNum",s.getIdCardNum());
             student.put("gender",s.getGender());
             student.put("birthday",s.getBirthday());
+            student.put("age",s.getAge());
             student.put("studentId",s.getStudentId());
             student.put("dept",s.getDept());
             student.put("homeTown",s.getHomeTown());

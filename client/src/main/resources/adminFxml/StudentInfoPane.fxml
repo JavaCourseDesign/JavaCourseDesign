@@ -50,7 +50,7 @@
                             <TextField GridPane.columnIndex="1" GridPane.rowIndex="6" fx:id="dept" />
                             <TextField GridPane.columnIndex="1" GridPane.rowIndex="7" fx:id="major" />
                             <Label GridPane.columnIndex="1" GridPane.rowIndex="8" fx:id="clazz" /> <!--待修改-->
-                            <TextField GridPane.columnIndex="1" GridPane.rowIndex="9" fx:id="social" />
+                            <ComboBox GridPane.columnIndex="1" GridPane.rowIndex="9" fx:id="social" />
                             <TextField GridPane.columnIndex="1" GridPane.rowIndex="10" fx:id="highSchool" />
                         </GridPane>
                     </AnchorPane>

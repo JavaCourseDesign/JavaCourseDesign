@@ -15,7 +15,7 @@ public class Clazz {
 
     private String major;
     private String grade;
-    private String classNumber;
+    private String clazzNumber;
     private String name;
 
     /*@OneToOne

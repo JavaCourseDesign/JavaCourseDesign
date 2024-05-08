@@ -7,8 +7,6 @@ import javafx.collections.ObservableList;
 import javafx.geometry.Orientation;
 import javafx.scene.control.Label;
 import javafx.scene.control.SplitPane;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.cell.MapValueFactory;
 import org.controlsfx.control.tableview2.FilteredTableColumn;
 
@@ -63,7 +61,6 @@ public class StudentScorePage extends SplitPane {
         FilteredTableColumn<Map, String> creditColumn = new FilteredTableColumn<>("学分");
         FilteredTableColumn<Map, String> hourColumn = new FilteredTableColumn<>("总学时");
         FilteredTableColumn<Map, String> courseTypeColumn = new FilteredTableColumn<>("课程类型");
-        FilteredTableColumn<Map, String> coursePropertyColumn = new FilteredTableColumn<>("课程性质");
         courseIdColumn.setCellValueFactory(
                 data -> {
                     Map course= (Map)data.getValue().get("course");
@@ -85,11 +82,7 @@ public class StudentScorePage extends SplitPane {
             if(course.isEmpty()) return new SimpleStringProperty("");
             return new SimpleStringProperty((String)course.get("type"));
         });
-        coursePropertyColumn.setCellValueFactory(data -> {
-            Map course= (Map)data.getValue().get("course");
-            if(course.isEmpty()) return new SimpleStringProperty("");
-            return new SimpleStringProperty((String)course.get("property"));
-        });
+
         creditColumn.setCellValueFactory(data -> {
             Map course= (Map)data.getValue().get("course");
             if(course.isEmpty()) return new SimpleStringProperty("");
@@ -123,7 +116,7 @@ public class StudentScorePage extends SplitPane {
             else return new SimpleStringProperty("D");
         });
 
-        List<FilteredTableColumn<Map,?>> columns= List.of(courseIdColumn,courseNameColumn,homeworkMarkColumn,absenceColumn,finalMarkColumn,markColumn,gradePointColumn,gradeColumn,creditColumn,hourColumn,courseTypeColumn,coursePropertyColumn);
+        List<FilteredTableColumn<Map,?>> columns= List.of(courseIdColumn,courseNameColumn,homeworkMarkColumn,absenceColumn,finalMarkColumn,markColumn,gradePointColumn,gradeColumn,creditColumn,hourColumn,courseTypeColumn);
         scoreTable= new SearchableTableView(observableList,List.of(),columns);
         this.getItems().add(label);
         this.getItems().add(scoreTable);

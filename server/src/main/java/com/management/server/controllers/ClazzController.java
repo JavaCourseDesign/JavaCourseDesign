@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -27,6 +28,7 @@ public class ClazzController {
     public DataResponse getAllClazz(){
         List<Clazz> clazzes = clazzRepository.findAll();
         List<Map> clazzesMap = new ArrayList<>();
+        DecimalFormat df = new DecimalFormat("#.##");
         for (Clazz clazz : clazzes) {
             Map<String, Object> clazzMap = BeanUtil.beanToMap(clazz);
             clazzMap.put("studentCount", clazz.getStudents().size());
@@ -55,7 +57,7 @@ public class ClazzController {
                 }
                 avgScore+=pslAvgScore;
             }
-            clazzMap.put("avgScore", avgScore/clazz.getStudents().size());
+            clazzMap.put("avgScore", Double.parseDouble(df.format(avgScore/clazz.getStudents().size())));
             clazzesMap.add(clazzMap);
         }
 
@@ -76,6 +78,7 @@ public class ClazzController {
             }
             clazz.setStudents(students);
         }
+        clazz.setName(""+m.get("major")+m.get("grade")+"级"+m.get("clazzNumber")+"班");
         clazzRepository.save(clazz);
         return new DataResponse(0,null,"添加成功");
     }
@@ -94,7 +97,7 @@ public class ClazzController {
             return new DataResponse(-1,null,"行政班不存在");
         }
         BeanUtil.fillBeanWithMap(m, clazz, true, true);
-        clazz.setName(""+m.get("major")+m.get("grade")+"级"+m.get("classNumber")+"班");
+        clazz.setName(""+m.get("major")+m.get("grade")+"级"+m.get("clazzNumber")+"班");
         if(m.get("studentIds") != null){
             List<Student> students = new ArrayList<>();
             for (int i = 0; i < ((ArrayList)m.get("studentIds")).size(); i++) {

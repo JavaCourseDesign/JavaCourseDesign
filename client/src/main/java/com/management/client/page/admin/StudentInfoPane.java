@@ -45,7 +45,7 @@ public class StudentInfoPane{
     @FXML
     private Label clazz; //待修改
     @FXML
-    private TextField social;
+    private ComboBox<String> social;
     @FXML
     private TextField highSchool;
     @FXML
@@ -94,6 +94,8 @@ public class StudentInfoPane{
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
+        social.getItems().addAll("群众", "共青团员", "共产党员");
     }
 
     public TabPane getRoot() {
@@ -111,7 +113,7 @@ public class StudentInfoPane{
         student.put("dept", dept.getText());
         student.put("major", major.getText());
         //clazz待修改
-        student.put("social", social.getText());
+        student.put("social", social.getValue());
         student.put("highSchool", highSchool.getText());
 
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "确定要更新吗？");
@@ -158,7 +160,8 @@ public class StudentInfoPane{
         homeTown.setText(student.get("homeTown")==null?"":student.get("homeTown").toString());
         dept.setText(student.get("dept")==null?"":student.get("dept").toString());
         major.setText(student.get("major")==null?"":student.get("major").toString());
-        social.setText(student.get("social")==null?"":student.get("social").toString());
+        //social.setText(student.get("social")==null?"":student.get("social").toString());
+        social.setValue(student.get("social")==null?"":student.get("social").toString());
         highSchool.setText(student.get("highSchool")==null?"":student.get("highSchool").toString());
         phone.setText(student.get("phone")==null?"":student.get("phone").toString());
         email.setText(student.get("email")==null?"":student.get("email").toString());
