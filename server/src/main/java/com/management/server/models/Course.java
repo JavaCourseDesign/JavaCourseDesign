@@ -53,7 +53,7 @@ public class Course{
     //private String semester;
 
 
-    @OneToMany(fetch = FetchType.LAZY,cascade = {CascadeType.ALL},orphanRemoval = true)
+    @OneToMany(mappedBy = "course",fetch = FetchType.LAZY,cascade = {CascadeType.ALL},orphanRemoval = true)
     //@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "eventId")
     @JsonIgnore
     @ToString.Exclude
@@ -97,14 +97,14 @@ public class Course{
     //@JsonIgnore
     private Set<Person> willingStudents;
 
-    @OneToMany(cascade = CascadeType.ALL,orphanRemoval = true)
-    @JoinColumn(name = "course_id")
+    @OneToMany(mappedBy = "course",cascade = CascadeType.ALL,orphanRemoval = true)
+    //@JoinColumn(name = "course_id")
     @JsonIgnore
     @ToString.Exclude
     private List<Score> scores;
 
-    @OneToMany
-    @JoinColumn(name = "course_id")
+    @OneToMany(mappedBy = "course",cascade = CascadeType.ALL,orphanRemoval = true)
+    //@JoinColumn(name = "course_id")
     @JsonIgnore
     @ToString.Exclude
     private List<Homework> homeworks;
