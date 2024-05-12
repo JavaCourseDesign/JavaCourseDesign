@@ -19,6 +19,7 @@ public class ClientApplication extends Application {
         Scene scene = new Scene(new LoginPage(), 300, 400);
         stage.setScene(scene);
         stage.show();
+        stage.setOnCloseRequest(e -> System.exit(0));
     }
 
     public static void main(String[] args) {

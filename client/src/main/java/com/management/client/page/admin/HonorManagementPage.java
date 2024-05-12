@@ -38,8 +38,8 @@ public class HonorManagementPage extends SplitPane {
     private Button updateButton = new Button("更新");
     private HBox buttonBox=new HBox();
     private DatePicker awardDatePicker=new DatePicker();
-    private TextField nameField = new TextField("优秀团员");
-    private TextField departmentField = new TextField("软院团支部");
+    private TextField nameField = new TextField();
+    private TextField departmentField = new TextField();
 
     List<Map<String, Object>> events = (List<Map<String, Object>>) request("/getAllEventsExceptLessons", null).getData();
     public HonorManagementPage() {

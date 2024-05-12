@@ -32,12 +32,12 @@ public class DailyActivityManagementPage extends SplitPane {
     private Button deleteButton = new Button("删除");
     private Button updateButton = new Button("更新");
     private HBox buttonBox=new HBox();
-    private TextField nameField = new TextField("体育活动");
+    private TextField nameField = new TextField();
     private ComboBox<String> typeField = new ComboBox<>(FXCollections.observableArrayList(
             "体育活动","外出旅游","文艺演出","聚会"
     ));
     private WeekTimeTable eventPicker=new WeekTimeTable();
-    private TextField locationField = new TextField("软件学院");
+    private TextField locationField = new TextField();
     private ObservableList<Map<String,Object>> allStudentsList=FXCollections.observableArrayList((ArrayList) request("/getAllStudents", null).getData());
     public DailyActivityManagementPage() {
         this.setWidth(1000);

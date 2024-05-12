@@ -118,6 +118,16 @@
             </columns>
         </TableView>
     </Tab>
+    <Tab text="成绩信息" fx:id="scoreInfo">
+        <TableView fx:id="scoreTable">
+            <columns>
+                <TableColumn text="课程号" fx:id="courseIdColumn"/>
+                <TableColumn text="课程名称" fx:id="courseNameColumn"/>
+                <TableColumn text="总成绩" fx:id="gradeColumn"/>
+                <TableColumn text="绩点" fx:id="gradePointColumn"/>
+            </columns>
+        </TableView>
+    </Tab>
     <!--<Tab text="日常活动" fx:id="dailyInfo">
 
     </Tab>

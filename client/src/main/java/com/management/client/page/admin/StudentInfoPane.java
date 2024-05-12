@@ -77,7 +77,16 @@ public class StudentInfoPane{
     @FXML
     private TableColumn<Map, String> eventColumn;
 
-
+    @FXML
+    private TableView scoreTable;
+    @FXML
+    private TableColumn<Map, String> courseIdColumn;
+    @FXML
+    private TableColumn<Map, String> courseNameColumn;
+    @FXML
+    private TableColumn<Map, String> gradeColumn;
+    @FXML
+    private TableColumn<Map, String> gradePointColumn;
 
 
     private Map<String, Object> student;
@@ -166,7 +175,6 @@ public class StudentInfoPane{
         phone.setText(student.get("phone")==null?"":student.get("phone").toString());
         email.setText(student.get("email")==null?"":student.get("email").toString());
         other.setText(student.get("other")==null?"":student.get("other").toString());
-
         ObservableList<Map> familyItems = FXCollections.observableArrayList();
         List<Map> familyList = (List<Map>) student.get("families");
         if (student.get("families") != null) {
@@ -177,7 +185,6 @@ public class StudentInfoPane{
         familyName.setCellValueFactory(new MapValueFactory<>("name"));
         familyAge.setCellValueFactory(new MapValueFactory<>("birthday"));
         familyPhone.setCellValueFactory(new MapValueFactory<>("phone"));
-
         ObservableList<Map> honorItems = FXCollections.observableArrayList();
         List<Map> honorList = (List<Map>) student.get("honors");
         if (student.get("honors") != null) {
@@ -193,6 +200,30 @@ public class StudentInfoPane{
             Map<String,Object> event=(Map<String,Object>) data.getValue().get("event");
             String name=(String) event.get("name");
             return new SimpleStringProperty(name);
+        });
+        ObservableList<Map> scoreItems = FXCollections.observableArrayList();
+        List<Map> scores = (List<Map>) student.get("scores");
+        if(scores!=null)
+        {
+            scoreItems = FXCollections.observableArrayList(scores);
+        }
+        scoreTable.setItems(scoreItems);
+        System.out.println(scoreItems);
+        courseIdColumn.setCellValueFactory(data -> {
+            if(data.getValue().isEmpty()) return new SimpleStringProperty("");
+            String courseId = (String) data.getValue().get("courseId");
+            return new SimpleStringProperty("sdu"+String.format("%06d",Integer.parseInt(courseId)));
+        });
+        courseNameColumn.setCellValueFactory(
+            new MapValueFactory<>("courseName")
+        );
+        gradeColumn.setCellValueFactory(new MapValueFactory<>("mark"));
+        gradePointColumn.setCellValueFactory(data -> {
+            Map<String, Object> row = data.getValue();
+            if(row.get("mark")==null) return new SimpleStringProperty("");
+            double mark = Double.parseDouble(row.get("mark").toString());
+            double gradePoint = mark<60?0:1+(mark-60)/10;
+            return new SimpleStringProperty(gradePoint+"");
         });
 
 

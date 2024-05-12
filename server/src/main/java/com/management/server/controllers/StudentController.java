@@ -92,6 +92,16 @@ public class StudentController {
             student.put("photo", FileUtil.getPhotoImageStr(s.getPhoto()));
             System.out.println("文件合法"+s.getPhoto());
         }
+        List<Score> scoreList=s.getScores();
+        List<Map> scoreMapList = new ArrayList<>();
+        for(Score score:scoreList)
+        {
+            Map scoreMap = BeanUtil.beanToMap(score);
+            scoreMap.put("courseId",score.getCourse().getCourseId());
+            scoreMap.put("courseName",score.getCourse().getName());
+            scoreMapList.add(scoreMap);
+        }
+        student.put("scores",scoreMapList);
         return new DataResponse(0,student,null);
     }
 

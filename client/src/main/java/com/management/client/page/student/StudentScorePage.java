@@ -45,7 +45,10 @@ public class StudentScorePage extends SplitPane {
             totalCredit+=Double.parseDouble(course.get("credit").toString());
             totalGradePoint+=gradePoint*Double.parseDouble(course.get("credit").toString());
         }
-        label.setText("平均学分绩点为:\n"+totalGradePoint/totalCredit);
+        double gpa=0;
+        if(totalCredit!=0)
+         gpa=totalGradePoint/totalCredit;
+        label.setText("平均学分绩点为:"+gpa);
         label.setStyle("-fx-font-size: 20 ; -fx-text-fill: red;");
     }
 
@@ -116,7 +119,7 @@ public class StudentScorePage extends SplitPane {
             else return new SimpleStringProperty("D");
         });
 
-        List<FilteredTableColumn<Map,?>> columns= List.of(courseIdColumn,courseNameColumn,homeworkMarkColumn,absenceColumn,finalMarkColumn,markColumn,gradePointColumn,gradeColumn,creditColumn,hourColumn,courseTypeColumn);
+        List<FilteredTableColumn<Map,?>> columns= List.of(courseIdColumn,courseNameColumn,courseTypeColumn,homeworkMarkColumn,absenceColumn,finalMarkColumn,markColumn,gradePointColumn,gradeColumn,creditColumn,hourColumn);
         scoreTable= new SearchableTableView(observableList,List.of(),columns);
         this.getItems().add(label);
         this.getItems().add(scoreTable);

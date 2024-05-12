@@ -23,8 +23,8 @@ public class AbsencePage extends SplitPane {
     private VBox controlPanel = new VBox();
     private ObservableList<Map> observableList = FXCollections.observableArrayList();
 
-    private TextField offReasonField = new TextField("玩原神");
-    private TextField destinationField = new TextField("宿舍");
+    private TextField offReasonField = new TextField();
+    private TextField destinationField = new TextField();
     private WeekTimeTable eventView=new WeekTimeTable();
 
     public AbsencePage() {

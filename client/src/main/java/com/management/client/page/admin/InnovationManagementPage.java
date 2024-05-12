@@ -30,13 +30,13 @@ public class InnovationManagementPage extends SplitPane {
     private Button updateButton = new Button("更新");
     private HBox buttonBox=new HBox();
 
-    private TextField nameField = new TextField("创新比赛");
+    private TextField nameField = new TextField();
     //private TextField typeField = new TextField("社会实践");
     private ComboBox<String> typeField = new ComboBox<>(FXCollections.observableArrayList(
             "社会实践","学科竞赛","科研成果","培训讲座","创新项目","校外实习"
     ));
     private WeekTimeTable eventPicker=new WeekTimeTable();
-    private TextField locationField = new TextField("软件学院");
+    private TextField locationField = new TextField();
     //private TextField performanceField = new TextField("good");
     private ObservableList<Map<String,Object>> allStudentsList=FXCollections.observableArrayList((ArrayList) request("/getAllStudents", null).getData());
     public InnovationManagementPage() {
