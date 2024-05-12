@@ -53,7 +53,7 @@ public class ClazzController {
                 double pslAvgScore = 0;
                 List<Score> scores = student.getScores();
                 for (Score score : scores) {
-                    pslAvgScore+=score.getMark();
+                    pslAvgScore+=score.getMark()==null?0:score.getMark();
                 }
                 avgScore+=pslAvgScore;
             }
