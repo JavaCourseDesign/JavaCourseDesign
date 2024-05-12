@@ -5,8 +5,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.cell.MapValueFactory;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.VBox;
 import org.controlsfx.control.tableview2.FilteredTableColumn;
 
 import java.util.ArrayList;
@@ -17,8 +15,6 @@ import static com.management.client.util.HttpClientUtil.request;
 
 public class StudentManagementPage extends SplitPane {
     private SearchableTableView studentTable;
-    private final GridPane view = new GridPane();
-    private final VBox controlPanel = new VBox(10, view);
     private final ObservableList<Map> observableList = FXCollections.observableArrayList();
 
     private StudentInfoPane studentInfoPane=new StudentInfoPane(this);

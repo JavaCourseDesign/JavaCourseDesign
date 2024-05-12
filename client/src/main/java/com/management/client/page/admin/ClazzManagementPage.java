@@ -27,6 +27,8 @@ public class ClazzManagementPage extends SplitPane {
     private TextField clazzNameField = new TextField();
     private TextField clazzNumberField = new TextField();
 
+    private ListView<String> studentList = new ListView<>();
+
     private Map newMapFromFields(Map m) {
         m.put("name", clazzNameField.getText());
         m.put("major", clazzMajorField.getText());
@@ -114,7 +116,7 @@ public class ClazzManagementPage extends SplitPane {
         controlPanel.setMinWidth(200);
         controlPanel.setSpacing(10);
 
-        controlPanel.getChildren().addAll(clazzNameField, clazzMajorField, clazzGradeField, clazzNumberField , addButton, deleteButton, updateButton);
+        controlPanel.getChildren().addAll(clazzNameField, clazzMajorField, clazzGradeField, clazzNumberField , studentList,addButton, deleteButton, updateButton);
 
         addButton.setOnAction(event -> addClazz());
         deleteButton.setOnAction(event -> deleteClazz());
@@ -127,6 +129,8 @@ public class ClazzManagementPage extends SplitPane {
                 clazzMajorField.setText((String) clazz.get("major"));
                 clazzGradeField.setText((String) clazz.get("grade"));
                 clazzNumberField.setText((String) clazz.get("clazzNumber"));
+
+                studentList.setItems(FXCollections.observableArrayList((List<String>) clazz.get("students")));
             }
         });
         this.getItems().add(controlPanel);

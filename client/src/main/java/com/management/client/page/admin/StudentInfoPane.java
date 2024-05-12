@@ -43,7 +43,7 @@ public class StudentInfoPane{
     @FXML
     private TextField major;
     @FXML
-    private Label clazz; //待修改
+    private ComboBox<String> clazz;
     @FXML
     private ComboBox<String> social;
     @FXML
@@ -95,6 +95,12 @@ public class StudentInfoPane{
             throw new RuntimeException(e);
         }
 
+        List<Map> clazzList = (List<Map>) request("/getAllClazz", null).getData();
+        List<String> clazzNameList = new ArrayList<>();
+        for (Map clazz : clazzList) {
+            clazzNameList.add(clazz.get("name")+"");
+        }
+        clazz.getItems().addAll(clazzNameList);
         social.getItems().addAll("群众", "共青团员", "共产党员");
     }
 
@@ -112,7 +118,7 @@ public class StudentInfoPane{
         student.put("idCardNum", idCardNum.getText());
         student.put("dept", dept.getText());
         student.put("major", major.getText());
-        //clazz待修改
+        student.put("clazzName", clazz.getValue());
         student.put("social", social.getValue());
         student.put("highSchool", highSchool.getText());
 
@@ -160,7 +166,9 @@ public class StudentInfoPane{
         homeTown.setText(student.get("homeTown")==null?"":student.get("homeTown").toString());
         dept.setText(student.get("dept")==null?"":student.get("dept").toString());
         major.setText(student.get("major")==null?"":student.get("major").toString());
-        //social.setText(student.get("social")==null?"":student.get("social").toString());
+
+        clazz.setValue(student.get("clazzName")==null?"":student.get("clazzName").toString());
+
         social.setValue(student.get("social")==null?"":student.get("social").toString());
         highSchool.setText(student.get("highSchool")==null?"":student.get("highSchool").toString());
         phone.setText(student.get("phone")==null?"":student.get("phone").toString());

@@ -137,15 +137,16 @@ public class TestController {//专门用于添加测试数据
             clazz.setMajor("软件工程");
             clazz.setGrade("2019");
             clazz.setClazzNumber(i+1+"");
+            clazz.setName(clazz.getMajor()+clazz.getGrade()+"级"+clazz.getClazzNumber()+"班");
             List<Student> studentsInClass=new ArrayList<>();
             while (studentsInClass.size()<30){
                 Student student=students.get(r.nextInt(students.size()));
                 if(!studentsInClass.contains(student) && !assignedStudents.contains(student)) {
                     studentsInClass.add(student);
-                    assignedStudents.add(student);
+                    student.setClazz(clazz);
                 }
             }
-            clazz.setStudents(studentsInClass);
+            //clazz.setStudents(studentsInClass);
             clazzes.add(clazz);
             clazzRepository.save(clazz);
         }
