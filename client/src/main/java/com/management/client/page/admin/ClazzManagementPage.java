@@ -18,9 +18,9 @@ public class ClazzManagementPage extends SplitPane {
     private VBox controlPanel = new VBox();
     private ObservableList<Map> observableList = FXCollections.observableArrayList();
 
-    private Button addButton = new Button("Add");
-    private Button deleteButton = new Button("Delete");
-    private Button updateButton = new Button("Update");
+    private Button addButton = new Button("增加");
+    private Button deleteButton = new Button("删除");
+    private Button updateButton = new Button("更新");
 
     private TextField clazzMajorField = new TextField();
     private TextField clazzGradeField = new TextField();

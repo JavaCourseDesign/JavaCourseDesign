@@ -26,8 +26,8 @@ public class HomeworkManagementTab extends Tab {
     private TextField homeworkContentField = new TextField();
     private DatePicker deadlinePicker = new DatePicker();
     private Button markButton = new Button("批改学生作业");
-    private Button addButton = new Button("Add");
-    private Button deleteButton = new Button("Delete");
+    private Button addButton = new Button("增加");
+    private Button deleteButton = new Button("删除");
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     private PdfModel model;
     private Pagination pagination=new Pagination();
