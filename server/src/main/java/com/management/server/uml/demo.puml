@@ -5,14 +5,181 @@ abstract class AbstractList
 abstract AbstractCollection
 interface List
 interface Collection
-class Absence
-class AdministrativeClass
-class Course
-class DailyActivity
-class Dormitory
-class EUserType
-class Event
-class Family
+class Absence{
+-absenceId:String
+-offReason:String
+-isApproved:Boolean
+-destination:String
+}
+class AdministrativeClass{
+-administrativeClassId
+-major:String
+-grade:String
+-classNumber:String
+-name:String
+}
+class Course{
+-courseId:String
+-name:String
+-reference:String
+-capacity:Double
+-credit:Double
+-regularWeight:Double
+-type:String
+}
+class DailyActivity{
+
+}
+class Dormitory{
+-dormitoryId:String
+-persons:List<Person>
+-number:Double
+
+}
+class EUserType{
+
+}
+class Event{
+-eventId:String
+-name:String
+-startDate:LocalDate
+-endDate:LocalDate
+-startTime:LocalDate
+-endTime:LocalDate
+-duration:String
+-introduction:String
+-location:String
+-checked:boolean
+}
+class Family{
+-relationship:String
+
+
+}
+class Fee{
+-feeId:String
+-person:Person
+-time:String
+-money:Double
+-goods:String
+-place:String
+}
+class Homework{
+-homeworkId:String
+-student:Student
+-course:Course
+-homeworkContent:String
+-deadline:LocalDate
+-submitTime:LocalDate
+-homeworkFile:String
+-grade:String
+
+}
+class Honor{
+-honorId:String
+-time:String
+-name:String
+-message:String
+-department:String
+-person:Person
+-event:Event
+}
+class Innovation{
+-performance:String
+-type:String
+
+
+}
+class Lesson{
+
+
+
+
+
+}
+class Person{
+-personId:String
+-name:String
+-dept:String
+-idCardNum:String
+-gender:String
+-birthday:String
+-email:String
+-phone:String
+-address:String
+-social:String
+-photo:String
+
+}
+class Score{
+-scoreId:String
+-student:Student
+-course:Course
+-regularMark:Double
+-finalMark:Double
+-mark:Double
+}
+class Student{
+-studentId:String
+-major:String
+-homeTown:String
+-highSchool:String
+-families:List<Family>
+
+
+}
+class Teacher{
+-teacherId:
+-degree:
+-title:
+
+
+}
+class UserType{
+-id:String
+-name:EUserType
++UserType()
+
+}
+class User{
+-userId:String
+-userType:UserType
+-person:Person
+-username:String
+-password:String
+-loginCount:Integer
+-lastLoginTime:String
++User()
+
+}
+Event <-- Course
+Event <-- DailyActivity
+Event <-- Lesson
+
+Course <-- Person
+Course <-- Score
+Course <-- Homework
+Course <-- Absence
+
+Person <-- Course
+Person <-- Student
+Person <-- Teacher
+Person <-- Fee
+Person <-- Dormitory
+Person <-- Honor
+Person <-- Family
+Person <-- Innovation
+Person <-- User
+
+User <-- UserType
+
+Student <-- DailyActivity
+Student <-- Score
+Student <-- Homework
+Student <-- Absence
+Student <-- AdministrativeClass
+
+
 
 List <|-- AbstractList
 Collection <|-- AbstractCollection
