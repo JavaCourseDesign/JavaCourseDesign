@@ -47,7 +47,7 @@ public class TestController {//专门用于添加测试数据
         UserType userType=new UserType();
         userType.setName(ROLE_ADMIN);
         user.setUsername("admin");
-        user.setPassword(passwordEncoder.encode("admin"));
+        user.setPassword(passwordEncoder.encode("123456"));
         user.setUserType(userType);
         userTypeRepository.save(userType);
         userRepository.save(user);

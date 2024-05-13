@@ -36,7 +36,8 @@ public class AuthController {
         authenticationManager.authenticate(authenticationToken);
 
         */
-        if(passwordEncoder.matches(req.get("password"),userRepository.findByUsername(req.get("username")).getPassword()))
+        User user = userRepository.findByUsername(req.get("username"));
+        if(user!=null&&passwordEncoder.matches(req.get("password"),user.getPassword()))
         {
             return JwtUtil.generateToken(req.get("username"));
         }

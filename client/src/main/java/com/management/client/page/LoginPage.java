@@ -50,9 +50,18 @@ public class LoginPage extends GridPane {
 
         testStage.setX(100);
         VBox testVBox = new VBox();
-        Button testButton = new Button("添加测试数据");
 
-        testButton.setOnAction(event -> {
+        sendAndReceiveDataResponse("/test/addTestData",null);
+
+        sendAndReceiveDataResponse("/register", Map.of("name", "向辉", "username", "199900100000", "password", "123456"));
+        sendAndReceiveDataResponse("/register", Map.of("name", "李学庆", "username", "199900100001", "password", "123456"));
+        sendAndReceiveDataResponse("/register", Map.of("name", "谭绍庭", "username", "202300300000", "password", "123456"));
+        sendAndReceiveDataResponse("/register", Map.of("name", "王志凯", "username", "202300300001", "password", "123456"));
+        sendAndReceiveDataResponse("/register", Map.of("name", "张小三", "username", "202300300002", "password", "123456"));
+
+        //Button testButton = new Button("添加测试数据");
+
+        /*testButton.setOnAction(event -> {
             sendAndReceiveDataResponse("/test/addTestData",null);
         });
 
@@ -63,7 +72,7 @@ public class LoginPage extends GridPane {
             sendAndReceiveDataResponse("/register", Map.of("name", "谭绍庭", "username", "202300300000", "password", "123456"));
             sendAndReceiveDataResponse("/register", Map.of("name", "王志凯", "username", "202300300001", "password", "123456"));
             sendAndReceiveDataResponse("/register", Map.of("name", "张小三", "username", "202300300002", "password", "123456"));
-        });
+        });*/
 
         Button adminButton = new Button("填入管理员账号");
         adminButton.setOnAction(event -> {
@@ -107,7 +116,7 @@ public class LoginPage extends GridPane {
         });
 
 
-        testVBox.getChildren().addAll(testButton, registerButton, adminButton, teacherButton1, teacherButton2, studentButton1, studentButton2, studentButton3);
+        testVBox.getChildren().addAll(adminButton, teacherButton1, teacherButton2, studentButton1, studentButton2, studentButton3);
         testVBox.setAlignment(javafx.geometry.Pos.CENTER);
         testStage.setScene(new Scene(testVBox, 300, 200));
         testStage.show();
