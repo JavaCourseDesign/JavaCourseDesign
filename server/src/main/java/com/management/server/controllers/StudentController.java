@@ -68,7 +68,7 @@ public class StudentController {
         Map student = BeanUtil.beanToMap(s) ;
         student.put("families",s.getFamilies());
         //student.put("courses",courseRepository.findCoursesByPersonId(map.get("personId")));
-        student.put("clazzName", clazzRepository.findClazzByStudent(s)+"班");
+        student.put("clazzName", s.getClazz().getName());
         return new DataResponse(0,student,null);
     }
 
@@ -84,7 +84,7 @@ public class StudentController {
         {
             student.put("families",families);
         }
-        student.put("clazzName", clazzRepository.findClazzByStudent(s)+"班");
+        student.put("clazzName", s.getClazz().getName());
         student.put("honor",s.getHonors());
         //文件不存在时可能出现问题，可以把方法的返回字符串调成一个固定图片
         if(s.getPhoto()!=null&&!Objects.equals(s.getPhoto(), "请先上传文件！"))
@@ -251,8 +251,9 @@ public class StudentController {
         String personId = (String) m.get("personId");
         Student student = studentRepository.findByPersonId(personId);
         if(student != null) {
-            BeanUtil.fillBeanWithMap(m, student, CopyOptions.create());
+            BeanUtil.fillBeanWithMap(m, student, CopyOptions.create().ignoreError());
             boolean flag = completeStudentById(student);
+            student.setClazz(clazzRepository.findByName(""+m.get("clazzName")));
             if(!flag) return new DataResponse(-1,null,"身份证号不合法，无法更新");
             studentRepository.save(student);
             return new DataResponse(0, null, "更新成功");
@@ -260,6 +261,7 @@ public class StudentController {
             return new DataResponse(-1, null, "学生不存在，无法更新");
         }
     }
+
     @PostMapping("/saveStudentPersonalInfo")
     public DataResponse saveStudentPersonalInfo(@RequestBody Map m)
     {
@@ -441,10 +443,10 @@ public class StudentController {
     public Map getMapFromStudentForIntroduce(String studentId) {
         Student student = studentRepository.findByStudentId(studentId);
         Map map = BeanUtil.beanToMap(student);
-        map.put("className", clazzRepository.findClazzByStudent(student)+"班");
+        map.put("className", student.getClazz().getName());
         List<Innovation> list=innovationRepository.findByPersons(student);
         List<Honor> honorList=student.getHonors();
-        String filePath = "server/src/main/resources/static/resume.html";
+        String filePath = "src/main/resources/static/resume.html";
         String content = null;
         try {
             content = new String(Files.readAllBytes(Paths.get(filePath)));

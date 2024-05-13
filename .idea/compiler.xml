@@ -17,7 +17,7 @@
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="client" options="--add-exports org.controlsfx.controls/impl.org.controlsfx.tableview2.filter.parser.string=com.management.client,com.management.client" />
+      <module name="client" options="" />
       <module name="server" options="-parameters" />
     </option>
   </component>

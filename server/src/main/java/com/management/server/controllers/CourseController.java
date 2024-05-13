@@ -216,6 +216,7 @@ public class CourseController {
                     .findFirst()
                     .orElseGet(() -> {
                         Lesson newLesson = new Lesson();
+                        newLesson.setCourse(course);
                         newLessons.add(newLesson);
                         return newLesson;
                     });
@@ -227,6 +228,7 @@ public class CourseController {
         lessonRepository.saveAll(lessons);
 
         course.getLessons().addAll(newLessons);
+        System.out.println("\nlesson:"+course.getLessons());
 
 
         courseRepository.save(course);

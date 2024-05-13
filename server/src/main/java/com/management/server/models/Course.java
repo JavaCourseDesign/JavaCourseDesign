@@ -53,11 +53,11 @@ public class Course{
     //private String semester;
 
 
-    @OneToMany(mappedBy = "course",fetch = FetchType.LAZY,cascade = {CascadeType.ALL},orphanRemoval = true)
+    @OneToMany(mappedBy = "course",fetch = FetchType.EAGER,cascade = {CascadeType.ALL},orphanRemoval = true)
     //@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "eventId")
     @JsonIgnore
     @ToString.Exclude
-    private List<Lesson> lessons;//可以通过get0和getSize得到开始结束周次
+    private List<Lesson> lessons;
 
     /*@ManyToMany
     @JoinTable(name = "student_course")

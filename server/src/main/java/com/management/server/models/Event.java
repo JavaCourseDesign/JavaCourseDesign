@@ -1,13 +1,12 @@
 package com.management.server.models;
 
-import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.List;
 import java.util.Set;
 
 //should be the super class of course,activities,etc
@@ -42,9 +41,7 @@ public class Event{
 
     //private boolean checked;//用于判定是否已经通知到学生，如果未通知，应在通知栏显示 单独弄notice类？
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnore
-    protected Course course;
+
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "person_event")

@@ -6,8 +6,10 @@ import com.jfoenix.controls.JFXTextField;
 import com.management.client.request.DataResponse;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.util.HashMap;
@@ -17,6 +19,7 @@ import static com.management.client.util.HttpClientUtil.login;
 import static com.management.client.util.HttpClientUtil.sendAndReceiveDataResponse;
 
 public class LoginPage extends GridPane {
+    private Stage testStage = new Stage();
     public static String username;//不知道这样合不合适
     private JFXTextField nameField = new JFXTextField();
     private Label namelabel = new Label("姓名");
@@ -32,6 +35,7 @@ public class LoginPage extends GridPane {
     public LoginPage() {
         setupUI();
         setupActions();
+        setupTestStage();
         this.getStylesheets().add("dark-theme.css");
 
         sendAndReceiveDataResponse("/register", Map.of("name", "向辉", "username", "100000", "password", "admin"));
@@ -39,10 +43,75 @@ public class LoginPage extends GridPane {
         sendAndReceiveDataResponse("/register", Map.of("name", "wzk", "username", "201921001", "password", "admin"));
         sendAndReceiveDataResponse("/register", Map.of("name", "why", "username", "201921002", "password", "admin"));
 
-        //测试用
-        nameField.setText("向辉");
-        usernameField.setText("201921000");
-        passwordField.setText("admin");
+    }
+
+    public void setupTestStage() {
+        //另外显示一个页面用于添加测试数据
+
+        testStage.setX(100);
+        VBox testVBox = new VBox();
+        Button testButton = new Button("添加测试数据");
+
+        testButton.setOnAction(event -> {
+            sendAndReceiveDataResponse("/test/addTestData",null);
+        });
+
+        Button registerButton = new Button("注册测试账户");
+        registerButton.setOnAction(event -> {
+            sendAndReceiveDataResponse("/register", Map.of("name", "向辉", "username", "199900100000", "password", "123456"));
+            sendAndReceiveDataResponse("/register", Map.of("name", "李学庆", "username", "199900100001", "password", "123456"));
+            sendAndReceiveDataResponse("/register", Map.of("name", "谭绍庭", "username", "202300300000", "password", "123456"));
+            sendAndReceiveDataResponse("/register", Map.of("name", "王志凯", "username", "202300300001", "password", "123456"));
+            sendAndReceiveDataResponse("/register", Map.of("name", "张小三", "username", "202300300002", "password", "123456"));
+        });
+
+        Button adminButton = new Button("填入管理员账号");
+        adminButton.setOnAction(event -> {
+            usernameField.setText("admin");
+            passwordField.setText("123456");
+        });
+
+        Button teacherButton1 = new Button("填入教师账号1");
+        teacherButton1.setOnAction(event -> {
+            nameField.setText("向辉");
+            usernameField.setText("199900100000");
+            passwordField.setText("123456");
+        });
+
+        Button teacherButton2 = new Button("填入教师账号2");
+        teacherButton2.setOnAction(event -> {
+            nameField.setText("李学庆");
+            usernameField.setText("199900100001");
+            passwordField.setText("123456");
+        });
+
+        Button studentButton1 = new Button("填入学生账号1");
+        studentButton1.setOnAction(event -> {
+            nameField.setText("谭绍庭");
+            usernameField.setText("202300300000");
+            passwordField.setText("123456");
+        });
+
+        Button studentButton2 = new Button("填入学生账号2");
+        studentButton2.setOnAction(event -> {
+            nameField.setText("王志凯");
+            usernameField.setText("202300300001");
+            passwordField.setText("123456");
+        });
+
+        Button studentButton3 = new Button("填入学生账号3");
+        studentButton3.setOnAction(event -> {
+            nameField.setText("张小三");
+            usernameField.setText("202300300002");
+            passwordField.setText("123456");
+        });
+
+
+        testVBox.getChildren().addAll(testButton, registerButton, adminButton, teacherButton1, teacherButton2, studentButton1, studentButton2, studentButton3);
+        testVBox.setAlignment(javafx.geometry.Pos.CENTER);
+        testStage.setScene(new Scene(testVBox, 300, 200));
+        testStage.show();
+        testStage.setAlwaysOnTop(true);
     }
 
     private void setupUI() {
@@ -69,6 +138,7 @@ public class LoginPage extends GridPane {
         if (login(username, password)) {
             changeScene();
             LoginPage.username = username;
+            testStage.close();
             //showAlert("登录成功", Alert.AlertType.INFORMATION);
         } else {
             showAlert("登录失败", Alert.AlertType.ERROR);

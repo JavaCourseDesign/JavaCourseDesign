@@ -62,12 +62,12 @@ public class TestController {//专门用于添加测试数据
         ArrayList<Student> students=new ArrayList<>();
         for(int i=0;i<200;i++){
             Student student=new Student();
-            student.setStudentId("201921"+String.format("%03d",i));
+            student.setStudentId("202300300"+String.format("%03d",i));
             student.setName(generateRandomChineseName());
-            if(i==0) {student.setName("tst");student.setFamilies(Collections.singletonList(f));}
-            if(i==1)  student.setName("wzk");
-            if(i==2)  student.setName("why");
-            if(i==3)  student.setName("hzx");
+            if(i==0) {student.setName("谭绍庭");student.setFamilies(Collections.singletonList(f));}
+            if(i==1)  student.setName("王志凯");
+            if(i==2)  student.setName("张小三");
+            if(i==3)  student.setName("李小四");
             student.setGender("男");
             student.setMajor("软件工程");
             student.setDept("软件学院");
@@ -83,12 +83,12 @@ public class TestController {//专门用于添加测试数据
         ArrayList<Teacher> teachers=new ArrayList<>();
         for(int i=0;i<50;i++){
             Teacher teacher=new Teacher();
-            teacher.setTeacherId("10000"+i);
+            teacher.setTeacherId("199900100"+String.format("%03d",i));
             teacher.setName(generateRandomChineseName());
             if(i==0) teacher.setName("向辉");
             if(i==1) teacher.setName("李学庆");
             teacher.setGender("男");
-            teacher.setTitle("讲师");
+            teacher.setTitle("教授");
             teachers.add(teacher);
             teacherRepository.save(teacher);
         }
@@ -137,15 +137,16 @@ public class TestController {//专门用于添加测试数据
             clazz.setMajor("软件工程");
             clazz.setGrade("2019");
             clazz.setClazzNumber(i+1+"");
+            clazz.setName(clazz.getMajor()+clazz.getGrade()+"级"+clazz.getClazzNumber()+"班");
             List<Student> studentsInClass=new ArrayList<>();
             while (studentsInClass.size()<30){
                 Student student=students.get(r.nextInt(students.size()));
                 if(!studentsInClass.contains(student) && !assignedStudents.contains(student)) {
                     studentsInClass.add(student);
-                    assignedStudents.add(student);
+                    student.setClazz(clazz);
                 }
             }
-            clazz.setStudents(studentsInClass);
+            //clazz.setStudents(studentsInClass);
             clazzes.add(clazz);
             clazzRepository.save(clazz);
         }

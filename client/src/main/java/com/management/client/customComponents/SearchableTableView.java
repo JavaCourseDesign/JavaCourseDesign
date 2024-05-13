@@ -1,7 +1,7 @@
 package com.management.client.customComponents;
 
 import com.jfoenix.controls.JFXTextField;
-import impl.org.controlsfx.tableview2.filter.parser.string.StringParser;
+
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ObservableList;
@@ -19,6 +19,7 @@ import org.controlsfx.control.tableview2.filter.popupfilter.PopupFilter;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 public class SearchableTableView extends VBox {
     private JFXTextField searchField = new JFXTextField();
@@ -142,11 +143,11 @@ public class SearchableTableView extends VBox {
 
 class PopupContainsFilter<S, T> extends PopupFilter<S, T> {
 
-    private final StringParser<T> stringParser;
+    /*private final StringParser<T> stringParser;*/
 
     public PopupContainsFilter(FilteredTableColumn<S, T> tableColumn) {
         super(tableColumn);
-        stringParser = new StringParser<>(false, getConverter());
+        /*stringParser = new StringParser<>(false, getConverter());*/
 
         tableColumn.widthProperty().addListener((obs, oldWidth, newWidth) -> {
             // Set the width of the popup to be the same as the width of the tableColumn
@@ -169,19 +170,49 @@ class PopupContainsFilter<S, T> extends PopupFilter<S, T> {
 
     @Override
     public Parser<T> getParser() {
-        return stringParser;
+        return new Parser<T>() {
+            @Override
+            public Predicate<T> parse(String s) {
+                return null;
+            }
+
+            @Override
+            public List<String> operators() {
+                return List.of();
+            }
+
+            @Override
+            public String getSymbol(String s) {
+                return "";
+            }
+
+            @Override
+            public boolean isValid(String s) {
+                return false;
+            }
+
+            @Override
+            public String getErrorMessage() {
+                return "";
+            }
+        };
     }
 
+    /*@Override
+    public Parser<T> getParser() {
+        return stringParser;
+    }*/
+
     // --- string converter
-    private final ObjectProperty<StringConverter<T>> converter = new SimpleObjectProperty<StringConverter<T>>(this, "converter", defaultStringConverter()) {
+    /*private final ObjectProperty<StringConverter<T>> converter = new SimpleObjectProperty<StringConverter<T>>(this, "converter", defaultStringConverter()) {
         @Override
         protected void invalidated() {
             stringParser.setConverter(get());
         }
-    };
-    public final ObjectProperty<StringConverter<T>> converterProperty() { return converter; }
-    public final void setConverter(StringConverter<T> value) { converterProperty().set(value); }
-    public final StringConverter<T> getConverter() { return converterProperty().get(); }
+    };*/
+    /*public final ObjectProperty<StringConverter<T>> converterProperty() { return converter; }*/
+    /*public final void setConverter(StringConverter<T> value) { converterProperty().set(value); }
+    public final StringConverter<T> getConverter() { return converterProperty().get(); }*/
 
     private static <T> StringConverter<T> defaultStringConverter() {
         return new StringConverter<T>() {
