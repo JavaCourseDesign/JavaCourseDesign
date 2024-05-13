@@ -30,6 +30,7 @@ import static org.kordamp.ikonli.materialdesign2.MaterialDesignA.*;
 import static org.kordamp.ikonli.materialdesign2.MaterialDesignB.BOOK_OPEN_PAGE_VARIANT;
 import static org.kordamp.ikonli.materialdesign2.MaterialDesignB.BOOK_PLUS_MULTIPLE;
 import static org.kordamp.ikonli.materialdesign2.MaterialDesignF.FILE_DOCUMENT;
+import static org.kordamp.ikonli.materialdesign2.MaterialDesignF.FORMAT_ANNOTATION_PLUS;
 import static org.kordamp.ikonli.materialdesign2.MaterialDesignH.HOME;
 import static org.kordamp.ikonli.materialdesign2.MaterialDesignL.LIGHTBULB_ON_OUTLINE;
 import static org.kordamp.ikonli.materialdesign2.MaterialDesignM.MEDAL;
@@ -91,7 +92,7 @@ public class Menu extends AnchorPane {
             AnchorPane.setRightAnchor(borderPane, 0.0);
             this.getChildren().add(borderPane);
             //this.getStylesheets().add("dark-theme.css");
-
+            this.getStylesheets().add("menu.css");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -283,9 +284,7 @@ public class Menu extends AnchorPane {
         //tchCrsItm.setGraphic(new ImageView("/icons/teacher.png"));
 
         tchCrsItm.setGraphic(new FontIcon("mdi2b-book-open-page-variant"));
-
         stuHmpItm.setGraphic(new FontIcon(HOME));
-
         tchPerItm.setGraphic(new FontIcon(ID_CARD));
         stuPerItm.setGraphic(new FontIcon(ID_CARD));
         stuCrsItm.setGraphic(new FontIcon(BOOK_OPEN_PAGE_VARIANT));
@@ -301,6 +300,7 @@ public class Menu extends AnchorPane {
         stuDlaItm.setGraphic(new FontIcon(RUN));
         dlaMngItm.setGraphic(new FontIcon(RUN));
         hnrMngItm.setGraphic(new FontIcon(MEDAL));
+        stuScoItm.setGraphic(new FontIcon(FORMAT_ANNOTATION_PLUS));
 
         FontIcon acc=new FontIcon(ACCOUNT);
         acc.setIconSize(25);
