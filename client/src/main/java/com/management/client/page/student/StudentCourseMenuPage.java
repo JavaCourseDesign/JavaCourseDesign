@@ -1,6 +1,10 @@
 package com.management.client.page.student;
 
 import com.management.client.customComponents.SearchableTableView;
+import com.management.client.page.teacher.CourseInfoTab;
+import com.management.client.page.teacher.HomeworkManagementTab;
+import com.management.client.page.teacher.ScoreManagementTab;
+import com.management.client.page.teacher.StudentAbsenceManagementTab;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -25,7 +29,7 @@ public class StudentCourseMenuPage extends SplitPane {
     private TabPane courseTabPane = new TabPane();
 
     public StudentCourseMenuPage() {
-        this.setDividerPosition(0, 0.1);
+        this.setDividerPosition(0, 0.13);
         initializeTable();
         initializeTabPane();
         displayCourses();
@@ -53,6 +57,14 @@ public class StudentCourseMenuPage extends SplitPane {
             courseTabPane.getTabs().clear();
             // 这里可以根据学生的需求添加不同的Tab
             // courseTabPane.getTabs().add(new StudentCourseInfoTab(item));
+        });
+        courseTable.setOnItemClick(item -> {
+            courseTabPane.getTabs().clear();
+            courseTabPane.getTabs().add(new StudentCourseInfoTab(item));
+            courseTabPane.getTabs().add(new StudentHomeworkTab());
+           /* courseTabPane.getTabs().add(new );
+            courseTabPane.getTabs().add(new HomeworkManagementTab(item));
+            courseTabPane.getTabs().add(new StudentAbsenceManagementTab(item));*/
         });
 
         this.getItems().add(courseTable);

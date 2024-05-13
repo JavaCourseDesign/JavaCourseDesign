@@ -335,7 +335,7 @@ public class CourseController {
         String courseId = (String) m.get("courseId");
         Course course = courseRepository.findByCourseId(courseId);
         if(course.getReference()==null){
-            return new DataResponse(-1,null,"请先上传文件！");
+            return new DataResponse(-1,null,"未上传文件！");
         }
         return FileUtil.downloadFile("pdf",course.getReference());
     }

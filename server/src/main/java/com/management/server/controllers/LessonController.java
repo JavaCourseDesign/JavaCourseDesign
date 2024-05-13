@@ -34,7 +34,7 @@ public class LessonController {
         Lesson lesson=lessonRepository.findByEventId(eventId);
         if(lesson.getPpt()==null)
         {
-            return new DataResponse(-1,null,"请先上传PPT");
+            return new DataResponse(-1,null,"未上传PPT");
         }
         return FileUtil.downloadFile("ppt",lesson.getPpt());
     }
