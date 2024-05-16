@@ -6,6 +6,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.MapValueFactory;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import org.controlsfx.control.tableview2.FilteredTableColumn;
 
@@ -15,7 +16,7 @@ import static com.management.client.util.HttpClientUtil.request;
 
 public class ClazzManagementPage extends SplitPane {
     private SearchableTableView clazzTable;
-    private VBox controlPanel = new VBox();
+    private GridPane controlPanel = new GridPane();
     private ObservableList<Map> observableList = FXCollections.observableArrayList();
 
     private Button addButton = new Button("增加");
@@ -27,7 +28,10 @@ public class ClazzManagementPage extends SplitPane {
     private TextField clazzNameField = new TextField();
     private TextField clazzNumberField = new TextField();
 
-    private ListView<String> studentList = new ListView<>();
+    //private ListView<String> studentList = new ListView<>();
+    private TableView<Map> studentTable = new TableView<>();
+    private TableColumn<Map, String> studentNameColumn = new TableColumn<>("学生名");
+    private TableColumn<Map, String> studentIdColumn = new TableColumn<>("学号");
 
     private Map newMapFromFields(Map m) {
         m.put("name", clazzNameField.getText());
@@ -38,7 +42,7 @@ public class ClazzManagementPage extends SplitPane {
     }
 
     public ClazzManagementPage() {
-        this.setWidth(1000);
+        this.setDividerPosition(0, 0.8);
         initializeTable();
         initializeControlPanel();
         displayClazz();
@@ -114,9 +118,22 @@ public class ClazzManagementPage extends SplitPane {
 
     private void initializeControlPanel() {
         controlPanel.setMinWidth(200);
-        controlPanel.setSpacing(10);
+        //controlPanel.setSpacing(10);
 
-        controlPanel.getChildren().addAll(clazzNameField, clazzMajorField, clazzGradeField, clazzNumberField , studentList,addButton, deleteButton, updateButton);
+        //controlPanel.getChildren().addAll(clazzNameField, clazzMajorField, clazzGradeField, clazzNumberField , studentTable,addButton, deleteButton, updateButton);
+
+        controlPanel.add(new Label("班级名"), 0, 0);
+        controlPanel.add(clazzNameField, 1, 0);
+        controlPanel.add(new Label("专业"), 0, 1);
+        controlPanel.add(clazzMajorField, 1, 1);
+        controlPanel.add(new Label("年级"), 0, 2);
+        controlPanel.add(clazzGradeField, 1, 2);
+        controlPanel.add(new Label("班级号"), 0, 3);
+        controlPanel.add(clazzNumberField, 1, 3);
+        controlPanel.add(studentTable, 0, 4, 2, 1);
+        controlPanel.add(addButton, 0, 5);
+        controlPanel.add(deleteButton, 1, 5);
+        controlPanel.add(updateButton, 0, 6);
 
         addButton.setOnAction(event -> addClazz());
         deleteButton.setOnAction(event -> deleteClazz());
@@ -130,7 +147,11 @@ public class ClazzManagementPage extends SplitPane {
                 clazzGradeField.setText((String) clazz.get("grade"));
                 clazzNumberField.setText((String) clazz.get("clazzNumber"));
 
-                studentList.setItems(FXCollections.observableArrayList((List<String>) clazz.get("students")));
+                studentTable.setItems(FXCollections.observableArrayList((ArrayList) clazz.get("students")));
+                studentNameColumn.setCellValueFactory(new MapValueFactory<>("name"));
+                studentIdColumn.setCellValueFactory(new MapValueFactory<>("studentId"));
+                studentTable.getColumns().setAll(studentNameColumn, studentIdColumn);
+                studentTable.maxHeight(200);
             }
         });
         this.getItems().add(controlPanel);
