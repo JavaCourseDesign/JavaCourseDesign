@@ -252,6 +252,10 @@ public class StudentController {
         Student student = studentRepository.findByPersonId(personId);
         if(student != null) {
             BeanUtil.fillBeanWithMap(m, student, CopyOptions.create().ignoreError());
+            if(student.getStudentId().length()!=12)
+            {
+                return new DataResponse(-1,null,"学号不合法，无法更新");
+            }
             boolean flag = completeStudentById(student);
             student.setClazz(clazzRepository.findByName(""+m.get("clazzName")));
             if(!flag) return new DataResponse(-1,null,"身份证号不合法，无法更新");
@@ -267,7 +271,6 @@ public class StudentController {
     {
         String studentId = CommonMethod.getUsername();
         Student student = studentRepository.findByStudentId(studentId);
-
         student.getFamilies().clear();
 
         List<Map> familiesList= (List<Map>) m.get("families");

@@ -6,6 +6,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.MapValueFactory;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import org.controlsfx.control.tableview2.FilteredTableColumn;
 
@@ -21,6 +22,7 @@ public class ScoreManagementTab extends Tab {//成绩录入界面
     SearchableTableView scoreTable;
     ObservableList<Map> observableList= FXCollections.observableArrayList();
     VBox controlPanel = new VBox();
+   // GridPane controlPanel = new GridPane();
     Spinner homeworkWeightField = new Spinner(0,1,0.3,0.1);
     Spinner absenceWeightField = new Spinner(0,1,0.2,0.1);
     TextField finalMarkField = new TextField();
@@ -97,8 +99,7 @@ public class ScoreManagementTab extends Tab {//成绩录入界面
             request("/uploadFinalScore", score);
             displayScores();
         });
-
-        controlPanel.getChildren().addAll(homeworkWeightField,absenceWeightField,fillButton,finalMarkField,saveButton);
+        controlPanel.getChildren().addAll(new Label("平时成绩权重："),homeworkWeightField,new Label("出勤成绩权重："), absenceWeightField,new Label("期末成绩："),finalMarkField, fillButton, saveButton);
         splitPane.getItems().add(controlPanel);
     }
 

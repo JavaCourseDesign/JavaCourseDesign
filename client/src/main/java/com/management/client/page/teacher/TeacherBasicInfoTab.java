@@ -80,6 +80,20 @@ public class TeacherBasicInfoTab extends Tab {
 
     @FXML
     public void save() {
+        String emailRegex = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$";
+        if(email.getText()!=null&&!email.getText().equals("")&&!email.getText().matches(emailRegex)){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setContentText("邮箱格式不正确");
+            alert.showAndWait();
+            return;
+        }
+        String phoneRegex ="^1[3-9]\\d{9}$" ;
+        if(phone.getText()!=null&&!phone.getText().equals("")&&!phone.getText().matches(phoneRegex)){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setContentText("电话号码格式不正确");
+            alert.showAndWait();
+            return;
+        }
         DataResponse r = request("/saveTeacherPersonalInfo", newMapFromFields());
         if (r.getCode() == 0) {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
