@@ -102,6 +102,7 @@ public abstract class Person {
         return innovations;
     }
 
+    @JsonIgnore
     public Integer getAge() {
         if(this.birthday == null)
             return -1;

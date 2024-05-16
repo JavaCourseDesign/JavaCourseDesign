@@ -15,7 +15,7 @@ import java.util.Set;
 @Data
 //@MappedSuperclass
 @Inheritance(strategy = InheritanceType.JOINED)
-@EqualsAndHashCode(exclude = {"persons","course"})
+@EqualsAndHashCode(exclude = {"persons"})
 /*@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "eventId")//在递归中第二次出现时用name属性替代本对象避免无限递归
 @JsonIgnoreProperties(value = {"persons"})*/
 /*@NamedEntityGraph(name = "Event.persons",

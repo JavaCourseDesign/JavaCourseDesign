@@ -11,7 +11,7 @@
 <?import org.controlsfx.control.tableview2.FilteredTableColumn?>
 <?import org.controlsfx.control.tableview2.FilteredTableView?>
 <SplitPane xmlns="http://javafx.com/javafx"
-      xmlns:fx="http://javafx.com/fxml" orientation="VERTICAL" dividerPositions="0.9">
+           xmlns:fx="http://javafx.com/fxml" orientation="VERTICAL" dividerPositions="0.9">
     <SplitPane orientation="HORIZONTAL" dividerPositions="0.65">
         <TitledPane text="日历" >
             <CalendarView fx:id="calendarView"/>
@@ -39,8 +39,8 @@
         <SplitPane HBox.hgrow="ALWAYS" orientation="VERTICAL">
             <!--<TitledPane text="通知" HBox.hgrow="ALWAYS">
                 <AnchorPane prefHeight="300"/>
-            </TitledPane>-->
-            <TitledPane text="待办">
+            </TitledPane>统统砍了-->
+            <!--<TitledPane text="待办">
                 <TableView fx:id="toDoTable">
                     <columns>
                         <TableColumn fx:id="courseNameColumn" text="课程名称"/>
@@ -49,7 +49,7 @@
                         <TableColumn fx:id="submitColumn" />
                     </columns>
                 </TableView>
-            </TitledPane>
+            </TitledPane>-->
             <TitledPane text="事件详情" >
                 <GridPane>
                     <columnConstraints>

@@ -68,7 +68,7 @@ public class StudentController {
         Map student = BeanUtil.beanToMap(s) ;
         student.put("families",s.getFamilies());
         //student.put("courses",courseRepository.findCoursesByPersonId(map.get("personId")));
-        student.put("clazzName", s.getClazz().getName());
+        student.put("clazzName", s.getClazz()==null?"未分配":s.getClazz().getName());
         return new DataResponse(0,student,null);
     }
 

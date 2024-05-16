@@ -7,10 +7,12 @@ import com.management.client.ClientApplication;
 import com.management.client.page.admin.*;
 import com.management.client.page.student.*;
 import com.management.client.page.teacher.TeacherCourseMenuPage;
+import com.management.client.page.teacher.TeacherHomePage;
 import com.management.client.page.teacher.TeacherPersonalInfoPage;
 import com.management.client.request.DataResponse;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
@@ -21,6 +23,7 @@ import javafx.stage.Stage;
 import org.kordamp.ikonli.javafx.FontIcon;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -72,6 +75,7 @@ public class Menu extends AnchorPane {
     private TreeItem<String> tchCrsItm = new TreeItem<>("课程信息");
 
     private TreeItem<String> stuHmpItm = new TreeItem<>("主界面");
+    private TreeItem<String> tchHmpItm = new TreeItem<>("主界面");
     private TreeItem<String> crsAppItm = new TreeItem<>("课程申请");
     private TreeItem<String> stuPerItm = new TreeItem<>("个人信息");
     private TreeItem<String> stuCrsItm = new TreeItem<>("课程信息");
@@ -106,7 +110,16 @@ public class Menu extends AnchorPane {
     @FXML
     public void refresh()
     {
-
+        Class<?> clazz = borderPane.getCenter().getClass();
+        try {
+            Object instance = clazz.getDeclaredConstructor().newInstance();
+            if(instance instanceof Node)
+            {
+                borderPane.setCenter((Node) instance);
+            }
+        } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @FXML
@@ -192,7 +205,8 @@ public class Menu extends AnchorPane {
                 break;
             case "ROLE_TEACHER":
                 roleLabel.setText("教师菜单");
-                leftMenu.getRoot().getChildren().addAll(tchCrsItm,tchPerItm);
+                borderPane.setCenter(new TeacherHomePage());
+                leftMenu.getRoot().getChildren().addAll(tchHmpItm,tchCrsItm,tchPerItm);
                 break;
             default:
                 System.out.println("Error: Unknown role"+response.getMsg());
@@ -268,6 +282,10 @@ public class Menu extends AnchorPane {
             {
                 borderPane.setCenter(new StudentHomePage());
             }
+            else if(newValue == tchHmpItm)
+            {
+                borderPane.setCenter(new TeacherHomePage());
+            }
             else if(newValue == stuScoItm)
             {
                 borderPane.setCenter(new StudentScorePage());
@@ -285,6 +303,7 @@ public class Menu extends AnchorPane {
 
         tchCrsItm.setGraphic(new FontIcon("mdi2b-book-open-page-variant"));
         stuHmpItm.setGraphic(new FontIcon(HOME));
+        tchHmpItm.setGraphic(new FontIcon(HOME));
         tchPerItm.setGraphic(new FontIcon(ID_CARD));
         stuPerItm.setGraphic(new FontIcon(ID_CARD));
         stuCrsItm.setGraphic(new FontIcon(BOOK_OPEN_PAGE_VARIANT));

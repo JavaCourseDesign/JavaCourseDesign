@@ -5,13 +5,17 @@ import com.calendarfx.model.CalendarSource;
 import com.calendarfx.model.Entry;
 import com.calendarfx.view.CalendarView;
 import com.calendarfx.view.DayEntryView;
+import com.calendarfx.view.DayView;
 import com.calendarfx.view.DayViewBase;
+import com.calendarfx.view.popover.EntryPopOverContentPane;
 import com.management.client.ClientApplication;
 import com.management.client.request.DataResponse;
 import impl.com.calendarfx.view.DayEntryViewSkin;
 import javafx.collections.FXCollections;
+import javafx.collections.SetChangeListener;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.MapValueFactory;
 import javafx.stage.FileChooser;
@@ -20,11 +24,10 @@ import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.time.format.TextStyle;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.management.client.util.HttpClientUtil.request;
@@ -46,6 +49,17 @@ public class StudentHomePage extends SplitPane {
     @FXML
     private TableColumn submitColumn;
 
+    @FXML
+    private TextField eventNameField;
+    @FXML
+    private TextField startTimeField;
+    @FXML
+    private TextField endTimeField;
+    @FXML
+    private TextField locationField;
+    @FXML
+    private TextArea noteArea;
+
     private final CalendarSource calendarSource = new CalendarSource();
     public StudentHomePage() {
         FXMLLoader fxmlLoader = new FXMLLoader(ClientApplication.class.getResource("/studentFxml/StudentHomePage.fxml")); // 确保路径正确
@@ -53,6 +67,7 @@ public class StudentHomePage extends SplitPane {
         try {
             homePage=fxmlLoader.load();
             this.getItems().add(homePage);
+            //homePage.setDividerPosition(0,0.6);
             //this.getStylesheets().add("dark-theme.css");
 
         } catch (IOException e) {
@@ -73,16 +88,87 @@ public class StudentHomePage extends SplitPane {
         calendarView.getWeekPage().getDetailedWeekView().setHoursLayoutStrategy(DayViewBase.HoursLayoutStrategy.FIXED_HOUR_COUNT);
         calendarView.getWeekPage().getDetailedWeekView().setVisibleHours(18);
 
+        //System.out.println(calendarView.getDayPage().getDetailedDayView().getDayView().getEntryViewFactory());
         calendarView.getDayPage().getDetailedDayView().getDayView().setEntryViewFactory(entry -> {
-            CustomDayEntryView entryView = new CustomDayEntryView(entry);
-            //entryView.setSkin(new CustomDayEntryViewSkin(entryView));
-            //entryView.addNode(Pos.CENTER,new Label("地点："+entry.getLocation()));
-            //entryView.addNode(Pos.BASELINE_LEFT,new Label("地点："+entry.getLocation()));
-            //entryView.addNode(Pos.TOP_LEFT,new Label("地点："+entry.getLocation()));
-            //System.out.println(entryView.nodesProperty());
-            //System.out.println(entryView.getNodes());
+            DayEntryView entryView = new DayEntryView(entry);
+            entryView.addNode(Pos.TOP_RIGHT,new Label("地点："+entry.getLocation()));
+            entryView.setOnMouseClicked(event -> {
+                boolean readOnly = entryView.getEntry().getCalendar().isReadOnly();
+                eventNameField.setDisable(readOnly);
+                startTimeField.setDisable(readOnly);
+                endTimeField.setDisable(readOnly);
+                locationField.setDisable(readOnly);
+                noteArea.setDisable(readOnly);
+
+                eventNameField.setText(entryView.getEntry().getTitle());
+                startTimeField.setText(entryView.getEntry().getStartTime().toString());
+                endTimeField.setText(entryView.getEntry().getEndTime().toString());
+                locationField.setText(entryView.getEntry().getLocation());
+                noteArea.setText(((Map)(entryView.getEntry().getUserObject())).get("introduction")==null?"":((Map)(entryView.getEntry().getUserObject())).get("introduction").toString());
+            });
             return entryView;
         });
+
+        calendarView.getWeekPage().getSelections().addListener((SetChangeListener<? super Entry<?>>) change -> {
+            if (calendarView.getWeekPage().getSelections().size() == 1) {
+                List<Entry<?>> selectedEntries = new ArrayList<>(calendarView.getWeekPage().getSelections());
+                Entry<?> entry = selectedEntries.get(0);
+
+                boolean readOnly = entry.getCalendar().isReadOnly();
+                eventNameField.setDisable(readOnly);
+                startTimeField.setDisable(readOnly);
+                endTimeField.setDisable(readOnly);
+                locationField.setDisable(readOnly);
+                noteArea.setDisable(readOnly);
+
+                eventNameField.setText(entry.getTitle());
+                startTimeField.setText(entry.getStartTime().toString());
+                endTimeField.setText(entry.getEndTime().toString());
+                locationField.setText(entry.getLocation());
+                noteArea.setText(((Map)(entry.getUserObject())).get("introduction")==null?"":((Map)(entry.getUserObject())).get("introduction").toString());
+            }
+        });
+
+        calendarView.getMonthPage().getSelections().addListener((SetChangeListener<? super Entry<?>>) change -> {
+            if (calendarView.getMonthPage().getSelections().size() == 1) {
+                List<Entry<?>> selectedEntries = new ArrayList<>(calendarView.getMonthPage().getSelections());
+                Entry<?> entry = selectedEntries.get(0);
+
+                boolean readOnly = entry.getCalendar().isReadOnly();
+                eventNameField.setDisable(readOnly);
+                startTimeField.setDisable(readOnly);
+                endTimeField.setDisable(readOnly);
+                locationField.setDisable(readOnly);
+                noteArea.setDisable(readOnly);
+
+                eventNameField.setText(entry.getTitle());
+                startTimeField.setText(entry.getStartTime().toString());
+                endTimeField.setText(entry.getEndTime().toString());
+                locationField.setText(entry.getLocation());
+                noteArea.setText(((Map)(entry.getUserObject())).get("introduction")==null?"":((Map)(entry.getUserObject())).get("introduction").toString());
+            }
+        });
+
+        calendarView.getYearPage().getSelections().addListener((SetChangeListener<? super Entry<?>>) change -> {
+            if (calendarView.getYearPage().getSelections().size() == 1) {
+                List<Entry<?>> selectedEntries = new ArrayList<>(calendarView.getYearPage().getSelections());
+                Entry<?> entry = selectedEntries.get(0);
+
+                boolean readOnly = entry.getCalendar().isReadOnly();
+                eventNameField.setDisable(readOnly);
+                startTimeField.setDisable(readOnly);
+                endTimeField.setDisable(readOnly);
+                locationField.setDisable(readOnly);
+                noteArea.setDisable(readOnly);
+
+                eventNameField.setText(entry.getTitle());
+                startTimeField.setText(entry.getStartTime().toString());
+                endTimeField.setText(entry.getEndTime().toString());
+                locationField.setText(entry.getLocation());
+                noteArea.setText(((Map)(entry.getUserObject())).get("introduction")==null?"":((Map)(entry.getUserObject())).get("introduction").toString());
+            }
+        });
+
         //calendarView.getDayPage().getDetailedDayView().setMaxWidth(300);
         putCalendars();
     }
@@ -202,7 +288,11 @@ public class StudentHomePage extends SplitPane {
             if(i==8) i=1;
         }
 
-        System.out.println(calendars);
+        /*Calendar calendar = new Calendar("我的日程");
+        calendar.setStyle("style7");
+        calendars.add(calendar);*/ //砍了
+
+        //System.out.println(calendars);
 
         calendarView.getCalendarSources().clear();
         calendarSource.getCalendars().addAll(calendars);
@@ -211,7 +301,7 @@ public class StudentHomePage extends SplitPane {
 
     public List<Map> getEvents(Calendar calendar) {
         List<Map> events = new ArrayList<>();
-        for (Entry<?> entry : (List<Entry>)calendar.findEntries("")) {
+        for (Entry<Map> entry : (List<Entry>)calendar.findEntries("")) {
             events.add(convertEntryToMap(entry));
         }
         return events;
@@ -222,9 +312,9 @@ public class StudentHomePage extends SplitPane {
         calendar.addEntries(events.stream().map(this::convertMapToEntry).collect(Collectors.toList()));
     }
 
-    public Entry<String> convertMapToEntry(Map<String, Object> map) {
-        Entry<String> entry = new Entry<>((String) map.get("name"));
-        entry.setId((String) map.get("eventId"));
+    public Entry<Map> convertMapToEntry(Map<String, Object> map) {
+        Entry<Map> entry = new Entry<>((String) map.get("name"));
+        entry.setUserObject(map);
         entry.setInterval(
                 LocalDate.parse(map.get("startDate")+""),
                 LocalTime.parse(map.get("startTime")+"") ,
@@ -232,11 +322,13 @@ public class StudentHomePage extends SplitPane {
                 LocalTime.parse(map.get("endTime")+"")
         );
         entry.setLocation((String) map.get("location"));
+
         return entry;
     }
 
-    public Map<String, Object> convertEntryToMap(Entry entry) {
+    public Map<String, Object> convertEntryToMap(Entry<Map> entry) {
         String name = entry.getTitle() != null ? entry.getTitle() : "";
+        String eventId = entry.getUserObject() != null ? (String) entry.getUserObject().get("eventId") : "";
         LocalDate startDate = entry.getStartDate() != null ? entry.getStartDate() : LocalDate.now();
         LocalDate endDate = entry.getEndDate() != null ? entry.getEndDate() : LocalDate.now();
         LocalTime startTime = entry.getStartTime() != null ? entry.getStartTime() : LocalTime.now();
@@ -245,7 +337,7 @@ public class StudentHomePage extends SplitPane {
 
         return Map.of(
                 "name", name,
-                "eventId", entry.getId(),
+                "eventId", eventId,
                 "startDate", startDate.toString(),
                 "endDate", endDate.toString(),
                 "startTime", startTime.toString(),
@@ -253,29 +345,19 @@ public class StudentHomePage extends SplitPane {
                 "location", location
         );
     }
+
+    /*@FXML
+    private void saveEvent() {
+        String msg = request("/saveEvent",m).getMsg();
+        if (msg.equals("保存成功")) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setContentText("保存成功");
+            alert.show();
+        } else {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setContentText("保存失败");
+            alert.show();
+        }
+    }*/
 }
 
-class CustomDayEntryView extends DayEntryView {
-    public CustomDayEntryView(Entry<?> entry) {
-        super(entry);
-    }
-
-    @Override
-    protected Skin<?> createDefaultSkin() {
-        return new CustomDayEntryViewSkin(this);
-    }
-}
-
-class CustomDayEntryViewSkin extends DayEntryViewSkin {
-    private Label locationLabel;
-    public CustomDayEntryViewSkin(DayEntryView view) {
-        super(view);
-
-        //locationLabel = createTitleLabel();
-        locationLabel=new Label("地点：");
-        locationLabel.setManaged(false);
-        locationLabel.setMouseTransparent(true);
-
-        getChildren().add(locationLabel);
-    }
-}
