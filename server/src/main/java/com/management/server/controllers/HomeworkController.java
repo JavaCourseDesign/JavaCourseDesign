@@ -35,15 +35,15 @@ public class HomeworkController {
     }
     @PostMapping("/addHomework")
     public DataResponse addHomework(@RequestBody Map m){
-        System.out.println("\nmap:"+m);
+       // System.out.println("\nmap:"+m);
         List<Person> personList= personRepository.findPersonsByCourseId((String) m.get("courseId"));
-        System.out.println("\npersonList:"+personList);
+        //System.out.println("\npersonList:"+personList);
         for(Person p:personList){
             Student s=studentRepository.findByPersonId(p.getPersonId());
-            System.out.println("\nstudent:"+s);
+            //System.out.println("\nstudent:"+s);
             if(s!=null){
                 Homework h=BeanUtil.mapToBean(m,Homework.class,true);
-                System.out.println("\nhomework:"+h);
+                //System.out.println("\nhomework:"+h);
                 h.setCourse(courseRepository.findByCourseId((String) m.get("courseId")));
                 h.setStudent(s);
                 homeworkRepository.save(h);

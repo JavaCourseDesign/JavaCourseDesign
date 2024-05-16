@@ -66,14 +66,15 @@ public class StudentCourseInfoTab extends Tab {
             alert.show();
             return;
         }
-        Map lesson=weekTimeTable.getSelectedEvents().get(0);
-        if(lesson==null)
+        if(weekTimeTable.getSelectedEvents().isEmpty())
         {
             Alert alert=new Alert(Alert.AlertType.ERROR);
             alert.setContentText("未选择对应课");
             alert.show();
             return;
         }
+        Map lesson=weekTimeTable.getSelectedEvents().get(0);
+
         DataResponse r=request("/downloadPPT",lesson);
         if(r.getCode()!=0)
         {
