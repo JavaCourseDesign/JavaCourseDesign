@@ -6,6 +6,7 @@ import com.jfoenix.controls.JFXTreeView;
 import com.management.client.ClientApplication;
 import com.management.client.page.admin.*;
 import com.management.client.page.student.*;
+import com.management.client.page.admin.AdminHomePage;
 import com.management.client.page.teacher.TeacherCourseMenuPage;
 import com.management.client.page.teacher.TeacherHomePage;
 import com.management.client.page.teacher.TeacherPersonalInfoPage;
@@ -76,6 +77,7 @@ public class Menu extends AnchorPane {
 
     private TreeItem<String> stuHmpItm = new TreeItem<>("主界面");
     private TreeItem<String> tchHmpItm = new TreeItem<>("主界面");
+    private TreeItem<String> admHmpItm = new TreeItem<>("主界面");
     private TreeItem<String> crsAppItm = new TreeItem<>("课程申请");
     private TreeItem<String> stuPerItm = new TreeItem<>("个人信息");
     private TreeItem<String> stuCrsItm = new TreeItem<>("课程信息");
@@ -196,7 +198,8 @@ public class Menu extends AnchorPane {
         {
             case "ROLE_ADMIN":
                 roleLabel.setText("管理员菜单");
-                leftMenu.getRoot().getChildren().addAll(stuMngItm,tchMngItm,crsMngItm,clzMngItm,invMngItm,dlaMngItm,hnrMngItm,logMngItm);
+                borderPane.setCenter(new AdminHomePage());
+                leftMenu.getRoot().getChildren().addAll(admHmpItm,stuMngItm,tchMngItm,crsMngItm,clzMngItm,invMngItm,dlaMngItm,hnrMngItm,logMngItm);
                 break;
             case "ROLE_STUDENT":
                 roleLabel.setText("学生菜单");
@@ -302,6 +305,7 @@ public class Menu extends AnchorPane {
         //tchCrsItm.setGraphic(new ImageView("/icons/teacher.png"));
 
         tchCrsItm.setGraphic(new FontIcon("mdi2b-book-open-page-variant"));
+        admHmpItm.setGraphic(new FontIcon(HOME));
         stuHmpItm.setGraphic(new FontIcon(HOME));
         tchHmpItm.setGraphic(new FontIcon(HOME));
         tchPerItm.setGraphic(new FontIcon(ID_CARD));

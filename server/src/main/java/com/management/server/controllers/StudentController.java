@@ -102,6 +102,50 @@ public class StudentController {
             scoreMapList.add(scoreMap);
         }
         student.put("scores",scoreMapList);
+        double max=0;
+        double min=100;
+        double avg=0;
+
+        //System.out.println(scoreList);
+        int cnt = scoreList.size();
+        double creditCnt = 0;
+        double gpa = 0;
+        for(Score score:scoreList)
+        {
+            double credit=score.getCourse().getCredit();
+            if(score.getMark()!=null)
+            {
+                if(score.getMark()>max)
+                {
+                    max=score.getMark();
+                }
+                if(score.getMark()<min)
+                {
+                    min=score.getMark();
+                }
+                avg+=score.getMark();
+                gpa+=(score.getMark()<60?0:1+(score.getMark()-60)/10)*credit;
+            }
+            creditCnt+=credit;
+        }
+        if(cnt==0||max<min)
+        {
+            max=0;
+            min=0;
+            avg=0;
+            gpa=0;
+        }
+        else {
+            avg /= cnt;
+            gpa /= creditCnt;
+            DecimalFormat df = new DecimalFormat("#.##");
+            gpa= Double.parseDouble(df.format(gpa));
+        }
+
+        student.put("maxMark",max);
+        student.put("minMark",min);
+        student.put("avgMark",avg);
+        student.put("gpa",gpa);
         return new DataResponse(0,student,null);
     }
 
@@ -177,7 +221,7 @@ public class StudentController {
             double min=100;
             double avg=0;
             List<Score> scoreList=s.getScores();
-            System.out.println(scoreList);
+            //System.out.println(scoreList);
             int cnt = scoreList.size();
             double creditCnt = 0;
             double gpa = 0;

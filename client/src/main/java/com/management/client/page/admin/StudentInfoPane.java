@@ -52,8 +52,8 @@ public class StudentInfoPane{
     private Label phone;
     @FXML
     private Label email;
-    @FXML
-    private Label other;
+    /*@FXML
+    private Label other;*/
 
     @FXML
     private TableView<Map> family;
@@ -77,6 +77,10 @@ public class StudentInfoPane{
     @FXML
     private TableColumn<Map, String> eventColumn;
 
+    @FXML
+    private Label avgMark;
+    @FXML
+    private Label gpa;
     @FXML
     private TableView scoreTable;
     @FXML
@@ -182,7 +186,7 @@ public class StudentInfoPane{
         highSchool.setText(student.get("highSchool")==null?"":student.get("highSchool").toString());
         phone.setText(student.get("phone")==null?"":student.get("phone").toString());
         email.setText(student.get("email")==null?"":student.get("email").toString());
-        other.setText(student.get("other")==null?"":student.get("other").toString());
+        //other.setText(student.get("other")==null?"":student.get("other").toString());
         ObservableList<Map> familyItems = FXCollections.observableArrayList();
         List<Map> familyList = (List<Map>) student.get("families");
         if (student.get("families") != null) {
@@ -215,8 +219,12 @@ public class StudentInfoPane{
         {
             scoreItems = FXCollections.observableArrayList(scores);
         }
+
+        avgMark.setText(student.get("avgMark")==null?"":student.get("avgMark").toString());
+        gpa.setText(student.get("gpa")==null?"":student.get("gpa").toString());
+
         scoreTable.setItems(scoreItems);
-        System.out.println(scoreItems);
+        //System.out.println(scoreItems);
         courseIdColumn.setCellValueFactory(data -> {
             if(data.getValue().isEmpty()) return new SimpleStringProperty("");
             String courseId = (String) data.getValue().get("courseId");
