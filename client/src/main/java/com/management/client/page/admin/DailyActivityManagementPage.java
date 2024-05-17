@@ -52,10 +52,7 @@ public class DailyActivityManagementPage extends SplitPane {
         m.put("studentList",studentListView.getSelectedItems());
         m.put("name",nameField.getText());
         m.put("type",typeField.getValue());
-        m.put("startDate",eventPicker.getEvents().get(0).get("startDate"));
-        m.put("startTime",eventPicker.getEvents().get(0).get("startTime"));
-        m.put("endDate",eventPicker.getEvents().get(0).get("endDate"));
-        m.put("endTime",eventPicker.getEvents().get(0).get("endTime"));
+
         m.put("location",locationField.getText());
         return m;
     }
@@ -87,6 +84,10 @@ public class DailyActivityManagementPage extends SplitPane {
             alert.showAndWait();
             return;
         }
+        m.put("startDate",eventPicker.getEvents().get(0).get("startDate"));
+        m.put("startTime",eventPicker.getEvents().get(0).get("startTime"));
+        m.put("endDate",eventPicker.getEvents().get(0).get("endDate"));
+        m.put("endTime",eventPicker.getEvents().get(0).get("endTime"));
         DataResponse r=request("/addDailyActivity",m);
         if(r.getCode()==-1)
         {

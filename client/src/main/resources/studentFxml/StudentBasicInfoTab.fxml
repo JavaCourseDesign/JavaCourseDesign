@@ -85,9 +85,10 @@
                 </rowConstraints>
                 <Label GridPane.rowIndex="0" text="电话" />
                 <Label GridPane.rowIndex="1" text="邮箱" />
-
+                <Label GridPane.rowIndex="2" text="地址" />
                 <TextField GridPane.columnIndex="1" GridPane.rowIndex="0" fx:id="phone"/>
                 <TextField GridPane.columnIndex="1" GridPane.rowIndex="1" fx:id="email"/>
+                <TextField GridPane.columnIndex="1" GridPane.rowIndex="2" fx:id="address"/>
             </GridPane>
         </AnchorPane>
     </TitledPane>

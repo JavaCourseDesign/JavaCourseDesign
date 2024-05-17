@@ -277,6 +277,7 @@ public class StudentController {
         }
         Student student = BeanUtil.toBean(m, Student.class, CopyOptions.create());//要求map键值与对象一致
         boolean flag = completeStudentById(student);
+        student.setClazz(clazzRepository.findByName(""+m.get("clazzName")));
         if(!flag) return new DataResponse(-1,null,"身份证号不合法，无法添加");
         //应已包含 姓名、身份证号、学号、部门、政治面貌、专业、毕业高中
         studentRepository.save(student);
@@ -306,7 +307,8 @@ public class StudentController {
             studentRepository.save(student);
             return new DataResponse(0, null, "更新成功");
         } else {
-            return new DataResponse(-1, null, "学生不存在，无法更新");
+            return addStudent(m);
+            //return new DataResponse(-1, null, "学生不存在，无法更新");
         }
     }
 

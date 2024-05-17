@@ -281,6 +281,10 @@ public class Menu extends AnchorPane {
             {
                 borderPane.setCenter(new DailyActivityPage());
             }
+            else if(newValue == admHmpItm)
+            {
+                borderPane.setCenter(new AdminHomePage());
+            }
             else if(newValue == stuHmpItm)
             {
                 borderPane.setCenter(new StudentHomePage());

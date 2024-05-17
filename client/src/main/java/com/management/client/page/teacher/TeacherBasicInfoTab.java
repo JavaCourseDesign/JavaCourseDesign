@@ -42,6 +42,8 @@ public class TeacherBasicInfoTab extends Tab {
     private TextField phone;
     @FXML
     private TextField email;
+    @FXML
+    private TextField address;
 
     public TeacherBasicInfoTab(Map<String, Object> teacher) {
         this.teacher = teacher;
@@ -75,6 +77,7 @@ public class TeacherBasicInfoTab extends Tab {
         Map m = new HashMap<>();
         m.put("phone", phone.getText());
         m.put("email", email.getText());
+        m.put("address", address.getText());
         return m;
     }
 
@@ -114,6 +117,7 @@ public class TeacherBasicInfoTab extends Tab {
     }
 
     private void refresh() {
+        this.teacher= (Map) request("/getTeacher", null).getData();
         if (teacher != null) {
             NAME.setText((String) teacher.get("name"));
             TEACHERID.setText((String) teacher.get("teacherId"));
@@ -123,6 +127,7 @@ public class TeacherBasicInfoTab extends Tab {
             title.setText((String) teacher.get("title"));
             phone.setText((String) teacher.get("phone"));
             email.setText((String) teacher.get("email"));
+            address.setText((String) teacher.get("address"));
         }
         display();
     }
