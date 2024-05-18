@@ -41,8 +41,7 @@ public class TeacherInfoPane {
     private TextField dept;
     @FXML
     private TextField degree;
-    @FXML
-    private Label clazz; //待修改
+
     @FXML
     private TextField social;
     @FXML
@@ -52,7 +51,7 @@ public class TeacherInfoPane {
     @FXML
     private Label email;
     @FXML
-    private Label other;
+    private Label address;
 
     @FXML
     private TableView honorTable;
@@ -88,13 +87,13 @@ public class TeacherInfoPane {
     //添加与更新合并为保存
     private void save() {
         Map<String, Object> teacher = new HashMap<>();
-        teacher.put("personId", this.teacher.get("personId"));
+
+        if(this.teacher!=null)teacher.put("personId", this.teacher.get("personId"));
         teacher.put("name", name.getText());
         teacher.put("teacherId", teacherId.getText());
         teacher.put("idCardNum", idCardNum.getText());
         teacher.put("dept", dept.getText());
         teacher.put("degree", degree.getText());
-        //clazz待修改
         teacher.put("social", social.getText());
         teacher.put("title", title.getText());
 
@@ -104,6 +103,12 @@ public class TeacherInfoPane {
         if (result.get() == ButtonType.OK) {
             executeTask("/updateTeacher", teacher, this::refresh);
         }
+    }
+    @FXML
+    private void clear()
+    {
+        teacher = Map.of();
+        refresh();
     }
 
     @FXML
@@ -146,7 +151,7 @@ public class TeacherInfoPane {
         title.setText(teacher.get("title")==null?"":teacher.get("title").toString());
         phone.setText(teacher.get("phone")==null?"":teacher.get("phone").toString());
         email.setText(teacher.get("email")==null?"":teacher.get("email").toString());
-        other.setText(teacher.get("other")==null?"":teacher.get("other").toString());
+        address.setText(teacher.get("address")==null?"":teacher.get("address").toString());
 
         ObservableList<Map> honorItems = FXCollections.observableArrayList();
         List<Map> honorList = (List<Map>) teacher.get("honors");
@@ -165,12 +170,8 @@ public class TeacherInfoPane {
             return new SimpleStringProperty(name);
         });
 
-
         parent.displayTeachers();
     }
 
-    public void clear() {
-        teacher = Map.of();
-        refresh();
-    }
+
 }

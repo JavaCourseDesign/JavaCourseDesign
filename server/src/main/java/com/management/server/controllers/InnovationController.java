@@ -70,7 +70,7 @@ public class InnovationController {
         //save()方法既可以用于保存新的实体，也可以用于更新已存在的实体。
         Innovation innovation=innovationRepository.findByEventId((String) m.get("eventId"));
         List<Map> personsMap = (List<Map>) m.get("studentList");
-        System.out.println(personsMap);
+        //System.out.println(personsMap);
         Set<Person> persons = new HashSet<>();
         for (Map personMap : personsMap) {
             //改成student突然可以了,目前不知道有没有bug

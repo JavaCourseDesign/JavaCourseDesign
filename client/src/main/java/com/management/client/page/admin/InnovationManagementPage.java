@@ -55,10 +55,7 @@ public class InnovationManagementPage extends SplitPane {
         m.put("type",typeField.getValue());
         m.put("location",locationField.getText());
         //m.put("performance",performanceField.getText());
-        m.put("startDate",eventPicker.getEvents().get(0).get("startDate"));
-        m.put("startTime",eventPicker.getEvents().get(0).get("startTime"));
-        m.put("endDate",eventPicker.getEvents().get(0).get("endDate"));
-        m.put("endTime",eventPicker.getEvents().get(0).get("endTime"));
+
         return m;
     }
 
@@ -222,7 +219,10 @@ public class InnovationManagementPage extends SplitPane {
             alert.showAndWait();
             return;
         }
-
+        m.put("startDate",eventPicker.getEvents().get(0).get("startDate"));
+        m.put("startTime",eventPicker.getEvents().get(0).get("startTime"));
+        m.put("endDate",eventPicker.getEvents().get(0).get("endDate"));
+        m.put("endTime",eventPicker.getEvents().get(0).get("endTime"));
         DataResponse r=request("/addInnovation",m);
         if(r.getCode()==-1)
         {

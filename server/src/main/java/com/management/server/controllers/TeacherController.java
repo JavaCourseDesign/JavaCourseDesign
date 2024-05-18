@@ -26,6 +26,7 @@ public class TeacherController {
     TeacherRepository teacherRepository;
 
     @PostMapping("/getTeacher")
+    @PreAuthorize("hasRole('TEACHER')")
     public DataResponse getTeacher()
     {
         String username = CommonMethod.getUsername();
@@ -87,7 +88,7 @@ public class TeacherController {
             teacherRepository.save(teacher);
             return new DataResponse(0, null, "更新成功");
         } else {
-            return new DataResponse(-1, null, "学生不存在，无法更新");
+            return addTeacher(m);
         }
     }
 
@@ -96,9 +97,7 @@ public class TeacherController {
     {
         String teacherId = CommonMethod.getUsername();
         Teacher teacher = teacherRepository.findByTeacherId(teacherId);
-
         BeanUtil.fillBeanWithMap(m, teacher, CopyOptions.create().ignoreError());
-
         teacherRepository.save(teacher);
         return new DataResponse(0, null, "保存成功");
     }

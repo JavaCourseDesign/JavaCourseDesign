@@ -82,16 +82,17 @@
                         </rowConstraints>
                         <Label GridPane.rowIndex="0" text="电话" />
                         <Label GridPane.rowIndex="1" text="邮箱" />
-                        <Label GridPane.rowIndex="2" text="其他" />
+                        <Label GridPane.rowIndex="2" text="地址" />
 
                         <Label GridPane.columnIndex="1" GridPane.rowIndex="0" fx:id="phone"/>
                         <Label GridPane.columnIndex="1" GridPane.rowIndex="1" fx:id="email"/>
-                        <Label GridPane.columnIndex="1" GridPane.rowIndex="2" fx:id="other"/>
+                        <Label GridPane.columnIndex="1" GridPane.rowIndex="2" fx:id="address"/>
                     </GridPane>
                 </AnchorPane>
             </TitledPane>
             <TitledPane animated="false" text="操作" collapsible="false">
                 <HBox>
+                    <Button fx:id="clear" text="新建(清空)" onAction="#clear"/>
                     <Button fx:id="save" text="保存" onAction="#save"/>
                     <Button fx:id="delete" text="删除" onAction="#delete"/>
                 </HBox>

@@ -63,10 +63,13 @@ public class StudentBasicInfoTab extends Tab {
     private Label social;
     @FXML
     private Label homeTown;
+
     @FXML
     private TextField phone;
     @FXML
     private TextField email;
+    @FXML
+    private TextField address;
 
     @FXML
     private TableView family;
@@ -191,6 +194,7 @@ public class StudentBasicInfoTab extends Tab {
         ObservableList<Map> familyItems = family.getItems();
         List<Map> familyList = familyItems;
         m.put("families", familyList);
+        m.put("address",address.getText());
        // System.out.println(m);
         return m;
     }
@@ -211,7 +215,6 @@ public class StudentBasicInfoTab extends Tab {
             alert.showAndWait();
             return;
         }
-
         DataResponse r = request("/saveStudentPersonalInfo", newMapFromFields());
         if (r.getCode() == 0) {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -222,6 +225,7 @@ public class StudentBasicInfoTab extends Tab {
     }
 
     private void refresh() {
+        this.student = (Map)request("/getStudent", null).getData();
         if (student != null) {
             homeTown.setText((String) student.get("homeTown"));
             NAME.setText((String) student.get("name"));
@@ -239,6 +243,7 @@ public class StudentBasicInfoTab extends Tab {
             social.setText((String) student.get("social"));
             phone.setText((String) student.get("phone"));
             email.setText((String) student.get("email"));
+            address.setText((String) student.get("address"));
             // 假设有other键
 
             ObservableList<Map> familyItems = FXCollections.observableArrayList();

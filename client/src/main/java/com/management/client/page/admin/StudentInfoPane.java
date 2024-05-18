@@ -52,6 +52,8 @@ public class StudentInfoPane{
     private Label phone;
     @FXML
     private Label email;
+    @FXML
+    private Label address;
     /*@FXML
     private Label other;*/
 
@@ -125,7 +127,7 @@ public class StudentInfoPane{
     //添加与更新合并为保存
     private void save() {
         Map<String, Object> student = new HashMap<>();
-        student.put("personId", this.student.get("personId"));
+        if(this.student!=null)student.put("personId", this.student.get("personId"));
         student.put("name", name.getText());
         student.put("studentId", studentId.getText());
         student.put("idCardNum", idCardNum.getText());
@@ -141,6 +143,13 @@ public class StudentInfoPane{
         if (result.get() == ButtonType.OK) {
             executeTask("/updateStudent", student, this::refresh);
         }
+    }
+
+    @FXML
+    private void clear()
+    {
+        student = Map.of();
+        refresh();
     }
 
     @FXML
@@ -186,6 +195,7 @@ public class StudentInfoPane{
         highSchool.setText(student.get("highSchool")==null?"":student.get("highSchool").toString());
         phone.setText(student.get("phone")==null?"":student.get("phone").toString());
         email.setText(student.get("email")==null?"":student.get("email").toString());
+        address.setText(student.get("address")==null?"":student.get("address").toString());
         //other.setText(student.get("other")==null?"":student.get("other").toString());
         ObservableList<Map> familyItems = FXCollections.observableArrayList();
         List<Map> familyList = (List<Map>) student.get("families");
@@ -244,10 +254,5 @@ public class StudentInfoPane{
 
 
         parent.displayStudents();
-    }
-
-    public void clear() {
-        student = Map.of();
-        refresh();
     }
 }

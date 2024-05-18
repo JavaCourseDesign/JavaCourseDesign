@@ -56,7 +56,7 @@ public class TeacherManagementPage extends SplitPane {
         FilteredTableColumn<Map, String> teacherDeptColumn = new FilteredTableColumn<>("系别");
         FilteredTableColumn<Map, String> teacherSocialColumn = new FilteredTableColumn<>("政治面貌");
         FilteredTableColumn<Map, String> teacherDegreeColumn = new FilteredTableColumn<>("学位");
-        FilteredTableColumn<Map, String> teacherTitleColumn = new FilteredTableColumn<>("毕业高中");
+        FilteredTableColumn<Map, String> teacherTitleColumn = new FilteredTableColumn<>("职称");
         FilteredTableColumn<Map, String> teacherAddressColumn = new FilteredTableColumn<>("地址");
 
 
@@ -124,7 +124,7 @@ public class TeacherManagementPage extends SplitPane {
         observableList.addAll(FXCollections.observableArrayList((ArrayList) request("/getAllTeachers", null).getData()));
         teacherTable.setData(observableList);
 
-        System.out.println(observableList);
+        //System.out.println(observableList);
 
     }
 
