@@ -68,11 +68,16 @@ public class WeekTimeTable extends WeekPage {
         List<Map> events = new ArrayList<>();
         //System.out.println(this.calendar.findEntries(""));
         System.out.println(this.calendar.findEntries(""));
-        for (Entry<?> entry : (List<Entry>)this.calendar.findEntries("")) {
+        List<Entry> entries = (List<Entry>)this.calendar.findEntries("");
+        //去除重复的entry
+        for (int i = 0; i < entries.size(); i++) {
+            if(i!=0&&entries.get(i).equals(entries.get(i-1)))
+                entries.remove(i--);
+        }
+        for (Entry<?> entry : entries) {
             System.out.println(entry);
             Map m= convertEntryToMap(entry);
-            if(events.size()==0||m.equals(m.get(events.size()-1)))
-                events.add(m);
+            events.add(m);
         }
         System.out.println(events);
         return events;
