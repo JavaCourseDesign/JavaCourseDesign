@@ -15,7 +15,7 @@ import static com.management.client.util.HttpClientUtil.request;
 
 public class InnovationPage extends SplitPane {
     private SearchableTableView innovationTable;
-    private ObservableList<Map> observableList = FXCollections.observableArrayList();
+    private final ObservableList<Map> observableList = FXCollections.observableArrayList();
 
     public InnovationPage() {
         initializeTable();

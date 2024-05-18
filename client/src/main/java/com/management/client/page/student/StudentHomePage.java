@@ -35,7 +35,7 @@ import static com.management.client.util.HttpClientUtil.uploadFile;
 
 public class StudentHomePage extends SplitPane {
     @FXML
-    private SplitPane homePage;
+    private final SplitPane homePage;
     @FXML
     private CalendarView calendarView;
     @FXML

@@ -17,9 +17,9 @@ import java.util.Map;
 import static com.management.client.util.HttpClientUtil.request;
 
 public class StudentScorePage extends SplitPane {
-    private Label label = new Label();
+    private final Label label = new Label();
     private SearchableTableView scoreTable;
-    private ObservableList<Map> observableList = FXCollections.observableArrayList();
+    private final ObservableList<Map> observableList = FXCollections.observableArrayList();
     public StudentScorePage() {
         initializeTable();
         displayScores();

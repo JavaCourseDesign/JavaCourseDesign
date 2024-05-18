@@ -20,12 +20,12 @@ import static com.management.client.util.HttpClientUtil.request;
 public class AbsencePage extends SplitPane {
 
     private SearchableTableView absenceTable;
-    private VBox controlPanel = new VBox();
-    private ObservableList<Map> observableList = FXCollections.observableArrayList();
+    private final VBox controlPanel = new VBox();
+    private final ObservableList<Map> observableList = FXCollections.observableArrayList();
 
-    private TextField offReasonField = new TextField();
-    private TextField destinationField = new TextField();
-    private WeekTimeTable eventView=new WeekTimeTable();
+    private final TextField offReasonField = new TextField();
+    private final TextField destinationField = new TextField();
+    private final WeekTimeTable eventView=new WeekTimeTable();
 
     public AbsencePage() {
         eventView.setEvents((List<Map<String, Object>>) request("/getStudentEvents", null).getData());

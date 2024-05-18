@@ -24,9 +24,9 @@ import static com.management.client.util.HttpClientUtil.request;
 //考虑是否要实现教师上传作业内容文件，然后在本页面显示
 //studentHomeworkPage仍有存在的必要，提供一个快捷的提交作业的途径，考虑集成在homePage中
 public class StudentCourseMenuPage extends SplitPane {
-    private ObservableList<Map> observableList = FXCollections.observableArrayList();
+    private final ObservableList<Map> observableList = FXCollections.observableArrayList();
     private SearchableTableView courseTable;
-    private TabPane courseTabPane = new TabPane();
+    private final TabPane courseTabPane = new TabPane();
 
     public StudentCourseMenuPage() {
         this.setDividerPosition(0, 0.13);

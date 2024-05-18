@@ -30,8 +30,8 @@ public class StudentPersonalInfoPage extends TabPane {
 
 class HonorTab extends Tab {
     private SearchableTableView honorTable;
-    private SplitPane splitPane=new SplitPane();
-    private ObservableList<Map> observableList = FXCollections.observableArrayList();
+    private final SplitPane splitPane=new SplitPane();
+    private final ObservableList<Map> observableList = FXCollections.observableArrayList();
 
     public HonorTab() {
         this.setText("荣誉信息");
@@ -74,8 +74,8 @@ class HonorTab extends Tab {
 }
 class FeeTab extends Tab{
     private SearchableTableView feeTable;
-    private SplitPane splitPane=new SplitPane();
-    private ObservableList<Map> observableList = FXCollections.observableArrayList();
+    private final SplitPane splitPane=new SplitPane();
+    private final ObservableList<Map> observableList = FXCollections.observableArrayList();
 
     public FeeTab() {
         this.setText("消费信息");

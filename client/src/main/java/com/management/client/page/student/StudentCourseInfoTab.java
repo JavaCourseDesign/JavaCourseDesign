@@ -27,9 +27,9 @@ import static com.management.client.util.HttpClientUtil.uploadFile;
 public class StudentCourseInfoTab extends Tab {
     Map course;
 
-    private Button pptDownloadButton = new Button("下载PPT");
-    private Button pdfDownloadButton = new Button("下载参考资料PDF");
-    private WeekTimeTable weekTimeTable = new WeekTimeTable();
+    private final Button pptDownloadButton = new Button("下载PPT");
+    private final Button pdfDownloadButton = new Button("下载参考资料PDF");
+    private final WeekTimeTable weekTimeTable = new WeekTimeTable();
     public StudentCourseInfoTab(Map course) {
         this.course = course;
 

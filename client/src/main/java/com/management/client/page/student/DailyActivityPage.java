@@ -16,7 +16,7 @@ import static com.management.client.util.HttpClientUtil.request;
 public class DailyActivityPage extends SplitPane {
 
     private SearchableTableView dailyActivityTable;
-    private ObservableList<Map> observableList = FXCollections.observableArrayList();
+    private final ObservableList<Map> observableList = FXCollections.observableArrayList();
 
     public DailyActivityPage() {
         initializeTable();

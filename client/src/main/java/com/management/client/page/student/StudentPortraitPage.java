@@ -108,7 +108,7 @@ public class StudentPortraitPage {
             seriesFee.getData().add(new XYChart.Data<>(entry.getKey(), entry.getValue()));
         }
         ObservableList<XYChart.Series<String, Number>> barData =
-                FXCollections.<XYChart.Series<String, Number>>observableArrayList();
+                FXCollections.observableArrayList();
         barData.add(seriesFee);
         feeBarChart.setData(barData);
 
@@ -121,7 +121,7 @@ public class StudentPortraitPage {
             seriesScore.getData().add(new XYChart.Data<>(map.get("courseName").toString(),Double.parseDouble( map.get("mark").toString())));
         }
         ObservableList<XYChart.Series<String,Number>> scoreData =
-                FXCollections.<XYChart.Series<String, Number>>observableArrayList();
+                FXCollections.observableArrayList();
         scoreData.add(seriesScore);
         scoreBarChart.setData(scoreData);
 

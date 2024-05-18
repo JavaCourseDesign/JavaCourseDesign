@@ -6,6 +6,7 @@ import com.management.server.payload.response.DataResponse;
 import com.management.server.repositories.*;
 import com.management.server.util.CommonMethod;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;

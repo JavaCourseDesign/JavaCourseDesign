@@ -27,19 +27,19 @@ import static com.management.client.util.HttpClientUtil.request;
 
 public class CourseApplyPage extends SplitPane {
     private SearchableTableView courseTable;
-    private ObservableList<Map> observableList = FXCollections.observableArrayList();
-    private WeekPage weekTimeTable = new WeekPage();
-    private Label creditCount = new Label();
-    private Label requiredCreditCount = new Label();
-    private Label optionalCreditCount = new Label();
-    private Label selectiveCreditCount = new Label();
-    private ToggleButton filterConflict = new ToggleButton();
-    private ToggleButton filterAvailable = new ToggleButton();
-    private ToggleButton filterChosen = new ToggleButton();
-    private Calendar chosenCalendar = new Calendar("已中课程");
-    private Calendar selectedCalendar = new Calendar("已选课程");
-    private Calendar preViewCalendar = new Calendar("预览课程");
-    private CalendarSource calendarSource = new CalendarSource("My Calendar Source");
+    private final ObservableList<Map> observableList = FXCollections.observableArrayList();
+    private final WeekPage weekTimeTable = new WeekPage();
+    private final Label creditCount = new Label();
+    private final Label requiredCreditCount = new Label();
+    private final Label optionalCreditCount = new Label();
+    private final Label selectiveCreditCount = new Label();
+    private final ToggleButton filterConflict = new ToggleButton();
+    private final ToggleButton filterAvailable = new ToggleButton();
+    private final ToggleButton filterChosen = new ToggleButton();
+    private final Calendar chosenCalendar = new Calendar("已中课程");
+    private final Calendar selectedCalendar = new Calendar("已选课程");
+    private final Calendar preViewCalendar = new Calendar("预览课程");
+    private final CalendarSource calendarSource = new CalendarSource("My Calendar Source");
     public CourseApplyPage() {
         this.setWidth(1000);
         this.setDividerPosition(0, 0.7);

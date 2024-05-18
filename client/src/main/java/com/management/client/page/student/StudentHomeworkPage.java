@@ -23,8 +23,8 @@ import static com.management.client.util.HttpClientUtil.request;
 import static com.management.client.util.HttpClientUtil.uploadFile;
 
 public class StudentHomeworkPage extends VBox{
-    private Button uploadHomeworkButton=new Button("上传作业");
-    private ObservableList<Map> observableList= FXCollections.observableArrayList();
+    private final Button uploadHomeworkButton=new Button("上传作业");
+    private final ObservableList<Map> observableList= FXCollections.observableArrayList();
     private SearchableTableView homeworkTable;
 
     public StudentHomeworkPage() {
@@ -123,6 +123,6 @@ public class StudentHomeworkPage extends VBox{
         columns.add(gradeColumn);
         homeworkTable=new SearchableTableView(observableList,List.of("courseName","grade"),columns);
         this.getChildren().add(homeworkTable);
-        this.setVgrow(homeworkTable, Priority.ALWAYS);
+        setVgrow(homeworkTable, Priority.ALWAYS);
     }
 }
