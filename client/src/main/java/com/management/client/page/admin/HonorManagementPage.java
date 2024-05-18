@@ -68,7 +68,7 @@ public class HonorManagementPage extends SplitPane {
         observableList.clear();
         observableList.add(Map.of());
         ArrayList<Map> hList=(ArrayList<Map>) request("/getAllHonors", null).getData();
-        System.out.println(hList);
+        //System.out.println(hList);
         observableList.addAll(FXCollections.observableArrayList(hList));
         honorTable.setData(observableList);
     }

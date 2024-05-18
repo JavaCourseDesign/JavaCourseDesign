@@ -67,14 +67,14 @@ public class WeekTimeTable extends WeekPage {
         //return this.calendar.findEntries("").stream().map(this::convertEntryToMap).collect(Collectors.toList());
         List<Map> events = new ArrayList<>();
         //System.out.println(this.calendar.findEntries(""));
-        System.out.println(this.calendar.findEntries(""));
+        //System.out.println(this.calendar.findEntries(""));
         for (Entry<?> entry : (List<Entry>)this.calendar.findEntries("")) {
-            System.out.println(entry);
+           // System.out.println(entry);
             Map m= convertEntryToMap(entry);
             if(events.size()==0||m.equals(m.get(events.size()-1)))
                 events.add(m);
         }
-        System.out.println(events);
+        //System.out.println(events);
         return events;
     }
 

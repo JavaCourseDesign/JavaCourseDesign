@@ -157,6 +157,10 @@ public class InnovationManagementPage extends SplitPane {
            return;
        }
         Map innovation=newMapFromFields(innovationTable.getSelectedItems().get(0));
+        innovation.put("startDate",eventPicker.getEvents().get(0).get("startDate"));
+        innovation.put("startTime",eventPicker.getEvents().get(0).get("startTime"));
+        innovation.put("endDate",eventPicker.getEvents().get(0).get("endDate"));
+        innovation.put("endTime",eventPicker.getEvents().get(0).get("endTime"));
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "确定要更新吗？");
         alert.setTitle("警告");
         Optional<ButtonType> result=alert.showAndWait();

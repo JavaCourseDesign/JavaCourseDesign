@@ -161,7 +161,7 @@ public class ClazzManagementPage extends SplitPane {
         observableList.clear();
         observableList.addAll(FXCollections.observableArrayList((ArrayList) request("/getAllClazz", null).getData()));
         clazzTable.setData(observableList);
-        System.out.println(observableList);
+        //System.out.println(observableList);
     }
 
     private void addClazz() {

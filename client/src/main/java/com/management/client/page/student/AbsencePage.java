@@ -84,7 +84,7 @@ public class AbsencePage extends SplitPane {
         FilteredTableColumn<Map, String> statusColumn = new FilteredTableColumn<>("状态");
         offReasonColumn.setCellValueFactory(new MapValueFactory<>("offReason"));
         eventColumn.setCellValueFactory(data -> {
-            System.out.println(data.getValue());
+            //System.out.println(data.getValue());
             if (data.getValue() != null) {
                 Map<String, Object> event = (Map<String, Object>) data.getValue().get("event");
                 String name = (String) event.get("name");

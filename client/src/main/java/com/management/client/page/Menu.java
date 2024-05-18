@@ -212,7 +212,7 @@ public class Menu extends AnchorPane {
                 leftMenu.getRoot().getChildren().addAll(tchHmpItm,tchCrsItm,tchPerItm);
                 break;
             default:
-                System.out.println("Error: Unknown role"+response.getMsg());
+                //System.out.println("Error: Unknown role"+response.getMsg());
         }
 
         leftMenu.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {

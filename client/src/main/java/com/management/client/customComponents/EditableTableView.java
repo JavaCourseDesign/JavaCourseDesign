@@ -15,7 +15,7 @@ public class EditableTableView<T> extends TableView<T> {
     public EditableTableView() {
         this.setEditable(true);
         this.setItems(FXCollections.observableArrayList((ArrayList) request("/getAllStudents", null).getData()));
-        System.out.println("EditableTableView: " + this.getItems());
+        //System.out.println("EditableTableView: " + this.getItems());
         addColumn("学号", "studentId");
         addColumn("姓名", "name");
     }

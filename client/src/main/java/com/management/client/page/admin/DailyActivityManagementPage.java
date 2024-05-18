@@ -146,6 +146,10 @@ public class DailyActivityManagementPage extends SplitPane {
             return;
         }
         Map m=newMapFromFields(dailyActivityTable.getSelectedItems().get(0));
+        m.put("startDate",eventPicker.getEvents().get(0).get("startDate"));
+        m.put("startTime",eventPicker.getEvents().get(0).get("startTime"));
+        m.put("endDate",eventPicker.getEvents().get(0).get("endDate"));
+        m.put("endTime",eventPicker.getEvents().get(0).get("endTime"));
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "确定要更新吗？");
         alert.setTitle("警告");
         Optional<ButtonType> result=alert.showAndWait();
