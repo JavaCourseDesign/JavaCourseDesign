@@ -193,6 +193,11 @@ public class StudentBasicInfoTab extends Tab {
         //存入家庭成员信息
         ObservableList<Map> familyItems = family.getItems();
         List<Map> familyList = familyItems;
+        for (Map familyItem : familyItems) {
+            if (familyItem.get("name") == null || familyItem.get("name").equals("")) {
+                familyList.remove(familyItem);
+            }
+        }
         m.put("families", familyList);
         m.put("address",address.getText());
        // System.out.println(m);

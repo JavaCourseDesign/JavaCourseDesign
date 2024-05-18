@@ -78,6 +78,14 @@ public class ScoreManagementTab extends Tab {//成绩录入界面
     }
 
     public void initializeControlPanel() {
+
+        scoreTable.setOnItemClick(item -> {
+            if(item.get("homeworkMark")==null)
+                saveButton.setDisable(true);
+            else
+                saveButton.setDisable(false);
+        });
+
         fillButton.setOnMouseClicked(e -> {
             request("/fillCourseScores", newMapFromFields());
             displayScores();
@@ -85,19 +93,27 @@ public class ScoreManagementTab extends Tab {//成绩录入界面
 
         saveButton.setOnMouseClicked(e -> {
             Map score = scoreTable.getSelectedItem();
+            if(score != null)
+            {
+                double finalMarkValue;
+                try {
+                    finalMarkValue = Double.parseDouble(finalMarkField.getText());
+                } catch (NumberFormatException exception) {
+                    finalMarkValue = 0;
+                }
+                finalMarkValue = Math.max(0, finalMarkValue);
+                finalMarkValue = Math.min(100, finalMarkValue);
 
-            double finalMarkValue;
-            try {
-                finalMarkValue = Double.parseDouble(finalMarkField.getText());
-            } catch (NumberFormatException exception) {
-                finalMarkValue = 0;
+                score.put("finalMark", finalMarkValue + "");
+                request("/uploadFinalScore", score);
+                displayScores();
             }
-            finalMarkValue = Math.max(0, finalMarkValue);
-            finalMarkValue = Math.min(100, finalMarkValue);
-
-            score.put("finalMark", finalMarkValue+"");
-            request("/uploadFinalScore", score);
-            displayScores();
+            else {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("提示");
+                alert.setHeaderText("请先选择一行");
+                alert.showAndWait();
+            }
         });
         controlPanel.getChildren().addAll(new Label("平时成绩权重："),homeworkWeightField,new Label("出勤成绩权重："), absenceWeightField,new Label("期末成绩："),finalMarkField, fillButton, saveButton);
         splitPane.getItems().add(controlPanel);

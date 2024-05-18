@@ -173,12 +173,22 @@ public class StudentInfoPane{
         if(response!=null) {
             student = (Map<String, Object>) response.getData();
         }
+        System.out.println(student.get("photo"));
         //student = (Map<String, Object>) request("/getStudentByPersonId", student).getData();
-        String base64Image = student.get("photo")==null?"":student.get("photo").toString();
-        byte[] decodedBytes = Base64.getDecoder().decode(base64Image);
-        ByteArrayInputStream bis = new ByteArrayInputStream(decodedBytes);
-        Image image = new Image(bis);
-        photoArea.setImage(image);
+        //String base64Image = student.get("photo")==null||student.get("photo").equals("")?"":student.get("photo").toString();
+        if(student.get("photo")!=null)
+        {
+            String base64Image = student.get("photo").toString();
+            byte[] decodedBytes = Base64.getDecoder().decode(base64Image);
+            ByteArrayInputStream bis = new ByteArrayInputStream(decodedBytes);
+            Image image = new Image(bis);
+            photoArea.setImage(image);
+        }
+        else
+        {
+            photoArea.setImage(null);
+        }
+
 
         name.setText(student.get("name")==null?"":student.get("name").toString());
         studentId.setText(student.get("studentId")==null?"":student.get("studentId").toString());

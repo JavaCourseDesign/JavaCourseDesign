@@ -81,7 +81,7 @@ public class StudentPortraitPage {
         majorText.setText(m.get("major")+"");
         gpaText.setText(m.get("gpa")+"");
         competitionText.setText("曾参与"+m.get("competitionName1")+",荣获"+m.get("competitionPerformance1") );
-        paperText.setText("曾在刊物"+m.get("paperPlace1")+"上发表过《"+m.get("paperName1")+"》");
+        paperText.setText("曾在刊物"+m.get("paperLocation1")+"上发表过《"+m.get("paperName1")+"》");
         projectText.setText("曾参加"+m.get("projectName1")+"项目,项目评价为"+m.get("projectPerformance1"));
         DecimalFormat df = new DecimalFormat("#.##");
         String gpa=df.format(Double.parseDouble(m.get("gpa").toString()));
@@ -113,7 +113,7 @@ public class StudentPortraitPage {
         feeBarChart.setData(barData);
 
         List<Map> scoreList = (List<Map>) m.get("scoreList");
-        System.out.println(scoreList);
+        //System.out.println(scoreList);
         XYChart.Series<String, Number> seriesScore = new XYChart.Series<>();
         seriesScore.setName("成绩");
         for (Map map : scoreList) {

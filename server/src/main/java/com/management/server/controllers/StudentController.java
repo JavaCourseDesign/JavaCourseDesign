@@ -87,11 +87,16 @@ public class StudentController {
         student.put("clazzName", s.getClazz().getName());
         student.put("honor",s.getHonors());
         //文件不存在时可能出现问题，可以把方法的返回字符串调成一个固定图片
-        if(s.getPhoto()!=null&&!Objects.equals(s.getPhoto(), "请先上传文件！"))
-        {
-            student.put("photo", FileUtil.getPhotoImageStr(s.getPhoto()));
-            System.out.println("文件合法"+s.getPhoto());
-        }
+        String str=FileUtil.getPhotoImageStr(s.getPhoto());
+            if(!str.equals("请先上传文件！"))
+            {
+                student.put("photo",str);
+            }
+            else
+            {
+                student.put("photo",null);
+            }
+
         List<Score> scoreList=s.getScores();
         List<Map> scoreMapList = new ArrayList<>();
         for(Score score:scoreList)
@@ -566,17 +571,20 @@ public class StudentController {
         Map m;
         Course c;
         for(Score s:sList){
-            c = s.getCourse();
-            if(s.getMark() >= 90)
-                count[0]++;
-            if(s.getMark() >= 80)
-                count[1]++;
-            if(s.getMark() >= 70)
-                count[2]++;
-            if(s.getMark() >= 60)
-                count[3]++;
-            else
-                count[4]++;
+            if(s.getMark()!=null)
+            {
+                c = s.getCourse();
+                if(s.getMark() >= 90)
+                    count[0]++;
+                if(s.getMark() >= 80)
+                    count[1]++;
+                if(s.getMark() >= 70)
+                    count[2]++;
+                if(s.getMark() >= 60)
+                    count[3]++;
+                else
+                    count[4]++;
+            }
         }
         for(int i = 0; i < 5;i++) {
             m = new HashMap();

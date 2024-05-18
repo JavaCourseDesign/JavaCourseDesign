@@ -46,7 +46,7 @@ class HonorTab extends Tab {
     }
     private void initializeTable()
     {
-        FilteredTableColumn<Map, String> nameColumn = new FilteredTableColumn<>("荣誉名称");
+        FilteredTableColumn<Map, String> nameColumn = new FilteredTableColumn<>("成果");
         FilteredTableColumn<Map, String> timeColumn = new FilteredTableColumn<>("获得时间");
         FilteredTableColumn<Map, String> departmentColumn = new FilteredTableColumn<>("颁奖部门");
         FilteredTableColumn<Map, String> eventColumn = new FilteredTableColumn<>("获奖事件");

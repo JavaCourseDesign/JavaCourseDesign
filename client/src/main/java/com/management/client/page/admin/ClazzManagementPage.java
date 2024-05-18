@@ -122,26 +122,29 @@ public class ClazzManagementPage extends SplitPane {
 
         //controlPanel.getChildren().addAll(clazzNameField, clazzMajorField, clazzGradeField, clazzNumberField , studentTable,addButton, deleteButton, updateButton);
 
-        controlPanel.add(new Label("班级名"), 0, 0);
-        controlPanel.add(clazzNameField, 1, 0);
-        controlPanel.add(new Label("专业"), 0, 1);
-        controlPanel.add(clazzMajorField, 1, 1);
-        controlPanel.add(new Label("年级"), 0, 2);
-        controlPanel.add(clazzGradeField, 1, 2);
-        controlPanel.add(new Label("班级号"), 0, 3);
-        controlPanel.add(clazzNumberField, 1, 3);
-        controlPanel.add(studentTable, 0, 4, 2, 1);
-        controlPanel.add(addButton, 0, 5);
-        controlPanel.add(deleteButton, 1, 5);
-        controlPanel.add(updateButton, 0, 6);
+        /*controlPanel.add(new Label("班级名"), 0, 0);
+        controlPanel.add(clazzNameField, 1, 0);*/
+        controlPanel.add(new Label("专业"), 0, 0);
+        controlPanel.add(clazzMajorField, 1, 0);
+        controlPanel.add(new Label("年级"), 0, 1);
+        controlPanel.add(clazzGradeField, 1, 1);
+        controlPanel.add(new Label("班级号"), 0, 2);
+        controlPanel.add(clazzNumberField, 1, 2);
+        controlPanel.add(studentTable, 0, 3, 2, 1);
+        controlPanel.add(addButton, 0, 4);
+        controlPanel.add(deleteButton, 1, 4);
+        controlPanel.add(updateButton, 0, 5);
 
         addButton.setOnAction(event -> addClazz());
         deleteButton.setOnAction(event -> deleteClazz());
         updateButton.setOnAction(event -> updateClazz());
 
         clazzTable.setOnItemClick(clazz -> {
-            if(clazz!=null)
+            if(clazzTable.getSelectedIndex()!=0&&clazz!=null)
             {
+                addButton.setDisable(true);
+                updateButton.setDisable(false);
+                studentTable.setVisible(true);
                 clazzNameField.setText((String) clazz.get("name"));
                 clazzMajorField.setText((String) clazz.get("major"));
                 clazzGradeField.setText((String) clazz.get("grade"));
@@ -153,12 +156,23 @@ public class ClazzManagementPage extends SplitPane {
                 studentTable.getColumns().setAll(studentNameColumn, studentIdColumn);
                 studentTable.maxHeight(200);
             }
+            else
+            {
+                addButton.setDisable(false);
+                updateButton.setDisable(true);
+                clazzNameField.setText("");
+                clazzMajorField.setText("");
+                clazzGradeField.setText("");
+                clazzNumberField.setText("");
+                studentTable.setVisible(false);
+            }
         });
         this.getItems().add(controlPanel);
     }
 
     private void displayClazz(){
         observableList.clear();
+        observableList.add(Map.of("students",List.of()));
         observableList.addAll(FXCollections.observableArrayList((ArrayList) request("/getAllClazz", null).getData()));
         clazzTable.setData(observableList);
         //System.out.println(observableList);
@@ -167,7 +181,15 @@ public class ClazzManagementPage extends SplitPane {
     private void addClazz() {
         Map m=newMapFromFields(new HashMap<>());
 
-        System.out.println(m);
+        //System.out.println(m);
+        if(m.get("major")==null||m.get("grade")==null||m.get("clazzNumber")==null
+        ||m.get("major").equals("")||m.get("grade").equals("")||m.get("clazzNumber").equals(""))
+        {
+            Alert alert=new Alert(Alert.AlertType.INFORMATION);
+            alert.setContentText("请填写完整信息");
+            alert.showAndWait();
+            return;
+        }
 
         DataResponse r=request("/addClazz",m);
 
@@ -204,8 +226,8 @@ public class ClazzManagementPage extends SplitPane {
             if(result.get()==ButtonType.OK)
             {
                 DataResponse r=request("/deleteClazz",m);
-                System.out.println(m);
-                System.out.println(r);
+                //System.out.println(m);
+                //System.out.println(r);
 
                 displayClazz();
 
@@ -228,12 +250,22 @@ public class ClazzManagementPage extends SplitPane {
             alert.showAndWait();
             return;
         }
+
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "确定要更新吗？");
         alert.setTitle("警告");
         Optional<ButtonType> result=alert.showAndWait();
         if(result.get()==ButtonType.OK)
         {
-            DataResponse r=request("/updateClazz",newMapFromFields(selected));
+            Map m=newMapFromFields(selected);
+            if(m.get("major").equals("")||m.get("grade").equals("")||m.get("clazzNumber").equals("")
+                    ||m.get("major")==null||m.get("grade")==null||m.get("clazzNumber")==null)
+            {
+                Alert alert1=new Alert(Alert.AlertType.INFORMATION);
+                alert1.setContentText("请填写完整信息");
+                alert1.showAndWait();
+                return;
+            }
+            DataResponse r=request("/updateClazz",m);
 
             displayClazz();
 

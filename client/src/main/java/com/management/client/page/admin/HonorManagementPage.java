@@ -76,7 +76,7 @@ public class HonorManagementPage extends SplitPane {
         gridPane.addColumn(0,
                 new Label("获奖事件"),
                 new Label("学生(点击事件查看)"),
-                new Label("荣誉名称"),
+                new Label("成果"),
                 new Label("颁奖部门"),
                 new Label("颁奖时间")
 
@@ -266,7 +266,7 @@ public class HonorManagementPage extends SplitPane {
     }
 
     private void initializeTable(){
-        FilteredTableColumn<Map, String> nameColumn = new FilteredTableColumn<>("荣誉名称");
+        FilteredTableColumn<Map, String> nameColumn = new FilteredTableColumn<>("成果");
         FilteredTableColumn<Map, String> awardDateColumn = new FilteredTableColumn<>("颁奖时间");
         FilteredTableColumn<Map, String> departmentColumn = new FilteredTableColumn<>("颁奖部门");
         FilteredTableColumn<Map, String> eventColumn = new FilteredTableColumn<>("获奖事件");
