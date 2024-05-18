@@ -30,13 +30,21 @@ public class DailyActivityController {
     public DataResponse getDailyActivitiesByStudent()
     {
         Student s=studentRepository.findByStudentId(CommonMethod.getUsername());
-        List<DailyActivity> list=new ArrayList<>();
+        List<Map> list=new ArrayList<>();
         Set<Event> eventList=s.getEvents();
         for(Event e:eventList)
         {
             if(e instanceof DailyActivity)
             {
-                list.add((DailyActivity) e);
+                Map m=BeanUtil.beanToMap(e);
+                s.getHonors().forEach(h->{
+                    if(h.getEvent().getEventId().equals(e.getEventId()))
+                    {
+                        m.put("performance",h.getName());
+                    }
+                });
+                m.remove("persons");
+                list.add(m);
             }
         }
         return new DataResponse(0,list,null);

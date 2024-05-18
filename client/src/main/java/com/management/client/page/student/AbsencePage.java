@@ -29,6 +29,7 @@ public class AbsencePage extends SplitPane {
 
     public AbsencePage() {
         eventView.setEvents((List<Map<String, Object>>) request("/getStudentEvents", null).getData());
+        eventView.getCalendars().get(0).setReadOnly(true);
         initializeTable();
         initializeControlPanel();
         displayAbsences();

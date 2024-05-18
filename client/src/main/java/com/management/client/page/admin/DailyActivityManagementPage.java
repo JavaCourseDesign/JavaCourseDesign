@@ -127,6 +127,7 @@ public class DailyActivityManagementPage extends SplitPane {
             }
            displayDailyActivities();
         }
+        dailyActivityTable.setSelectedItem(0);
     }
     private void updateDailyActivity() {
 

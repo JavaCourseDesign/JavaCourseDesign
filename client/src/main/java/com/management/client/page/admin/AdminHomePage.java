@@ -267,7 +267,7 @@ public class AdminHomePage extends SplitPane {
             }
             sortedEvents.get(key).add(event);
         }
-        System.out.println(sortedEvents);
+        //System.out.println(sortedEvents);
         ArrayList<Calendar> calendars = new ArrayList<>();
         int i=1;
         for (String key : sortedEvents.keySet()) {

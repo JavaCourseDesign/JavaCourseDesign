@@ -96,7 +96,6 @@ public class CourseManagementPage extends SplitPane {
         FilteredTableColumn<Map, String> courseNameColumn = new FilteredTableColumn<>("课程名");
         FilteredTableColumn<Map, String> courseCreditColumn = new FilteredTableColumn<>("学分");
         FilteredTableColumn<Map, String> courseTypeColumn = new FilteredTableColumn<>("类型");
-        FilteredTableColumn<Map, String> coursePropertyColumn = new FilteredTableColumn<>("课程性质");
         FilteredTableColumn<Map, String> courseReferenceColumn = new FilteredTableColumn<>("参考资料");
         FilteredTableColumn<Map, String> courseCapacityColumn = new FilteredTableColumn<>("课容量");
         FilteredTableColumn<Map, String> preCourseColumn = new FilteredTableColumn<>("先修课程");
@@ -113,7 +112,17 @@ public class CourseManagementPage extends SplitPane {
         });
         courseNameColumn.setCellValueFactory(new MapValueFactory<>("name"));
         courseCreditColumn.setCellValueFactory(new MapValueFactory<>("credit"));
-        courseReferenceColumn.setCellValueFactory(new MapValueFactory<>("reference"));
+
+        courseReferenceColumn.setCellValueFactory(data->
+        {
+            if(data.getValue().get("reference")==null)
+            {
+                return new SimpleStringProperty("");
+            }
+            String reference=data.getValue().get("reference")+"";
+            reference=reference.replace(".pdf","");
+            return new SimpleStringProperty(reference);
+        });
         //coursePropertyColumn.setCellValueFactory(new MapValueFactory<>("property"));
         courseCapacityColumn.setCellValueFactory(new MapValueFactory<>("capacity"));
         preCourseColumn.setCellValueFactory(new MapValueFactory<>("preCourses"));
@@ -160,7 +169,7 @@ public class CourseManagementPage extends SplitPane {
 
 
         List<FilteredTableColumn<Map,?>> columns = new ArrayList<>();
-        columns.addAll(List.of(courseIdColumn, courseNameColumn, courseCreditColumn,courseTypeColumn ,coursePropertyColumn,courseReferenceColumn, courseCapacityColumn,preCourseColumn ,teacherColumn, studentColumn, availableColumn));
+        columns.addAll(List.of(courseIdColumn, courseNameColumn, courseCreditColumn,courseTypeColumn ,courseReferenceColumn, courseCapacityColumn,preCourseColumn ,teacherColumn, studentColumn, availableColumn));
         courseTable=new SearchableTableView(observableList, List.of("courseId","name","persons"), columns);
         this.getItems().add(courseTable);
     }

@@ -75,7 +75,7 @@ public class HonorManagementPage extends SplitPane {
     private void initializeControlPanel() {
         gridPane.addColumn(0,
                 new Label("获奖事件"),
-                new Label("学生"),
+                new Label("学生(点击事件查看)"),
                 new Label("荣誉名称"),
                 new Label("颁奖部门"),
                 new Label("颁奖时间")
@@ -102,7 +102,7 @@ public class HonorManagementPage extends SplitPane {
 
         eventView.getSelections().addListener((SetChangeListener<? super Entry<?>>) change -> {
             if (eventView.getSelections().size() == 1) {
-                System.out.println("test1");
+               // System.out.println("test1");
                 List<Entry<?>> selectedEntries = new ArrayList<>(eventView.getSelections());
                 Entry<?> entry = selectedEntries.get(0);
                 Map m=convertEntryToMap(entry);
@@ -217,6 +217,7 @@ public class HonorManagementPage extends SplitPane {
             }
             displayHonors();
         }
+        honorTable.setSelectedItem(0);
     }
 
     private void addHonor() {
@@ -302,6 +303,7 @@ public class HonorManagementPage extends SplitPane {
         studentObservableList.addAll(FXCollections.observableArrayList(studentList));
         studentTable.setItems(studentObservableList);
     }
+
 
     public Map<String, Object> convertEntryToMap(Entry entry) {
         String name = entry.getTitle() != null ? entry.getTitle() : "";

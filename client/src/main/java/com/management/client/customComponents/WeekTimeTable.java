@@ -21,6 +21,9 @@ public class WeekTimeTable extends WeekPage {
 
         this.calendar = new Calendar("Week Calendar");
         this.calendar.setStyle(Calendar.Style.STYLE1);
+
+
+
         CalendarSource calendarSource = new CalendarSource("My Calendar Source");
         calendarSource.getCalendars().add(this.calendar);
 
@@ -64,9 +67,14 @@ public class WeekTimeTable extends WeekPage {
         //return this.calendar.findEntries("").stream().map(this::convertEntryToMap).collect(Collectors.toList());
         List<Map> events = new ArrayList<>();
         //System.out.println(this.calendar.findEntries(""));
+        System.out.println(this.calendar.findEntries(""));
         for (Entry<?> entry : (List<Entry>)this.calendar.findEntries("")) {
-            events.add(convertEntryToMap(entry));
+            System.out.println(entry);
+            Map m= convertEntryToMap(entry);
+            if(events.size()==0||m.equals(m.get(events.size()-1)))
+                events.add(m);
         }
+        System.out.println(events);
         return events;
     }
 

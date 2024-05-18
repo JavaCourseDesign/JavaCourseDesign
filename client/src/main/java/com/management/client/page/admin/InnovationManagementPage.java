@@ -197,6 +197,7 @@ public class InnovationManagementPage extends SplitPane {
                 }
                 displayInnovations();
             }
+            innovationTable.setSelectedItem(0);
     }
 
     private void addInnovation() {
@@ -213,6 +214,7 @@ public class InnovationManagementPage extends SplitPane {
         }
         if(eventPicker.getEvents().size()>1)
         {
+            //System.out.println(eventPicker.getEvents());
             Alert alert=new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("警告");
             alert.setContentText("只能选择一个事件");

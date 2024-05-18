@@ -1,5 +1,6 @@
 package com.management.client.page.admin;
 
+import com.calendarfx.model.Entry;
 import com.management.client.customComponents.SearchableListView;
 import com.management.client.customComponents.SearchableTableView;
 import com.management.client.customComponents.WeekTimeTable;
@@ -7,6 +8,7 @@ import com.management.client.request.DataResponse;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.SetChangeListener;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.MapValueFactory;
@@ -15,6 +17,8 @@ import javafx.stage.FileChooser;
 import org.controlsfx.control.tableview2.FilteredTableColumn;
 
 import java.io.File;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.*;
 
 import static com.management.client.util.HttpClientUtil.importData;
@@ -33,8 +37,9 @@ public class StudentLogManagementPage extends TabPane {
 }
 class StudentAbsenceManagementTab extends Tab {
     private SplitPane splitPane=new SplitPane();
-    private Button displayButton=new Button("学生(点击以查看):");
+    //private Button displayButton=new Button("学生(点击以查看):");
     private SearchableTableView absenceTable;
+    private SplitPane studentListViewContainer=new SplitPane();
     private VBox controlPanel = new VBox();
     //private SearchableListView studentListView=new SearchableListView(FXCollections.observableArrayList((ArrayList) request("/getAllStudents",null).getData()), List.of("name","studentId"));
     private SearchableListView studentListView=new SearchableListView(FXCollections.observableArrayList(List.of()),List.of());
@@ -62,7 +67,7 @@ class StudentAbsenceManagementTab extends Tab {
     private void displayAbsences() {
         observableList.clear();
         ArrayList<Map> list=(ArrayList<Map>) request("/getAllStudentAbsences", null).getData();
-        System.out.println(list);
+        //System.out.println(list);
         for(Map m:list)
         {
             if(m.get("person")!=null)
@@ -90,9 +95,9 @@ class StudentAbsenceManagementTab extends Tab {
         controlPanel.getChildren().add(text);
         controlPanel.getChildren().add(new Label("请假事件:"));
         controlPanel.getChildren().add(eventView);
-        controlPanel.getChildren().add(displayButton);
-        controlPanel.getChildren().add(studentListView);
-        displayButton.setOnMouseClicked(e->
+        controlPanel.getChildren().add(new Label("学生(点击事件以查看):"));
+        controlPanel.getChildren().add(studentListViewContainer);
+        /*displayButton.setOnMouseClicked(e->
         {
             if(eventView.getSelectedEvents().isEmpty())
             {
@@ -104,6 +109,17 @@ class StudentAbsenceManagementTab extends Tab {
             controlPanel.getChildren().remove(studentListView);
             studentListView=new SearchableListView(FXCollections.observableArrayList((ArrayList) request("/getStudentsByEvent",eventView.getSelectedEvents().get(0)).getData()), List.of("name","studentId"));
             controlPanel.getChildren().add(4,studentListView);
+        });*/
+        eventView.getSelections().addListener((SetChangeListener<? super Entry<?>>) change -> {
+            if (eventView.getSelections().size() == 1) {
+                //System.out.println("test1");
+                List<Entry<?>> selectedEntries = new ArrayList<>(eventView.getSelections());
+                Entry<?> entry = selectedEntries.get(0);
+                Map m=convertEntryToMap(entry);
+                studentListView=new SearchableListView(FXCollections.observableArrayList((ArrayList) request("/getStudentsByEvent",m).getData()), List.of("name","studentId"));
+                studentListViewContainer.getItems().clear();
+                studentListViewContainer.getItems().add(studentListView);
+            }
         });
 
         Button addButton = new Button("添加");
@@ -281,6 +297,25 @@ class StudentAbsenceManagementTab extends Tab {
         }
         displayAbsences();
         studentListView.setSelectedItems(List.of());
+    }
+    public Map<String, Object> convertEntryToMap(Entry entry) {
+        String name = entry.getTitle() != null ? entry.getTitle() : "";
+        String eventId = entry.getUserObject() != null ? (String) entry.getUserObject() : "";
+        LocalDate startDate = entry.getStartDate() != null ? entry.getStartDate() : LocalDate.now();
+        LocalDate endDate = entry.getEndDate() != null ? entry.getEndDate() : LocalDate.now();
+        LocalTime startTime = entry.getStartTime() != null ? entry.getStartTime() : LocalTime.now();
+        LocalTime endTime = entry.getEndTime() != null ? entry.getEndTime() : LocalTime.now();
+        String location = entry.getLocation() != null ? entry.getLocation() : "";
+
+        return Map.of(
+                "name", name,
+                "eventId", eventId,
+                "startDate", startDate.toString(),
+                "endDate", endDate.toString(),
+                "startTime", startTime.toString(),
+                "endTime", endTime.toString(),
+                "location", location
+        );
     }
 }
 class StudentFeeManagementTab extends Tab{

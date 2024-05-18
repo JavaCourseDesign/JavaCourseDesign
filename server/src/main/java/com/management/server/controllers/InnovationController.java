@@ -31,15 +31,20 @@ public class InnovationController {
     {
         Student s=studentRepository.findByStudentId(CommonMethod.getUsername());
         Set<Event> eventList=s.getEvents();
-        List<Innovation> list=new ArrayList<>();
-        for(Event e:eventList)
-        {
-            if(e instanceof Innovation)
-            {
-                list.add((Innovation) e);
+        List<Map> result=new ArrayList<>();
+        for(Event e:eventList) {
+            if (e instanceof Innovation) {
+                Map m = BeanUtil.beanToMap(e);
+                s.getHonors().forEach(h -> {
+                    if (h.getEvent().getEventId().equals(e.getEventId())) {
+                        m.put("performance", h.getName());
+                    }
+                });
+                m.remove("persons");
+                result.add(m);
             }
         }
-        return new DataResponse(0,list,null);
+        return new DataResponse(0,result,null);
     }
     @PostMapping("/addInnovation")
     public DataResponse addInnovation(@RequestBody Map m){
