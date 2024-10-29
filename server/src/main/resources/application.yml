@@ -1,6 +1,7 @@
 
 spring:
   datasource:
+    #url: jdbc:sqlite:data.db
     url: jdbc:sqlite:data.db
     driver-class-name: org.sqlite.JDBC
   jpa:
@@ -13,3 +14,4 @@ server:
   port: 9090
 attach:
   folder: /JAVACourseDesign/JavaCourseDesign/
+  #folder: /teach/

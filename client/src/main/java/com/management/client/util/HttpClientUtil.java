@@ -31,7 +31,7 @@ import java.util.Map;
 public class HttpClientUtil {
     static public String mainUrl = "http://localhost:9090";
     static Gson gson = new Gson();
-    static private JwtResponse jwt=new JwtResponse();//在老师的示例项目中被存储在appstore
+    static private JwtResponse jwt=new JwtResponse();
     static public boolean login(String username, String password){
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = null;
@@ -142,6 +142,50 @@ public class HttpClientUtil {
         });
     }
 
+    static public DataResponse sendAndReceiveDataResponse(String url, Object parameter) {
+        CloseableHttpClient httpclient = HttpClients.createDefault();
+        // 2. 创建HttpPost实例
+        HttpPost httpPost = new HttpPost(mainUrl+url);
+        httpPost.setEntity(new StringEntity(gson.toJson(parameter), ContentType.APPLICATION_JSON));
+
+        // 3. 调用HttpClient实例来执行HttpPost实例
+        CloseableHttpResponse response = null;
+        try {
+            response = httpclient.execute(httpPost);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        // 4. 读 response
+        int status = response.getStatusLine().getStatusCode();
+        if(status<200||status>=300) try {
+            throw new ClientProtocolException("Unexpected response status: " + status);
+        } catch (ClientProtocolException e) {
+            throw new RuntimeException(e);
+        }
+        HttpEntity entity = response.getEntity();
+        String html = null;
+        try {
+            html = EntityUtils.toString(entity);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        // 5. 释放连接
+        try {
+            response.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        try {
+            httpclient.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        //System.out.println(html);
+        return gson.fromJson(html, DataResponse.class);
+    }
+
     public static byte[] requestByteData(String url, Object request){
         HttpRequest httpRequest = HttpRequest.newBuilder()
                 .uri(URI.create(mainUrl + url))
@@ -231,9 +275,9 @@ public class HttpClientUtil {
         }
         return null;
     }
+}
 
-
-    static public Object sendAndReceiveObject(String url, Object parameter) throws IOException {
+/*static public Object sendAndReceiveObject(String url, Object parameter) throws IOException {
         CloseableHttpClient httpclient = HttpClients.createDefault();
 
         // 2. 创建HttpPost实例
@@ -255,54 +299,7 @@ public class HttpClientUtil {
 
         //System.out.println(html);
         return gson.fromJson(html, Object.class);
-    }
-
-    static public DataResponse sendAndReceiveDataResponse(String url, Object parameter) {
-        CloseableHttpClient httpclient = HttpClients.createDefault();
-        // 2. 创建HttpPost实例
-        HttpPost httpPost = new HttpPost(mainUrl+url);
-        httpPost.setEntity(new StringEntity(gson.toJson(parameter), ContentType.APPLICATION_JSON));
-
-        // 3. 调用HttpClient实例来执行HttpPost实例
-        CloseableHttpResponse response = null;
-        try {
-            response = httpclient.execute(httpPost);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        // 4. 读 response
-        int status = response.getStatusLine().getStatusCode();
-        if(status<200||status>=300) try {
-            throw new ClientProtocolException("Unexpected response status: " + status);
-        } catch (ClientProtocolException e) {
-            throw new RuntimeException(e);
-        }
-        HttpEntity entity = response.getEntity();
-        String html = null;
-        try {
-            html = EntityUtils.toString(entity);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-        // 5. 释放连接
-        try {
-            response.close();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        try {
-            httpclient.close();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-        //System.out.println(html);
-        return gson.fromJson(html, DataResponse.class);
-    }
-}
-
-
+    }*/
 
 /*public class HttpClientUtil {
     //private DataResponse sendAndReceive(String numName) throws IOException {

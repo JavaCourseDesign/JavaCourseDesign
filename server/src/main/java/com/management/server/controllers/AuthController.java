@@ -1,19 +1,26 @@
 package com.management.server.controllers;
 
 import com.management.server.models.*;
+import com.management.server.payload.request.LoginRequest;
 import com.management.server.payload.response.DataResponse;
-import com.management.server.repositories.*;
+import com.management.server.payload.response.JwtResponse;
+import com.management.server.repositories.StudentRepository;
+import com.management.server.repositories.TeacherRepository;
+import com.management.server.repositories.UserRepository;
+import com.management.server.repositories.UserTypeRepository;
 import com.management.server.util.CommonMethod;
 import com.management.server.util.JwtUtil;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
 import java.util.Map;
 
-
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
+@RequestMapping("/auth")
 public class AuthController {
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -30,18 +37,41 @@ public class AuthController {
     AuthenticationManager authenticationManager;
      */
     @PostMapping("/login")
-    public String login( @RequestBody Map<String,String> req){
+    public ResponseEntity<JwtResponse> login(@Valid @RequestBody LoginRequest req){
        /* UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(req.get("username"), req.get("password"));
         authenticationManager.authenticate(authenticationToken);
 
         */
-        User user = userRepository.findByUsername(req.get("username"));
-        if(user!=null&&passwordEncoder.matches(req.get("password"),user.getPassword()))
+        System.out.println("login request received");
+        System.out.println("username:"+req.getUsername());
+
+        User user = userRepository.findByUsername(req.getUsername());
+        System.out.println("user:"+user);
+        System.out.println("password:"+req.getPassword());
+        System.out.println("password:"+user.getPassword());
+        System.out.println("password:"+passwordEncoder.matches(req.getPassword(),user.getPassword()));
+        if(user!=null&&passwordEncoder.matches(req.getPassword(),user.getPassword()))
         {
-            return JwtUtil.generateToken(req.get("username"));
+            //return JwtUtil.generateToken(req.getUsername());
+            String jwt= JwtUtil.generateToken(req.getUsername());
+            System.out.println(ResponseEntity.ok(new JwtResponse(jwt,
+                    user.getUserId(),
+                    user.getUsername(),
+                    user.getUsername(),
+                    user.getUserType().toString())));
+            System.out.println("not----null");
+            return ResponseEntity.ok(new JwtResponse(jwt,
+                    user.getUserId(),
+                    user.getUsername(),
+                    user.getUsername(),
+                    user.getUserType().toString()));
         }
-        return null;
+        else
+        {
+            System.out.println("is fxxking null");
+            return null;
+        }
     }
     @PostMapping("/register")
     public DataResponse registerUser(@RequestBody Map<String,String> map) {

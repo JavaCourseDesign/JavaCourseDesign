@@ -15,7 +15,7 @@ import lombok.Data;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String userId;
+    private Integer userId;
 
     @ManyToOne
     @JoinColumn(name = "user_type_id")
