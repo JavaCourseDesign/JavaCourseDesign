@@ -43,7 +43,11 @@ public class Course{
 
     private String type;//课程类型 0 Required 1 Optional 2 Selective 代码代替似乎意义不大，后续考虑修改
 
-    private boolean available;//是否可选
+    private Boolean available;//是否可选
+
+    public boolean isAvailable() {
+        return available;
+    }//？？？？？？？？？？？？？？？？
 
     @Transient//@Transient 注解表示该属性并非一个到数据库表的字段的映射，ORM框架将忽略该属性。
     private Boolean chosen;//是否被选中，由controller根据具体人进行判断

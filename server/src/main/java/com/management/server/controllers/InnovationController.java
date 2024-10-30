@@ -8,6 +8,7 @@ import com.management.server.repositories.InnovationRepository;
 import com.management.server.repositories.StudentRepository;
 import com.management.server.util.CommonMethod;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.*;
 
 @RestController
+@CrossOrigin(origins = "*", maxAge = 3600)
 public class InnovationController {
     @Autowired
     InnovationRepository innovationRepository;

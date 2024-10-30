@@ -9,10 +9,7 @@ import com.management.server.util.CommonMethod;
 import com.management.server.util.FileUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.*;
 import java.net.URLDecoder;
@@ -20,6 +17,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
 @RestController
+@CrossOrigin(origins = "*", maxAge = 3600)
 public class PhotoController {
 
     @Value("${attach.folder}")

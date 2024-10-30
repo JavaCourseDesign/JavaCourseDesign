@@ -1,6 +1,7 @@
 package com.management.server.controllers;
 
 import com.management.server.models.*;
+import com.management.server.payload.request.DataRequest;
 import com.management.server.payload.request.LoginRequest;
 import com.management.server.payload.response.DataResponse;
 import com.management.server.payload.response.JwtResponse;
@@ -43,24 +44,27 @@ public class AuthController {
         authenticationManager.authenticate(authenticationToken);
 
         */
-        System.out.println("login request received");
-        System.out.println("username:"+req.getUsername());
+        /*System.out.println("login request received");
+        System.out.println("username:"+req.getUsername());*/
 
         User user = userRepository.findByUsername(req.getUsername());
-        System.out.println("user:"+user);
+        /*System.out.println("user:"+user);
         System.out.println("password:"+req.getPassword());
         System.out.println("password:"+user.getPassword());
-        System.out.println("password:"+passwordEncoder.matches(req.getPassword(),user.getPassword()));
+        System.out.println("password:"+passwordEncoder.matches(req.getPassword(),user.getPassword()));*/
         if(user!=null&&passwordEncoder.matches(req.getPassword(),user.getPassword()))
         {
             //return JwtUtil.generateToken(req.getUsername());
             String jwt= JwtUtil.generateToken(req.getUsername());
-            System.out.println(ResponseEntity.ok(new JwtResponse(jwt,
+            /*System.out.println(ResponseEntity.ok(new JwtResponse(jwt,
                     user.getUserId(),
                     user.getUsername(),
                     user.getUsername(),
                     user.getUserType().toString())));
-            System.out.println("not----null");
+            System.out.println("not----null");*/
+
+            System.out.println("login success");
+
             return ResponseEntity.ok(new JwtResponse(jwt,
                     user.getUserId(),
                     user.getUsername(),
@@ -69,24 +73,36 @@ public class AuthController {
         }
         else
         {
-            System.out.println("is fxxking null");
+            /*System.out.println("is fxxking null");*/
             return null;
         }
     }
-    @PostMapping("/register")
-    public DataResponse registerUser(@RequestBody Map<String,String> map) {
-        String username = map.get("username");//把学号/工号作为用户名
-        String name = map.get("name");//姓名用于验证是否匹配
-        String password = passwordEncoder.encode(map.get("password"));
+    @PostMapping("/registerUser")
+    public DataResponse registerUser(@Valid @RequestBody DataRequest dataRequest) {
+
+        System.out.println("register request received");
+
+        String username = dataRequest.getString("username");//把学号/工号作为用户名
+        String name = dataRequest.getString("perName");//姓名用于验证是否匹配
+        String password = passwordEncoder.encode(dataRequest.getString("password"));
         Student foundStudent = studentRepository.findByStudentId(username);
+
+        System.out.println("username:"+username);
+        System.out.println("name:"+name);
+        System.out.println("password:"+password);
+        System.out.println("foundStudent:"+foundStudent);
+
         if (isUserValid(foundStudent, name, username)) {
+            System.out.println("register student");
             return registerUser(foundStudent,username, password, EUserType.ROLE_STUDENT);
         }
 
         Teacher foundTeacher = teacherRepository.findByTeacherId(username);
         if (isUserValid(foundTeacher, name, username)) {
+            System.out.println("register teacher");
             return registerUser(foundTeacher, username, password, EUserType.ROLE_TEACHER);
         }
+        System.out.println("register failed");
         return new DataResponse(-1,null,"注册失败");
     }
 
@@ -99,11 +115,8 @@ public class AuthController {
         user.setUsername(username);
         user.setPassword(password);
 
-        UserType type = new UserType();
-        type.setName(userType);
-        userTypeRepository.save(type);
+        user.setUserType(userTypeRepository.findByName(userType));
 
-        user.setUserType(type);
         user.setPerson(person);
         userRepository.save(user);
         return new DataResponse(0, null, userType == EUserType.ROLE_STUDENT ? "学生注册成功" : "教师注册成功");

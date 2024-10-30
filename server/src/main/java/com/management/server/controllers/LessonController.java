@@ -5,14 +5,12 @@ import com.management.server.payload.response.DataResponse;
 import com.management.server.repositories.LessonRepository;
 import com.management.server.util.FileUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
 @RestController
+@CrossOrigin(origins = "*", maxAge = 3600)
 public class LessonController {
     @Autowired
     private LessonRepository lessonRepository;

@@ -6,6 +6,7 @@ import com.management.server.payload.response.DataResponse;
 import com.management.server.repositories.*;
 import com.management.server.util.CommonMethod;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,6 +17,7 @@ import java.util.Map;
 
 //event controller负责实现innovation dailyActivity; lesson course单独实现
 @RestController
+@CrossOrigin(origins = "*", maxAge = 3600)
 public class EventController {
     @Autowired
     private EventRepository eventRepository;

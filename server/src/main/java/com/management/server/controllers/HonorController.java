@@ -6,11 +6,11 @@ import com.management.server.models.Honor;
 import com.management.server.models.Person;
 import com.management.server.models.Student;
 import com.management.server.payload.response.DataResponse;
-import com.management.server.repositories.DailyActivityRepository;
 import com.management.server.repositories.HonorRepository;
 import com.management.server.repositories.StudentRepository;
 import com.management.server.util.CommonMethod;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
+@CrossOrigin(origins = "*", maxAge = 3600)
 public class HonorController {
     @Autowired
     private HonorRepository honorRepository;

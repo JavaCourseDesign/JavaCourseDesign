@@ -4,6 +4,7 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
 import cn.hutool.core.util.IdcardUtil;
 import com.management.server.models.*;
+import com.management.server.payload.request.DataRequest;
 import com.management.server.payload.response.DataResponse;
 import com.management.server.repositories.*;
 import com.management.server.util.CommonMethod;
@@ -11,13 +12,14 @@ import com.management.server.util.FileUtil;
 import com.openhtmltopdf.extend.FSSupplier;
 import com.openhtmltopdf.extend.impl.FSDefaultCacheStore;
 import com.openhtmltopdf.pdfboxout.PdfRendererBuilder;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.core.io.ResourceLoader;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -32,6 +34,8 @@ import static com.management.server.util.NativePlaceUtil.getNativePlace;
 
 
 @RestController
+@CrossOrigin(origins = "*", maxAge = 3600)
+@RequestMapping("/api/student")
 public class StudentController {
     @Autowired
     private ResourceLoader resourceLoader;  //资源装在服务对象自动注入
@@ -372,8 +376,13 @@ public class StudentController {
         return new DataResponse(0,studentList,null);
     }
     @PostMapping("/getStudentPortraitData")
-    public DataResponse getStudentPortraitData()
+    //@PostMapping("/getStudentIntroduceData")
+    @PreAuthorize("hasRole('STUDENT')")
+    public DataResponse getStudentPortraitData(@Valid @RequestBody DataRequest dataRequest)
     {
+
+        System.out.println("getStudentPortraitData-------");
+
         Map m=getMapFromStudentForIntroduce(CommonMethod.getUsername());
         m.remove("photo");
         m.remove("introduce");
@@ -392,6 +401,7 @@ public class StudentController {
         m.put("markList",getStudentMarkList(scoreList));
         m.put("gpa",gpa(CommonMethod.getUsername()));
         return new DataResponse(0,m,null);
+        //return new DataResponse(0,null,null);
     }
     public String gpa(String num) {
         double credit = 0;

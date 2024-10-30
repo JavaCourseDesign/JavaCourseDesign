@@ -24,7 +24,7 @@ import java.util.Set;
 @EqualsAndHashCode(exclude = {"events","honors","courses","absences","dormitory"})//极为重要！跟json ignore搭配才能解决循环引用问题
 
 @Inheritance(strategy = InheritanceType.JOINED)
-public abstract class Person {
+public /*abstract*/ class Person {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String personId;

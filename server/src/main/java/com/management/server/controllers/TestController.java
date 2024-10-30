@@ -6,6 +6,7 @@ import com.management.server.payload.response.DataResponse;
 import com.management.server.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -18,6 +19,7 @@ import static com.management.server.models.EUserType.ROLE_ADMIN;
 import static com.management.server.util.NativePlaceUtil.getNativePlace;
 
 @RestController
+@CrossOrigin(origins = "*", maxAge = 3600)
 public class TestController {//专门用于添加测试数据
     @Autowired
     private UserRepository userRepository;

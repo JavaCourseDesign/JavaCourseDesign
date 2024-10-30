@@ -9,6 +9,7 @@ import com.management.server.payload.response.DataResponse;
 import com.management.server.repositories.ClazzRepository;
 import com.management.server.repositories.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
+@CrossOrigin(origins = "*", maxAge = 3600)
 public class ClazzController {
     @Autowired
     private ClazzRepository clazzRepository;
