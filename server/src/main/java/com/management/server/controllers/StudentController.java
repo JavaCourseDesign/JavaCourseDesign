@@ -191,7 +191,9 @@ public class StudentController {
         }
         return new DataResponse(0,studentList,null);
     }
-    @PostMapping("/getAllStudents")
+
+    //@PostMapping("/getAllStudents")
+    @PostMapping("/getStudentPageData")
     public DataResponse getAllStudents()
     {
         System.out.println("\nmarkStart\n");

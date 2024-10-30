@@ -7,7 +7,7 @@ import com.management.server.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
@@ -37,21 +37,31 @@ public class TestController {//专门用于添加测试数据
     private PasswordEncoder passwordEncoder;
     @Autowired
     private FamilyRepository familyRepository;
-    @PostMapping("/test/addTestData")
+    //@PostMapping("/test/addTestData")
+    @GetMapping("/test/addTestData")
     public DataResponse addTestData(){
         if(studentRepository.count()!=0||teacherRepository.count()!=0||courseRepository.count()!=0){
             return new DataResponse(1,null,"测试数据已存在");
         }
 
         Random r=new Random();
+        userTypeRepository.deleteAll();
+
+        UserType adm=new UserType();
+        adm.setName(ROLE_ADMIN);
+        UserType stu=new UserType();
+        stu.setName(EUserType.ROLE_STUDENT);
+        UserType tea=new UserType();
+        tea.setName(EUserType.ROLE_TEACHER);
+        userTypeRepository.save(adm);
+        userTypeRepository.save(stu);
+        userTypeRepository.save(tea);
+
 
         User user=new User();
-        UserType userType=new UserType();
-        userType.setName(ROLE_ADMIN);
         user.setUsername("admin");
         user.setPassword(passwordEncoder.encode("123456"));
-        user.setUserType(userType);
-        userTypeRepository.save(userType);
+        user.setUserType(adm);
         userRepository.save(user);
 
         Family f=new Family();
